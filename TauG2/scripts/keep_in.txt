@@ -1,0 +1,43 @@
+# this is a comment
+drop *
+
+#keep event info
+keep run*
+keep event*
+keep luminosityBlock*
+keep Flag*
+keep HLT_Ele32_WPTight_Gsf
+keep HLT_Ele35_WPTight_Gsf
+keep HLT_Photon200
+keep HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL
+keep HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ
+keep HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ
+keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_TightID_CrossL1
+keep HLT_IsoMu24
+keep HLT_IsoMu27
+keep HLT_Mu50
+keep HLT_OldMu100
+keep HLT_TkMu100
+keep HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8
+keep HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_TightID_CrossL1
+keep HLT_DoubleTightChargedIsoPFTauHPS40_Trk1_eta2p1_Reg
+keep HLT_MediumChargedIsoPFTau180HighPtRelaxedIso_Trk50_eta2p1
+keep HLT_DoubleMedium_ChargedIsoPFTau40_Trk1_TightID_eta2p1_Reg
+keep HLT_DoubleTight_ChargedIsoPFTau40_Trk1_eta2p1_Reg
+keep HLT_DoubleTight_ChargedIsoPF_Tau35_Trk1_TightID_eta2p1_Reg
+keep HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_CrossL1
+keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_CrossL1
+keep Pileup_nTrueInt*
+keep genWeight*
+keep Generator*
+keep btagWeight_DeepCSVB*
+
+#keep objects
+keep MET_p*
+keep PuppiMET_p*
+keep Muon*
+keep Electron*
+keep Tau*
+keep GenPart*
+keep Jet*
+keep PV_*
