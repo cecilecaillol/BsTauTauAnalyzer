@@ -31,6 +31,8 @@ keep Pileup_nTrueInt*
 keep genWeight*
 keep Generator*
 keep btagWeight_DeepCSVB*
+keep LHE_Vpt*
+keep LHE_Njets*
 
 #keep objects
 keep MET_p*

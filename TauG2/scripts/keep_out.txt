@@ -5,7 +5,6 @@ drop *
 keep run*
 keep event*
 keep luminosityBlock*
-keep genEventCount*
 keep genWeight*
 keep Generator*
 
@@ -35,6 +34,8 @@ keep HLT_DoubleTight_ChargedIsoPF_Tau35_Trk1_TightID_eta2p1_Reg
 keep HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_CrossL1
 keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_CrossL1
 keep btagWeight_DeepCSVB*
+keep LHE_Vpt*
+keep LHE_Njets*
 
 #keep custom variables
 keep nLepCand
@@ -45,7 +46,5 @@ keep nMuons
 keep nTaus
 keep JetCand*
 keep Lep*
-keep gen_*
-keep tauid*
 keep V_ge*
 keep pu_weight

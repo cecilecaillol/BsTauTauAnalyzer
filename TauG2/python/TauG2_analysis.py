@@ -80,7 +80,6 @@ class Analysis(Module):
         self.out.branch("GenCand_pt",            "F",  lenVar = "nGenCand");
         self.out.branch("GenCand_eta",           "F",  lenVar = "nGenCand");
         self.out.branch("GenCand_phi",           "F",  lenVar = "nGenCand");
-        self.out.branch("GenCand_charge",        "I",  lenVar = "nGenCand");
 
         self.out.branch("nJets",             "I");
         self.out.branch("nElectrons",        "I");
@@ -189,13 +188,7 @@ class Analysis(Module):
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
 
-        #if self.isMC:
-        #   self.selectGenParticles(event)
-        #for genp in event.selectedGenParticles:
-        #   if abs(genp.pdgId==2212) or abs(genp.pdgId)==9911561 or abs(genp.pdgId)==15 or abs(genp.pdgId)==11 or abs(genp.pdgId)==13 or abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15:
-        #      print genp.pdgId,genp.pt,genp.eta,event.selectedGenParticles[genp.genPartIdxMother].pdgId
-        #print "New event"
-
+        print "New event"
 
 	# Apply MET filters
 
@@ -399,7 +392,6 @@ class Analysis(Module):
         gen_pt     = [genp.pt for genp in event.genCand]
         gen_eta    = [genp.eta for genp in event.genCand]
         gen_phi    = [genp.phi for genp in event.genCand]
-        gen_charge = [genp.charge for genp in event.genCand]
 
         jet_pt     = [jet.pt for jet in event.selectedAK4Jets]
         jet_eta    = [jet.eta for jet in event.selectedAK4Jets]
@@ -473,7 +465,6 @@ class Analysis(Module):
           self.out.fillBranch("GenCand_pt" ,        gen_pt)
           self.out.fillBranch("GenCand_eta" ,       gen_eta)
           self.out.fillBranch("GenCand_phi" ,       gen_phi)
-          self.out.fillBranch("GenCand_charge",     gen_charge)
 
         return True
 
