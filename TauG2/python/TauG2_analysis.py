@@ -188,7 +188,7 @@ class Analysis(Module):
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
 
-        print "New event"
+        #print "New event"
 
 	# Apply MET filters
 
