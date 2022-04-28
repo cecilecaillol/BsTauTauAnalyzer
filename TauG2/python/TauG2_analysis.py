@@ -221,9 +221,9 @@ class Analysis(Module):
 
         self.selectTaus(event, tauSel)
         if self.channel=="etau" or self.channel=="mutau":
-            if len(event.selectedElectrons)<1: return False
+            if len(event.selectedTaus)<1: return False
         if self.channel=="tautau":
-            if len(event.selectedElectrons)<2: return False
+            if len(event.selectedTaus)<2: return False
 
         self.selectAK4Jets(event)
 

@@ -25,7 +25,7 @@ ANALYSISGRL = {
 }
 
 cmssw=os.environ['CMSSW_BASE']
-ANALYSISCUT={'': {'mu' : '-c "%s"'%ANALYSISCHANNELCUT['mu'], 'el' : '-c "%s"'%ANALYSISCHANNELCUT['el'], 'tau' : '-c "%s"'%ANALYSISCHANNELCUT['tau']}}
+ANALYSISCUT={'': {'ee' : '-c "%s"'%ANALYSISCHANNELCUT['ee'], 'emu' : '-c "%s"'%ANALYSISCHANNELCUT['emu'], 'etau' : '-c "%s"'%ANALYSISCHANNELCUT['etau'], 'mumu' : '-c "%s"'%ANALYSISCHANNELCUT['mumu'], 'mutau' : '-c "%s"'%ANALYSISCHANNELCUT['mutau'], 'tautau' : '-c "%s"'%ANALYSISCHANNELCUT['tautau']}}
 for y in ANALYSISTRIGGER:
   ANALYSISCUT[y]={}
   for c in ANALYSISTRIGGER[y]:
