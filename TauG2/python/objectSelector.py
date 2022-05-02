@@ -19,7 +19,7 @@ class ElectronSelector(ObjectSelector):
         
         if el.pt < self.minPt: return False
         if abs(el.eta) > 2.5: return False
-	if not el.mvaFall17V2Iso_WP90: return False
+        if not el.mvaFall17V2Iso_WP90: return False
         if abs(el.dxy) > 0.05 or abs(el.dz) > 0.2: return False
 
         return True
@@ -36,7 +36,7 @@ class TauSelector(ObjectSelector):
         if abs(tau.charge)!=1: return False
         if tau.idDeepTau2017v2p1VSe<4: return False # VLoose
         if tau.idDeepTau2017v2p1VSmu<1: return False # VLoose
-	if tau.idDeepTau2017v2p1VSjet<1: return False # VVVLoose
+        if tau.idDeepTau2017v2p1VSjet<1: return False # VVVLoose
 
         return True
         
@@ -53,5 +53,6 @@ class MuonSelector(ObjectSelector):
         if self.id == 'tight' and not mu.tightId: return False
         elif self.id == 'medium' and not mu.mediumId: return False
         elif self.id == 'loose' and not mu.looseId: return False
-	return True
+	      
+        return True
 
