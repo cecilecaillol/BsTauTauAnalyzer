@@ -11,6 +11,13 @@ git clone https://github.com/cecilecaillol/MyNanoAnalyzer.git
 scram b -j 8
 ```
 
+## Create NANOAOD from MINIAOD
+
+NANOAOD production was tested with `CMSSW_12_4_0_pre3` release. To produce nanoAOD from miniAOD, run the following command:
+```
+cmsRun $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/test/produceNANO.py inputFiles=root://cms-xrd-global.cern.ch//store/mc/RunIISummer20UL18MiniAODv2/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/100000/744C5C6A-F392-5B4B-A1A0-343415CD3C69.root era="era2018" outFilename=output_nano.root
+```
+
 ## Run locally
 
 Example for a ttbar MC file in the emu final state. The trigger list can be left empty. Change the last word to run other final states, or to run over data (e.g. "emudata" instead of "emumc").
