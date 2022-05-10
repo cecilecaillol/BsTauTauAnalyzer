@@ -259,9 +259,11 @@ class Analysis(Module):
         event.genCand=[]
         event.V_genpt=-1.0;
 
-        for genp in event.selectedGenParticles:
-            if abs(genp.pdgId)==15 and len(event.genCand)<2:
-                event.genCand.append(genp)
+
+        if self.isMC:
+            for genp in event.selectedGenParticles:
+                if abs(genp.pdgId)==15 and len(event.genCand)<2:
+                    event.genCand.append(genp)
 
         if self.isMC:
             for genp in event.selectedGenParticles:
