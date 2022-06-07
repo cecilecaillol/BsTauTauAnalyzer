@@ -48,6 +48,7 @@ Double_t GetCollMass(const TLorentzVector _lep1, const TLorentzVector _lep2, con
   return m_mz_coll;
 }
 
+
 int main(int argc, char** argv) {
 
     std::string sample = *(argv + 1);
@@ -55,6 +56,19 @@ int main(int argc, char** argv) {
 
     cout << "sample = " << sample << endl;
     cout << "name = " << name << endl;
+
+//Read muon ID scale factor
+    TFile *freco = new TFile("/afs/cern.ch/user/x/xuqin/cernbox/workdir/taug-2/SFs/Efficiencies_muon_reco.root","READ");//RECO
+    TFile *fID = new TFile("/afs/cern.ch/user/x/xuqin/cernbox/workdir/taug-2/SFs/Efficiencies_muon_generalTracks_Z_Run2018_UL_ID.root","READ");//ID
+    TFile *fiso = new TFile("/afs/cern.ch/user/x/xuqin/cernbox/workdir/taug-2/SFs/Efficiencies_muon_generalTracks_Z_Run2018_UL_ISO.root","READ");//ISO
+    TFile *ftrigger = new TFile("/afs/cern.ch/user/x/xuqin/cernbox/workdir/taug-2/SFs/Efficiencies_muon_generalTracks_Z_Run2018_UL_SingleMuonTriggers.root","READ");//Trigger
+
+    TH1D *recoeff = (TH1D*)freco->Get("Efficiencies_muon_reco_abseta");
+    TH2F *IDeff = (TH2F*)fID->Get("NUM_MediumID_DEN_TrackerMuons_abseta_pt");
+    TH2F *isoeff = (TH2F*)fiso->Get("NUM_TightRelIso_DEN_MediumID_abseta_pt");
+    TH2F *triggereff = (TH2F*)ftrigger->Get("NUM_IsoMu24_DEN_CutBasedIdMedium_and_PFIsoMedium_abseta_pt");
+
+
     TChain *arbre = new TChain("Events");
     TChain *arbre2 = new TChain("Runs");
     if (sample=="data"){
@@ -142,9 +156,14 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("LepCand_muonIso", &LepCand_muonIso); 
     arbre->SetBranchAddress("LepCand_charge", &LepCand_charge);    
     arbre->SetBranchAddress("LepCand_muonMediumId",&LepCand_muonMediumId);
+    arbre->SetBranchAddress("LepCand_tauidMsf",&LepCand_tauidMsf); //tau id scale factor
+    arbre->SetBranchAddress("LepCand_taues",&LepCand_taues); //tau energy scale factor
+    arbre->SetBranchAddress("pu_weight",&pu_weight);//pile up weight
     TFile *fout = new TFile(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/%s.root",sample.c_str()),"recreate");
+    //TTree *tout = new TTree("Events","Events after basic selection");
     TTree *tout = (TTree*)arbre->CloneTree(0);
     double taupt, mupt, taueta, mueta, tauphi, muphi, taumumass,taumudelphi,Acopl, muiso, mumediumID, tauvsmu, tauvse, tauvsjet, mucharge, taucharge, Mcol, xsweight, MT_muonMET;
+    double muidsf,tauidsf,tauesf;
     tout->Branch("taupt",&taupt);
     tout->Branch("mupt",&mupt);
     tout->Branch("taueta",&taueta);
@@ -161,13 +180,15 @@ int main(int argc, char** argv) {
     tout->Branch("mucharge",&mucharge);
     tout->Branch("taucharge",&taucharge);
     tout->Branch("Acopl",&Acopl);
-    tout->Branch("PV_ndof",&PV_ndof);
-    tout->Branch("MET_pt",&MET_pt);
-    tout->Branch("nJets",&nJets);
+    //tout->Branch("PV_ndof",&PV_ndof);
+    //tout->Branch("MET_pt",&MET_pt);
+    //tout->Branch("nJets",&nJets);
     tout->Branch("Mcol",&Mcol);
     tout->Branch("MT_muonMET",&MT_muonMET);
     tout->Branch("xsweight",&xsweight);
-
+    tout->Branch("muidsf",&muidsf);
+    tout->Branch("tauidsf",&tauidsf);
+    tout->Branch("tauesf",&tauesf);
     //TH1F* h_taupt = new TH1F("h_taupt","h_taupt",20,0,200); h_taupt->Sumw2();
 
     Int_t nentries_wtn = (Int_t) arbre->GetEntries();
@@ -187,7 +208,9 @@ int main(int argc, char** argv) {
             tauvse = LepCand_vse[0];
             tauvsjet = LepCand_vse[0];
             taucharge = LepCand_charge[0];
-            mucharge = LepCand_charge[1];            
+            mucharge = LepCand_charge[1]; 
+            tauidsf = LepCand_tauidMsf[0];
+            tauesf = LepCand_taues[0];           
         }
 
         else if (nLepCand>1 && LepCand_id[0]==13 && LepCand_id[1]==15){
@@ -200,6 +223,8 @@ int main(int argc, char** argv) {
             tauvsjet = LepCand_vse[1];
             taucharge = LepCand_charge[1];
             mucharge = LepCand_charge[0];  
+            tauidsf = LepCand_tauidMsf[1];
+            tauesf = LepCand_taues[1];   
 
         }
 
@@ -212,10 +237,13 @@ int main(int argc, char** argv) {
             tauvse = LepCand_vse[0];
             tauvsjet = LepCand_vse[0];
             taucharge = LepCand_charge[0];
-            mucharge = LepCand_charge[2];  
+            mucharge = LepCand_charge[2]; 
+            tauidsf = LepCand_tauidMsf[0];
+            tauesf = LepCand_taues[0];    
         }
 
         else continue;
+        my_tau=my_tau*tauesf;
         taupt = my_tau.Pt();
         mupt = my_mu.Pt();
         taueta = my_tau.Eta();
@@ -223,11 +251,45 @@ int main(int argc, char** argv) {
         tauphi = my_tau.Phi();
         muphi = my_mu.Phi();
 
+
+
         if (!(tauvse>=7 && tauvsmu >=15 && tauvsjet>=31)) continue; //tau id selection: Medium vs jet, Tight vs muon, VLoose vs electron
         if (!(mumediumID==1 && muiso<0.15)) continue; //muid and isolation cut: medium vs muon and isolation<0.15
         if (mucharge==taucharge) continue; //oposite sign of mutau
         if (!(HLT_IsoMu24==1 && mupt>26)) continue; // trigger and mupt
         if (!(taueta<2.3 && mueta<2.4)) continue; // eta selection
+
+
+
+        double recosf,IDsf,isosf,triggersf;
+
+        recosf = recoeff->GetBinContent(recoeff->FindBin(abs(mueta)));
+        if (recosf==0){
+            cout << "mueta = " << mueta << " recosf = 0" << endl; 
+
+        }
+
+
+        if (mupt<120){
+            IDsf = IDeff->GetBinContent(IDeff->FindBin(abs(mueta),mupt));
+            isosf = isoeff->GetBinContent(isoeff->FindBin(abs(mueta),mupt));
+        }
+        else{
+            IDsf = IDeff->GetBinContent(IDeff->FindBin(abs(mueta),119));
+            isosf = isoeff->GetBinContent(isoeff->FindBin(abs(mueta),119));
+        }
+
+        if (mupt<200){
+            triggersf = triggereff->GetBinContent(triggereff->FindBin(abs(mueta),mupt));
+        }
+        else {
+            triggersf = triggereff->GetBinContent(triggereff->FindBin(abs(mueta),199));
+        }
+
+        muidsf = recosf*IDsf*isosf*triggersf;
+        
+        //cout << "recosf = " << recosf << " IDsf = " << IDsf << " isosf = " << isosf << " triggersf = " << triggersf << endl;
+        //cout << "muidsf = " << muidsf << endl; 
 
 /*       TLorentzVector my_tau;
         if (nLepCand>0 and LepCand_id[0]==15) my_tau.SetPtEtaPhiM(LepCand_pt[0],LepCand_eta[0],LepCand_phi[0],0);

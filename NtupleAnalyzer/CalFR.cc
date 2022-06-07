@@ -31,33 +31,15 @@
 
 using namespace std;
 
-
-Double_t GetCollMass(const TLorentzVector _lep1, const TLorentzVector _lep2, const Double_t _metx, const Double_t _mety)
-{
-  Double_t m_mz_coll=0;
-
-  Double_t x1 = ((_lep1.Px()*_lep2.Py())-(_lep1.Py()*_lep2.Px())) / ((_lep1.Px()*_lep2.Py())-(_lep1.Py()*_lep2.Px())+(_lep2.Py()*_metx)-(_lep2.Px()*_mety));
-  Double_t x2 = ((_lep1.Px()*_lep2.Py())-(_lep1.Py()*_lep2.Px())) / ((_lep1.Px()*_lep2.Py())-(_lep1.Py()*_lep2.Px())+(_lep1.Px()*_mety)-(_lep1.Py()*_metx));
-
-  //cout << "x1 is " << x1 << " x2 is " << x2 << endl;
-
-  if( (x1*x2) > 0. )
-    m_mz_coll = ((_lep1+_lep2).M())/(sqrt(x1*x2));
-  else m_mz_coll = 0;
-
-  return m_mz_coll;
-}
-
 int main(int argc, char** argv) {
 
-    std::string sample = *(argv + 1);
-    std::string name = *(argv + 2);
+   //std::string sample = *(argv + 1);
+   // std::string name = *(argv + 2);
 
-    cout << "sample = " << sample << endl;
-    cout << "name = " << name << endl;
+    //cout << "sample = " << sample << endl;
+    //cout << "name = " << name << endl;
     TChain *arbre = new TChain("Events");
     TChain *arbre2 = new TChain("Runs");
-    if (sample=="data"){
 
     
     arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/mutau/SingleMuon_Run2018A-UL2018_MiniAODv2_NanoAODv9-v2_mutau/*.root");
@@ -69,55 +51,11 @@ int main(int argc, char** argv) {
     arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/mutau/SingleMuon_Run2018C-UL2018_MiniAODv2_NanoAODv9-v2_mutau/*.root");
     arbre2->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/mutau/SingleMuon_Run2018C-UL2018_MiniAODv2_NanoAODv9-v2_mutau/*.root");
 
-    arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/mutau/SingleMuon_Run2018D-UL2018_MiniAODv2_NanoAODv9-v2_mutau/*.root");
-    arbre2->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/mutau/SingleMuon_Run2018D-UL2018_MiniAODv2_NanoAODv9-v2_mutau/*.root");
-
-    }
-
-    else {
-    arbre->Add(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/mutau/%s/*.root",name.c_str()));
-    arbre2->Add(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/mutau/%s/*.root",name.c_str()));
-    }
-
-    float ngen=0;
-    if (name!="data_obs") {
-        Int_t nentries_wtn2 = (Int_t) arbre2->GetEntries();
-        arbre2->SetBranchAddress("genEventCount", &genEventCount);
-        for (Int_t i = 0; i < nentries_wtn2; i++) {
-          arbre2->GetEntry(i);
-	        ngen+=genEventCount;
-        }
-    }
+    arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/mutau/SingleMuon_Run2018D-UL2018_MiniAODv2_NanoAODv9-v1_mutau/*.root");
+    arbre2->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/mutau/SingleMuon_Run2018D-UL2018_MiniAODv2_NanoAODv9-v1_mutau/*.root");
 
 
-    float xs=1.0; float weight=1.0; float luminosity=59740.0;
-    if (sample == "DYJetsToLL_M-50") xs=6077.22; 
-    else if (sample == "WJetsToLNu") xs=61526.7;
-    else if (sample == "ST_t-channel_antitop_5f_InclusiveDecays") xs=80.95;
-    else if (sample == "ST_t-channel_top_4f_InclusiveDecays") xs=136.02;
-    else if (sample == "ST_tW_top_5f_inclusiveDecays") xs=35.85;
-    else if (sample == "ST_tW_antitop_5f_inclusiveDecays") xs=35.85;
-    else if (sample == "TTTo2L2Nu") xs=88.29;
-    else if (sample == "TTToHadronic") xs=377.96;
-    else if (sample == "TTToSemiLeptonic") xs=365.35;
-    else if (sample == "WW") xs=75.8;
-    else if (sample == "WZ") xs=27.6;
-    else if (sample == "ZZTo2L2Nu") xs=0.6008;
-    else if (sample == "ZZTo2Q2L_mllmin4p0") xs=3.38;
-    else if (sample == "ZZTo4L") xs=1.26;
-    else if (sample == "data" || sample == "dataA" || sample == "dataB" || sample == "dataC" || sample == "dataD") xs=1; //No use here
-    else { 
-        cout << "Wrong sample, please check" << endl;
-        exit(1);
-    }
 
-    
-    weight=luminosity*xs/ngen;
-
-    cout << "luminosity = " <<  luminosity <<" xs = " << xs << " ngen = " << ngen << endl;
-    cout << "calculate weight = luminosity*xs/ngen = " << weight << endl;
-
-    if (sample == "data"|| sample == "dataA" || sample == "dataB" || sample == "dataC" || sample == "dataD") weight=1; //Set weight of data sample to 1
 
     cout.setf(ios::fixed, ios::floatfield);
     cout.precision(10);
@@ -142,10 +80,23 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("LepCand_muonIso", &LepCand_muonIso); 
     arbre->SetBranchAddress("LepCand_charge", &LepCand_charge);    
     arbre->SetBranchAddress("LepCand_muonMediumId",&LepCand_muonMediumId);
-    TFile *fout = new TFile(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/%s.root",sample.c_str()),"recreate");
-    TTree *tout = (TTree*)arbre->CloneTree(0);
+    TFile *fout = new TFile("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/FRSSestimate.root","recreate");
+    
+    double FRedge[42];
+    for (int i=0;i<=41;i++){
+        if (i==41){
+            FRedge[i]=1000;
+        }
+        else {
+            FRedge[i]=30+i*4;
+        }
+    }
+    TH1D *SS_M = new TH1D("SS_M","",41,FRedge);
+    TH1D *SS_VVVL = new TH1D("SS_VVVL","",41,FRedge);  
+    TH1D *FRSS= new TH1D("FRSS","",41,FRedge);     
+    //TTree *tout = new TTree("Events","Events after basic selection");
     double taupt, mupt, taueta, mueta, tauphi, muphi, taumumass,taumudelphi,Acopl, muiso, mumediumID, tauvsmu, tauvse, tauvsjet, mucharge, taucharge, Mcol, xsweight, MT_muonMET;
-    tout->Branch("taupt",&taupt);
+    /*tout->Branch("taupt",&taupt);
     tout->Branch("mupt",&mupt);
     tout->Branch("taueta",&taueta);
     tout->Branch("mueta",&mueta);
@@ -166,8 +117,7 @@ int main(int argc, char** argv) {
     tout->Branch("nJets",&nJets);
     tout->Branch("Mcol",&Mcol);
     tout->Branch("MT_muonMET",&MT_muonMET);
-    tout->Branch("xsweight",&xsweight);
-
+*/
     //TH1F* h_taupt = new TH1F("h_taupt","h_taupt",20,0,200); h_taupt->Sumw2();
 
     Int_t nentries_wtn = (Int_t) arbre->GetEntries();
@@ -223,11 +173,19 @@ int main(int argc, char** argv) {
         tauphi = my_tau.Phi();
         muphi = my_mu.Phi();
 
-        if (!(tauvse>=7 && tauvsmu >=15 && tauvsjet>=31)) continue; //tau id selection: Medium vs jet, Tight vs muon, VLoose vs electron
+        if (!(tauvse>=7 && tauvsmu >=15 )) continue; //tau id selection: Tight vs muon, VLoose vs electron
         if (!(mumediumID==1 && muiso<0.15)) continue; //muid and isolation cut: medium vs muon and isolation<0.15
-        if (mucharge==taucharge) continue; //oposite sign of mutau
+        if (mucharge!=taucharge) continue; //same sign region considered
         if (!(HLT_IsoMu24==1 && mupt>26)) continue; // trigger and mupt
         if (!(taueta<2.3 && mueta<2.4)) continue; // eta selection
+
+        if (tauvsjet>=1 && tauvsjet<31){//pass VVVLoose but fail Medium vs jet
+            SS_VVVL->Fill(taupt);
+        }
+        else if (tauvsjet>=31){//pass Medium vs jet
+            SS_M->Fill(taupt);
+        }
+
 
 /*       TLorentzVector my_tau;
         if (nLepCand>0 and LepCand_id[0]==15) my_tau.SetPtEtaPhiM(LepCand_pt[0],LepCand_eta[0],LepCand_phi[0],0);
@@ -238,7 +196,7 @@ int main(int argc, char** argv) {
 
         //if (fabs(my_tau.Eta())>2.1) continue;
         //cout << "haha" << endl;
-        taumumass = (my_tau + my_mu).M();
+        /*taumumass = (my_tau + my_mu).M();
         taumudelphi = my_tau.DeltaPhi(my_mu);
         Acopl = 1 - abs(taumudelphi)/TMath::Pi();
         double metx = MET_pt * TMath::Cos(MET_phi);
@@ -248,14 +206,23 @@ int main(int argc, char** argv) {
         MT_muonMET = TMath::Sqrt(2*mupt*MET_pt*(1-TMath::Cos(muMETdelphi)));
         xsweight=weight;
         //h_taupt->Fill(my_tau.Pt());
-        tout->Fill();
-
+        tout->Fill();*/
     } // end of loop over events
+
+    for (int i=1;i<=41;i++){
+        double NVVVL_noM = SS_VVVL->GetBinContent(i);
+        double NM = SS_M->GetBinContent(i);
+        double FR = NM/NVVVL_noM;
+        FRSS->SetBinContent(i,FR);
+    }
+
+
     //TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();
 
-    tout->Write();
-
+    SS_M->Write();
+    SS_VVVL->Write();
+    FRSS->Write();
     //TDirectory *dir0 =fout->mkdir("tau_pt");
     //dir0->cd();
     //h_taupt->SetName(name.c_str());
