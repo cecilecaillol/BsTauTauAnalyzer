@@ -35,7 +35,7 @@
 using namespace std;
 
 
-
+//this code only plot data/MC comparison with cross section reweighting and scale factor
 int main(int argc, char** argv) {
     gStyle->SetOptStat(0);
     gStyle->SetFrameLineWidth(1);
@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
     vector<Color_t> color = {kRed,kBlue,kGreen,kCyan+2};
 
     TChain *datantuple = new TChain("Events","datatuple");
-    datantuple->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/data*.root");
+    datantuple->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/after_sel/SSregion/data*.root");
     TH1F *hdata = new TH1F("hdata","",40,plotmin,plotmax);
     datantuple->Draw(Form("%s>>hdata",variable.c_str()),"","goff");
     int DataEntries = datantuple->GetEntries();
@@ -76,27 +76,34 @@ int main(int argc, char** argv) {
     cout << "bkgMChis.size " << bkgMChis.size() << endl;
     THStack *hsMC = new THStack("hsMC","");
 
-    //double bkgMCentries=0;
-    /*for (unsigned int i=0; i < allsamplename.size(); i++){
-        double xsweight;
+    /*double bkgMCentries=0;
+    for (unsigned int i=0; i < allsamplename.size(); i++){
+        double xsweight,muidsf,tauidsf;
         TChain t("Events");
-        t.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/" + allsamplename[i] + ".root").c_str());
+        t.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/after_sel/SSregion/" + allsamplename[i] + ".root").c_str());
         t.SetBranchAddress("xsweight",&xsweight);
+        t.SetBranchAddress("muidsf",&muidsf);
+        t.SetBranchAddress("tauidsf",&tauidsf);
         t.GetEntry(i);
-        cout << "sample is " << allsamplename[i] << " Entries is " << xsweight*t.GetEntries() << endl;
-        bkgMCentries += xsweight*t.GetEntries();
+        //cout << "sample is " << allsamplename[i] << " Entries is " << xsweight*t.GetEntries() << endl;
+        //bkgMCentries += xsweight*t.GetEntries();
         TH1F *hMC = new TH1F(Form("h%s",allsamplename[i].c_str()),"",40,plotmin,plotmax);
-        t.Draw(Form("%s>>h%s",variable.c_str(),allsamplename[i].c_str()),"xsweight","goff");
+        t.Draw(Form("%s>>h%s",variable.c_str(),allsamplename[i].c_str()),"xsweight*muidsf*tauidsf","goff");
+        cout << "sample is " << allsamplename[i] << " Entries is " << hMC->Integral() << endl;   
+        bkgMCentries += hMC->Integral();     
         bkgMChis.push_back(hMC);
         hsMC->Add(hMC);
-    }*/
+    }
+    cout << "bkg total is" << bkgMCentries << endl;
+    return 0;
+    */
     TH1F *hratio = new TH1F("hratio","",40,plotmin,plotmax);
 
     for (unsigned int i=0; i < cate.size(); i++){
         TChain t("Events");
         for (int j = catenumber[i][0];j <= catenumber[i][1]; j++){
             cout << "j= " << j << endl;
-            t.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/" + allsamplename[j] + ".root").c_str());
+            t.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/after_sel/SSregion/" + allsamplename[j] + ".root").c_str());
         }
         cout << "xixi" << endl;
         bkgMChis[i]=new TH1F(Form("h%s",cate[i].c_str()),"",40,plotmin,plotmax);

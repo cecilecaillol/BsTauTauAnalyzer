@@ -30,8 +30,8 @@
 
 
 using namespace std;
-// this code used to do basic selection on MC samples (sf included)
-// remember to check the fout and mutau sign
+//this code is to generate data-driven MC sample with fake rate
+//careful to check tauvsjet and taugen
 
 Double_t GetCollMass(const TLorentzVector _lep1, const TLorentzVector _lep2, const Double_t _metx, const Double_t _mety)
 {
@@ -59,6 +59,8 @@ int main(int argc, char** argv) {
     cout << "name = " << name << endl;
 
 //Read muon ID scale factor
+    TFile * FRfile = new TFile("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/after_sel/FRSSestimate.root","read");
+    TH1D* hFR = (TH1D*)FRfile->Get("FRSS");
     TFile *freco = new TFile("/afs/cern.ch/user/x/xuqin/cernbox/workdir/taug-2/SFs/Efficiencies_muon_reco.root","READ");//RECO
     TFile *fID = new TFile("/afs/cern.ch/user/x/xuqin/cernbox/workdir/taug-2/SFs/Efficiencies_muon_generalTracks_Z_Run2018_UL_ID.root","READ");//ID
     TFile *fiso = new TFile("/afs/cern.ch/user/x/xuqin/cernbox/workdir/taug-2/SFs/Efficiencies_muon_generalTracks_Z_Run2018_UL_ISO.root","READ");//ISO
@@ -160,11 +162,11 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("LepCand_tauidMsf",&LepCand_tauidMsf); //tau id scale factor
     arbre->SetBranchAddress("LepCand_taues",&LepCand_taues); //tau energy scale factor
     arbre->SetBranchAddress("pu_weight",&pu_weight);//pile up weight
-    TFile *fout = new TFile(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/after_sel/SSregion/%s.root",sample.c_str()),"recreate");
+    TFile *fout = new TFile(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/after_sel/anti_iso_notjetfaketau/%s.root",sample.c_str()),"recreate");
     //TTree *tout = new TTree("Events","Events after basic selection");
     TTree *tout = (TTree*)arbre->CloneTree(0);
     double taupt, mupt, taueta, mueta, tauphi, muphi, taumumass,taumudelphi,Acopl, muiso, mumediumID, tauvsmu, tauvse, tauvsjet, mucharge, taucharge, Mcol, xsweight, MT_muonMET;
-    double muidsf,tauidsf,tauesf,taugen;
+    double muidsf,tauidsf,tauesf,taugen,SSFR;
     tout->Branch("taupt",&taupt);
     tout->Branch("mupt",&mupt);
     tout->Branch("taueta",&taueta);
@@ -191,6 +193,7 @@ int main(int argc, char** argv) {
     tout->Branch("tauidsf",&tauidsf);
     tout->Branch("tauesf",&tauesf);
     tout->Branch("taugen", &taugen);
+    tout->Branch("SSFR",&SSFR);
     //TH1F* h_taupt = new TH1F("h_taupt","h_taupt",20,0,200); h_taupt->Sumw2();
 
     Int_t nentries_wtn = (Int_t) arbre->GetEntries();
@@ -258,11 +261,16 @@ int main(int argc, char** argv) {
 
 
 
-        if (!(tauvse>=7 && tauvsmu >=15 && tauvsjet>=31)) continue; //tau id selection: Medium vs jet, Tight vs muon, VLoose vs electron
+        if (!(tauvse>=7 && tauvsmu >=15 )) continue; //tau id selection: Tight vs muon, VLoose vs electron
+        if (!(tauvsjet>=1 && tauvsjet<31)) continue; //VVVLoose vs jet & fali Medium vs jet
         if (!(mumediumID==1 && muiso<0.15)) continue; //muid and isolation cut: medium vs muon and isolation<0.15
-        if (mucharge!=taucharge) continue; //same sign of mutau
+        if (mucharge==taucharge) continue; //oposite sign of mutau
         if (!(HLT_IsoMu24==1 && mupt>26)) continue; // trigger and mupt
         if (!(abs(taueta)<2.3 && abs(mueta)<2.4)) continue; // eta selection
+
+        if (taugen==0) continue; //remove jetfaketau 
+
+        SSFR = hFR->GetBinContent(hFR->FindBin(taupt));
 
 
 

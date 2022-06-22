@@ -28,7 +28,7 @@
 #include "TMath.h"
 #include "tr_Tree.h"
 
-
+//this code is to generate data-driven data sample with fake rate
 using namespace std;
 
 
@@ -179,7 +179,7 @@ int main(int argc, char** argv) {
             mumediumID = LepCand_muonMediumId[1];
             tauvsmu = LepCand_vsmu[0];
             tauvse = LepCand_vse[0];
-            tauvsjet = LepCand_vse[0];
+            tauvsjet = LepCand_vsjet[0];
             taucharge = LepCand_charge[0];
             mucharge = LepCand_charge[1];            
         }
@@ -191,7 +191,7 @@ int main(int argc, char** argv) {
             mumediumID = LepCand_muonMediumId[0];
             tauvsmu = LepCand_vsmu[1];
             tauvse = LepCand_vse[1];
-            tauvsjet = LepCand_vse[1];
+            tauvsjet = LepCand_vsjet[1];
             taucharge = LepCand_charge[1];
             mucharge = LepCand_charge[0];  
 
@@ -204,7 +204,7 @@ int main(int argc, char** argv) {
             mumediumID = LepCand_muonMediumId[2];
             tauvsmu = LepCand_vsmu[0];
             tauvse = LepCand_vse[0];
-            tauvsjet = LepCand_vse[0];
+            tauvsjet = LepCand_vsjet[0];
             taucharge = LepCand_charge[0];
             mucharge = LepCand_charge[2];  
         }
@@ -221,7 +221,7 @@ int main(int argc, char** argv) {
         if (!(mumediumID==1 && muiso<0.15)) continue; //muid and isolation cut: medium vs muon and isolation<0.15
         if (mucharge==taucharge) continue; //oppsite sign of mutau
         if (!(HLT_IsoMu24==1 && mupt>26)) continue; // trigger and mupt
-        if (!(taueta<2.3 && mueta<2.4)) continue; // eta selection
+        if (!(abs(taueta)<2.3 && abs(mueta)<2.4)) continue; // eta selection
         if (!(tauvsjet>=1 && tauvsjet<31)) continue; //pass VVVLoose fail Medium vs jet
 
 /*       TLorentzVector my_tau;

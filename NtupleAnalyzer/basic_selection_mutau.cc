@@ -30,7 +30,7 @@
 
 
 using namespace std;
-
+// this code used to do basic selection on data samples (as no sf included)
 
 Double_t GetCollMass(const TLorentzVector _lep1, const TLorentzVector _lep2, const Double_t _metx, const Double_t _mety)
 {
@@ -142,7 +142,7 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("LepCand_muonIso", &LepCand_muonIso); 
     arbre->SetBranchAddress("LepCand_charge", &LepCand_charge);    
     arbre->SetBranchAddress("LepCand_muonMediumId",&LepCand_muonMediumId);
-    TFile *fout = new TFile(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/%s.root",sample.c_str()),"recreate");
+    TFile *fout = new TFile(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/after_sel/SSregion/%s.root",sample.c_str()),"recreate");
     TTree *tout = (TTree*)arbre->CloneTree(0);
     double taupt, mupt, taueta, mueta, tauphi, muphi, taumumass,taumudelphi,Acopl, muiso, mumediumID, tauvsmu, tauvse, tauvsjet, mucharge, taucharge, Mcol, xsweight, MT_muonMET;
     tout->Branch("taupt",&taupt);
@@ -185,7 +185,7 @@ int main(int argc, char** argv) {
             mumediumID = LepCand_muonMediumId[1];
             tauvsmu = LepCand_vsmu[0];
             tauvse = LepCand_vse[0];
-            tauvsjet = LepCand_vse[0];
+            tauvsjet = LepCand_vsjet[0];
             taucharge = LepCand_charge[0];
             mucharge = LepCand_charge[1];            
         }
@@ -197,7 +197,7 @@ int main(int argc, char** argv) {
             mumediumID = LepCand_muonMediumId[0];
             tauvsmu = LepCand_vsmu[1];
             tauvse = LepCand_vse[1];
-            tauvsjet = LepCand_vse[1];
+            tauvsjet = LepCand_vsjet[1];
             taucharge = LepCand_charge[1];
             mucharge = LepCand_charge[0];  
 
@@ -210,7 +210,7 @@ int main(int argc, char** argv) {
             mumediumID = LepCand_muonMediumId[2];
             tauvsmu = LepCand_vsmu[0];
             tauvse = LepCand_vse[0];
-            tauvsjet = LepCand_vse[0];
+            tauvsjet = LepCand_vsjet[0];
             taucharge = LepCand_charge[0];
             mucharge = LepCand_charge[2];  
         }
@@ -225,9 +225,9 @@ int main(int argc, char** argv) {
 
         if (!(tauvse>=7 && tauvsmu >=15 && tauvsjet>=31)) continue; //tau id selection: Medium vs jet, Tight vs muon, VLoose vs electron
         if (!(mumediumID==1 && muiso<0.15)) continue; //muid and isolation cut: medium vs muon and isolation<0.15
-        if (mucharge==taucharge) continue; //oposite sign of mutau
+        if (mucharge!=taucharge) continue; //same sign of mutau
         if (!(HLT_IsoMu24==1 && mupt>26)) continue; // trigger and mupt
-        if (!(taueta<2.3 && mueta<2.4)) continue; // eta selection
+        if (!(abs(taueta)<2.3 && abs(mueta)<2.4)) continue; // eta selection
 
 /*       TLorentzVector my_tau;
         if (nLepCand>0 and LepCand_id[0]==15) my_tau.SetPtEtaPhiM(LepCand_pt[0],LepCand_eta[0],LepCand_phi[0],0);

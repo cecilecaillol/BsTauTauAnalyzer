@@ -34,7 +34,7 @@
 
 using namespace std;
 
-
+//this code only plot data/MC comparison with cross section reweighting
 
 int main(int argc, char** argv) {
     gStyle->SetOptStat(0);
@@ -61,8 +61,8 @@ int main(int argc, char** argv) {
 
     //vector<string> cate = {"DY","WJets","TT","Others"};
     //int catenumber[4][2] = {{0,0},{1,1},{2,4},{5,13}};
-    vector<string> cate = {"Others","TT","DY","WJets"};
-    int catenumber[4][2] = {{5,13},{2,4},{0,0},{1,1}};
+    vector<string> cate = {"Others","TT","WJets","DY"};
+    int catenumber[4][2] = {{5,13},{2,4},{1,1},{0,0}};
     vector<Color_t> color = {kRed,kBlue,kGreen,kCyan+2};
 
     TChain *datantuple = new TChain("Events","datatuple");
@@ -76,8 +76,8 @@ int main(int argc, char** argv) {
     cout << "bkgMChis.size " << bkgMChis.size() << endl;
     THStack *hsMC = new THStack("hsMC","");
 
-    //double bkgMCentries=0;
-    /*for (unsigned int i=0; i < allsamplename.size(); i++){
+    /*double bkgMCentries=0;
+    for (unsigned int i=0; i < allsamplename.size(); i++){
         double xsweight;
         TChain t("Events");
         t.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/" + allsamplename[i] + ".root").c_str());
@@ -89,7 +89,11 @@ int main(int argc, char** argv) {
         t.Draw(Form("%s>>h%s",variable.c_str(),allsamplename[i].c_str()),"xsweight","goff");
         bkgMChis.push_back(hMC);
         hsMC->Add(hMC);
-    }*/
+    }
+    cout << "Total entries of MC " << bkgMCentries << endl;
+    */
+
+    //return 0;
     TH1F *hratio = new TH1F("hratio","",40,plotmin,plotmax);
 
     for (unsigned int i=0; i < cate.size(); i++){

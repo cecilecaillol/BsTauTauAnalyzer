@@ -28,7 +28,7 @@
 #include "TMath.h"
 #include "tr_Tree.h"
 
-
+//this code is used to calculate fake rate using Same sign region
 using namespace std;
 
 int main(int argc, char** argv) {
@@ -82,18 +82,18 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("LepCand_muonMediumId",&LepCand_muonMediumId);
     TFile *fout = new TFile("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/FRSSestimate.root","recreate");
     
-    double FRedge[42];
-    for (int i=0;i<=41;i++){
-        if (i==41){
+    double FRedge[22];
+    for (int i=0;i<=21;i++){
+        if (i==21){
             FRedge[i]=1000;
         }
         else {
-            FRedge[i]=30+i*4;
+            FRedge[i]=30+i*8;
         }
     }
-    TH1D *SS_M = new TH1D("SS_M","",41,FRedge);
-    TH1D *SS_VVVL = new TH1D("SS_VVVL","",41,FRedge);  
-    TH1D *FRSS= new TH1D("FRSS","",41,FRedge);     
+    TH1D *SS_M = new TH1D("SS_M","",21,FRedge);
+    TH1D *SS_VVVL = new TH1D("SS_VVVL","",21,FRedge);  
+    TH1D *FRSS= new TH1D("FRSS","",21,FRedge);     
     //TTree *tout = new TTree("Events","Events after basic selection");
     double taupt, mupt, taueta, mueta, tauphi, muphi, taumumass,taumudelphi,Acopl, muiso, mumediumID, tauvsmu, tauvse, tauvsjet, mucharge, taucharge, Mcol, xsweight, MT_muonMET;
     /*tout->Branch("taupt",&taupt);
@@ -135,7 +135,7 @@ int main(int argc, char** argv) {
             mumediumID = LepCand_muonMediumId[1];
             tauvsmu = LepCand_vsmu[0];
             tauvse = LepCand_vse[0];
-            tauvsjet = LepCand_vse[0];
+            tauvsjet = LepCand_vsjet[0];
             taucharge = LepCand_charge[0];
             mucharge = LepCand_charge[1];            
         }
@@ -147,7 +147,7 @@ int main(int argc, char** argv) {
             mumediumID = LepCand_muonMediumId[0];
             tauvsmu = LepCand_vsmu[1];
             tauvse = LepCand_vse[1];
-            tauvsjet = LepCand_vse[1];
+            tauvsjet = LepCand_vsjet[1];
             taucharge = LepCand_charge[1];
             mucharge = LepCand_charge[0];  
 
@@ -160,7 +160,7 @@ int main(int argc, char** argv) {
             mumediumID = LepCand_muonMediumId[2];
             tauvsmu = LepCand_vsmu[0];
             tauvse = LepCand_vse[0];
-            tauvsjet = LepCand_vse[0];
+            tauvsjet = LepCand_vsjet[0];
             taucharge = LepCand_charge[0];
             mucharge = LepCand_charge[2];  
         }
@@ -177,7 +177,7 @@ int main(int argc, char** argv) {
         if (!(mumediumID==1 && muiso<0.15)) continue; //muid and isolation cut: medium vs muon and isolation<0.15
         if (mucharge!=taucharge) continue; //same sign region considered
         if (!(HLT_IsoMu24==1 && mupt>26)) continue; // trigger and mupt
-        if (!(taueta<2.3 && mueta<2.4)) continue; // eta selection
+        if (!(abs(taueta)<2.3 && abs(mueta)<2.4)) continue; // eta selection
 
         if (tauvsjet>=1 && tauvsjet<31){//pass VVVLoose but fail Medium vs jet
             SS_VVVL->Fill(taupt);
@@ -209,7 +209,7 @@ int main(int argc, char** argv) {
         tout->Fill();*/
     } // end of loop over events
 
-    for (int i=1;i<=41;i++){
+    for (int i=1;i<=21;i++){
         double NVVVL_noM = SS_VVVL->GetBinContent(i);
         double NM = SS_M->GetBinContent(i);
         double FR = NM/NVVVL_noM;

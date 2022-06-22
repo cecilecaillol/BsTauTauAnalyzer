@@ -28,13 +28,15 @@
 #include "TChain.h"
 #include "TMath.h"
 #include "TLine.h"
+#include "TPaveText.h"
 #include "tr_Tree.h"
 
-
+//this code is used to plot data/MC comparison with data-driven estimated bkg with correction (rm not jetfaketau MC
+//in anti-isolated region and only consider no jetfaketau MC in signal region )
 
 using namespace std;
 
-//this code is used to plot data/MC comparison with data-driven estimated bkg without any correction
+
 
 int main(int argc, char** argv) {
     gStyle->SetOptStat(0);
@@ -46,27 +48,34 @@ int main(int argc, char** argv) {
     std::string variable = *(argv + 1);
     double plotmin = atof(*(argv+2));
     double plotmax = atof(*(argv+3));
-    int log = atoi(*(argv+4));
+    int nbins = atoi(*(argv+4));
+    int log = atoi(*(argv+5));
 
     cout << "Try to compare data/MC of variable " << variable << endl;
     cout << "Plot minimum is " << plotmin << endl;
     cout << "Plot maximum is " << plotmax << endl;
+    cout << "nbins " << nbins << endl;
     cout << "log scale " << log << endl;
 
+    TFile *fout = new TFile(Form("~/eos/taug-2/nanoplots/mutau/after_sel/histo/histo%s_MT50.root",variable.c_str()),"recreate");
 
 
-    vector<string> allsamplename = {"DYJetsToLL_M-50","Estbkg","TTTo2L2Nu","ZZTo2L2Nu","ZZTo4L"};
+    vector<string> allsamplename = {"DYJetsToLL_M-50","TTTo2L2Nu","TTToHadronic","TTToSemiLeptonic","WJetsToLNu","WW","WZ","ZZTo2L2Nu",
+        "ZZTo2Q2L_mllmin4p0","ZZTo4L","ST_t-channel_antitop_5f_InclusiveDecays","ST_t-channel_top_4f_InclusiveDecays","ST_tW_top_5f_inclusiveDecays",
+        "ST_tW_antitop_5f_inclusiveDecays","Estbkg"};
 
     //vector<string> cate = {"DY","WJets","TT","Others"};
     //int catenumber[4][2] = {{0,0},{1,1},{2,4},{5,13}};
-    vector<string> cate = {"Others","DY","Estbkg"};
-    int catenumber[3][2] = {{2,4},{0,0},{1,1}};
-    vector<Color_t> color = {kRed,kBlue,kGreen};
+    vector<string> cate = {"Others","TT","DY","Estbkg"};
+    int catenumber[4][2] = {{4,13},{1,3},{0,0},{14,14}};
+    vector<Color_t> color = {kRed,kBlue,kGreen,kCyan};
 
     TChain *datantuple = new TChain("Events","datatuple");
-    datantuple->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/data*.root");
-    TH1F *hdata = new TH1F("hdata","",40,plotmin,plotmax);
-    datantuple->Draw(Form("%s>>hdata",variable.c_str()),"","goff");
+    datantuple->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/after_sel/data*.root");
+    TH1F *hdata = new TH1F("hdata","",nbins,plotmin,plotmax);
+    fout->cd();
+    hdata->Write("data_obs");
+    datantuple->Draw(Form("%s>>hdata",variable.c_str()),"MT_muonMET<50","goff");
     int DataEntries = datantuple->GetEntries();
     cout << "Entry of data is " << DataEntries << endl; 
     vector<TChain> bkgMCntuple;
@@ -83,39 +92,58 @@ int main(int argc, char** argv) {
         t.GetEntry(i);
         cout << "sample is " << allsamplename[i] << " Entries is " << xsweight*t.GetEntries() << endl;
         bkgMCentries += xsweight*t.GetEntries();
-        TH1F *hMC = new TH1F(Form("h%s",allsamplename[i].c_str()),"",40,plotmin,plotmax);
+        TH1F *hMC = new TH1F(Form("h%s",allsamplename[i].c_str()),"",nbins,plotmin,plotmax);
         t.Draw(Form("%s>>h%s",variable.c_str(),allsamplename[i].c_str()),"xsweight","goff");
         bkgMChis.push_back(hMC);
         hsMC->Add(hMC);
     }*/
-    TH1F *hratio = new TH1F("hratio","",40,plotmin,plotmax);
+    TH1F *hratio = new TH1F("hratio","",nbins,plotmin,plotmax);
 
     for (unsigned int i=0; i < cate.size(); i++){
-        TChain t("Events");
-        for (int j = catenumber[i][0];j <= catenumber[i][1]; j++){
-            cout << "j= " << j << endl;
-            t.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/" + allsamplename[j] + ".root").c_str());
-        }
-        cout << "xixi" << endl;
-        bkgMChis[i]=new TH1F(Form("h%s",cate[i].c_str()),"",40,plotmin,plotmax);
-        //bkgMChis[i]->SetName(Form("h%s",cate[i].c_str()));
-        //bkgMChis[i]->SetBins(40,plotmin,plotmax);
-        cout<< "xixi" << endl;   
 
-        //TH1F *hMC = new TH1F(Form("h%s",cate[i].c_str()),"",40,plotmin,plotmax);
-        if (cate[i]== "Estbkg"){
-            t.Draw(Form("%s>>h%s",variable.c_str(),cate[i].c_str()),"SSFR","goff");    
+        TChain t("Events");
+        if (cate[i]!="Estbkg"){
+            for (int j = catenumber[i][0];j <= catenumber[i][1]; j++){
+                cout << "j= " << j << endl;
+                t.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/after_sel/sig_reg_rmjetfaketau/" + allsamplename[j] + "_rmjetfaketau.root").c_str());
+            }
+            cout << "xixi" << endl;
+            bkgMChis[i]=new TH1F(Form("h%s",cate[i].c_str()),"",nbins,plotmin,plotmax);
+        //bkgMChis[i]->SetName(Form("h%s",cate[i].c_str()));
+        //bkgMChis[i]->SetBins(nbins,plotmin,plotmax);
+            cout<< "xixi" << endl;  
+            t.Draw(Form("%s>>h%s",variable.c_str(),cate[i].c_str()),"xsweight*muidsf*tauidsf*(MT_muonMET<50)","goff"); 
+            fout->cd();
+            bkgMChis[i]->Write(cate[i].c_str()); 
         }
-        else {
-            t.Draw(Form("%s>>h%s",variable.c_str(),cate[i].c_str()),"xsweight*muidsf*tauidsf","goff");  
-        }
+        else{ 
+            t.Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/after_sel/Estbkg.root");
+            bkgMChis[i]=new TH1F(Form("h%s",cate[i].c_str()),"",nbins,plotmin,plotmax);
+        //TH1F *hMC = new TH1F(Form("h%s",cate[i].c_str()),"",nbins,plotmin,plotmax);
+            t.Draw(Form("%s>>h%s",variable.c_str(),cate[i].c_str()),"SSFR*(MT_muonMET<50)","goff");  
+            fout->cd();
+            bkgMChis[i]->Write("Estbkg_beforeCor");
+            TH1F * bkgCor=new TH1F("hCor","",nbins,plotmin,plotmax);
+            TChain tCor("Events");
+            for (int j =0; j< allsamplename.size()-1;j++ ){
+                tCor.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/mutau/after_sel/anti_iso_notjetfaketau/" + allsamplename[j] + ".root").c_str());
+            }
+            tCor.Draw(Form("%s>>hCor",variable.c_str()),"xsweight*muidsf*tauidsf*SSFR*(MT_muonMET<50)","goff"); 
+            fout->cd();
+            bkgCor->Write("anti_isoMC_nojetfaketau");
+            bkgMChis[i]->Add(bkgCor,-1); 
+            fout->cd();
+            bkgMChis[i]->Write("Estbkg_afterCor");
+
+        }  
+
         cout<< "xixi" << endl;   
         //bkgMChis.push_back(hMC);
         bkgMChis[i]->SetFillColor(color[i]);
         hsMC->Add(bkgMChis[i]);       
     }
     cout << "xuxu" << endl;
-    for (unsigned int i=1; i <= 40; i++){
+    for (unsigned int i=1; i <= nbins; i++){
         double valuedata = hdata->GetBinContent(i);
         double valueMC = 0.;
         for (unsigned int j=0; j < cate.size(); j++){
@@ -127,6 +155,8 @@ int main(int argc, char** argv) {
         }
         hratio->SetBinContent(i,ratio);
         hratio->SetBinError(i,0);
+        fout->cd();
+        hratio->Write("ratio");
         cout<< "value of " << i << " is " << hratio->GetBinContent(i) << endl;
     }
     cout << "xuxu" << endl;
@@ -157,11 +187,11 @@ int main(int argc, char** argv) {
     hdata->GetXaxis()->SetNdivisions(505);
     hdata->GetYaxis()->SetLabelFont(42);
     hdata->GetYaxis()->SetLabelOffset(0.01);
-    hdata->GetYaxis()->SetLabelSize(0.06);
-    hdata->GetYaxis()->SetTitleSize(0.07);
-    hdata->GetYaxis()->SetTitleOffset(0.7);
+    hdata->GetYaxis()->SetLabelSize(0.04);
+    hdata->GetYaxis()->SetTitleSize(0.05);
+    hdata->GetYaxis()->SetTitleOffset(1.1);
     hdata->GetYaxis()->SetTickLength(0.012);
-    hdata->SetTitle(variable.c_str());
+    hdata->SetTitle("");
     hdata->GetYaxis()->SetTitle("Events");
     hdata->SetMarkerStyle(20);
     hdata->SetMarkerSize(1);
@@ -188,10 +218,49 @@ int main(int argc, char** argv) {
         leg->Draw();
     }
 
+
+    double lowX=0.11;
+    double lowY=0.835;
+    TPaveText *CMS = new TPaveText(lowX, lowY+0.06, lowX+0.15, lowY+0.16, "NDC");
+    CMS->SetTextFont(61);
+    CMS->SetTextSize(0.08);
+    CMS->SetBorderSize(   0 );
+    CMS->SetFillStyle(    0 );
+    CMS->SetTextAlign(   12 );
+    CMS->SetTextColor(    1 );
+    CMS->AddText("CMS");
+    CMS->Draw("same");
+
+    lowX=0.65;
+    lowY=0.835;
+    TPaveText *lumi  = new TPaveText(lowX, lowY+0.06, lowX+0.30, lowY+0.16, "NDC");
+    lumi->SetBorderSize(   0 );
+    lumi->SetFillStyle(    0 );
+    lumi->SetTextAlign(   12 );
+    lumi->SetTextColor(    1 );
+    lumi->SetTextSize(0.06);
+    lumi->SetTextFont (   42 );
+    lumi->AddText("2018, 59.74 fb^{-1} (13 TeV)");
+    lumi->Draw("same");
+
+    lowX=0.20;
+    lowY=0.835;
+    TPaveText *Pre  = new TPaveText(lowX, lowY+0.06, lowX+0.15, lowY+0.16, "NDC");
+    Pre->SetTextFont(52);
+    Pre->SetTextSize(0.06);
+    Pre->SetBorderSize(   0 );
+    Pre->SetFillStyle(    0 );
+    Pre->SetTextAlign(   12 );
+    Pre->SetTextColor(    1 );
+    Pre->AddText("Preliminary");
+    Pre->Draw("same");
+
+    pad1->RedrawAxis();
+
     c->cd();
     TPad* pad2 = new TPad("pad2","pad2",0,0.0,1,0.3);
     pad2->SetTopMargin(0.05);
-    pad2->SetBottomMargin(0.15);
+    pad2->SetBottomMargin(0.4);
     pad2->SetLeftMargin(0.10);
     pad2->SetRightMargin(0.05);
     pad2->SetTickx(1);
@@ -216,7 +285,7 @@ int main(int argc, char** argv) {
     hratio->GetXaxis()->SetTitleSize(0.15);
     hratio->GetYaxis()->SetTitleSize(0.10);
     hratio->GetYaxis()->SetTitleOffset(0.4);
-    hratio->GetXaxis()->SetTitleOffset(1.65);
+    hratio->GetXaxis()->SetTitleOffset(0.8);
     hratio->GetXaxis()->SetLabelSize(0.09);
     hratio->GetXaxis()->SetTitle(variable.c_str());
     hratio->SetMarkerSize(1);
@@ -229,7 +298,10 @@ int main(int argc, char** argv) {
     line->SetLineStyle(3);
     line->Draw();
 
-    c->SaveAs(Form("Plotsmutau/%s_log%d_Estbkg.png",variable.c_str(),log));
+
+
+    c->SaveAs(Form("Plotsmutau/Estbkg/%s_log%d_Estbkg_MT50.png",variable.c_str(),log));
+    fout->Close();
     //TChain *DYtuple = new TChain("Events");
     //cout << "Entry of MC is " << bkgMCentries << endl;
 
