@@ -1,0 +1,7 @@
+tau1pt 40 100 40 0
+tau2pt 40 100 40 0
+tautaudelphi -3.1415926 3.1415926 40 0
+tautaumass 0 300 40 0
+MET_pt 0 200 40 0
+Acopl 0 1 40 0
+nJets 0 6 6 0

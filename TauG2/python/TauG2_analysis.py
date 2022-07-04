@@ -14,6 +14,9 @@ from MyNanoAnalyzer.TauG2.objectSelector import GenParticleSelector
 from TauPOG.TauIDSFs.TauIDSFTool import TauIDSFTool, TauESTool, campaigns
 from TauPOG.TauIDSFs.TauIDSFTool import TauFESTool
 
+from TauAnalysisTools.TauTriggerSFs.SFProvider import SFProvider
+
+
 class Analysis(Module):
     def __init__(self, channel, isMC):
         self.channel       = channel
@@ -23,6 +26,9 @@ class Analysis(Module):
         self.antiEleSFTool = TauIDSFTool('UL2018','DeepTau2017v2p1VSe','Loose')
         self.antiMuSFTool  = TauIDSFTool('UL2018','DeepTau2017v2p1VSmu','Tight')
         self.festool       = TauFESTool('UL2018')
+        self.tautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/nanoAOD/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
+        self.tauDMSF       = TauIDSFTool('UL2018','DeepTau2017v2p1VSjet','Medium',dm=True)
+
 
         cmssw=os.environ['CMSSW_BASE']
         datafilename = os.path.join(cmssw+"/src/MyNanoAnalyzer/TauG2/data/","Data_PileUp_UL2018_69p2.root")
@@ -75,6 +81,10 @@ class Analysis(Module):
         self.out.branch("LepCand_antielesf",     "F",  lenVar = "nLepCand");
         #self.out.branch("LepCand_antielesf_up",  "F",  lenVar = "nLepCand");
         #self.out.branch("LepCand_antielesf_down","F",  lenVar = "nLepCand");
+
+        self.out.branch("LepCand_tauidMsfDM",    "F",  lenVar = "nLepCand");# tauidsf for ditau channel
+        self.out.branch("LepCand_tautriggersf",    "F",  lenVar = "nLepCand");# trigger sf for ditau channel
+
         self.out.branch("nGenCand",              "I");
         self.out.branch("GenCand_id",            "I",  lenVar = "nGenCand");
         self.out.branch("GenCand_pt",            "F",  lenVar = "nGenCand");
@@ -300,6 +310,8 @@ class Analysis(Module):
         lep_eleMVAiso90=[]
         lep_eleMVAiso80=[]
         lep_eleIso=[]
+        lep_tauidMsfDM=[]
+        lep_tautriggersf=[]
 
         for lep in event.selectedLeptons:
              
@@ -331,6 +343,8 @@ class Analysis(Module):
                     lep_taues.append(self.testool.getTES(lep.pt,lep.decayMode,lep.genPartFlav))
                     #lep_taues_up.append(self.testool.getTES(lep.pt,lep.decayMode,lep.genPartFlav,unc='Up'))
                     #lep_taues_down.append(self.testool.getTES(lep.pt,lep.decayMode,lep.genPartFlav,unc='Down'))
+                    lep_tauidMsfDM.append(self.tauDMSF.getSFvsDM(lep.pt,lep.decayMode,lep.genPartFlav))
+                    lep_tautriggersf.append(self.tautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=0))
                 else:
                     lep_tauidMsf.append(1.0)
                     #lep_tauidMsf_up.append(1.0)
@@ -338,6 +352,9 @@ class Analysis(Module):
                     lep_taues.append(1.0)
                     #lep_taues_up.append(1.0)
                     #lep_taues_down.append(1.0)
+                    lep_tauidMsfDM.append(1.0)
+                    lep_tautriggersf.append(1.0)
+
                 
                 if self.isMC and (lep.genPartFlav==2 or lep.genPartFlav==4):
 	                  lep_antimusf.append(self.antiMuSFTool.getSFvsEta(lep.eta,lep.genPartFlav))
@@ -453,6 +470,8 @@ class Analysis(Module):
         self.out.fillBranch("LepCand_fes",           lep_fes)
         #self.out.fillBranch("LepCand_fes_up",        lep_fes_up)
         #self.out.fillBranch("LepCand_fes_down",      lep_fes_down)
+        self.out.fillBranch("LepCand_tauidMsfDM", lep_tauidMsfDM)
+        self.out.fillBranch("LepCand_tautriggersf",lep_tautriggersf)
 
         self.out.fillBranch("nJets" ,             len(event.selectedAK4Jets))
         self.out.fillBranch("nElectrons" ,        len(event.selectedElectrons))

@@ -46,4 +46,8 @@ for y in ANALYSISTRIGGERDATA:
     ANALYSISCUT[y]={}
     for c in ANALYSISTRIGGERDATA[y]:
         ANALYSISCUT[y][c]='--cut %s&&%s --json %s'%(ANALYSISTRIGGERDATA[y][c],ANALYSISCHANNELCUT[c],cmssw+'/src/MyNanoAnalyzer/TauG2/data/'+ANALYSISGRL[y]) # for data (json applied)
-    #ANALYSISCUT[y][c]='--cut %s&&%s'%(ANALYSISTRIGGERMC[y][c],ANALYSISCHANNELCUT[c]) # for MC (no json applied)
+    
+'''for y in ANALYSISTRIGGERMC:
+    ANALYSISCUT[y]={}
+    for c in ANALYSISTRIGGERMC[y]:
+        ANALYSISCUT[y][c]='--cut %s&&%s'%(ANALYSISTRIGGERMC[y][c],ANALYSISCHANNELCUT[c]) # for MC (no json applied)'''

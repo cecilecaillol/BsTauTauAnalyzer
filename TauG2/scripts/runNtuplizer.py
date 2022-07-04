@@ -39,12 +39,15 @@ def buildCondorFile(opt,FarmDirectory):
           print('INFO: Processing %s'%(dataset))
           sufix=''
           prefix=''
-          year=''
+          year='2018'
+
           if 'NanoAODv9' in dataset:
+            print ('haha')
             dataset_name = '_'.join(dataset.split('/')[1:3])
             year=dataset.split('UL')[1][:4]
-	    if 'UL1' in dataset:
-		year="20"+str(dataset.split('UL')[1][:2])
+            if 'UL1' in dataset:
+              year="20"+str(dataset.split('UL')[1][:2])
+              print ('year = ', year)
             sufix='data'
             cmd='dasgoclient --query=\"file dataset={} status=*\"'.format(dataset)
             file_list=os.popen(cmd).read().split()
@@ -56,9 +59,10 @@ def buildCondorFile(opt,FarmDirectory):
           else:
             print('ERROR: found invalid dataset = ',dataset,'stop the code')
             sys.exit(1)
-	  if 'Tau' not in dataset and "SingleMuon" not in dataset and "EGamma" not in dataset and "MuonEG" not in dataset and "DoubleMuon" not in dataset:
-	     sufix='mc'
-          channels=['mutau'] #EDIT THIS (could be ee,emu,etau,mumu,mutau,tautau)
+          if 'Tau' not in dataset and "SingleMuon" not in dataset and "EGamma" not in dataset and "MuonEG" not in dataset and "DoubleMuon" not in dataset:
+	          sufix='mc'
+          channels=['tautau'] #EDIT THIS (could be ee,emu,etau,mumu,mutau,tautau)
+          print ('sufix = ', sufix)
             
           #prepare output
           output=opt.output+'/'+dataset_name
@@ -67,10 +71,13 @@ def buildCondorFile(opt,FarmDirectory):
             output_full=output+"_"+channel
             # apply filter to data: trigger and GRL
             filter=ANALYSISCUT[year][channel]
+            print ("filter is ", filter)
             os.system('mkdir -p {}'.format(output_full))
             for file in file_list:
+
               outfile='%s/%s'%(output_full,os.path.basename(file).replace('.root','_Skim.root'))
               if os.path.isfile(outfile) and not opt.force: continue
+
               condor.write('arguments = %s %s %s %s\n'%(prefix+file,'analysis_'+channel+sufix,output_full,filter))
               condor.write('queue 1\n')
 
@@ -129,8 +136,8 @@ def main():
     #configuration
     usage = 'usage: %prog [options]'
     parser = optparse.OptionParser(usage)
-    parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesDataSingleMuon2018.txt', type='string')
-    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/xuqin/taug-2/ntuple/mutau', type='string') #EDIT THIS
+    parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='/afs/cern.ch/user/x/xuqin/work/taug-2/nanoAOD/CMSSW_10_6_27/src/MyNanoAnalyzer/TauG2/data/listSamplesDataTau2018.txt', type='string')
+    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/xuqin/taug-2/ntuple/tautau', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
     (opt, args) = parser.parse_args()
@@ -140,7 +147,7 @@ def main():
       sys.exit(1)
 	
     #prepare directory with scripts
-    FarmDirectory=os.environ['PWD']+'/FarmLocalNtuple'
+    FarmDirectory='/afs/cern.ch/user/x/xuqin/work/taug-2/nanoAOD/CMSSW_10_6_27/src/MyNanoAnalyzer/TauG2/data/FarmLocalNtuple'
     if not os.path.exists(FarmDirectory):  os.system('mkdir -vp '+FarmDirectory)
     print('\nINFO: IMPORTANT MESSAGE: RUN THE FOLLOWING SEQUENCE:')
     print('voms-proxy-init --voms cms --valid 72:00 --out %s/myproxy509\n'%FarmDirectory)
