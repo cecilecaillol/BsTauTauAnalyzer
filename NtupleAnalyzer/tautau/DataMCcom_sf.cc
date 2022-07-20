@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
     vector<Color_t> color = {kRed,kBlue,kGreen,kCyan+2};
 
     TChain *datantuple = new TChain("Events","datatuple");
-    datantuple->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/tautau/Sigregion/data*.root");
+    datantuple->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/tautau/SSregion/data*.root");
     TH1F *hdata = new TH1F("hdata","",nbins,plotmin,plotmax);
     datantuple->Draw(Form("%s>>hdata",variable.c_str()),"","goff");
     int DataEntries = datantuple->GetEntries();
@@ -78,11 +78,11 @@ int main(int argc, char** argv) {
     cout << "bkgMChis.size " << bkgMChis.size() << endl;
     THStack *hsMC = new THStack("hsMC","");
 
-    /*double bkgMCentries=0;
+    double bkgMCentries=0;
     for (unsigned int i=0; i < allsamplename.size(); i++){
         double xsweight,tau1idsf,tau2idsf,tau1tgsf,tau2tgsf,pu_weight;
         TChain t("Events");
-        t.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/tautau/Sigregion/" + allsamplename[i] + ".root").c_str());
+        t.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/tautau/SSregion/" + allsamplename[i] + ".root").c_str());
         t.SetBranchAddress("xsweight",&xsweight);
         t.SetBranchAddress("tau1idsf",&tau1idsf);
         t.SetBranchAddress("tau2idsf",&tau2idsf);
@@ -101,7 +101,7 @@ int main(int argc, char** argv) {
     }
     cout << "bkg total is" << bkgMCentries << endl;
     return 0;
-    */
+    
     
     TH1F *hratio = new TH1F("hratio","",nbins,plotmin,plotmax);
 
@@ -109,7 +109,7 @@ int main(int argc, char** argv) {
         TChain t("Events");
         for (int j = catenumber[i][0];j <= catenumber[i][1]; j++){
             cout << "j= " << j << endl;
-            t.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/tautau/Sigregion/" + allsamplename[j] + ".root").c_str());
+            t.Add(("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/tautau/SSregion/" + allsamplename[j] + ".root").c_str());
         }
         cout << "xixi" << endl;
         bkgMChis[i]=new TH1F(Form("h%s",cate[i].c_str()),"",nbins,plotmin,plotmax);

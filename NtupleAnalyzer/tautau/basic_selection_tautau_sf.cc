@@ -60,23 +60,23 @@ int main(int argc, char** argv) {
     if (sample=="data"){
 
     
-    arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautau/Tau_Run2018A-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
-    arbre2->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautau/Tau_Run2018A-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
+    arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautaunew/Tau_Run2018A-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
+    arbre2->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautaunew/Tau_Run2018A-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
 
-    arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautau/Tau_Run2018B-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
-    arbre2->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautau/Tau_Run2018B-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
+    arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautaunew/Tau_Run2018B-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
+    arbre2->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautaunew/Tau_Run2018B-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
 
-    arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautau/Tau_Run2018C-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
-    arbre2->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautau/Tau_Run2018C-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
+    arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautaunew/Tau_Run2018C-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
+    arbre2->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautaunew/Tau_Run2018C-UL2018_MiniAODv2_NanoAODv9-v1_tautau/*.root");
 
-    arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautau/Tau_Run2018D-UL2018_MiniAODv2_NanoAODv9-v2_tautau/*.root");
-    arbre2->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautau/Tau_Run2018D-UL2018_MiniAODv2_NanoAODv9-v2_tautau/*.root");
+    arbre->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautaunew/Tau_Run2018D-UL2018_MiniAODv2_NanoAODv9-v2_tautau/*.root");
+    arbre2->Add("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautaunew/Tau_Run2018D-UL2018_MiniAODv2_NanoAODv9-v2_tautau/*.root");
 
     }
 
     else {
-    arbre->Add(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautau/%s/*.root",name.c_str()));
-    arbre2->Add(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautau/%s/*.root",name.c_str()));
+    arbre->Add(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautaunew/%s/*.root",name.c_str()));
+    arbre2->Add(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/ntuple/tautaunew/%s/*.root",name.c_str()));
     }
 
     float ngen=0;
@@ -148,10 +148,11 @@ int main(int argc, char** argv) {
     //arbre->SetBranchAddress("HLT_DoubleMediumChargedIsoPFTau40_Trk1_TightID_eta2p1_Reg", &HLT_DoubleMediumChargedIsoPFTau40_Trk1_TightID_eta2p1_Reg);  
     //arbre->SetBranchAddress("HLT_DoubleTightChargedIsoPFTau40_Trk1_eta2p1_Reg", &HLT_DoubleTightChargedIsoPFTau40_Trk1_eta2p1_Reg);  
     //arbre->SetBranchAddress("HLT_DoubleTightChargedIsoPFTau35_Trk1_TightID_eta2p1_Reg" ,&HLT_DoubleTightChargedIsoPFTau35_Trk1_TightID_eta2p1_Reg);
-    arbre->SetBranchAddress("HLT_DoubleTightChargedIsoPFTauHPS40_Trk1_eta2p1_Reg",&HLT_DoubleTightChargedIsoPFTauHPS40_Trk1_eta2p1_Reg);       
-    TFile *fout = new TFile(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/tautau/SSregion/%s.root",sample.c_str()),"recreate");
+    arbre->SetBranchAddress("HLT_DoubleTightChargedIsoPFTauHPS40_Trk1_eta2p1_Reg",&HLT_DoubleTightChargedIsoPFTauHPS40_Trk1_eta2p1_Reg);   
+    arbre->SetBranchAddress("HLT_DoubleMediumChargedIsoPFTauHPS35_Trk1_eta2p1_Reg",&HLT_DoubleMediumChargedIsoPFTauHPS35_Trk1_eta2p1_Reg);     
+    TFile *fout = new TFile(Form("/afs/cern.ch/user/x/xuqin/eos/taug-2/nanoplots/tautau/Sigregion/%s.root",sample.c_str()),"recreate");
     TTree *tout = (TTree*)arbre->CloneTree(0);
-    double tau1pt, tau2pt, tau1eta, tau2eta, tau1phi, tau2phi, tautaumass,tautaudelphi,Acopl, tau1vsmu, tau1vse, tau1vsjet, tau2vsmu, tau2vse, tau2vsjet, tau1charge, tau2charge, Mcol, xsweight;
+    double tau1pt, tau2pt, tau1eta, tau2eta, tau1phi, tau2phi, tautaumass,tautaudelphi,Acopl, tau1vsmu, tau1vse, tau1vsjet, tau2vsmu, tau2vse, tau2vsjet, tau1charge, tau2charge, Mcol, xsweight, tautaudelR;
     double tau1idsf,tau2idsf,tau1tgsf,tau2tgsf,tau1es,tau2es;
     tout->Branch("tau1pt",&tau1pt);
     tout->Branch("tau2pt",&tau2pt);
@@ -161,6 +162,7 @@ int main(int argc, char** argv) {
     tout->Branch("tau2phi",&tau2phi);
     tout->Branch("tautaumass",&tautaumass);
     tout->Branch("tautaudelphi",&tautaudelphi);
+    tout->Branch("tautaudelR",&tautaudelR);
     tout->Branch("tau1vsmu",&tau1vsmu);
     tout->Branch("tau1vse",&tau1vse);
     tout->Branch("tau1vsjet",&tau1vsjet);
@@ -230,10 +232,10 @@ int main(int argc, char** argv) {
 
         if (!(tau1vse>=15 && tau1vsmu >=3 && tau1vsjet>=31)) continue; //tau id selection: Medium vs jet, Loose vs muon, Loose vs electron
         if (!(tau2vse>=15 && tau2vsmu >=3 && tau2vsjet>=31)) continue; //tau id selection: Medium vs jet, Loose vs muon, Loose vs electron
-        if (tau1charge!=tau2charge) continue; //opposite sign of tautau
+        if (tau1charge==tau2charge) continue; //opposite sign of tautau
         if (!(abs(tau1eta)<2.1 && abs(tau2eta)<2.1)) continue; // eta selection
         if (!(tau1pt>40 && tau2pt>40)) continue; // eta selection
-        if (!HLT_DoubleTightChargedIsoPFTauHPS40_Trk1_eta2p1_Reg)
+        if (!HLT_DoubleMediumChargedIsoPFTauHPS35_Trk1_eta2p1_Reg)
             continue;
         //Trigger
 
@@ -248,6 +250,7 @@ int main(int argc, char** argv) {
         //cout << "haha" << endl;
         tautaumass = (my_tau1 + my_tau2).M();
         tautaudelphi = my_tau1.DeltaPhi(my_tau2);
+        tautaudelR = my_tau1.DeltaR(my_tau2);
         Acopl = 1 - abs(tautaudelphi)/TMath::Pi();
         double metx = MET_pt * TMath::Cos(MET_phi);
         double mety = MET_pt * TMath::Sin(MET_phi);

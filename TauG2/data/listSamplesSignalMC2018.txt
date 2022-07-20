@@ -1,0 +1,1 @@
+/eos/cms/store/group/phys_smp/Exclusive_DiTau/nanoaod/GGToTauTau_M_50GeV_TuneCP5_madgraphLO_reweight

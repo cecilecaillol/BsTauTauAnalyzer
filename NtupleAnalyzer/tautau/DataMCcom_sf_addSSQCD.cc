@@ -57,10 +57,10 @@ int main(int argc, char** argv) {
     cout << "log scale " << log << endl;
     TFile *fout = new TFile(Form("./test%s.root",variable.c_str()),"recreate");
 
-    std::string MCweight = "xsweight*tau1idsf*tau2idsf*tau1tgsf*tau2tgsf*pu_weight";
+    std::string MCweight = "xsweight*tau1idsf*tau2idsf*pu_weight*tau1tgsf*tau2tgsf*(tautaudelR>0.5)";
     //std::string MCweight = "xsweight*muidsf*tauidsf*(MT_muonMET<50 && taumumass>=40)";
     //std::string dataweight = "MT_muonMET<50 && taumumass>=40";
-    std::string dataweight = "";
+    std::string dataweight = "tautaudelR>0.5";
     //std::string MCestweight = "xsweight*muidsf*tauidsf*SSFR*(MT_muonMET<50 && taumumass>=40)";
     //std::string MCestweight = "xsweight*muidsf*tauidsf*SSFR*LepCand_antimusf[0]*LepCand_antimusf[1]*(MT_muonMET<50 && taumumass>=40)";
 
@@ -303,7 +303,7 @@ int main(int argc, char** argv) {
 
 
 
-    c->SaveAs(Form("Plotstautau/addSSQCD/%s_log%d.png",variable.c_str(),log));
+    c->SaveAs(Form("Plotstautau/addSSQCD/adddRcut/%s_log%d.png",variable.c_str(),log));
     fout->Close();
     //TChain *DYtuple = new TChain("Events");
     //cout << "Entry of MC is " << bkgMCentries << endl;

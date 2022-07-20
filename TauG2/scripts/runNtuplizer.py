@@ -136,8 +136,8 @@ def main():
     #configuration
     usage = 'usage: %prog [options]'
     parser = optparse.OptionParser(usage)
-    parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='/afs/cern.ch/user/x/xuqin/work/taug-2/nanoAOD/CMSSW_10_6_27/src/MyNanoAnalyzer/TauG2/data/listSamplesDataTau2018.txt', type='string')
-    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/xuqin/taug-2/ntuple/tautau', type='string') #EDIT THIS
+    parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='/afs/cern.ch/user/x/xuqin/work/taug-2/nanoAOD/CMSSW_10_6_27/src/MyNanoAnalyzer/TauG2/data/listSamplesMC2018_3.txt', type='string')
+    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/xuqin/taug-2/ntuple/tautaunewnew', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
     (opt, args) = parser.parse_args()
