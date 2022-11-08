@@ -81,7 +81,7 @@ class Analysis(Module):
         self.out.branch("LepCand_antielesf",     "F",  lenVar = "nLepCand");
         #self.out.branch("LepCand_antielesf_up",  "F",  lenVar = "nLepCand");
         #self.out.branch("LepCand_antielesf_down","F",  lenVar = "nLepCand");
-
+        self.out.branch("LepCand_DecayMode",    "I",  lenVar = "nLepCand");# tau decay mode
         self.out.branch("LepCand_tauidMsfDM",    "F",  lenVar = "nLepCand");# tauidsf for ditau channel
         self.out.branch("LepCand_tautriggersf",    "F",  lenVar = "nLepCand");# trigger sf for ditau channel
 
@@ -310,10 +310,12 @@ class Analysis(Module):
         lep_eleMVAiso90=[]
         lep_eleMVAiso80=[]
         lep_eleIso=[]
+        lep_decaymode=[]
         lep_tauidMsfDM=[]
         lep_tautriggersf=[]
 
         for lep in event.selectedLeptons:
+            
              
             if lep.id==11:
                 lep_eleMVAiso90.append(lep.mvaFall17V2Iso_WP90)
@@ -332,6 +334,7 @@ class Analysis(Module):
                 lep_muonIso.append(-1)
               
             if lep.id==15:
+                lep_decaymode.append(lep.decayMode)
                 lep_vsjet.append(lep.idDeepTau2017v2p1VSjet)
                 lep_vse.append(lep.idDeepTau2017v2p1VSe)
                 lep_vsmu.append(lep.idDeepTau2017v2p1VSmu)
@@ -397,8 +400,11 @@ class Analysis(Module):
                 #lep_antielesf_up.append(1.0)
                 #lep_antielesf_down.append(1.0)
                 lep_taues.append(1.0)
+                lep_decaymode.append(-1)
                 #lep_taues_up.append(1.0)
                 #lep_taues_down.append(1.0)
+                lep_tauidMsfDM.append(1.0)
+                lep_tautriggersf.append(1.0)
         
         lep_id     = [lep.id for lep in event.selectedLeptons]
         lep_pt     = [lep.pt for lep in event.selectedLeptons]
@@ -470,6 +476,7 @@ class Analysis(Module):
         self.out.fillBranch("LepCand_fes",           lep_fes)
         #self.out.fillBranch("LepCand_fes_up",        lep_fes_up)
         #self.out.fillBranch("LepCand_fes_down",      lep_fes_down)
+        self.out.fillBranch("LepCand_DecayMode", lep_decaymode)
         self.out.fillBranch("LepCand_tauidMsfDM", lep_tauidMsfDM)
         self.out.fillBranch("LepCand_tautriggersf",lep_tautriggersf)
 
