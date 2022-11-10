@@ -13,6 +13,7 @@ keep HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL
 keep HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ
 keep HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ
 keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_TightID_CrossL1
+keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_TightID_CrossL1
 keep HLT_IsoMu24
 keep HLT_IsoMu27
 keep HLT_Mu50
@@ -27,6 +28,7 @@ keep HLT_DoubleTightChargedIsoPFTau40_Trk1_eta2p1_Reg
 keep HLT_DoubleTightChargedIsoPFTau35_Trk1_TightID_eta2p1_Reg
 keep HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_CrossL1
 keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_CrossL1
+keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1
 
 
 keep HLT_DoubleMediumChargedIsoPFTauHPS35_Trk1_eta2p1_Reg
@@ -37,6 +39,13 @@ keep Generator*
 keep btagWeight_DeepCSVB*
 keep LHE_Vpt*
 keep LHE_Njets*
+
+keep beamspot*
+keep nCharged*
+keep Charged*
+keep nLost*
+keep Lost*
+keep GenVtx*
 
 #keep objects
 keep MET_p*

@@ -23,10 +23,14 @@ class Analysis(Module):
         self.isMC          = isMC
         self.tauSFsM       = TauIDSFTool('UL2018','DeepTau2017v2p1VSjet','Medium')
         self.testool       = TauESTool('UL2018','DeepTau2017v2p1VSjet')
-        self.antiEleSFTool = TauIDSFTool('UL2018','DeepTau2017v2p1VSe','Loose')
-        self.antiMuSFTool  = TauIDSFTool('UL2018','DeepTau2017v2p1VSmu','Tight')
+        self.antiEleSFLTool = TauIDSFTool('UL2018','DeepTau2017v2p1VSe','Loose')
+        self.antiMuSFLTool  = TauIDSFTool('UL2018','DeepTau2017v2p1VSmu','Loose')
+        self.antiEleSFTTool = TauIDSFTool('UL2018','DeepTau2017v2p1VSe','Tight')
+        self.antiMuSFTTool  = TauIDSFTool('UL2018','DeepTau2017v2p1VSmu','Tight')
         self.festool       = TauFESTool('UL2018')
-        self.tautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/nanoAOD/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
+        self.ditautriggerSFTool = SFProvider("TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
+        self.etautriggerSFTool = SFProvider("TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "etau", "Medium") #FOR ditau channel
+        self.mutautriggerSFTool = SFProvider("TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "mutau", "Medium") #FOR ditau channel
         self.tauDMSF       = TauIDSFTool('UL2018','DeepTau2017v2p1VSjet','Medium',dm=True)
 
 
@@ -211,7 +215,7 @@ class Analysis(Module):
         #initiate object selector tools:
         elSel = ElectronSelector()
         tauSel = TauSelector()
-        muSel = MuonSelector(minPt=20, ID='medium')
+        muSel = MuonSelector(minPt=10, ID='medium')
         
         # apply object selection and make channels exclusive based on number of leptons
         self.selectMuons(event, muSel)
@@ -248,11 +252,14 @@ class Analysis(Module):
         if self.channel=="etau" or self.channel=="ee":
             if event.selectedElectrons[0].pt<25: return False
 
+        if self.channel=="etau":
+	    if event.selectedElectrons[0].pt<32 and event.selectedTaus[0].pt<34: return False
+
         if self.channel=="tautau":
-            if event.selectedTaus[0].pt<45: return False
+            if event.selectedTaus[0].pt<39: return False
 
         if self.channel=="emu":
-            if event.selectedElectrons[0].pt<24 and event.selectedMuons[0].pt<24: return False
+            if event.selectedElectrons[0].pt<23 and event.selectedMuons[0].pt<23: return False
 
 	      #apply channel-dependent tau ID cuts
         if self.channel=="mutau":
@@ -347,7 +354,12 @@ class Analysis(Module):
                     #lep_taues_up.append(self.testool.getTES(lep.pt,lep.decayMode,lep.genPartFlav,unc='Up'))
                     #lep_taues_down.append(self.testool.getTES(lep.pt,lep.decayMode,lep.genPartFlav,unc='Down'))
                     lep_tauidMsfDM.append(self.tauDMSF.getSFvsDM(lep.pt,lep.decayMode,lep.genPartFlav))
-                    lep_tautriggersf.append(self.tautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=0))
+		    if self.channel=="etau":
+                       lep_tautriggersf.append(self.etautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=0))
+		    elif self.channel=="mutau":
+                       lep_tautriggersf.append(self.mutautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=0))
+		    else:
+                       lep_tautriggersf.append(self.ditautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=0))
                 else:
                     lep_tauidMsf.append(1.0)
                     #lep_tauidMsf_up.append(1.0)
@@ -360,7 +372,10 @@ class Analysis(Module):
 
                 
                 if self.isMC and (lep.genPartFlav==2 or lep.genPartFlav==4):
-	                  lep_antimusf.append(self.antiMuSFTool.getSFvsEta(lep.eta,lep.genPartFlav))
+		    if self.channel=="mutau":
+	               lep_antimusf.append(self.antiMuSFTTool.getSFvsEta(lep.eta,lep.genPartFlav))
+		    else:
+                       lep_antimusf.append(self.antiMuSFLTool.getSFvsEta(lep.eta,lep.genPartFlav))
                     #lep_antimusf_up.append(self.antiMuSFTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Up'))
                     #lep_antimusf_down.append(self.antiMuSFTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Down'))
                 else:
@@ -369,7 +384,10 @@ class Analysis(Module):
                     #lep_antimusf_down.append(1.0)
                 
                 if self.isMC and (lep.genPartFlav==1 or lep.genPartFlav==3):
-                    lep_antielesf.append(self.antiEleSFTool.getSFvsEta(lep.eta,lep.genPartFlav))
+		    if self.channel=="etau":
+                       lep_antielesf.append(self.antiEleSFTTool.getSFvsEta(lep.eta,lep.genPartFlav))
+		    else:
+                       lep_antielesf.append(self.antiEleSFLTool.getSFvsEta(lep.eta,lep.genPartFlav))
                     #lep_antielesf_up.append(self.antiEleSFTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Up'))
                     #lep_antielesf_down.append(self.antiEleSFTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Down'))
                     lep_fes.append(self.festool.getFES(lep.eta,lep.decayMode,lep.genPartFlav))
