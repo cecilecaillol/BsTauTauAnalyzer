@@ -1,0 +1,56 @@
+# this is a comment
+drop *
+
+#keep event info
+keep run*
+keep event*
+keep luminosityBlock*
+keep genWeight*
+keep Generator_weight
+
+#keep nanoAOD content
+keep PV_*
+keep OtherPV*
+keep nOtherPV*
+keep MET_p*
+#keep PuppiMET_p*
+keep LHE_Vpt*
+keep LHE_Njets*
+
+keep beamspot_sigmaZ
+keep beamspot_z0
+#keep nCharged*
+#keep Charged*
+#keep nLost*
+#keep Lost*
+keep GenVtx*
+keep Pileup_nTrueInt
+keep puWeight*
+keep Track*
+keep nTracks
+keep HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ
+keep HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ
+
+#keep custom variables
+keep nGenCand
+keep GenCand*
+keep nLepCand
+keep LepCand_pt
+keep LepCand_eta
+keep LepCand_phi
+keep LepCand_gen
+keep LepCand_id
+keep LepCand_charge
+keep LepCand_dxy
+keep LepCand_dz
+keep LepCand_eleMVAiso80
+keep LepCand_eleMVAiso90
+
+keep nJets
+keep nElectrons
+keep nMuons
+keep nTaus
+#keep JetCand*
+#keep Lep*
+keep V_ge*
+keep pu_weight

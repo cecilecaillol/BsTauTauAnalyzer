@@ -28,9 +28,9 @@ class Analysis(Module):
         self.antiEleSFTTool = TauIDSFTool('UL2018','DeepTau2017v2p1VSe','Tight')
         self.antiMuSFTTool  = TauIDSFTool('UL2018','DeepTau2017v2p1VSmu','Tight')
         self.festool       = TauFESTool('UL2018')
-        self.ditautriggerSFTool = SFProvider("TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
-        self.etautriggerSFTool = SFProvider("TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "etau", "Medium") #FOR ditau channel
-        self.mutautriggerSFTool = SFProvider("TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "mutau", "Medium") #FOR ditau channel
+        self.ditautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
+        self.etautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "etau", "Medium") #FOR ditau channel
+        self.mutautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "mutau", "Medium") #FOR ditau channel
         self.tauDMSF       = TauIDSFTool('UL2018','DeepTau2017v2p1VSjet','Medium',dm=True)
 
 
@@ -94,6 +94,17 @@ class Analysis(Module):
         self.out.branch("GenCand_pt",            "F",  lenVar = "nGenCand");
         self.out.branch("GenCand_eta",           "F",  lenVar = "nGenCand");
         self.out.branch("GenCand_phi",           "F",  lenVar = "nGenCand");
+
+        self.out.branch("nTracks",              "I");
+        self.out.branch("Track_pt",             "F",  lenVar = "nTracks");
+        self.out.branch("Track_eta",            "F",  lenVar = "nTracks");
+        self.out.branch("Track_phi",            "F",  lenVar = "nTracks");
+        self.out.branch("Track_dz",             "F",  lenVar = "nTracks");
+        self.out.branch("Track_dxy",             "F",  lenVar = "nTracks");
+        self.out.branch("Track_charge",         "I",  lenVar = "nTracks");
+        self.out.branch("Track_isMatchedToHS",  "I",  lenVar = "nTracks");
+        self.out.branch("Track_lostInnerHits",  "I",  lenVar = "nTracks");
+        self.out.branch("Track_trackHighPurity",  "I",  lenVar = "nTracks");
 
         self.out.branch("nJets",             "I");
         self.out.branch("nElectrons",        "I");
@@ -200,6 +211,30 @@ class Analysis(Module):
             
         event.selectedAK4Jets.sort(key=lambda x: x.pt, reverse=True)
 
+    def selectTracks(self, event):
+        event.selectedTracks = []
+        chargedPF = Collection(event, "ChargedPFCandidates")
+        #lostTracks = Collection(event, "LostTracks")
+  	vertex_dz=0.0
+	if self.channel=="ee":
+	   vertex_dz=0.5*(event.selectedElectrons[0].dz+event.selectedElectrons[1].dz)
+        elif self.channel=="emu":
+           vertex_dz=0.5*(event.selectedElectrons[0].dz+event.selectedMuons[0].dz)
+        elif self.channel=="etau":
+           vertex_dz=0.5*(event.selectedElectrons[0].dz+event.selectedTaus[0].dz)
+        elif self.channel=="mumu":
+           vertex_dz=0.5*(event.selectedMuons[0].dz+event.selectedMuons[1].dz)
+        elif self.channel=="mutau":
+           vertex_dz=0.5*(event.selectedMuons[0].dz+event.selectedTaus[0].dz)
+        elif self.channel=="tautau":
+           vertex_dz=0.5*(event.selectedTaus[0].dz+event.selectedTaus[1].dz)
+        for j in chargedPF:
+            if abs(j.eta)<2.5 and abs(j.dz-vertex_dz)<0.3:
+                event.selectedTracks.append(j)
+        #for j in lostTracks:
+        #    if abs(j.eta)<2.5 and abs(j.dz-vertex_dz)<0.3:
+        #        event.selectedTracks.append(j)
+        event.selectedTracks.sort(key=lambda x: x.pt, reverse=True)
 
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
@@ -246,8 +281,11 @@ class Analysis(Module):
             self.selectGenParticles(event)
         
         #apply preliminary loose pt cuts based on trigger:
-        if self.channel=="mutau" or self.channel=="mumu":
+        if self.channel=="mutau":
             if event.selectedMuons[0].pt<20: return False
+
+        if self.channel=="mumu":
+            if event.selectedMuons[0].pt<24: return False
 
         if self.channel=="etau" or self.channel=="ee":
             if event.selectedElectrons[0].pt<25: return False
@@ -268,6 +306,7 @@ class Analysis(Module):
         if self.channel=="etau":
             if event.selectedTaus[0].idDeepTau2017v2p1VSe<32: return False #pass tight VSe
 
+        self.selectTracks(event)
 
       	######################################################
       	###############  GEN-LEVEL ANALYSIS ##################
@@ -280,6 +319,8 @@ class Analysis(Module):
         if self.isMC:
             for genp in event.selectedGenParticles:
                 if abs(genp.pdgId)==15 and len(event.genCand)<2:
+                    event.genCand.append(genp)
+		if (abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==23):
                     event.genCand.append(genp)
 
         if self.isMC:
@@ -322,7 +363,6 @@ class Analysis(Module):
         lep_tautriggersf=[]
 
         for lep in event.selectedLeptons:
-            
              
             if lep.id==11:
                 lep_eleMVAiso90.append(lep.mvaFall17V2Iso_WP90)
@@ -461,6 +501,17 @@ class Analysis(Module):
               if event.pu_weight>5.: 
                 event.pu_weight=5.
 
+
+        track_pt     = [track.pt for track in event.selectedTracks]
+        track_eta     = [track.eta for track in event.selectedTracks]
+        track_phi     = [track.phi for track in event.selectedTracks]
+        track_dz     = [track.dz for track in event.selectedTracks]
+        track_dxy     = [track.dxy for track in event.selectedTracks]
+        track_charge     = [track.charge for track in event.selectedTracks]
+        track_isMatchedToHS     = [track.isMatchedToGenHS for track in event.selectedTracks]
+        track_lostInnerHits     = [track.lostInnerHits for track in event.selectedTracks]
+        track_trackHighPurity     = [track.trackHighPurity for track in event.selectedTracks]
+
         ## store branches
         self.out.fillBranch("nLepCand",              len(event.selectedLeptons))
         self.out.fillBranch("LepCand_id" ,           lep_id)
@@ -512,6 +563,17 @@ class Analysis(Module):
         self.out.fillBranch("JetCand_deepflavB",  jet_deepflavB)
         self.out.fillBranch("V_genpt",            event.V_genpt)
         self.out.fillBranch("pu_weight",          event.pu_weight)
+
+        self.out.fillBranch("nTracks",             len(event.selectedTracks))
+        self.out.fillBranch("Track_pt" ,           track_pt)
+        self.out.fillBranch("Track_eta" ,          track_eta)
+        self.out.fillBranch("Track_phi" ,          track_phi)
+        self.out.fillBranch("Track_dz",            track_dz)
+        self.out.fillBranch("Track_dxy",            track_dxy)
+        self.out.fillBranch("Track_lostInnerHits" ,    track_lostInnerHits)
+        self.out.fillBranch("Track_trackHighPurity" ,  track_trackHighPurity)
+        self.out.fillBranch("Track_isMatchedToHS",     track_isMatchedToHS)
+        self.out.fillBranch("Track_charge",            track_charge)
 
         if self.isMC and len(event.genCand)>0: 
             self.out.fillBranch("nGenCand",           len(event.genCand))

@@ -1,0 +1,2 @@
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL18_NanoAODv9/221117_084137/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL18_TuneCP5_madgraphLO_reweight/GGToTauTau_Inclusive_M_50GeV_PTFilter/221124_110940/0000

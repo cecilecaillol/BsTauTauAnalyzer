@@ -25,7 +25,8 @@ def buildCondorFile(opt,FarmDirectory):
         condor.write('output     = {0}/output{1}.out\n'.format(FarmDirectory,rand))
         condor.write('error      = {0}/output{1}.err\n'.format(FarmDirectory,rand))
         condor.write('log        = {0}/output{1}.log\n'.format(FarmDirectory,rand))
-        condor.write('+JobFlavour = "testmatch"\n')
+        condor.write('+JobFlavour = "tomorrow"\n')
+        condor.write('+AccountingGroup = "group_u_CMST3.all"\n')
         OpSysAndVer = str(os.system('cat /etc/redhat-release'))
         if 'SLC' in OpSysAndVer:
             OpSysAndVer = "SLCern6"
@@ -41,7 +42,7 @@ def buildCondorFile(opt,FarmDirectory):
           prefix=''
           year='2018'
 
-          if 'NanoAODv9' in dataset:
+          if 'NanoAODv9' in dataset and 'eos' not in dataset.split('/'):
             print ('haha')
             dataset_name = '_'.join(dataset.split('/')[1:3])
             year=dataset.split('UL')[1][:4]
@@ -54,15 +55,22 @@ def buildCondorFile(opt,FarmDirectory):
             prefix='root://cms-xrd-global.cern.ch/'
           elif 'eos' in dataset.split('/'):
             sufix='mc'
-            dataset_name = dataset.split('/')[-1]
+            #dataset_name = dataset.split('/')[-1]
+	    dataset_name = dataset.split('/')[9]+"_"+dataset.split('/')[12]
+	    if "TauTau" not in dataset.split('/') and ("SingleMuon" in dataset.split('/') or "EGamma" in dataset.split('/') or "MuonEG" in dataset.split('/') or "Tau" in dataset.split('/')): 
+	       dataset_name = dataset.split('/')[9]+"_"+dataset.split('/')[10]+"_"+dataset.split('/')[12]
             file_list=glob.glob(dataset+'/*.root')
-            print file_list
+            print dataset_name
           else:
             print('ERROR: found invalid dataset = ',dataset,'stop the code')
             sys.exit(1)
           if 'Tau' not in dataset and "SingleMuon" not in dataset and "EGamma" not in dataset and "MuonEG" not in dataset and "DoubleMuon" not in dataset:
 	          sufix='mc'
-          channels=['tautau'] #EDIT THIS (could be ee,emu,etau,mumu,mutau,tautau)
+	  elif 'TauTau' in dataset:
+                  sufix='mc'
+	  else:
+                  sufix='data'
+          channels=['mumu'] #EDIT THIS (could be ee,emu,etau,mumu,mutau,tautau)
           print ('sufix = ', sufix)
             
           #prepare output
@@ -109,12 +117,16 @@ def buildCondorFile(opt,FarmDirectory):
         worker.write('echo "python $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\\"\n')
         worker.write('echo "$filename ${input}  \\\\"\n')
         worker.write('echo "--bi $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_in.txt   \\\\"\n')
-        worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out.txt  \\\\"\n')
+	if channels[0]=="mumu": worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_mumu.txt  \\\\"\n')
+	elif channels[0]=="etau": worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_etau.txt  \\\\"\n')
+        else: worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out.txt  \\\\"\n')
         worker.write('echo "${filter} -I MyNanoAnalyzer.TauG2.TauG2_analysis ${channel} "\n')
         worker.write('python $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\n')
         worker.write('$filename ${input}  \\\n')
         worker.write('--bi $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_in.txt   \\\n')
-        worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out.txt  \\\n')
+	if channels[0]=="mumu": worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_mumu.txt  \\\n')
+	elif channels[0]=="etau": worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_etau.txt  \\\n')
+        else: worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out.txt  \\\n')
         worker.write('${filter} -I MyNanoAnalyzer.TauG2.TauG2_analysis ${channel} \n')
         worker.write('echo cp ${filename}/${filename}_Skim.root ${output}/${filename}_Skim.root\n')
         worker.write('cp ${filename}/${filename}_Skim.root ${output}/\n')
@@ -137,9 +149,9 @@ def main():
     #configuration
     usage = 'usage: %prog [options]'
     parser = optparse.OptionParser(usage)
-    #parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='/afs/cern.ch/user/x/xuqin/work/taug-2/nanoAOD/CMSSW_10_6_27/src/MyNanoAnalyzer/TauG2/data/test.txt', type='string')
-    parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='/afs/cern.ch/user/x/xuqin/work/taug-2/nanoAOD/CMSSW_10_6_27/src/MyNanoAnalyzer/TauG2/data/listSamplesSignalMC2018.txt', type='string')
-    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/xuqin/taug-2/ntuple/tautaunew', type='string') #EDIT THIS
+    parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesMC2018.txt', type='string')
+    #parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/ccaillol/TauG2/ntuples_mumu_2018', type='string') #EDIT THIS
+    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mumu_2018', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
     (opt, args) = parser.parse_args()
@@ -149,7 +161,7 @@ def main():
       sys.exit(1)
 	
     #prepare directory with scripts
-    FarmDirectory='/afs/cern.ch/user/x/xuqin/work/taug-2/nanoAOD/CMSSW_10_6_27/src/MyNanoAnalyzer/TauG2/data/FarmLocalNtuple'
+    FarmDirectory=os.environ['PWD']+'/FarmLocalNtuple'
     if not os.path.exists(FarmDirectory):  os.system('mkdir -vp '+FarmDirectory)
     print('\nINFO: IMPORTANT MESSAGE: RUN THE FOLLOWING SEQUENCE:')
     print('voms-proxy-init --voms cms --valid 72:00 --out %s/myproxy509\n'%FarmDirectory)

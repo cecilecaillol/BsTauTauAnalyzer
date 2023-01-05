@@ -9,6 +9,7 @@ keep genWeight*
 keep Generator*
 
 #keep nanoAOD content
+keep Pileup_nTrueInt
 keep PV_*
 keep MET_p*
 keep PuppiMET_p*
@@ -52,6 +53,8 @@ keep GenVtx*
 #keep custom variables
 keep nLepCand
 keep LepCand*
+keep nGenCand
+keep GenCand*
 keep nJets
 keep nElectrons
 keep nMuons
@@ -60,3 +63,4 @@ keep JetCand*
 keep Lep*
 keep V_ge*
 keep pu_weight
+keep puWeight*

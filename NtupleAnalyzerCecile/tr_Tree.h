@@ -1,3 +1,4 @@
+   Int_t           ntracks_friend;
    Long64_t       genEventCount; 
    Double_t       genEventSumw;
    UInt_t          run;
@@ -51,6 +52,8 @@
    Bool_t          HLT_Ele35_WPTight_Gsf;
    Bool_t          HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_CrossL1;
    Bool_t          HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_TightID_CrossL1;
+   Bool_t          HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1;
+   Bool_t          HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_TightID_CrossL1;
    Bool_t          HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_CrossL1;
    Bool_t          HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_TightID_CrossL1;
    Bool_t          HLT_IsoMu24;
@@ -87,6 +90,8 @@
    Float_t         LepCand_fes[3];   //[nLepCand]
    Float_t         LepCand_antimusf[3];   //[nLepCand]
    Float_t         LepCand_antielesf[3];   //[nLepCand]
+   Float_t         LepCand_tautriggersf[3];   //[nLepCand]
+   Int_t           LepCand_DecayMode[3];   //[nLepCand]
    Int_t           nJets;
    Int_t           nElectrons;
    Int_t           nMuons;
@@ -100,19 +105,30 @@
    Float_t         JetCand_deepflavB[4];   //[nJets]
    Float_t         V_genpt;
    Float_t         pu_weight;
+   Float_t         puWeight;
+
+   Int_t           nGenCand;
+   Int_t           GenCand_id[4];   //[nGenCand]
+   Float_t         GenCand_pt[4];   //[nGenCand]
+   Float_t         GenCand_eta[4];   //[nGenCand]
+   Float_t         GenCand_phi[4];   //[nGenCand]
+
+   Int_t           nTracks;
+   Float_t         Track_pt[312];   //[nTracks]
+   Float_t         Track_eta[312];   //[nTracks]
+   Float_t         Track_phi[312];   //[nTracks]
+   Float_t         Track_dz[312];   //[nTracks]
 
    UInt_t          nChargedPFCandidates;
-   Float_t         ChargedPFCandidates_dxy[1211];   //[nChargedPFCandidates]
-   Float_t         ChargedPFCandidates_dz[1211];   //[nChargedPFCandidates]
-   Float_t         ChargedPFCandidates_eta[1211];   //[nChargedPFCandidates]
-   Float_t         ChargedPFCandidates_mass[1211];   //[nChargedPFCandidates]
-   Float_t         ChargedPFCandidates_phi[1211];   //[nChargedPFCandidates]
-   Float_t         ChargedPFCandidates_pt[1211];   //[nChargedPFCandidates]
-   Int_t           ChargedPFCandidates_charge[1211];   //[nChargedPFCandidates]
-   Int_t           ChargedPFCandidates_fromPV[1211];   //[nChargedPFCandidates]
-   Int_t           ChargedPFCandidates_lostInnerHits[1211];   //[nChargedPFCandidates]
-   Int_t           ChargedPFCandidates_pdgId[1211];   //[nChargedPFCandidates]
-   Bool_t          ChargedPFCandidates_trackHighPurity[1211];   //[nChargedPFCandidates]
-   Bool_t          ChargedPFCandidates_isMatchedToGenHS[1211];   //[nChargedPFCandidates]
+   Float_t         ChargedPFCandidates_dz[1960];   //[nChargedPFCandidates]
+   Float_t         ChargedPFCandidates_pt[1960];   //[nChargedPFCandidates]
+   Bool_t          ChargedPFCandidates_isMatchedToGenHS[1960];   //[nChargedPFCandidates]
 
+   Float_t         beamspot_dxdz;
+   Float_t         beamspot_dydz;
+   Float_t         beamspot_sigmaZ;
+   Float_t         beamspot_sigmaZ0Error;
+   Float_t         beamspot_x0;
+   Float_t         beamspot_y0;
+   Float_t         beamspot_z0;
 

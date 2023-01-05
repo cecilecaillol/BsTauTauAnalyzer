@@ -1,0 +1,5 @@
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/EGamma/RunIISummer20UL18_NanoAODv9/221117_083712/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/EGamma/EGamma_Run2018B-RunIISummer20UL18_NanoAODv9/221117_140721/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/EGamma/EGamma_Run2018C-RunIISummer20UL18_NanoAODv9/221117_142455/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/EGamma/EGamma_Run2018D-RunIISummer20UL18_NanoAODv9/221117_142611/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/EGamma/EGamma_Run2018D-RunIISummer20UL18_NanoAODv9/221117_142611/0001

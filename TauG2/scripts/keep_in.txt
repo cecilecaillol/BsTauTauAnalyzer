@@ -56,3 +56,5 @@ keep Tau*
 keep GenPart*
 keep Jet*
 keep PV_*
+keep OtherPV*
+keep nOtherPV*

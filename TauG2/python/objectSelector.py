@@ -49,7 +49,7 @@ class MuonSelector(ObjectSelector):
     def evalMuon(self, mu):
         if mu.pt < self.minPt: return False
         if abs(mu.eta) > 2.4: return False
-        if mu.pfRelIso04_all>0.5: return False
+        if mu.pfRelIso04_all>0.25: return False # was 0.5
         #if abs(mu.dxybs) > 0.05 or abs(mu.dz) > 1.0: return False
         if self.id == 'tight' and not mu.tightId: return False
         elif self.id == 'medium' and not mu.mediumId: return False

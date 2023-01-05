@@ -1,0 +1,73 @@
+# this is a comment
+drop *
+
+#keep event info
+keep run*
+keep event*
+keep luminosityBlock*
+keep genWeight*
+keep Generator_weight
+
+#keep nanoAOD content
+keep PV_*
+keep OtherPV*
+keep nOtherPV*
+keep MET_p*
+#keep PuppiMET_p*
+keep HLT_Ele32_WPTight_Gsf
+keep HLT_Ele35_WPTight_Gsf
+#keep HLT_Photon200
+#keep HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL
+keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_TightID_CrossL1
+keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_TightID_CrossL1
+
+keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_CrossL1
+keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1
+keep LHE_Vpt*
+keep LHE_Njets*
+
+keep beamspot_sigmaZ
+keep beamspot_z0
+#keep nCharged*
+#keep Charged*
+#keep nLost*
+#keep Lost*
+keep GenVtx*
+keep Pileup_nTrueInt
+keep puWeight*
+keep Track*
+keep nTracks
+
+#keep custom variables
+keep nGenCand
+keep GenCand*
+keep nLepCand
+keep LepCand_pt
+keep LepCand_eta
+keep LepCand_phi
+keep LepCand_gen
+keep LepCand_id
+keep LepCand_charge
+keep LepCand_dxy
+keep LepCand_dz
+keep LepCand_vse
+keep LepCand_vsmu
+keep LepCand_vsjet
+keep LepCand_tauidMsf
+keep LepCand_taues
+keep LepCand_fes
+keep LepCand_antimusf
+keep LepCand_antielesf
+keep LepCand_DecayMode
+keep LepCand_tautriggersf
+keep LepCand_eleMVAiso80
+keep LepCand_eleMVAiso90
+
+keep nJets
+keep nElectrons
+keep nMuons
+keep nTaus
+#keep JetCand*
+#keep Lep*
+keep V_ge*
+keep pu_weight
