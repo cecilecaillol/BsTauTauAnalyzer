@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
     if (year=="2017") luminosity=41480.0;
     if (year=="2016pre") luminosity=19520.0;
     if (year=="2016post") luminosity=16810.0;
-    if (sample=="Z" or sample=="DY" or sample=="ZL" or sample=="ZTT" or sample=="ZJ" or sample=="ZLL"){ xs=6077.2; weight=luminosity*xs/ngen;}
+    if (sample=="Z" or sample=="DY"  or sample=="DYcondor" or sample=="ZL" or sample=="ZTT" or sample=="ZJ" or sample=="ZLL"){ xs=6077.2; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt100to250"){ xs=689.75; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt250to400"){ xs=24.51; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt400to600"){cout<<"trouve"<<endl; xs=3.110; weight=luminosity*xs/ngen;}
@@ -89,6 +89,7 @@ int main(int argc, char** argv) {
 
     //if (input.find("renano") < 140){
       if (sample=="DY") weight*=0.318*0.98;
+      else if (sample=="DYcondor") weight*=0.318*0.98*0.1;
       else if (sample=="TTTo2L2Nu") weight*=0.657;
       else if (sample=="TTToSemiLeptonic") weight*=0.401;
       else if (sample=="TTToHadronic") weight*=0.170;
@@ -145,12 +146,14 @@ int main(int argc, char** argv) {
     //arbre->SetBranchAddress("ChargedPFCandidates_lostInnerHits", &ChargedPFCandidates_lostInnerHits);
     //arbre->SetBranchAddress("ChargedPFCandidates_pdgId", &ChargedPFCandidates_pdgId);
     //arbre->SetBranchAddress("ChargedPFCandidates_trackHighPurity", &ChargedPFCandidates_trackHighPurity);
-    //arbre->SetBranchAddress("ChargedPFCandidates_isMatchedToGenHS", &ChargedPFCandidates_isMatchedToGenHS);
+    arbre->SetBranchAddress("ChargedPFCandidates_isMatchedToGenHS", &ChargedPFCandidates_isMatchedToGenHS);
 
     arbre->SetBranchAddress("HLT_IsoMu24", &HLT_IsoMu24);
     arbre->SetBranchAddress("HLT_IsoMu27", &HLT_IsoMu27);
     arbre->SetBranchAddress("pu_weight", &pu_weight);
     arbre->SetBranchAddress("puWeight", &puWeight);
+    arbre->SetBranchAddress("puWeightUp", &puWeightUp);
+    arbre->SetBranchAddress("puWeightDown", &puWeightDown);
     arbre->SetBranchAddress("genWeight", &genWeight);
 
    auto b1_1=arbre->GetBranch("LepCand_pt");
@@ -183,6 +186,8 @@ int main(int argc, char** argv) {
    auto b4_1=arbre->GetBranch("pu_weight");
    auto b4_2=arbre->GetBranch("genWeight");
    auto b4_3=arbre->GetBranch("puWeight");
+   auto b4_3_1=arbre->GetBranch("puWeightUp");
+   auto b4_3_2=arbre->GetBranch("puWeightDown");
    auto b4_4=arbre->GetBranch("nGenCand");
    auto b4_5=arbre->GetBranch("GenCand_id");
    auto b4_6=arbre->GetBranch("GenCand_pt");
@@ -204,13 +209,19 @@ int main(int argc, char** argv) {
    auto b6_1=arbre->GetBranch("nChargedPFCandidates");
    auto b6_2=arbre->GetBranch("ChargedPFCandidates_pt");
    auto b6_3=arbre->GetBranch("ChargedPFCandidates_dz");
+   //auto b6_4=arbre->GetBranch("ChargedPFCandidates_eta");
+   //auto b6_5=arbre->GetBranch("ChargedPFCandidates_phi");
+   auto b6_6=arbre->GetBranch("ChargedPFCandidates_isMatchedToGenHS");
 
    TH1F* h_beamspot = new TH1F("h_beamspot","h_beamspot",200,2.5,4.5); h_beamspot->Sumw2();
-   TH1F* h_beamspotz = new TH1F("h_beamspotz","h_beamspotz",150,-15,15); h_beamspotz->Sumw2();
+   TH1F* h_beamspotz = new TH1F("h_beamspotz","h_beamspotz",150,-1.5,1.5); h_beamspotz->Sumw2();
 
    TH1F* h_vtxresolution_PV = new TH1F("h_vtxresolution_PV","h_vtxresolution_PV",200,-1,1); h_vtxresolution_PV->Sumw2();
    TH1F* h_vtxresolution_simpledimu = new TH1F("h_vtxresolution_simpledimu","h_vtxresolution_simpledimu",200,-1,1); h_vtxresolution_simpledimu->Sumw2();
    TH1F* h_dimumass = new TH1F("h_dimumass","h_dimumass",20,0,200); h_dimumass->Sumw2();
+
+   float binsNPVS[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,65,70,80,90,100,150};
+   int  binnumNPVS = sizeof(binsNPVS)/sizeof(Float_t) - 1;
 
    TH1F* h0 = new TH1F("h0","h0",20,0,200); h0->Sumw2();
    TH1F* h0SS = new TH1F("h0SS","h0SS",20,0,200); h0SS->Sumw2();
@@ -218,37 +229,88 @@ int main(int argc, char** argv) {
    TH1F* h1SS = new TH1F("h1SS","h1SS",100,0,1); h1SS->Sumw2();
    TH1F* h2 = new TH1F("h2","h2",20,0,200); h2->Sumw2();
    TH1F* h2SS = new TH1F("h2SS","h2SS",20,0,200); h2SS->Sumw2();
-   TH1F* h3 = new TH1F("h3","h3",200,0,200); h3->Sumw2();
-   TH1F* h3SS = new TH1F("h3SS","h3SS",200,0,200); h3SS->Sumw2();
+   TH1F* h3 = new TH1F("h3","h3",binnumNPVS,binsNPVS); h3->Sumw2();
+   TH1F* h3SS = new TH1F("h3SS","h3SS",binnumNPVS,binsNPVS); h3SS->Sumw2();
+   TH1F* h4 = new TH1F("h4","h4",binnumNPVS,binsNPVS); h4->Sumw2();
+   TH1F* h4SS = new TH1F("h4SS","h4SS",binnumNPVS,binsNPVS); h4SS->Sumw2();
+   TH1F* h5 = new TH1F("h5","h5",binnumNPVS,binsNPVS); h5->Sumw2();
+   TH1F* h5SS = new TH1F("h5SS","h5SS",binnumNPVS,binsNPVS); h5SS->Sumw2();
 
    TH1F* h_ntracks_test = new TH1F("h_ntracks_test","h_ntracks_test",30,0,30); h_ntracks_test->Sumw2();
 
    TH1F* h_tracksz = new TH1F("h_tracksz","h_tracksz",200,-20,20); h_tracksz->Sumw2();
 
+   float binsNT[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31};
+   int  binnumNT = sizeof(binsNT)/sizeof(Float_t) - 1;
+
+   float binsNTPU[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51};
+   int  binnumNTPU = sizeof(binsNTPU)/sizeof(Float_t) - 1;
+
+
    std::vector<TH1F*> h_ntracks;
    int nslices=100;
    for (int k=0; k<nslices; ++k){
      ostringstream HN0; HN0 << "h_ntracks" << k;
-     h_ntracks.push_back(new TH1F (HN0.str().c_str(),"Ntracks",30,0,30)); h_ntracks[k]->Sumw2();
+     h_ntracks.push_back(new TH1F (HN0.str().c_str(),"Ntracks",binnumNTPU,binsNTPU)); h_ntracks[k]->Sumw2();
    }
 
    std::vector<TH1F*> h_ntracks_corrected;
    for (int k=0; k<nslices; ++k){
      ostringstream HN1; HN1 << "h_ntracks_corrected" << k;
-     h_ntracks_corrected.push_back(new TH1F (HN1.str().c_str(),"Ntracks_corrected",30,0,30)); h_ntracks_corrected[k]->Sumw2();
+     h_ntracks_corrected.push_back(new TH1F (HN1.str().c_str(),"Ntracks_corrected",binnumNTPU,binsNTPU)); h_ntracks_corrected[k]->Sumw2();
    }
 
    std::vector<TH1F*> h_ntracks0p1;
    int nslices0p1=200;
    for (int k=0; k<nslices0p1; ++k){
      ostringstream HN0; HN0 << "h_ntracks0p1" << k;
-     h_ntracks0p1.push_back(new TH1F (HN0.str().c_str(),"Ntracks",30,0,30)); h_ntracks0p1[k]->Sumw2();
+     h_ntracks0p1.push_back(new TH1F (HN0.str().c_str(),"Ntracks",binnumNTPU,binsNTPU)); h_ntracks0p1[k]->Sumw2();
    }
 
    std::vector<TH1F*> h_ntracks0p1_corrected;
    for (int k=0; k<nslices0p1; ++k){
      ostringstream HN1; HN1 << "h_ntracks0p1_corrected" << k;
-     h_ntracks0p1_corrected.push_back(new TH1F (HN1.str().c_str(),"Ntracks_corrected",30,0,30)); h_ntracks0p1_corrected[k]->Sumw2();
+     h_ntracks0p1_corrected.push_back(new TH1F (HN1.str().c_str(),"Ntracks_corrected",binnumNTPU,binsNTPU)); h_ntracks0p1_corrected[k]->Sumw2();
+   }
+
+   std::vector<TH1F*> h_ntracksAll;
+   std::vector<TH1F*> h_ntracksAll_genHS0;
+   std::vector<TH1F*> h_ntracksAll_genHS1;
+   std::vector<TH1F*> h_ntracksAll_genHS2;
+   std::vector<TH1F*> h_ntracksAll_genHS3;
+   std::vector<TH1F*> h_ntracksAll_genHS4;
+   std::vector<TH1F*> h_ntracksAll_genHS5to10;
+   std::vector<TH1F*> h_ntracksAll_genHS10to15;
+   std::vector<TH1F*> h_ntracksAll_genHS15to20;
+   std::vector<TH1F*> h_ntracksAll_genHS20to25;
+   std::vector<TH1F*> h_ntracksAll_genHS25to30;
+   std::vector<TH1F*> h_ntracksAll_genHSgt30;
+   int nslicesHS=2;
+   for (int k=0; k<nslicesHS; ++k){
+     ostringstream HN0; HN0 << "h_ntracksAll" << k;
+     h_ntracksAll.push_back(new TH1F (HN0.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll[k]->Sumw2();
+     ostringstream GHN0; GHN0 << "h_ntracksAll_genHS0" << k;
+     h_ntracksAll_genHS0.push_back(new TH1F (GHN0.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll_genHS0[k]->Sumw2();
+     ostringstream GHN1; GHN1 << "h_ntracksAll_genHS1" << k;
+     h_ntracksAll_genHS1.push_back(new TH1F (GHN1.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll_genHS1[k]->Sumw2();
+     ostringstream GHN2; GHN2 << "h_ntracksAll_genHS2" << k;
+     h_ntracksAll_genHS2.push_back(new TH1F (GHN2.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll_genHS2[k]->Sumw2();
+     ostringstream GHN3; GHN3 << "h_ntracksAll_genHS3" << k;
+     h_ntracksAll_genHS3.push_back(new TH1F (GHN3.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll_genHS3[k]->Sumw2();
+     ostringstream GHN4; GHN4 << "h_ntracksAll_genHS4" << k;
+     h_ntracksAll_genHS4.push_back(new TH1F (GHN4.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll_genHS4[k]->Sumw2();
+     ostringstream GHN5; GHN5 << "h_ntracksAll_genHS5to10" << k;
+     h_ntracksAll_genHS5to10.push_back(new TH1F (GHN5.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll_genHS5to10[k]->Sumw2();
+     ostringstream GHN6; GHN6 << "h_ntracksAll_genHS10to15" << k;
+     h_ntracksAll_genHS10to15.push_back(new TH1F (GHN6.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll_genHS10to15[k]->Sumw2();
+     ostringstream GHN7; GHN7 << "h_ntracksAll_genHS15to20" << k;
+     h_ntracksAll_genHS15to20.push_back(new TH1F (GHN7.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll_genHS15to20[k]->Sumw2();
+     ostringstream GHN8; GHN8 << "h_ntracksAll_genHS20to25" << k;
+     h_ntracksAll_genHS20to25.push_back(new TH1F (GHN8.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll_genHS20to25[k]->Sumw2();
+     ostringstream GHN9; GHN9 << "h_ntracksAll_genHS25to30" << k;
+     h_ntracksAll_genHS25to30.push_back(new TH1F (GHN9.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll_genHS25to30[k]->Sumw2();
+     ostringstream GHN10; GHN10 << "h_ntracksAll_genHSgt30" << k;
+     h_ntracksAll_genHSgt30.push_back(new TH1F (GHN10.str().c_str(),"Ntracks",binnumNT,binsNT)); h_ntracksAll_genHSgt30[k]->Sumw2();
    }
 
    // Scale factors
@@ -287,17 +349,31 @@ int main(int argc, char** argv) {
    TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
    TF1* fit_aco = (TF1*) f_aco->Get("fit_A");
 
-   TF1* fit_npvs = (TF1*) f_aco->Get("fit_npvs");
+   TFile *f_punt=new TFile("npu_correction_2018.root");
+   TH2F* correction_map=(TH2F*) f_punt->Get("correction_map");
+
+   TFile *f_hsnt=new TFile("nhs_correction_2018.root");
+   TH2F* correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
+
+   TFile* f_npvs=new TFile("correction_npvs_2018.root","read");
+   TH1F* h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
+
+   TFile* f_bs=new TFile("beamspot_TF1_2018.root","read");
+   TF1* h_bs_width = (TF1*) f_bs->Get("f1");
+
+   //TF1* fit_npvs = (TF1*) f_aco->Get("fit_npvs");
 
    TF1* f_beamspot=new TF1("f_beamspot","gaus",2.5,4.5);
    f_beamspot->SetParameter(0,1);
    f_beamspot->SetParameter(1,3.35);
    f_beamspot->SetParameter(2,0.15);
 
-   TF1* f_beamspotz=new TF1("f_beamspotz","gaus",-10,10);
+   TF1* f_beamspotz=new TF1("f_beamspotz","gaus",-1.1,1.1);
    f_beamspotz->SetParameter(0,1);
    f_beamspotz->SetParameter(1,-0.138);
    f_beamspotz->SetParameter(2,0.254);
+
+   TH1F *h_norm=new TH1F("h_norm","h_norm",10,0,10); h_norm->Sumw2();
 
    Int_t nentries_wtn = (Int_t) arbre->GetEntries();
    for (Int_t i = 0; i < nentries_wtn; i++) {
@@ -336,7 +412,7 @@ int main(int argc, char** argv) {
         bool is_OS=(LepCand_charge[0]*LepCand_charge[1]<0);
 
 	// Block weights
-	if (name!="data_obs") {b4_1->GetEntry(i); b4_2->GetEntry(i); b4_4->GetEntry(i); b4_5->GetEntry(i); b4_6->GetEntry(i); b4_7->GetEntry(i); b4_8->GetEntry(i);b4_3->GetEntry(i);}
+	if (name!="data_obs") {b4_1->GetEntry(i); b4_2->GetEntry(i); b4_4->GetEntry(i); b4_5->GetEntry(i); b4_6->GetEntry(i); b4_7->GetEntry(i); b4_8->GetEntry(i);b4_3->GetEntry(i); b4_3_1->GetEntry(i);b4_3_2->GetEntry(i);}
 
 	TLorentzVector my_genmu1; my_genmu1.SetPtEtaPhiM(0,0,0,0);
         TLorentzVector my_genmu2; my_genmu2.SetPtEtaPhiM(0,0,0,0);
@@ -351,6 +427,7 @@ int main(int argc, char** argv) {
 	}
 
         float aweight=1.0;
+	float aco_weight=1.0;
         if (name!="data_obs"){
            aweight*=genWeight;
            //aweight*=pu_weight;
@@ -383,9 +460,8 @@ int main(int argc, char** argv) {
 	   else if (my_mu1.Pt()<=25 and my_mu2.Pt()>25) trgsf=trgsf1;
 	   else if (my_mu1.Pt()>25 and my_mu2.Pt()>25) trgsf=(1-(1-trgsf1)*(1-trgsf2));
 
-	   float aco_weight=1.0;
-	   if (sample=="DY") aco_weight=fit_aco->Eval(gen_aco);
-           aweight=aweight*trgsf*recosf1*idsf1*muonIsoSF1*recosf2*idsf2*muonIsoSF2*aco_weight;
+	   if (sample=="DY" or sample=="DYcondor") aco_weight=fit_aco->Eval(gen_aco);
+           aweight=aweight*trgsf*recosf1*idsf1*muonIsoSF1*recosf2*idsf2*muonIsoSF2;
         }
 
 	// Block vertices
@@ -393,7 +469,9 @@ int main(int argc, char** argv) {
 	if (name!="data_obs") b5_2->GetEntry(i);
 	float simple_dimu_z=0.5*(2*PV_z+LepCand_dz[0]+LepCand_dz[1]);
 
-        if (sample=="DY") aweight*=fit_npvs->Eval(TMath::Min(70,PV_npvs));
+        //if (sample=="DY" or sample=="DYcondor") aweight*=fit_npvs->Eval(TMath::Min(70,PV_npvs));
+        float npvs_weight=1.0;
+        if (sample!="data_obs") npvs_weight=h_npvs_weight->GetBinContent(h_npvs_weight->GetXaxis()->FindBin(PV_npvs));
 	h_beamspot->Fill(beamspot_sigmaZ);
         h_beamspotz->Fill(beamspot_z0);
 
@@ -410,24 +488,31 @@ int main(int argc, char** argv) {
 	}
 
 	float aco = (1.0 -fabs(my_mu1.DeltaPhi(my_mu2))/3.14159);
+	if (sample=="data_obs") {puWeight=1; puWeightUp=1; puWeightDown=1;}
+aco_weight=1.0;//FIXME
+npvs_weight=1.0;//FIXME
 	if (is_OS){
-	   h_dimumass->Fill((my_mu1+my_mu2).M(),aweight*weight);
-	   h0->Fill((my_mu1+my_mu2).M(),aweight*weight);
-           h1->Fill(aco,aweight*weight);
-           h2->Fill((my_mu1+my_mu2).Pt(),aweight*weight);
-           h3->Fill(PV_npvs,aweight*weight);
+	   h_dimumass->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight);
+	   h0->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight);
+           h1->Fill(aco,aweight*weight*aco_weight*npvs_weight);
+           h2->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*npvs_weight);
+           h3->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight);
+           h4->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight*puWeightDown/puWeight);
+           h5->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight*puWeightUp/puWeight);
 	}
 
         if (!is_OS){
-           h0SS->Fill((my_mu1+my_mu2).M(),aweight*weight);
-           h1SS->Fill(aco,aweight*weight);
-           h2SS->Fill((my_mu1+my_mu2).Pt(),aweight*weight);
-           h3SS->Fill(PV_npvs,aweight*weight);
+           h0SS->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight);
+           h1SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
+           h2SS->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*npvs_weight);
+           h3SS->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight);
+           h4SS->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight*puWeightDown/puWeight);
+           h5SS->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight*puWeightUp/puWeight);
         }
 
-	b6_1->GetEntry(i); b6_2->GetEntry(i); b6_3->GetEntry(i);
+	/*b6_1->GetEntry(i); b6_2->GetEntry(i); b6_3->GetEntry(i);
 
-	//0p2 window width
+	 //0p2 window width
         int ntracks1=0;
         for (int nt=0; nt<nChargedPFCandidates; ++nt){
            if (ChargedPFCandidates_pt[nt]>0.5 and ChargedPFCandidates_dz[nt]>3.0 and ChargedPFCandidates_dz[nt]<3.05) {ntracks1++;}
@@ -442,13 +527,14 @@ int main(int argc, char** argv) {
 		     ntracks1++;
 		   }
                 }
-	        h_ntracks[j]->Fill(ntracks1,aweight*weight);
+		if (ntracks1>50) ntracks1=50;
+	        h_ntracks[j]->Fill(ntracks1,aweight*weight*aco_weight*npvs_weight);
 	     }
 	   }
 	}
 
 	if (name!="data_obs"){
-	   float rnd_beamspot=f_beamspot->GetRandom();
+	   float rnd_beamspot=h_bs_width->GetRandom();
            float rnd_beamspotz=f_beamspotz->GetRandom();
            if (fabs(91.2-(my_mu1+my_mu2).M())<15 and is_OS){
               for (int j=0; j<100; ++j){
@@ -460,7 +546,8 @@ int main(int argc, char** argv) {
                         ntracks_corrected1++;
                       }
                    }
-                   h_ntracks_corrected[j]->Fill(ntracks_corrected1,aweight*weight);
+                if (ntracks_corrected1>50) ntracks_corrected1=50;
+                   h_ntracks_corrected[j]->Fill(ntracks_corrected1,aweight*weight*aco_weight*npvs_weight);
                 }
               }
            }
@@ -476,13 +563,14 @@ int main(int argc, char** argv) {
                      ntracks1++;
                    }
                 }
-                h_ntracks0p1[j]->Fill(ntracks1,aweight*weight);
+                if (ntracks1>50) ntracks1=50;
+                h_ntracks0p1[j]->Fill(ntracks1,aweight*weight*aco_weight*npvs_weight);
              }
            }
         }
 
         if (name!="data_obs"){
-           float rnd_beamspot=f_beamspot->GetRandom();
+           float rnd_beamspot=h_bs_width->GetRandom();
            float rnd_beamspotz=f_beamspotz->GetRandom();
            if (fabs(91.2-(my_mu1+my_mu2).M())<15 and is_OS){
               for (int j=0; j<200; ++j){
@@ -494,15 +582,104 @@ int main(int argc, char** argv) {
                         ntracks_corrected1++;
                       }
                    }
-                   h_ntracks0p1_corrected[j]->Fill(ntracks_corrected1,aweight*weight);
+                   if (ntracks_corrected1>50) ntracks_corrected1=50;
+                   h_ntracks0p1_corrected[j]->Fill(ntracks_corrected1,aweight*weight*aco_weight*npvs_weight);
                 }
               }
            }
         }
 
+	// HS tracks
+	if (name!="data_obs") b6_6->GetEntry(i);
+        float ntpu_weight=1.0;
+        float nths_weight=1.0;
+	int ntracksHS=0;
+
+	if (fabs(91.2-(my_mu1+my_mu2).M())<10 and is_OS){
+           int ntracksAll=0;
+           int ntracksPU=0;
+           float rnd_beamspot=h_bs_width->GetRandom();
+           float rnd_beamspotz=f_beamspotz->GetRandom();
+           int matched=0;
+           for (int nt=0; nt<nChargedPFCandidates; ++nt){
+              float is_matched=false;
+              if (fabs(ChargedPFCandidates_dz[nt]-LepCand_dz[0])<0.1 and fabs(ChargedPFCandidates_pt[nt]-LepCand_pt[0])/LepCand_pt[0]<0.2) {is_matched=true; matched++;}
+              if (fabs(ChargedPFCandidates_dz[nt]-LepCand_dz[1])<0.1 and fabs(ChargedPFCandidates_pt[nt]-LepCand_pt[1])/LepCand_pt[1]<0.2) {is_matched=true; matched++;}
+              if (!is_matched){
+                 float raw_dz=fabs(ChargedPFCandidates_dz[nt]-0.5*LepCand_dz[0]-0.5*LepCand_dz[1]);
+                 if (ChargedPFCandidates_pt[nt]>0.5 and raw_dz<0.05) ntracksAll++;
+                 if (sample!="data_obs"){
+                    float BScorrected_dz=fabs(((PV_z+ChargedPFCandidates_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488))-PV_z-0.5*LepCand_dz[0]-0.5*LepCand_dz[1]);
+                    if (ChargedPFCandidates_isMatchedToGenHS[nt] and ChargedPFCandidates_pt[nt]>0.5 and raw_dz<0.05) ntracksHS++;
+                    if (!ChargedPFCandidates_isMatchedToGenHS[nt] and ChargedPFCandidates_pt[nt]>0.5 and BScorrected_dz<0.05) ntracksPU++;
+                 }
+              }
+	   }
+	   float zpos=simple_dimu_z; 
+	   if (zpos<-10) zpos=-9.99;
+	   else if (zpos>10) zpos=9.99;
+	   int ntpu=ntracksPU;
+	   if (ntracksPU>50) ntpu=50;
+	   if (sample!="data_obs") ntpu_weight=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));
+	   int sum_ntracks=ntracksPU+ntracksHS;
+	   if (sum_ntracks>30) sum_ntracks=30;
+	   if (ntracksAll>30) ntracksAll=30;
+	   //cout<<ntpu_weight<<endl;
+	   if (aco<0.02){
+	     if (name!="data_obs"){
+                h_ntracksAll[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+	        if (ntracksHS==0) h_ntracksAll_genHS0[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+		else if (ntracksHS==1) h_ntracksAll_genHS1[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS==2) h_ntracksAll_genHS2[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS==3) h_ntracksAll_genHS3[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS==4) h_ntracksAll_genHS4[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=5 and ntracksHS<10) h_ntracksAll_genHS5to10[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=10 and ntracksHS<15) h_ntracksAll_genHS10to15[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=15 and ntracksHS<20) h_ntracksAll_genHS15to20[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=20 and ntracksHS<25) h_ntracksAll_genHS20to25[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=25 and ntracksHS<30) h_ntracksAll_genHS25to30[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=30) h_ntracksAll_genHSgt30[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+	     }
+	     else{
+                h_ntracksAll[0]->Fill(ntracksAll,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+	     }
+	   }
+	   else{
+             if (name!="data_obs"){
+                h_ntracksAll[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                if (ntracksHS==0) h_ntracksAll_genHS0[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS==1) h_ntracksAll_genHS1[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS==2) h_ntracksAll_genHS2[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS==3) h_ntracksAll_genHS3[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS==4) h_ntracksAll_genHS4[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=5 and ntracksHS<10) h_ntracksAll_genHS5to10[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=10 and ntracksHS<15) h_ntracksAll_genHS10to15[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=15 and ntracksHS<20) h_ntracksAll_genHS15to20[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=20 and ntracksHS<25) h_ntracksAll_genHS20to25[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=25 and ntracksHS<30) h_ntracksAll_genHS25to30[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+                else if (ntracksHS>=30) h_ntracksAll_genHSgt30[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+             }
+             else{
+                h_ntracksAll[1]->Fill(ntracksAll,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+             }
+           }
+	}
+
+        if (sample=="DY" or sample=="DYcondor") nths_weight=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS)),correction_mapHS->GetYaxis()->FindBin(gen_aco));
+
+	if (fabs(91.2-(my_mu1+my_mu2).M())<10 and is_OS){
+	  h_norm->Fill(0.5,aweight);
+          h_norm->Fill(1.5,aweight*aco_weight);
+          h_norm->Fill(2.5,aweight*npvs_weight);
+          h_norm->Fill(3.5,aweight*ntpu_weight);
+          h_norm->Fill(4.5,aweight*nths_weight);
+          h_norm->Fill(5.5,aweight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
+        }*/
+
     } // end of loop over events
     TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();
+    h_norm->Write();
     h_ntracks_test->Write();
     h_tracksz->Write();
 
@@ -520,6 +697,23 @@ int main(int argc, char** argv) {
     for (int i=0; i<nslices0p1; ++i){
       h_ntracks0p1[i]->Write();
       if (name!="data_obs") h_ntracks0p1_corrected[i]->Write();
+    }
+
+    for (int i=0; i<nslicesHS; ++i){
+      h_ntracksAll[i]->Write();
+      if (name!="data_obs"){
+        h_ntracksAll_genHS0[i]->Write();
+        h_ntracksAll_genHS1[i]->Write();
+        h_ntracksAll_genHS2[i]->Write();
+        h_ntracksAll_genHS3[i]->Write();
+        h_ntracksAll_genHS4[i]->Write();
+        h_ntracksAll_genHS5to10[i]->Write();
+        h_ntracksAll_genHS10to15[i]->Write();
+        h_ntracksAll_genHS15to20[i]->Write();
+        h_ntracksAll_genHS20to25[i]->Write();
+	h_ntracksAll_genHS25to30[i]->Write();
+        h_ntracksAll_genHSgt30[i]->Write();
+      }
     }
 
     TDirectory *dir0 =fout->mkdir("mumu0");
@@ -561,6 +755,26 @@ int main(int argc, char** argv) {
     dir3SS->cd();
     h3SS->SetName(name.c_str());
     h3SS->Write();
+
+    TDirectory *dir4 =fout->mkdir("mumu4");
+    dir4->cd();
+    h4->SetName(name.c_str());
+    h4->Write();
+
+    TDirectory *dir4SS =fout->mkdir("mumu4_SS");
+    dir4SS->cd();
+    h4SS->SetName(name.c_str());
+    h4SS->Write();
+
+    TDirectory *dir5 =fout->mkdir("mumu5");
+    dir5->cd();
+    h5->SetName(name.c_str());
+    h5->Write();
+
+    TDirectory *dir5SS =fout->mkdir("mumu5_SS");
+    dir5SS->cd();
+    h5SS->SetName(name.c_str());
+    h5SS->Write();
 
     fout->Close();
 } 

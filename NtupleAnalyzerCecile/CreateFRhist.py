@@ -18,14 +18,22 @@ hist=[
 "h_tauFR_W_dm10_VVVL","h_tauFR_W_dm10_M",
 "h_tauFR_W_dm11_VVVL","h_tauFR_W_dm11_M",
 "h_tauFR_QCD_xtrg_VVVL","h_tauFR_QCD_xtrg_M",
-"h_tauFR_W_xtrg_VVVL","h_tauFR_W_xtrg_M"
+"h_tauFR_W_xtrg_VVVL","h_tauFR_W_xtrg_M",
+"h_tauFRnt_QCD_dm0_VVVL","h_tauFRnt_QCD_dm0_M",
+"h_tauFRnt_QCD_dm1_VVVL","h_tauFRnt_QCD_dm1_M",
+"h_tauFRnt_QCD_dm10_VVVL","h_tauFRnt_QCD_dm10_M",
+"h_tauFRnt_QCD_dm11_VVVL","h_tauFRnt_QCD_dm11_M",
+"h_tauFRnt_W_dm0_VVVL","h_tauFRnt_W_dm0_M",
+"h_tauFRnt_W_dm1_VVVL","h_tauFRnt_W_dm1_M",
+"h_tauFRnt_W_dm10_VVVL","h_tauFRnt_W_dm10_M",
+"h_tauFRnt_W_dm11_VVVL","h_tauFRnt_W_dm11_M"
 ]
 
 fileData=ROOT.TFile("output_etau_2018/EGamma.root","r")
 fileMC=ROOT.TFile("output_etau_2018/MC.root","r")
 fileDataSub=ROOT.TFile("output_etau_2018/DataSub.root","recreate")
 
-ncat=20
+ncat=20+16
 
 for i in range (0,ncat):
    Data=fileData.Get(hist[i])

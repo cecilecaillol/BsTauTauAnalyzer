@@ -94,6 +94,14 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
 
     makeBinsInteger(histogram_pass, histogram_fail);
 
+    if (num.find("tauFRnt")!=std::string::npos){ // normalize to average FR = 1
+	float ratio=histogram_pass->GetBinContent(1)/histogram_fail->GetBinContent(1);
+	for (int j=1; j<histogram_pass->GetSize()-1; ++j){
+	    histogram_pass->SetBinContent(j,histogram_pass->GetBinContent(j)/ratio);
+            histogram_pass->SetBinError(j,histogram_pass->GetBinError(j)/ratio);
+	}
+    }
+
     TGraphAsymmErrors* TGraph_FR = new TGraphAsymmErrors(26);
     TGraph_FR->Divide(histogram_pass, histogram_fail, "pois");
 
@@ -141,18 +149,53 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
       theFit->SetParameter(3, 180);
     }
 
+    if (year==2018 and num.find("W_dm0_")!=std::string::npos){
+      theFit->SetParameter(0, 0.2);
+      theFit->SetParameter(1, 70);
+      theFit->SetParameter(2, -90);
+      theFit->SetParameter(3, 10);
+    }
+
+    if (year==2018 and num.find("dm10_")!=std::string::npos){
+      theFit->SetParameter(0, 0.24);
+      theFit->SetParameter(1, -1.4);
+      theFit->SetParameter(2, 2410);
+      theFit->SetParameter(3, 1630);
+    }
+
+    if (year==2018 and num.find("tauFRnt_QCD_")!=std::string::npos){
+      theFit->SetParameter(0, 0.54);
+      theFit->SetParameter(1, 0.61);
+      theFit->SetParameter(2, -1.2);
+      theFit->SetParameter(3, 11);
+    }
+
+    if (year==2018 and num.find("tauFRnt_W_")!=std::string::npos){
+      theFit->SetParameter(0, -0.24);
+      theFit->SetParameter(1, 10.7);
+      theFit->SetParameter(2, -12);
+      theFit->SetParameter(3, 27);
+    }
+
     float xAxisMax = 500;
     TGraph_FR->Fit("theFit", "R0");
 
     TCanvas* canvas = new TCanvas("canvas", "", 800, 800);
     canvas->SetTitle("");
     canvas->SetGrid();
-    TGraph_FR->GetYaxis()->SetRangeUser(0.00, 0.70);
+    TGraph_FR->GetYaxis()->SetRangeUser(0.00, 1.00);
+    if (num.find("dm10")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 0.30);
+    if (num.find("dm11")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 0.30);
+
+
+    if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 3.50);
+
     TGraph_FR->GetYaxis()->SetTitle("f_{#tau}");
-    TGraph_FR->GetXaxis()->SetRangeUser(20, 5000);
+    TGraph_FR->GetXaxis()->SetRangeUser(0, 5000);
     TGraph_FR->GetXaxis()->SetTitle("#tau_{h} p_{T} [GeV]");
+    if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetXaxis()->SetTitle("N_{tracks}");
     TGraph_FR->SetTitle("");
-    TGraph_FR->Draw("PAE");
+    TGraph_FR->Draw("PAE0");
     TGraph_FR->SetLineWidth(3);
     std::string outNaming = "plots/fit" + num + "_" + denum + ".pdf";
     if (year==2016) outNaming = "plots_tau_2016/fit" + num + "_" + denum + ".pdf";
@@ -216,7 +259,7 @@ void FitFakeRateTau(int year) {
     TH2F * Fit_Value_tau = new TH2F("Fit_Value_tau", "Fit_Value_tau", 40, 0, 40, 40, 0, 40);
 
     Double_t fMin = 30;
-    Double_t fMax = 200;
+    Double_t fMax = 300;
     std::string datafile="output_etau_2018/DataSub.root";
     if (year==2016) datafile="output_etau_2016/DataSub.root";
     if (year==2017) datafile="output_etau_2017/DataSub.root";
@@ -226,12 +269,21 @@ void FitFakeRateTau(int year) {
     TF1* m102 = M_FR(2, "Exp3Par", datafile, "h_tauFR_QCD_dm1_M","h_tauFR_QCD_dm1_VVVL", Fit_Value_tau, fMin, fMax, year);
     TF1* m103 = M_FR(3, "Exp3Par", datafile, "h_tauFR_QCD_dm10_M","h_tauFR_QCD_dm10_VVVL", Fit_Value_tau, fMin, fMax, year);
     TF1* m104 = M_FR(4, "Exp3Par", datafile, "h_tauFR_QCD_dm11_M","h_tauFR_QCD_dm11_VVVL", Fit_Value_tau, fMin, fMax, year);
-    TF1* m105 = M_FR(5, "Exp3Par", datafile, "h_tauFR_W_dm0_M","h_tauFR_W_dm0_VVVL", Fit_Value_tau, fMin, fMax, year);
+    TF1* m105 = M_FR(5, "Exp3Par", datafile, "h_tauFR_W_dm0_M","h_tauFR_W_dm0_VVVL", Fit_Value_tau, fMin, 400, year);
     TF1* m106 = M_FR(6, "Exp3Par", datafile, "h_tauFR_W_dm1_M","h_tauFR_W_dm1_VVVL", Fit_Value_tau, fMin, fMax, year);
     TF1* m107 = M_FR(7, "Exp3Par", datafile, "h_tauFR_W_dm10_M","h_tauFR_W_dm10_VVVL", Fit_Value_tau, fMin, fMax, year);
     TF1* m108 = M_FR(8, "Exp3Par", datafile, "h_tauFR_W_dm11_M","h_tauFR_W_dm11_VVVL", Fit_Value_tau, fMin, fMax, year);
     TF1* m109 = M_FR(9, "Flat", datafile, "h_tauFR_QCD_xtrg_M","h_tauFR_QCD_xtrg_VVVL", Fit_Value_tau, 35, fMax, year);
     TF1* m110 = M_FR(10, "Flat", datafile, "h_tauFR_W_xtrg_M","h_tauFR_W_xtrg_VVVL", Fit_Value_tau, 35, fMax, year);
+
+    TF1* m111 = M_FR(11, "Exp3Par", datafile, "h_tauFRnt_QCD_dm0_M","h_tauFRnt_QCD_dm0_VVVL", Fit_Value_tau, 0, 100, year);
+    TF1* m112 = M_FR(12, "Exp3Par", datafile, "h_tauFRnt_QCD_dm1_M","h_tauFRnt_QCD_dm1_VVVL", Fit_Value_tau, 0, 100, year);
+    TF1* m113 = M_FR(13, "Exp3Par", datafile, "h_tauFRnt_QCD_dm10_M","h_tauFRnt_QCD_dm10_VVVL", Fit_Value_tau, 0, 100, year);
+    TF1* m114 = M_FR(14, "Exp3Par", datafile, "h_tauFRnt_QCD_dm11_M","h_tauFRnt_QCD_dm11_VVVL", Fit_Value_tau, 0, 100, year);
+    TF1* m115 = M_FR(15, "Exp3Par", datafile, "h_tauFRnt_W_dm0_M","h_tauFRnt_W_dm0_VVVL", Fit_Value_tau, 0, 60, year);
+    TF1* m116 = M_FR(16, "Exp3Par", datafile, "h_tauFRnt_W_dm1_M","h_tauFRnt_W_dm1_VVVL", Fit_Value_tau, 0, 80, year);
+    TF1* m117 = M_FR(17, "Exp3Par", datafile, "h_tauFRnt_W_dm10_M","h_tauFRnt_W_dm10_VVVL", Fit_Value_tau, 0, 100, year);
+    TF1* m118 = M_FR(18, "Exp3Par", datafile, "h_tauFRnt_W_dm11_M","h_tauFRnt_W_dm11_VVVL", Fit_Value_tau, 0, 100, year);
 
     FR_File->Write();
     FR_File->cd();
@@ -255,6 +307,24 @@ void FitFakeRateTau(int year) {
     m109->Write();
     m110->SetName("theFit_W_xtrg");
     m110->Write();
+
+    m111->SetName("theFit_nt_QCD_dm0");
+    m111->Write();
+    m112->SetName("theFit_nt_QCD_dm1");
+    m112->Write();
+    m113->SetName("theFit_nt_QCD_dm10");
+    m113->Write();
+    m114->SetName("theFit_nt_QCD_dm11");
+    m114->Write();
+    m115->SetName("theFit_nt_W_dm0");
+    m115->Write();
+    m116->SetName("theFit_nt_W_dm1");
+    m116->Write();
+    m117->SetName("theFit_nt_W_dm10");
+    m117->Write();
+    m118->SetName("theFit_nt_W_dm11");
+    m118->Write();
+
     FR_File->Close();
 }
 

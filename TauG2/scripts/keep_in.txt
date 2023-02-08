@@ -35,6 +35,7 @@ keep HLT_DoubleMediumChargedIsoPFTauHPS35_Trk1_eta2p1_Reg
 
 keep Pileup_nTrueInt*
 keep genWeight*
+keep fixedGridRhoFastjetAll
 keep Generator*
 keep btagWeight_DeepCSVB*
 keep LHE_Vpt*

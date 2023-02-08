@@ -6,6 +6,7 @@ keep run*
 keep event*
 keep luminosityBlock*
 keep genWeight*
+keep fixedGridRhoFastjetAll
 keep Generator*
 
 #keep nanoAOD content

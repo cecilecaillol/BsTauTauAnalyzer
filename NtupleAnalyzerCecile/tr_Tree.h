@@ -1,4 +1,7 @@
    Int_t           ntracks_friend;
+   Int_t           ntracksAll_friend;
+   Int_t           ntracksHS_friend;
+   Int_t           ntracksPU_friend;
    Long64_t       genEventCount; 
    Double_t       genEventSumw;
    UInt_t          run;
@@ -106,6 +109,8 @@
    Float_t         V_genpt;
    Float_t         pu_weight;
    Float_t         puWeight;
+   Float_t         puWeightUp;
+   Float_t         puWeightDown;
 
    Int_t           nGenCand;
    Int_t           GenCand_id[4];   //[nGenCand]
@@ -114,10 +119,11 @@
    Float_t         GenCand_phi[4];   //[nGenCand]
 
    Int_t           nTracks;
-   Float_t         Track_pt[312];   //[nTracks]
-   Float_t         Track_eta[312];   //[nTracks]
-   Float_t         Track_phi[312];   //[nTracks]
-   Float_t         Track_dz[312];   //[nTracks]
+   Float_t         Track_pt[3120];   //[nTracks]
+   Float_t         Track_eta[3120];   //[nTracks]
+   Float_t         Track_phi[3120];   //[nTracks]
+   Float_t         Track_dz[3120];   //[nTracks]
+   Int_t           Track_isMatchedToHS[3120];   //[nTracks]
 
    UInt_t          nChargedPFCandidates;
    Float_t         ChargedPFCandidates_dz[1960];   //[nChargedPFCandidates]

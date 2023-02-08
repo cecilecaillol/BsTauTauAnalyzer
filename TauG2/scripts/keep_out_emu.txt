@@ -6,6 +6,7 @@ keep run*
 keep event*
 keep luminosityBlock*
 keep genWeight*
+keep fixedGridRhoFastjetAll
 keep Generator_weight
 
 #keep nanoAOD content
@@ -45,6 +46,10 @@ keep LepCand_dxy
 keep LepCand_dz
 keep LepCand_eleMVAiso80
 keep LepCand_eleMVAiso90
+keep LepCand_eleMVAnoiso80
+keep LepCand_eleMVAnoiso90
+keep LepCand_muonMediumId
+keep LepCand_muonIso
 
 keep nJets
 keep nElectrons

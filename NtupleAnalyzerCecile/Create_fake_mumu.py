@@ -15,7 +15,7 @@ if __name__ == "__main__":
     fData=ROOT.TFile("output_mumu_"+options.year+"/Data.root","r")
     fout=ROOT.TFile("output_mumu_"+options.year+"/Fake.root","recreate")
 
-    ncat=4
+    ncat=6
     for j in range(0,ncat):
 
        dir0=fout.mkdir("mumu"+str(j))

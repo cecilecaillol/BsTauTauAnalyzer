@@ -69,6 +69,8 @@ class Analysis(Module):
         self.out.branch("LepCand_muonIso",       "F",  lenVar = "nLepCand");
         self.out.branch("LepCand_eleMVAiso90",   "I",  lenVar = "nLepCand");
         self.out.branch("LepCand_eleMVAiso80",   "I",  lenVar = "nLepCand");
+        self.out.branch("LepCand_eleMVAnoiso90",   "I",  lenVar = "nLepCand");
+        self.out.branch("LepCand_eleMVAnoiso80",   "I",  lenVar = "nLepCand");
         self.out.branch("LepCand_eleIso",        "F",  lenVar = "nLepCand");
         self.out.branch("LepCand_tauidMsf",      "F",  lenVar = "nLepCand");
         #self.out.branch("LepCand_tauidMsf_up",    "F",  lenVar = "nLepCand");
@@ -229,8 +231,13 @@ class Analysis(Module):
         elif self.channel=="tautau":
            vertex_dz=0.5*(event.selectedTaus[0].dz+event.selectedTaus[1].dz)
         for j in chargedPF:
-            if abs(j.eta)<2.5 and abs(j.dz-vertex_dz)<0.3:
-                event.selectedTracks.append(j)
+            if self.isMC:
+	        if abs(j.eta)<2.5 and abs(j.dz-vertex_dz)<2.5: #need wider window in dz in MC because of the BS correction later
+                   event.selectedTracks.append(j)
+	    else:
+                if abs(j.eta)<2.5 and abs(j.dz-vertex_dz)<0.5: 
+                   event.selectedTracks.append(j)
+
         #for j in lostTracks:
         #    if abs(j.eta)<2.5 and abs(j.dz-vertex_dz)<0.3:
         #        event.selectedTracks.append(j)
@@ -251,6 +258,11 @@ class Analysis(Module):
         elSel = ElectronSelector()
         tauSel = TauSelector()
         muSel = MuonSelector(minPt=10, ID='medium')
+
+        #self.selectMuons(event, muSel)
+        #self.selectElectrons(event, elSel)
+        #self.selectTaus(event, tauSel)
+	#print len(event.selectedElectrons),len(event.selectedMuons),len(event.selectedTaus)
         
         # apply object selection and make channels exclusive based on number of leptons
         self.selectMuons(event, muSel)
@@ -299,12 +311,18 @@ class Analysis(Module):
         if self.channel=="emu":
             if event.selectedElectrons[0].pt<23 and event.selectedMuons[0].pt<23: return False
 
-	      #apply channel-dependent tau ID cuts
+	#apply channel-dependent tau ID cuts
         if self.channel=="mutau":
-            if event.selectedTaus[0].idDeepTau2017v2p1VSmu<8: return False #pass tight VSmu
+	    tau_vsmu=False
+	    for k in range(0,len(selectedTaus)):
+               if event.selectedTaus[k].idDeepTau2017v2p1VSmu>=8: tau_vsmu=True #pass tight VSmu
+	    if not tau_vsmu: return False
 
         if self.channel=="etau":
-            if event.selectedTaus[0].idDeepTau2017v2p1VSe<32: return False #pass tight VSe
+            tau_vse=False
+            for k in range(0,len(selectedTaus)):
+               if event.selectedTaus[k].idDeepTau2017v2p1VSe>=32: tau_vse=True #pass tight VSmu
+            if not tau_vse: return False
 
         self.selectTracks(event)
 
@@ -357,6 +375,8 @@ class Analysis(Module):
         lep_muonIso=[]
         lep_eleMVAiso90=[]
         lep_eleMVAiso80=[]
+        lep_eleMVAnoiso90=[]
+        lep_eleMVAnoiso80=[]
         lep_eleIso=[]
         lep_decaymode=[]
         lep_tauidMsfDM=[]
@@ -367,10 +387,14 @@ class Analysis(Module):
             if lep.id==11:
                 lep_eleMVAiso90.append(lep.mvaFall17V2Iso_WP90)
                 lep_eleMVAiso80.append(lep.mvaFall17V2Iso_WP80)
+                lep_eleMVAnoiso90.append(lep.mvaFall17V2noIso_WP90)
+                lep_eleMVAnoiso80.append(lep.mvaFall17V2noIso_WP80)
                 lep_eleIso.append(lep.miniPFRelIso_all)
             else:
                 lep_eleMVAiso90.append(-1)
                 lep_eleMVAiso80.append(-1)
+                lep_eleMVAnoiso90.append(-1)
+                lep_eleMVAnoiso80.append(-1)
                 lep_eleIso.append(-1)
               
             if lep.id==13:
@@ -528,6 +552,8 @@ class Analysis(Module):
         self.out.fillBranch("LepCand_muonIso",       lep_muonIso)
         self.out.fillBranch("LepCand_eleMVAiso90",   lep_eleMVAiso90)
         self.out.fillBranch("LepCand_eleMVAiso80",   lep_eleMVAiso80)
+        self.out.fillBranch("LepCand_eleMVAnoiso90",   lep_eleMVAnoiso90)
+        self.out.fillBranch("LepCand_eleMVAnoiso80",   lep_eleMVAnoiso80)
         self.out.fillBranch("LepCand_eleIso",        lep_eleIso)
         self.out.fillBranch("LepCand_vsjet",         lep_vsjet)
         self.out.fillBranch("LepCand_tauidMsf",      lep_tauidMsf)
