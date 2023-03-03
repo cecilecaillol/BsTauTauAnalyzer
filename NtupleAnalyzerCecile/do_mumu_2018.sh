@@ -8,5 +8,6 @@ hadd -f output_mumu_2018/Data.root output_mumu_2018/SingleMuonA.root output_mumu
 ./FinalSelection_mumu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mumu_2018/DY.root output_mumu_2018/DY.root DY DY
 ./FinalSelection_mumu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mumu_2018/TTTo2L2Nu.root output_mumu_2018/TTTo2L2Nu.root TTTo2L2Nu TT
 ./FinalSelection_mumu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mumu_2018/WW2L2Nu.root output_mumu_2018/WW2L2Nu.root WW2L2Nu VV
+./FinalSelection_mumu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mumu_2018/GGMM.root output_mumu_2018/GGMM.root GGMM GGMM
 python Create_fake_mumu.py --year=2018
-hadd -f datacard_mumu_2018.root output_mumu_2018/Fake.root output_mumu_2018/TTTo2L2Nu.root output_mumu_2018/WW2L2Nu.root output_mumu_2018/Data.root output_mumu_2018/DY.root
+hadd -f datacard_mumu_2018.root output_mumu_2018/Fake.root output_mumu_2018/TTTo2L2Nu.root output_mumu_2018/WW2L2Nu.root output_mumu_2018/Data.root output_mumu_2018/DY.root output_mumu_2018/GGMM.root

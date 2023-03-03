@@ -2,6 +2,7 @@
    Int_t           ntracksAll_friend;
    Int_t           ntracksHS_friend;
    Int_t           ntracksPU_friend;
+   UChar_t           LHE_Njets;
    Long64_t       genEventCount; 
    Double_t       genEventSumw;
    UInt_t          run;
@@ -59,6 +60,8 @@
    Bool_t          HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_TightID_CrossL1;
    Bool_t          HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_CrossL1;
    Bool_t          HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_TightID_CrossL1;
+   Bool_t          HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1;
+   Bool_t          HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_TightID_CrossL1;
    Bool_t          HLT_IsoMu24;
    Bool_t          HLT_IsoMu27;
    Bool_t          HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8;
@@ -72,29 +75,43 @@
    Bool_t          HLT_MediumChargedIsoPFTau180HighPtRelaxedIso_Trk50_eta2p1;
    Bool_t          HLT_DoubleTightChargedIsoPFTauHPS40_Trk1_eta2p1_Reg;
    Int_t           nLepCand;
-   Int_t           LepCand_id[3];   //[nLepCand]
-   Float_t         LepCand_pt[3];   //[nLepCand]
-   Float_t         LepCand_eta[3];   //[nLepCand]
-   Float_t         LepCand_phi[3];   //[nLepCand]
-   Int_t           LepCand_charge[3];   //[nLepCand]
-   Float_t         LepCand_dxy[3];   //[nLepCand]
-   Float_t         LepCand_dz[3];   //[nLepCand]
-   Float_t         LepCand_gen[3];   //[nLepCand]
-   Int_t           LepCand_vse[3];   //[nLepCand]
-   Int_t           LepCand_vsmu[3];   //[nLepCand]
-   Int_t           LepCand_vsjet[3];   //[nLepCand]
-   Int_t           LepCand_muonMediumId[3];   //[nLepCand]
-   Float_t         LepCand_muonIso[3];   //[nLepCand]
-   Int_t           LepCand_eleMVAiso90[3];   //[nLepCand]
-   Int_t           LepCand_eleMVAiso80[3];   //[nLepCand]
-   Float_t         LepCand_eleIso[3];   //[nLepCand]
-   Float_t         LepCand_tauidMsf[3];   //[nLepCand]
-   Float_t         LepCand_taues[3];   //[nLepCand]
-   Float_t         LepCand_fes[3];   //[nLepCand]
-   Float_t         LepCand_antimusf[3];   //[nLepCand]
-   Float_t         LepCand_antielesf[3];   //[nLepCand]
-   Float_t         LepCand_tautriggersf[3];   //[nLepCand]
-   Int_t           LepCand_DecayMode[3];   //[nLepCand]
+   Int_t           LepCand_id[5];   //[nLepCand]
+   Float_t         LepCand_pt[5];   //[nLepCand]
+   Float_t         LepCand_eta[5];   //[nLepCand]
+   Float_t         LepCand_phi[5];   //[nLepCand]
+   Int_t           LepCand_charge[5];   //[nLepCand]
+   Float_t         LepCand_dxy[5];   //[nLepCand]
+   Float_t         LepCand_dz[5];   //[nLepCand]
+   Float_t         LepCand_gen[5];   //[nLepCand]
+   Int_t           LepCand_vse[5];   //[nLepCand]
+   Int_t           LepCand_vsmu[5];   //[nLepCand]
+   Int_t           LepCand_vsjet[5];   //[nLepCand]
+   Int_t           LepCand_muonMediumId[5];   //[nLepCand]
+   Float_t         LepCand_muonIso[5];   //[nLepCand]
+   Int_t           LepCand_eleMVAiso90[5];   //[nLepCand]
+   Int_t           LepCand_eleMVAiso80[5];   //[nLepCand]
+   Int_t           LepCand_eleMVAnoiso90[5];   //[nLepCand]
+   Int_t           LepCand_eleMVAnoiso80[5];   //[nLepCand]
+   Float_t         LepCand_eleIso[5];   //[nLepCand]
+   Float_t         LepCand_tauidMsf[5];   //[nLepCand]
+   Float_t         LepCand_tauidMsf_up[5];   //[nLepCand]
+   Float_t         LepCand_tauidMsf_down[5];   //[nLepCand]
+   Float_t         LepCand_taues[5];   //[nLepCand]
+   Float_t         LepCand_fes[5];   //[nLepCand]
+   Float_t         LepCand_antimusf[5];   //[nLepCand]
+   Float_t         LepCand_antielesf[5];   //[nLepCand]
+   Float_t         LepCand_taues_up[5];   //[nLepCand]
+   Float_t         LepCand_fes_up[5];   //[nLepCand]
+   Float_t         LepCand_antimusf_up[5];   //[nLepCand]
+   Float_t         LepCand_antielesf_up[5];   //[nLepCand]
+   Float_t         LepCand_taues_down[5];   //[nLepCand]
+   Float_t         LepCand_fes_down[5];   //[nLepCand]
+   Float_t         LepCand_antimusf_down[5];   //[nLepCand]
+   Float_t         LepCand_antielesf_down[5];   //[nLepCand]
+   Float_t         LepCand_tautriggersf[5];   //[nLepCand]
+   Float_t         LepCand_tautriggersf_up[5];   //[nLepCand]
+   Float_t         LepCand_tautriggersf_down[5];   //[nLepCand]
+   Int_t           LepCand_DecayMode[5];   //[nLepCand]
    Int_t           nJets;
    Int_t           nElectrons;
    Int_t           nMuons;

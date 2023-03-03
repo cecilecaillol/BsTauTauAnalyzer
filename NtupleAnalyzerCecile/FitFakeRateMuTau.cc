@@ -277,10 +277,10 @@ void FitFakeRateTau(int year) {
 
     Double_t fMin = 30;
     Double_t fMax = 300;
-    std::string datafile="output_etau_2018/DataSub.root";
-    if (year==2016) datafile="output_etau_2016/DataSub.root";
-    if (year==2017) datafile="output_etau_2017/DataSub.root";
-    if (year==2018) datafile="output_etau_2018/DataSub.root";
+    std::string datafile="output_mutau_2018/DataSub.root";
+    if (year==2016) datafile="output_mutau_2016/DataSub.root";
+    if (year==2017) datafile="output_mutau_2017/DataSub.root";
+    if (year==2018) datafile="output_mutau_2018/DataSub.root";
 
     TF1* m101 = M_FR(1, "Exp3Par", datafile, "h_tauFR_QCD_dm0_M","h_tauFR_QCD_dm0_VVVL", Fit_Value_tau, fMin, fMax, year);
     TF1* m102 = M_FR(2, "Exp3Par", datafile, "h_tauFR_QCD_dm1_M","h_tauFR_QCD_dm1_VVVL", Fit_Value_tau, fMin, fMax, year);

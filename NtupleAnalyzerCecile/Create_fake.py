@@ -14,7 +14,7 @@ if __name__ == "__main__":
     fVV=ROOT.TFile("output_etau_"+options.year+"/VV.root","r")
     fTT=ROOT.TFile("output_etau_"+options.year+"/TT.root","r")
     fST=ROOT.TFile("output_etau_"+options.year+"/ST.root","r")
-    fDY=ROOT.TFile("output_etau_"+options.year+"/DY.root","r")
+    fDY=ROOT.TFile("output_etau_"+options.year+"/DYrescaled.root","r")
     fData=ROOT.TFile("output_etau_"+options.year+"/EGamma.root","r")
     fout=ROOT.TFile("output_etau_"+options.year+"/Fake.root","recreate")
 

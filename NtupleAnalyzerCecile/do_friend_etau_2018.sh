@@ -5,6 +5,10 @@
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/EGammaD.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_EGammaD.root data_obs 
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/DY.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_DY.root DY 
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/W.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_W.root W  
+./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/W1.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_W1.root W1
+./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/W2.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_W2.root W2
+./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/W3.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_W3.root W3
+./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/W4.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_W4.root W4
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/ST_t_antitop.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_ST_t_antitop.root ST_t_antitop 
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/ST_t_top.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_ST_t_top.root ST_t_top 
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/ST_tW_antitop.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_ST_tW_antitop.root ST_tW_antitop 
@@ -18,4 +22,4 @@
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTToSemiLeptonic.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_TTToSemiLeptonic.root TTToSemiLeptonic 
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTTo2L2Nu.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_TTTo2L2Nu.root TTTo2L2Nu 
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGTT.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_GGTT.root GGTT 
-
+./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGWW.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_GGWW.root GGWW

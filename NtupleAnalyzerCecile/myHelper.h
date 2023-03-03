@@ -20,7 +20,7 @@ float TMass_F(float pt3lep, float px3lep, float py3lep, float met, float metPhi)
 }
 
 
-void WriteHistToFileETau(TFile* myfile, std::vector<TH1F*> hist, std::string name, TString dir_name, TString uncertainties[1], TString fake_uncertainties[1], bool isMC, int nbhist, int nbhist_offset, bool write_uncertainties){
+void WriteHistToFileETau(TFile* myfile, std::vector<TH1F*> hist, std::string name, TString dir_name, TString uncertainties[27], TString fake_uncertainties[1], bool isMC, int nbhist, int nbhist_offset, bool write_uncertainties){
     TString postfix="";
     TDirectory *dir =myfile->mkdir(dir_name);
     dir->cd();
@@ -29,8 +29,24 @@ void WriteHistToFileETau(TFile* myfile, std::vector<TH1F*> hist, std::string nam
        for (int j=0; j<hist[k]->GetSize()-1; ++j){
          if (hist[k]->GetBinContent(j)<0) hist[k]->SetBinContent(j,0);
        }
-       if (k<(1-nbhist_offset)) postfix=uncertainties[k];
-       else postfix=fake_uncertainties[k-(1-nbhist_offset)];
+       if (k<(27-nbhist_offset)) postfix=uncertainties[k];
+       else postfix=fake_uncertainties[k-(27-nbhist_offset)];
+       hist[k]->SetName(name.c_str()+postfix);
+       hist[k]->Write();
+    }
+}
+
+void WriteHistToFileMuTau(TFile* myfile, std::vector<TH1F*> hist, std::string name, TString dir_name, TString uncertainties[27], TString fake_uncertainties[1], bool isMC, int nbhist, int nbhist_offset, bool write_uncertainties){
+    TString postfix="";
+    TDirectory *dir =myfile->mkdir(dir_name);
+    dir->cd();
+    if (!write_uncertainties) nbhist=1;
+    for (int k=0; k<nbhist; ++k){
+       for (int j=0; j<hist[k]->GetSize()-1; ++j){
+         if (hist[k]->GetBinContent(j)<0) hist[k]->SetBinContent(j,0);
+       }
+       if (k<(27-nbhist_offset)) postfix=uncertainties[k];
+       else postfix=fake_uncertainties[k-(27-nbhist_offset)];
        hist[k]->SetName(name.c_str()+postfix);
        hist[k]->Write();
     }
