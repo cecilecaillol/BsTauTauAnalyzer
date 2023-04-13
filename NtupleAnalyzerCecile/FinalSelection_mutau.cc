@@ -439,7 +439,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    TString uncertainties[27]={"","_CMS_tauid_pt30to35_2018Down","_CMS_tauid_pt30to35_2018Up","_CMS_tauid_pt35to40_2018Down","_CMS_tauid_pt35to40_2018Up","_CMS_tauid_ptgt40_2018Down","_CMS_tauid_ptgt40_2018Up","_CMS_taues_dm0_2018Down","_CMS_taues_dm0_2018Up","_CMS_taues_dm1_2018Down","_CMS_taues_dm1_2018Up","_CMS_taues_3prong_2018Down","_CMS_taues_3prong_2018Up","_CMS_etauFR_barrel_2018Down","_CMS_etauFR_barrel_2018Up","_CMS_etauFR_endcap_2018Down","_CMS_etauFR_endcap_2018Up","_CMS_etauFES_dm0_2018Down","_CMS_etauFES_dm0_2018Up","_CMS_etauFES_dm1_2018Down","_CMS_etauFES_dm1_2018Up","_CMS_pileup_2018Down","_CMS_pileup_2018Up","_CMS_mutautrg_2018Down","_CMS_mutautrg_2018Up","_CMS_etrg_2018Down","_CMS_etrg_2018Up"};
    TString fake_uncertainties[1]={""};
 
-   TFile* f_taufr = new TFile("fakerate/FitValues_tauFR_2018.root");
+   TFile* f_taufr = new TFile("fakerate/FitValues_tauFR_2018_mutau.root");
    TF1 *fit_taufr_QCD_dm0 = (TF1*) f_taufr->Get("theFit_QCD_dm0");
    TF1 *fit_taufr_QCD_dm1 = (TF1*) f_taufr->Get("theFit_QCD_dm1");
    TF1 *fit_taufr_QCD_dm10 = (TF1*) f_taufr->Get("theFit_QCD_dm10");
@@ -512,8 +512,9 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    auto b3_2=arbre->GetBranch("LepCand_vsmu");
    auto b3_3=arbre->GetBranch("LepCand_vsjet");
    auto b3_4=arbre->GetBranch("LepCand_charge");
-   auto b3_5=arbre->GetBranch("LepCand_eleMVAiso90");
+   auto b3_5=arbre->GetBranch("LepCand_muonIso");
    auto b3_6=arbre->GetBranch("LepCand_DecayMode");
+   auto b3_7=arbre->GetBranch("LepCand_muonMediumId");
 
    auto b4_1=arbre->GetBranch("pu_weight");
    auto b4_2=arbre->GetBranch("genWeight");
@@ -641,7 +642,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
 	int mu_index=-1;
 	for (int j=0; j<nLepCand; ++j){
-	   if (mu_index<0 and LepCand_id[j]==11) mu_index=j;
+	   if (mu_index<0 and LepCand_id[j]==13) mu_index=j;
 	}
         int tau_index=-1; float dz_tmp=10000;
         for (int j=0; j<nLepCand; ++j){
@@ -660,7 +661,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
         if (name=="ZLL" and LepCand_gen[tau_index]==5) continue;
 
 	if (fabs(my_tau.Eta())>2.3) continue;
-        if (fabs(my_mu.Eta())>2.1) continue;
+        if (fabs(my_mu.Eta())>2.4) continue;
 	if (my_tau.DeltaR(my_mu)<0.5) continue;
 
 	// Trigger block
@@ -683,7 +684,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 	}
 
 	// Block ID/iso/charge
-	b3_1->GetEntry(i); b3_2->GetEntry(i); b3_3->GetEntry(i); b3_4->GetEntry(i); b3_5->GetEntry(i); b3_6->GetEntry(i);
+	b3_1->GetEntry(i); b3_2->GetEntry(i); b3_3->GetEntry(i); b3_4->GetEntry(i); b3_6->GetEntry(i); b3_5->GetEntry(i); b3_7->GetEntry(i); 
 	if (LepCand_vse[tau_index]<1 or LepCand_vsmu[tau_index]<15 or LepCand_vsjet[tau_index]<1) continue; 
 	if (!LepCand_muonMediumId[mu_index] or LepCand_muonIso[mu_index]>0.20) continue;
 

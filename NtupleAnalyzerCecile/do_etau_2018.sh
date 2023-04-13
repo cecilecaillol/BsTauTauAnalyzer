@@ -30,9 +30,12 @@ hadd -f output_etau_2018/VV.root output_etau_2018/WW2L2Nu.root output_etau_2018/
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTTo2L2Nu.root output_etau_2018/TTTo2L2Nu.root TTTo2L2Nu TT
 hadd -f output_etau_2018/TT.root output_etau_2018/TTToHadronic.root output_etau_2018/TTToSemiLeptonic.root output_etau_2018/TTTo2L2Nu.root
 hadd -f output_etau_2018/MC.root output_etau_2018/DYrescaled.root output_etau_2018/ST.root output_etau_2018/VV.root output_etau_2018/TT.root
-./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGTT.root output_etau_2018/GGTT.root GGTT GGTT
-./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGTT.root output_etau_2018/GGTT2.root GGTT2 GGTT2
+./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToTauTau.root output_etau_2018/GGTT.root GGTT GGTT
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGWW.root output_etau_2018/GGWW.root GGWW GGWW
 
+cp output_etau_2018/GGTT.root output_etau_2018/signal.root
+sh do_etau_BSM_2018.sh
+python Prepare_BSM_combine.py --year=2018
+
 python Create_fake.py --year=2018
-hadd -f datacard_etau_2018.root output_etau_2018/Fake.root output_etau_2018/MC.root  output_etau_2018/EGamma.root output_etau_2018/GGTT.root output_etau_2018/GGTT2.root output_etau_2018/GGWW.root output_etau_2018/W.root
+hadd -f datacard_etau_2018.root output_etau_2018/Fake.root output_etau_2018/MC.root  output_etau_2018/EGamma.root output_etau_2018/GGTT.root output_etau_2018/GGWW.root output_etau_2018/W.root output_etau_2018/bsm.root

@@ -1,13 +1,13 @@
 ./Make.sh FinalSelection_mutau.cc
-./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/EGammaA.root output_mutau_2018/EGammaA.root data_obs data_obs
-./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/EGammaB.root output_mutau_2018/EGammaB.root data_obs data_obs
-./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/EGammaC.root output_mutau_2018/EGammaC.root data_obs data_obs
-./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/EGammaD.root output_mutau_2018/EGammaD.root data_obs data_obs
-hadd -f output_mutau_2018/EGamma.root output_mutau_2018/EGammaA.root output_mutau_2018/EGammaB.root output_mutau_2018/EGammaC.root output_mutau_2018/EGammaD.root
+./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/SingleMuonA.root output_mutau_2018/SingleMuonA.root data_obs data_obs
+./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/SingleMuonB.root output_mutau_2018/SingleMuonB.root data_obs data_obs
+./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/SingleMuonC.root output_mutau_2018/SingleMuonC.root data_obs data_obs
+./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/SingleMuonD.root output_mutau_2018/SingleMuonD.root data_obs data_obs
+hadd -f output_mutau_2018/SingleMuon.root output_mutau_2018/SingleMuonA.root output_mutau_2018/SingleMuonB.root output_mutau_2018/SingleMuonC.root output_mutau_2018/SingleMuonD.root
 ./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/DY.root output_mutau_2018/ZTT.root DY ZTT
 ./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/DY.root output_mutau_2018/ZLL.root DY ZLL
 hadd -f output_mutau_2018/DY.root output_mutau_2018/ZTT.root output_mutau_2018/ZLL.root 
-python Relax_DY.py --year=2018
+python Relax_DY_mutau.py --year=2018
 ./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/W.root output_mutau_2018/Wincl.root W W 
 ./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/W1.root output_mutau_2018/W1.root W1 W
 ./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/W2.root output_mutau_2018/W2.root W2 W
@@ -35,4 +35,4 @@ hadd -f output_mutau_2018/MC.root output_mutau_2018/DYrescaled.root output_mutau
 ./FinalSelection_mutau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mutau_2018/GGWW.root output_mutau_2018/GGWW.root GGWW GGWW
 
 python Create_fake_mutau.py --year=2018
-hadd -f datacard_mutau_2018.root output_mutau_2018/Fake.root output_mutau_2018/MC.root  output_mutau_2018/EGamma.root output_mutau_2018/GGTT.root output_mutau_2018/GGTT2.root output_mutau_2018/GGWW.root output_mutau_2018/W.root
+hadd -f datacard_mutau_2018.root output_mutau_2018/Fake.root output_mutau_2018/MC.root  output_mutau_2018/SingleMuon.root output_mutau_2018/GGTT.root output_mutau_2018/GGTT2.root output_mutau_2018/GGWW.root output_mutau_2018/W.root

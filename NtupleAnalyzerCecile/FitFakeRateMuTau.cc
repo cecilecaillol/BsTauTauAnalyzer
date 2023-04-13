@@ -118,7 +118,7 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
     const int nPar = 4; // number of parameters in the fit
 
     TF1 * theFit = new TF1("theFit", fitFunc_Exp3Par, fMin, fMax, nPar);
-    TF1 * theFit2 = new TF1("theFit2", fitFunc_Exp3Par2, 0, 40, nPar);
+    TF1 * theFit2 = new TF1("theFit2", fitFunc_Exp3Par2, 0, 20, nPar);
 
     if (type=="Flat"){
       theFit = new TF1("theFit", fitFlat, fMin, fMax, 1);
@@ -207,7 +207,7 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
     if (num.find("dm11")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 0.30);
 
 
-    if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 3.50);
+    if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 1.5*yg[1]);
 
     TGraph_FR->GetYaxis()->SetTitle("f_{#tau}");
     TGraph_FR->GetXaxis()->SetRangeUser(0, 5000);
@@ -266,12 +266,12 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
     return theFit;
 }
 
-void FitFakeRateTau(int year) {
+void FitFakeRateMuTau(int year) {
 
-    TFile *FR_File = new TFile("FitValues_FR.root", "RECREATE");
-    if (year==2016) FR_File = new TFile("FitValues_tauFR_2016.root", "RECREATE");
-    if (year==2017) FR_File = new TFile("FitValues_tauFR_2017.root", "RECREATE");
-    if (year==2018) FR_File = new TFile("FitValues_tauFR_2018.root", "RECREATE");
+    TFile *FR_File = new TFile("FitValues_FR_mutau.root", "RECREATE");
+    if (year==2016) FR_File = new TFile("FitValues_tauFR_2016_mutau.root", "RECREATE");
+    if (year==2017) FR_File = new TFile("FitValues_tauFR_2017_mutau.root", "RECREATE");
+    if (year==2018) FR_File = new TFile("FitValues_tauFR_2018_mutau.root", "RECREATE");
 
     TH2F * Fit_Value_tau = new TH2F("Fit_Value_tau", "Fit_Value_tau", 40, 0, 40, 40, 0, 40);
 

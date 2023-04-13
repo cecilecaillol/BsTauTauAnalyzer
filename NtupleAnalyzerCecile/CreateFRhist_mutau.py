@@ -29,7 +29,7 @@ hist=[
 "h_tauFRnt_W_dm11_VVVL","h_tauFRnt_W_dm11_M"
 ]
 
-fileData=ROOT.TFile("output_mutau_2018/EGamma.root","r")
+fileData=ROOT.TFile("output_mutau_2018/SingleMuon.root","r")
 fileMC=ROOT.TFile("output_mutau_2018/MC.root","r")
 fileDataSub=ROOT.TFile("output_mutau_2018/DataSub.root","recreate")
 

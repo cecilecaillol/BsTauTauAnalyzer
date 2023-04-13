@@ -43,6 +43,7 @@ int main(int argc, char** argv) {
 
     TTree *arbre2 = (TTree*) f_Double->Get("Runs");
     float ngen=0;
+    float ngenu=0;
     if (name!="data_obs") {
        Int_t nentries_wtn2 = (Int_t) arbre2->GetEntries();
        arbre2->SetBranchAddress("genEventSumw", &genEventSumw);
@@ -50,8 +51,11 @@ int main(int argc, char** argv) {
        for (Int_t i = 0; i < nentries_wtn2; i++) {
          arbre2->GetEntry(i);
          ngen+=genEventSumw;
+         ngenu+=genEventCount;
        }
     }
+cout<<ngen<<" "<<ngenu<<endl;
+
     float xs=1.0; float weight=1.0; float luminosity=59830.0;
     if (year=="2017") luminosity=41480.0;
     if (year=="2016pre") luminosity=19520.0;
@@ -85,7 +89,7 @@ int main(int argc, char** argv) {
     else if (sample=="ST_t_tau"){ xs=(80.95+136.02)*0.108; weight=luminosity*xs/ngen;}
     else if (sample=="ST_t_top"){ xs=136.02; weight=luminosity*xs/ngen;}
     else if (sample=="ST_t_antitop"){ xs=80.95; weight=luminosity*xs/ngen;}
-    else if (sample=="GGMM"){ xs=0.3883; weight=luminosity*xs/ngen;}
+    else if (sample=="GGMM"){ xs=0.37553; weight=luminosity*xs/ngen;}
     else if (name=="data_obs"){ weight=1.0;}
     else if (name=="test") { xs=1.0; weight=luminosity*xs/ngen;}
 
@@ -105,8 +109,7 @@ int main(int argc, char** argv) {
       else if (sample=="ZZ4L") weight*=0.304;
       else if (sample=="ZZ2L2Nu") weight*=0.302;
       else if (sample=="ZZ2L2Q") weight*=0.373;
-      else if (sample=="GGMuMu") weight*=0.941;
-      else if (sample=="GGMM") weight*=0.32;
+      else if (sample=="GGMM") weight*=0.33;
     //}
 
 

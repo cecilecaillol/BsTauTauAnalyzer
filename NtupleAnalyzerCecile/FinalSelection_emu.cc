@@ -31,7 +31,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-    int is_control=0;
+    int is_control=1;
 
     std::string year = *(argv + 1);
     std::string input = *(argv + 2);
@@ -78,9 +78,9 @@ int main(int argc, char** argv) {
     else if (sample=="DY_Pt250to400"){ xs=3.43; weight=luminosity*xs/ngen;}
     else if (sample=="DY_Pt400to650"){ xs=0.464; weight=luminosity*xs/ngen;}
     else if (sample=="DY_Pt650toInf"){ xs=0.0436; weight=luminosity*xs/ngen;}
-    else if (sample=="TTTo2L2Nu"){ xs=831.76*0.1061; weight=luminosity*xs/ngen;}
-    else if (sample=="TTToSemiLeptonic"){ xs=831.76*0.4392; weight=luminosity*xs/ngen;}
-    else if (sample=="TTToHadronic"){ xs=831.76*0.4544; weight=luminosity*xs/ngen;}
+    else if (sample=="TTTo2L2Nu"){ xs=791*0.1061; weight=luminosity*xs/ngen;}
+    else if (sample=="TTToSemiLeptonic"){ xs=791*0.4392; weight=luminosity*xs/ngen;}
+    else if (sample=="TTToHadronic"){ xs=791*0.4544; weight=luminosity*xs/ngen;}
     else if (sample=="ZZ4L"){ xs=1.212; weight=luminosity*xs/ngen;}
     else if (sample=="ZZ2L2Q"){ xs=3.22; weight=luminosity*xs/ngen;}
     else if (sample=="ZZ2Q2L"){ xs=3.22; weight=luminosity*xs/ngen;}
@@ -92,10 +92,10 @@ int main(int argc, char** argv) {
     else if (sample=="ZZ2L2Nu"){ xs=3.0; weight=luminosity*xs/ngen;}
     else if (sample=="WZ"){ xs=47.13; weight=luminosity*xs/ngen;}
     else if (sample=="WW"){ xs=118.7; weight=luminosity*xs/ngen;}
-    else if (sample=="ST_tW_top"){ xs=35.6; weight=luminosity*xs/ngen;}
-    else if (sample=="ST_tW_antitop"){ xs=35.6; weight=luminosity*xs/ngen;}
-    else if (sample=="ST_t_top"){ xs=136.02; weight=luminosity*xs/ngen;}
-    else if (sample=="ST_t_antitop"){ xs=80.95; weight=luminosity*xs/ngen;}
+    else if (sample=="ST_tW_top"){ xs=39.65; weight=luminosity*xs/ngen;}
+    else if (sample=="ST_tW_antitop"){ xs=39.65; weight=luminosity*xs/ngen;}
+    else if (sample=="ST_t_top"){ xs=134.2; weight=luminosity*xs/ngen;}
+    else if (sample=="ST_t_antitop"){ xs=80.0; weight=luminosity*xs/ngen;}
     else if (sample=="GGTT"){ xs=0.669*0.0172; weight=luminosity*xs/ngen;}
     else if (sample=="GGWW"){ xs=0.009625 * 0.40; weight=luminosity*xs/ngen;}
     else if (sample=="GGTT2"){ xs=0.669*0.0172*3.59; weight=luminosity*xs/ngen;}
@@ -217,7 +217,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
 
    // Control 1
-   /*float bins0[] = {0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,300,500};//mvis
+   float bins0[] = {0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,300,500};//mvis
    float bins1[] = {10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,45,50,55,60,65,70,75,80,85,90,95,100,110,120};//e pt
    float bins2[] = {10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,45,50,55,60,65,70,75,80,85,90,95,100,110,120};//tau pt
    float bins3[] = {-2.5,-2.3,-2.1,-1.9,-1.7,-1.5,-1.3,-1.1,-0.9,-0.7,-0.5,-0.3,-0.1,0.1,0.3,0.5,0.7,0.9,1.1,1.3,1.5,1.7,1.9,2.1,2.3,2.5};//e eta
@@ -225,10 +225,10 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    float bins5[] = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,80,90,100,110,120};//met
    float bins6[] = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180};//mt
    float bins7[] = {0,1,2,3,4,5,6,7,8,9,10};//njets
-   float bins8[] = {0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity*/
+   float bins8[] = {0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity
 
    // Signal region
-   float bins0[] = {25,40,55,70,85,100,150,200,350,500};//mvis
+   /*float bins0[] = {25,40,55,70,85,100,150,200,350,500};//mvis
    float bins1[] = {25,40,55,70,85,100,150,200,350,500};//mvis
    float bins2[] = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120};//mvis
    float bins3[] = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120};//mvis
@@ -236,7 +236,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    float bins5[] = {25,40,55,70,85,100,150,200,350,500};//mvis
    float bins6[] = {25,40,55,70,85,100,150,200,350,500};//mvis
    float bins7[] = {25,40,55,70,85,100,150,200,350,500};//mvis
-   float bins8[] = {25,40,55,70,85,100,150,200,350,500};//mvis
+   float bins8[] = {25,40,55,70,85,100,150,200,350,500};//mvis*/
 
    int  binnum0 = sizeof(bins0)/sizeof(Float_t) - 1;
    int  binnum1 = sizeof(bins1)/sizeof(Float_t) - 1;
@@ -377,6 +377,20 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    TH2F* h_mu_iso24_zll= (TH2F*) f_mu_trg24->Get("ZLL_iso_eff");
    TH2F* h_mu_iso8_data= (TH2F*) f_mu_trg8->Get("data_iso_eff");
    TH2F* h_mu_iso8_zll= (TH2F*) f_mu_trg8->Get("ZLL_iso_eff");
+
+   TFile* f_e_trg24_c=new TFile("scalefactors/sf_el_2018_HLTMu8Ele23.root","read");
+   TFile* f_e_trg12_c=new TFile("scalefactors/sf_el_2018_HLTMu23Ele12.root","read");
+   TFile* f_mu_trg24_c=new TFile("scalefactors/sf_mu_2018_HLTMu23Ele12.root","read");
+   TFile* f_mu_trg8_c=new TFile("scalefactors/sf_mu_2018_HLTMu8Ele23.root","read");
+   TH2F* h_mu_trg24_data_c= (TH2F*) f_mu_trg24_c->Get("eff_data");
+   TH2F* h_mu_trg24_zll_c= (TH2F*) f_mu_trg24_c->Get("eff_mc");
+   TH2F* h_mu_trg8_data_c= (TH2F*) f_mu_trg8_c->Get("eff_data");
+   TH2F* h_mu_trg8_zll_c= (TH2F*) f_mu_trg8_c->Get("eff_mc");
+   TH2F* h_e_trg24_data_c= (TH2F*) f_e_trg24_c->Get("eff_data");
+   TH2F* h_e_trg24_zll_c= (TH2F*) f_e_trg24_c->Get("eff_mc");
+   TH2F* h_e_trg12_data_c= (TH2F*) f_e_trg12_c->Get("eff_data");
+   TH2F* h_e_trg12_zll_c= (TH2F*) f_e_trg12_c->Get("eff_mc");
+
 
    TFile* f_fr=new TFile("emu_fr_2018.root","read");
    TH2F* h_fr=(TH2F*) f_fr->Get("FR");
@@ -594,7 +608,7 @@ cout<<idsf1*muonIsoSF1<<" "<<((eff_mu_id8_data*eff_mu_iso8_data)/(eff_mu_id8_zll
 	   aweight*=((eff_e_id12_data*eff_e_iso12_data)/(eff_e_id12_zll*eff_e_iso12_zll));
 	   //cout<<elIDSF<<" "<<((eff_e_id12_data*eff_e_iso12_data)/(eff_e_id12_zll*eff_e_iso12_zll))<<" "<<((eff_e_id24_data*eff_e_iso24_data)/(eff_e_id24_zll*eff_e_iso24_zll))<<endl;
 
-	   if (ept2<20) ept2=20;
+	   /*if (ept2<20) ept2=20;
            if (mupt2<20) mupt2=15;
 	   float eff_e_trg24_data=h_e_trg24_data->GetBinContent(h_e_trg24_data->GetXaxis()->FindBin(ept2),h_e_trg24_data->GetYaxis()->FindBin(fabs(my_ele.Eta())));
            float eff_e_trg12_data=h_e_trg12_data->GetBinContent(h_e_trg12_data->GetXaxis()->FindBin(ept2),h_e_trg12_data->GetYaxis()->FindBin(fabs(my_ele.Eta())));
@@ -603,10 +617,21 @@ cout<<idsf1*muonIsoSF1<<" "<<((eff_mu_id8_data*eff_mu_iso8_data)/(eff_mu_id8_zll
            float eff_e_trg24_zll=h_e_trg24_zll->GetBinContent(h_e_trg24_zll->GetXaxis()->FindBin(ept2),h_e_trg24_zll->GetYaxis()->FindBin(fabs(my_ele.Eta())));
            float eff_e_trg12_zll=h_e_trg12_zll->GetBinContent(h_e_trg12_zll->GetXaxis()->FindBin(ept2),h_e_trg12_zll->GetYaxis()->FindBin(fabs(my_ele.Eta())));
            float eff_mu_trg24_zll=h_mu_trg24_zll->GetBinContent(h_mu_trg24_zll->GetXaxis()->FindBin(mupt2),h_mu_trg24_zll->GetYaxis()->FindBin(fabs(my_mu.Eta())));
-           float eff_mu_trg8_zll=h_mu_trg8_zll->GetBinContent(h_mu_trg8_zll->GetXaxis()->FindBin(mupt2),h_mu_trg8_zll->GetYaxis()->FindBin(fabs(my_mu.Eta())));
+           float eff_mu_trg8_zll=h_mu_trg8_zll->GetBinContent(h_mu_trg8_zll->GetXaxis()->FindBin(mupt2),h_mu_trg8_zll->GetYaxis()->FindBin(fabs(my_mu.Eta())));*/
+	   if (ept2<15) ept2=15;
+           if (mupt2<15) mupt2=15;
+           float eff_e_trg24_data=h_e_trg24_data_c->GetBinContent(h_e_trg24_data_c->GetXaxis()->FindBin(ept2),h_e_trg24_data_c->GetYaxis()->FindBin(fabs(my_ele.Eta())));
+           float eff_e_trg12_data=h_e_trg12_data_c->GetBinContent(h_e_trg12_data_c->GetXaxis()->FindBin(ept2),h_e_trg12_data_c->GetYaxis()->FindBin(fabs(my_ele.Eta())));
+           float eff_mu_trg24_data=h_mu_trg24_data_c->GetBinContent(h_mu_trg24_data_c->GetXaxis()->FindBin(mupt2),h_mu_trg24_data_c->GetYaxis()->FindBin(fabs(my_mu.Eta())));
+           float eff_mu_trg8_data=h_mu_trg8_data_c->GetBinContent(h_mu_trg8_data_c->GetXaxis()->FindBin(mupt2),h_mu_trg8_data_c->GetYaxis()->FindBin(fabs(my_mu.Eta())));
+           float eff_e_trg24_zll=h_e_trg24_zll_c->GetBinContent(h_e_trg24_zll_c->GetXaxis()->FindBin(ept2),h_e_trg24_zll_c->GetYaxis()->FindBin(fabs(my_ele.Eta())));
+           float eff_e_trg12_zll=h_e_trg12_zll_c->GetBinContent(h_e_trg12_zll_c->GetXaxis()->FindBin(ept2),h_e_trg12_zll_c->GetYaxis()->FindBin(fabs(my_ele.Eta())));
+           float eff_mu_trg24_zll=h_mu_trg24_zll_c->GetBinContent(h_mu_trg24_zll_c->GetXaxis()->FindBin(mupt2),h_mu_trg24_zll_c->GetYaxis()->FindBin(fabs(my_mu.Eta())));
+           float eff_mu_trg8_zll=h_mu_trg8_zll_c->GetBinContent(h_mu_trg8_zll_c->GetXaxis()->FindBin(mupt2),h_mu_trg8_zll_c->GetYaxis()->FindBin(fabs(my_mu.Eta())));
 
            float probData =eff_e_trg24_data*eff_mu_trg8_data*int(is_mu8ele23)+eff_mu_trg24_data*eff_e_trg12_data*int(is_mu23ele12)-eff_e_trg24_data*eff_mu_trg24_data*int(is_mu8ele23 && is_mu23ele12);
            float probMC =eff_e_trg24_zll*eff_mu_trg8_zll*int(is_mu8ele23)+eff_mu_trg24_zll*eff_e_trg12_zll*int(is_mu23ele12)-eff_e_trg24_zll*eff_mu_trg24_zll*int(is_mu8ele23 && is_mu23ele12);
+
            float sf_trg=probData/probMC;
            if (probMC==0) sf_trg=1;
            aweight=aweight*sf_trg;

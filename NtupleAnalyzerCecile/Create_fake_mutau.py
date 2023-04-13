@@ -15,18 +15,19 @@ if __name__ == "__main__":
     fTT=ROOT.TFile("output_mutau_"+options.year+"/TT.root","r")
     fST=ROOT.TFile("output_mutau_"+options.year+"/ST.root","r")
     fDY=ROOT.TFile("output_mutau_"+options.year+"/DYrescaled.root","r")
-    fData=ROOT.TFile("output_mutau_"+options.year+"/EGamma.root","r")
+    fData=ROOT.TFile("output_mutau_"+options.year+"/SingleMuon.root","r")
     fout=ROOT.TFile("output_mutau_"+options.year+"/Fake.root","recreate")
 
     ncat=9
     for j in range(0,ncat):
-
+       print "mt_"+str(j)
        dir0=fout.mkdir("mt_"+str(j))
 
        for k in range(0,nbhist):
           postfix=postfixName[k]
           h0=fData.Get("mt_"+str(j)+"_anti/data_obs"+postfix)
           h0.Add(fVV.Get("mt_"+str(j)+"_anti/VV"+postfix),-1)
+	  print fDY.Get("mt_"+str(j)+"_anti/ZLL"+postfix).Integral()
           h0.Add(fDY.Get("mt_"+str(j)+"_anti/ZLL"+postfix),-1)
           h0.Add(fDY.Get("mt_"+str(j)+"_anti/ZTT"+postfix),-1)
           h0.Add(fTT.Get("mt_"+str(j)+"_anti/TT"+postfix),-1)
