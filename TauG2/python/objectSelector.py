@@ -20,9 +20,9 @@ class ElectronSelector(ObjectSelector):
         if isEBEE: return False       
         if el.pt < self.minPt: return False
         if abs(el.eta) > 2.5: return False
-        if not el.mvaFall17V2noIso_WP90: return False
-	if el.miniPFRelIso_all>0.50: return False
-        #if abs(el.dxy) > 0.05 or abs(el.dz) > 0.2: return False
+        if not el.mvaFall17V2noIso_WPL: return False
+	##if el.miniPFRelIso_all>0.50: return False
+        ##if abs(el.dxy) > 0.05 or abs(el.dz) > 0.2: return False
 
         return True
 
@@ -35,8 +35,11 @@ class TauSelector(ObjectSelector):
         if abs(tau.eta) > 2.3: return False
         #if abs(tau.dz) > 0.2: return False
         if tau.decayMode not in [0,1,10,11]: return False
+	#if not tau.idDecayModeNewDMs: return False
+	#if tau.decayMode==5: return False
+        #if tau.decayMode==6: return False
         if abs(tau.charge)!=1: return False
-        if tau.idDeepTau2017v2p1VSe<4: return False # VLoose
+        if tau.idDeepTau2017v2p1VSe<3: return False # VVLoose
         if tau.idDeepTau2017v2p1VSmu<1: return False # VLoose
         if tau.idDeepTau2017v2p1VSjet<1: return False # VVVLoose
 

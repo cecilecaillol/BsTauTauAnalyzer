@@ -22,3 +22,7 @@
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/WZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL18_NanoAODv9/221117_170158/0000
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToEE_Pt-35_Elastic_13TeV-lpair/RunIISummer20UL18_NanoAODv9/221117_153038/0000
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToMuMu_Pt-25_Elastic_13TeV-lpair/RunIISummer20UL18_NanoAODv9/221117_153539/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL18_GGToElEl/GGToElEl/230323_171010/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL18_GGToMuMu/GGToMuMu/230323_171025/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL18_GGToTauTau/GGToTauTau/230323_171045/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL18_GGToWW/GGToWW/230323_171059/0000/

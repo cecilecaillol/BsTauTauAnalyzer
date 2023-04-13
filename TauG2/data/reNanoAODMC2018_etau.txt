@@ -1,5 +1,9 @@
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL18_NanoAODv9/221117_084137/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18_NanoAODv9/221118_113623/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18_NanoAODv9/230203_143603/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18_NanoAODv9/230215_150008/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18_NanoAODv9/230203_143930/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18_NanoAODv9/230203_144212/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18_NanoAODv9/230203_144328/0000/
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18_NanoAODv9/221117_084158/0000
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18_NanoAODv9/221117_152946/0000
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18_NanoAODv9/221117_153013/0000
@@ -9,7 +13,6 @@
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/ZZTo4L_TuneCP5_13TeV_powheg_pythia8/RunIISummer20UL18_NanoAODv9/221117_171953/0000
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/ZZTo2L2Nu_TuneCP5_13TeV_powheg_pythia8/RunIISummer20UL18_NanoAODv9/221117_172331/0000
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/ZZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL18_NanoAODv9/221117_172209/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL18_TuneCP5_madgraphLO_reweight/GGToTauTau_Inclusive_M_50GeV_PTFilter/221124_110940/0000
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIISummer20UL18_NanoAODv9/221118_125251/0000
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIISummer20UL18_NanoAODv9/221118_125314/0000
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18_NanoAODv9/221118_125446/0000

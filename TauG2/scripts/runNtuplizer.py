@@ -57,6 +57,9 @@ def buildCondorFile(opt,FarmDirectory):
             sufix='mc'
             #dataset_name = dataset.split('/')[-1]
 	    dataset_name = dataset.split('/')[9]+"_"+dataset.split('/')[12]
+	    if "RunII" in dataset.split('/')[9]:
+              dataset_name = dataset.split('/')[10]+"_"+dataset.split('/')[12]
+	    print "name: ",dataset_name
 	    if "TauTau" not in dataset.split('/') and ("SingleMuon" in dataset.split('/') or "EGamma" in dataset.split('/') or "MuonEG" in dataset.split('/') or "Tau" in dataset.split('/')): 
 	       dataset_name = dataset.split('/')[9]+"_"+dataset.split('/')[10]+"_"+dataset.split('/')[12]
             file_list=glob.glob(dataset+'/*.root')
@@ -70,8 +73,15 @@ def buildCondorFile(opt,FarmDirectory):
                   sufix='mc'
 	  else:
                   sufix='data'
-          channels=['mumu'] #EDIT THIS (could be ee,emu,etau,mumu,mutau,tautau)
+          channels=['emu'] #EDIT THIS (could be ee,emu,etau,mumu,mutau,tautau)
           print ('sufix = ', sufix)
+
+          yearmodified=year
+          if "preVFP" in dataset and year=="2016" and sufix=="mc":
+             yearmodified="2016pre"
+          if "preVFP" not in dataset and year=="2016" and sufix=="mc":
+             yearmodified="2016post"
+
             
           #prepare output
           output=opt.output+'/'+dataset_name
@@ -87,7 +97,7 @@ def buildCondorFile(opt,FarmDirectory):
               outfile='%s/%s'%(output_full,os.path.basename(file).replace('.root','_Skim.root'))
               if os.path.isfile(outfile) and not opt.force: continue
 
-              condor.write('arguments = %s %s %s %s\n'%(prefix+file,'analysis_'+channel+sufix,output_full,filter))
+              condor.write('arguments = %s %s %s %s\n'%(prefix+file,'analysis_'+channel+sufix+yearmodified,output_full,filter))
               condor.write('queue 1\n')
 
 
@@ -119,6 +129,8 @@ def buildCondorFile(opt,FarmDirectory):
         worker.write('echo "--bi $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_in.txt   \\\\"\n')
 	if channels[0]=="mumu": worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_mumu.txt  \\\\"\n')
 	elif channels[0]=="etau": worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_etau.txt  \\\\"\n')
+        elif channels[0]=="mutau": worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_mutau.txt  \\\\"\n')
+        elif channels[0]=="emu": worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_emu.txt  \\\\"\n')
         else: worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out.txt  \\\\"\n')
         worker.write('echo "${filter} -I MyNanoAnalyzer.TauG2.TauG2_analysis ${channel} "\n')
         worker.write('python $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\n')
@@ -126,6 +138,8 @@ def buildCondorFile(opt,FarmDirectory):
         worker.write('--bi $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_in.txt   \\\n')
 	if channels[0]=="mumu": worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_mumu.txt  \\\n')
 	elif channels[0]=="etau": worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_etau.txt  \\\n')
+        elif channels[0]=="mutau": worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_mutau.txt  \\\n')
+        elif channels[0]=="emu": worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_emu.txt  \\\n')
         else: worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out.txt  \\\n')
         worker.write('${filter} -I MyNanoAnalyzer.TauG2.TauG2_analysis ${channel} \n')
         worker.write('echo cp ${filename}/${filename}_Skim.root ${output}/${filename}_Skim.root\n')
@@ -151,7 +165,7 @@ def main():
     parser = optparse.OptionParser(usage)
     parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesMC2018.txt', type='string')
     #parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/ccaillol/TauG2/ntuples_mumu_2018', type='string') #EDIT THIS
-    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mumu_2018', type='string') #EDIT THIS
+    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
     (opt, args) = parser.parse_args()

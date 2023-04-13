@@ -14,9 +14,11 @@ keep PV_*
 keep OtherPV*
 keep nOtherPV*
 keep MET_p*
-#keep PuppiMET_p*
+keep PuppiMET_p*
 keep LHE_Vpt*
 keep LHE_Njets*
+keep *LHEScale*
+keep *LHEPdf*
 
 keep beamspot_sigmaZ
 keep beamspot_z0
@@ -31,6 +33,8 @@ keep Track*
 keep nTracks
 keep HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ
 keep HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ
+keep HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL
+keep HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL
 
 #keep custom variables
 keep nGenCand
@@ -45,11 +49,17 @@ keep LepCand_charge
 keep LepCand_dxy
 keep LepCand_dz
 keep LepCand_eleMVAiso80
+keep LepCand_eleMVAisoL
 keep LepCand_eleMVAiso90
 keep LepCand_eleMVAnoiso80
+keep LepCand_eleMVAnoisoL
 keep LepCand_eleMVAnoiso90
+keep LepCand_eleIso
+keep LepCand_eleScale*
+keep LepCand_eleSigma*
 keep LepCand_muonMediumId
 keep LepCand_muonIso
+keep LepCand_trgmatch
 
 keep nJets
 keep nElectrons
@@ -59,3 +69,5 @@ keep nTaus
 #keep Lep*
 keep V_ge*
 keep pu_weight
+keep L1PreFiringWeight*
+keep TauG2Weights*

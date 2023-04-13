@@ -14,18 +14,21 @@ keep PV_*
 keep OtherPV*
 keep nOtherPV*
 keep MET_p*
-#keep PuppiMET_p*
+keep PuppiMET_p*
 keep HLT_Ele32_WPTight_Gsf
 keep HLT_Ele35_WPTight_Gsf
-#keep HLT_Photon200
-#keep HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL
-keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_TightID_CrossL1
-keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_TightID_CrossL1
-
-keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_CrossL1
+keep HLT_Ele27_WPTight_Gsf
+keep HLT_Ele25_eta2p1_WPTight_Gsf
+keep HLT_Ele32_WPTight_Gsf_L1DoubleEG
+keep HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1
+keep HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau30
 keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1
+keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_CrossL1
+
 keep LHE_Vpt*
 keep LHE_Njets*
+keep *LHEScale*
+keep *LHEPdf*
 
 keep beamspot_sigmaZ
 keep beamspot_z0
@@ -54,17 +57,23 @@ keep LepCand_dz
 keep LepCand_vse
 keep LepCand_vsmu
 keep LepCand_vsjet
-keep LepCand_tauidMsf
-keep LepCand_taues
-keep LepCand_fes
-keep LepCand_antimusf
-keep LepCand_antielesf
+keep LepCand_tauidMsf*
+keep LepCand_taues*
+keep LepCand_fes*
+keep LepCand_antimusf*
+keep LepCand_antielesf*
 keep LepCand_DecayMode
-keep LepCand_tautriggersf
+keep LepCand_tautriggersf*
 keep LepCand_eleMVAiso80
+keep LepCand_eleMVAisoL
 keep LepCand_eleMVAiso90
 keep LepCand_eleMVAnoiso80
+keep LepCand_eleMVAnoisoL
 keep LepCand_eleMVAnoiso90
+keep LepCand_trgmatch
+keep LepCand_eleIso
+keep LepCand_eleSigma*
+keep LepCand_eleScale*
 
 keep nJets
 keep nElectrons
@@ -74,3 +83,6 @@ keep nTaus
 #keep Lep*
 keep V_ge*
 keep pu_weight
+
+keep L1PreFiringWeight*
+keep TauG2Weights*
