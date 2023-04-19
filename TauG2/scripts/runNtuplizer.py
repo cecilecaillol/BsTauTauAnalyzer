@@ -42,16 +42,19 @@ def buildCondorFile(opt,FarmDirectory):
           prefix=''
           year='2018'
 
-          if 'NanoAODv9' in dataset and 'eos' not in dataset.split('/'):
+          if 'Run20' in dataset:
             print ('haha')
             dataset_name = '_'.join(dataset.split('/')[1:3])
+            dataset_name = dataset.split('/')[10]+"_"+dataset.split('/')[12]
             year=dataset.split('UL')[1][:4]
             if 'UL1' in dataset:
               year="20"+str(dataset.split('UL')[1][:2])
               print ('year = ', year)
             sufix='data'
             cmd='dasgoclient --query=\"file dataset={} status=*\"'.format(dataset)
-            file_list=os.popen(cmd).read().split()
+            #file_list=os.popen(cmd).read().split()
+            file_list=glob.glob(dataset+'/*.root')
+            print dataset_name
             prefix='root://cms-xrd-global.cern.ch/'
           elif 'eos' in dataset.split('/'):
             sufix='mc'
@@ -60,20 +63,23 @@ def buildCondorFile(opt,FarmDirectory):
 	    if "RunII" in dataset.split('/')[9]:
               dataset_name = dataset.split('/')[10]+"_"+dataset.split('/')[12]
 	    print "name: ",dataset_name
-	    if "TauTau" not in dataset.split('/') and ("SingleMuon" in dataset.split('/') or "EGamma" in dataset.split('/') or "MuonEG" in dataset.split('/') or "Tau" in dataset.split('/')): 
+            if 'UL1' in dataset:
+              year="20"+str(dataset.split('UL')[1][:2])
+              print ('year = ', year)
+	    if "TauTau" not in dataset.split('/') and ("SingleMuon" in dataset.split('/') or "EGamma" in dataset.split('/') or "MuonEG" in dataset.split('/') or "Tau" in dataset.split('/') or "SingleElectron" in dataset.split('/')): 
 	       dataset_name = dataset.split('/')[9]+"_"+dataset.split('/')[10]+"_"+dataset.split('/')[12]
             file_list=glob.glob(dataset+'/*.root')
             print dataset_name
           else:
             print('ERROR: found invalid dataset = ',dataset,'stop the code')
             sys.exit(1)
-          if 'Tau' not in dataset and "SingleMuon" not in dataset and "EGamma" not in dataset and "MuonEG" not in dataset and "DoubleMuon" not in dataset:
+          if 'Tau' not in dataset and "SingleMuon" not in dataset and "EGamma" not in dataset and "MuonEG" not in dataset and "DoubleMuon" not in dataset and "SingleElectron" not in dataset:
 	          sufix='mc'
 	  elif 'TauTau' in dataset:
                   sufix='mc'
 	  else:
                   sufix='data'
-          channels=['emu'] #EDIT THIS (could be ee,emu,etau,mumu,mutau,tautau)
+          channels=['etau'] #EDIT THIS (could be ee,emu,etau,mumu,mutau,tautau)
           print ('sufix = ', sufix)
 
           yearmodified=year
@@ -90,6 +96,7 @@ def buildCondorFile(opt,FarmDirectory):
             output_full=output+"_"+channel
             # apply filter to data: trigger and GRL
             filter=ANALYSISCUT[year][channel]
+	    print year
             print ("filter is ", filter)
             os.system('mkdir -p {}'.format(output_full))
             for file in file_list:
@@ -165,7 +172,7 @@ def main():
     parser = optparse.OptionParser(usage)
     parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesMC2018.txt', type='string')
     #parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/ccaillol/TauG2/ntuples_mumu_2018', type='string') #EDIT THIS
-    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018', type='string') #EDIT THIS
+    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
     (opt, args) = parser.parse_args()

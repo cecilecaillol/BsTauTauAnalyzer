@@ -39,7 +39,8 @@ if __name__ == "__main__":
     ROOT.gStyle.SetOptStat(0)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--year', default="2016", choices=['2016', '2017', '2018'], help="Which TES?")
+    parser.add_argument('--year', default="2016", choices=['2016', '2016pre', '2016post', '2017', '2018'], help="Which TES?")
+    parser.add_argument('--channel', default="etau", choices=['etau', 'emu', 'mutau', 'tautau'], help="Which TES?")
 
     options = parser.parse_args()
     postfixName=[""]
@@ -59,13 +60,16 @@ if __name__ == "__main__":
     canv.cd()
 
 
-    fin=ROOT.TFile("output_etau_"+options.year+"/signal.root","r")
-    fout=ROOT.TFile("output_etau_"+options.year+"/bsm.root","recreate")
+    fin=ROOT.TFile("output_"+options.channel+"_"+options.year+"/signal.root","r")
+    fout=ROOT.TFile("output_"+options.channel+"_"+options.year+"/bsm.root","recreate")
 
-    physics_model = open("physics_model.txt","w")
+    physics_model = open("physics_model_"+options.channel+"_"+options.year+".txt","w")
 
-
-    categories=["et_0","et_1"]
+    short_channel="et"
+    if options.channel=="emu": short_channel="em"
+    if options.channel=="mutau": short_channel="mt"
+    if options.channel=="tautau": short_channel="tt"
+    categories=[short_channel+"_0",short_channel+"_1"]
     ncat=2
 
     shapes=[]
@@ -121,7 +125,7 @@ if __name__ == "__main__":
           gr.GetYaxis().SetTitle( 'Bin content' )
           #gr.Draw( 'ACP' )
 
-          total = ROOT.TF1( 'total', "pol5", -0.04, 0.04, 0)
+          total = ROOT.TF1( 'total', "pol5", -4, 4, 0)
           total.SetLineColor( ROOT.TColor.GetColor("#12cadd") )
           total.SetLineWidth(4)
           gr.Fit(total,"R")
@@ -141,6 +145,6 @@ if __name__ == "__main__":
           ROOT.gPad.Draw()
           ROOT.gPad.RedrawAxis()
           canv.Modified()
-          canv.SaveAs("plots_et_"+options.year+"/bsm_extrap_"+categories[c]+"_bin"+str(jj)+".png")
+          canv.SaveAs("plots_"+short_channel+"_"+options.year+"/bsm_extrap_"+categories[c]+"_bin"+str(jj)+".png")
 
     physics_model.close()

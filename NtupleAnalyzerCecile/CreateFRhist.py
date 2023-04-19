@@ -33,6 +33,11 @@ fileData=ROOT.TFile("output_etau_2018/EGamma.root","r")
 fileMC=ROOT.TFile("output_etau_2018/MC.root","r")
 fileDataSub=ROOT.TFile("output_etau_2018/DataSub.root","recreate")
 
+if options.year=="2017":
+  fileData=ROOT.TFile("output_etau_2017/SingleElectron.root","r")
+  fileMC=ROOT.TFile("output_etau_2017/MC.root","r")
+  fileDataSub=ROOT.TFile("output_etau_2017/DataSub.root","recreate") 
+
 ncat=20+16
 
 for i in range (0,ncat):

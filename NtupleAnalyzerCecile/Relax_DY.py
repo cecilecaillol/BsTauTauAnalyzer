@@ -9,7 +9,7 @@ if __name__ == "__main__":
     options = parser.parse_args()
     postfixName=["","_CMS_tauid_pt30to35_2018Down","_CMS_tauid_pt30to35_2018Up","_CMS_tauid_pt35to40_2018Down","_CMS_tauid_pt35to40_2018Up","_CMS_tauid_ptgt40_2018Down","_CMS_tauid_ptgt40_2018Up","_CMS_taues_dm0_2018Down","_CMS_taues_dm0_2018Up","_CMS_taues_dm1_2018Down","_CMS_taues_dm1_2018Up","_CMS_taues_3prong_2018Down","_CMS_taues_3prong_2018Up","_CMS_etauFR_barrel_2018Down","_CMS_etauFR_barrel_2018Up","_CMS_etauFR_endcap_2018Down","_CMS_etauFR_endcap_2018Up","_CMS_etauFES_dm0_2018Down","_CMS_etauFES_dm0_2018Up","_CMS_etauFES_dm1_2018Down","_CMS_etauFES_dm1_2018Up","_CMS_pileup_2018Down","_CMS_pileup_2018Up","_CMS_etautrg_2018Down","_CMS_etautrg_2018Up","_CMS_etrg_2018Down","_CMS_etrg_2018Up"]
 
-    nbhist=1+26 
+    nbhist=1#+26 
 
     fDY=ROOT.TFile("output_etau_"+options.year+"/DY.root","r")
     fout=ROOT.TFile("output_etau_"+options.year+"/DYrescaled.root","recreate")

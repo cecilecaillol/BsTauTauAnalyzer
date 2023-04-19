@@ -21,6 +21,5 @@
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTToHadronic.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_TTToHadronic.root TTToHadronic 
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTToSemiLeptonic.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_TTToSemiLeptonic.root TTToSemiLeptonic 
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTTo2L2Nu.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_TTTo2L2Nu.root TTTo2L2Nu 
-./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGTT.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_GGTT.root GGTT 
 ./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToTauTau.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_GGToTauTau.root GGTT
-./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGWW.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_GGWW.root GGWW
+./Add_track_friend_etau.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToWW.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/friend_GGToWW.root GGWW

@@ -18,14 +18,14 @@ def getEraConfiguration(era,isData):
     
 ANALYSISTRIGGERMC = {
     '2016': {'ee':'(HLT_Ele27_WPTight_Gsf||HLT_Ele25_eta2p1_WPTight_Gsf)','emu':'(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL)','etau':'(HLT_Ele27_WPTight_Gsf||HLT_Ele25_eta2p1_WPTight_Gsf||HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1||HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20||HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau30)','mumu':'(HLT_IsoTkMu24||HLT_IsoMu24)','mutau':'(HLT_IsoMu24||HLT_IsoTkMu24||HLT_IsoMu19_eta2p1_LooseIsoPFTau20_SingleL1)','tautau':'(HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Reg||HLT_DoubleMediumCombinedIsoPFTau35_Trk1_eta2p1_Reg)'},
-    '2017': {'ee':'(HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf)','emu':'(HLT_Mu23_TrkIsoVVL_Ele12 CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)','etau':'(HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf||HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1)','mumu':'(HLT_IsoMu27)','mutau':'(HLT_IsoMu27||HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1)','tautau':'(HLT_DoubleTightChargedIsoPFTau35_Trk1_TightID_eta2p1_Reg||HLT_DoubleMediumChargedIsoPFTau40_Trk1_TightID_eta2p1_Reg||HLT_DoubleTightChargedIsoPFTau40_Trk1_eta2p1_Reg)'},
+    '2017': {'ee':'(HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf)','emu':'(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)','etau':'(HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf||HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1)','mumu':'(HLT_IsoMu27)','mutau':'(HLT_IsoMu27||HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1)','tautau':'(HLT_DoubleTightChargedIsoPFTau35_Trk1_TightID_eta2p1_Reg||HLT_DoubleMediumChargedIsoPFTau40_Trk1_TightID_eta2p1_Reg||HLT_DoubleTightChargedIsoPFTau40_Trk1_eta2p1_Reg)'},
     '2018': {'ee':'(HLT_Ele32_WPTight_Gsf)','emu':'(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)','etau':'(HLT_Ele32_WPTight_Gsf||HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_CrossL1)','mumu':'(HLT_IsoMu24)','mutau':'(HLT_IsoMu24||HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_CrossL1)','tautau':'(HLT_DoubleMediumChargedIsoPFTauHPS35_Trk1_eta2p1_Reg)'}
 }
 
 # Some tau triggers are enabled only during part of the data taking in 2018, apply the triggers at analysis level rather than here
 ANALYSISTRIGGERDATA = {
     '2016': {'ee':'(HLT_Ele27_WPTight_Gsf||HLT_Ele25_eta2p1_WPTight_Gsf)','emu':'(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL)','etau':'(1)','mumu':'(HLT_IsoMu24||HLT_IsoTkMu24)','mutau':'(1)','tautau':'(1)'},
-    '2017': {'ee':'(HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf)','emu':'(HLT_Mu23_TrkIsoVVL_Ele12 CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)','etau':'(1)','mumu':'(HLT_IsoMu27)','mutau':'(1)','tautau':'(1)'},
+    '2017': {'ee':'(HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf)','emu':'(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)','etau':'(1)','mumu':'(HLT_IsoMu27)','mutau':'(1)','tautau':'(1)'},
     '2018': {'ee':'(HLT_Ele32_WPTight_Gsf)','emu':'(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ||HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ)','etau':'(1)','mumu':'(HLT_IsoMu24)','mutau':'(1)','tautau':'(1)'}
 }
 
@@ -50,6 +50,7 @@ cmssw=os.environ['CMSSW_BASE']
 ANALYSISCUT={'': {'ee' : '-c "%s"'%ANALYSISCHANNELCUT['ee'], 'emu' : '-c "%s"'%ANALYSISCHANNELCUT['emu'], 'etau' : '-c "%s"'%ANALYSISCHANNELCUT['etau'], 'mumu' : '-c "%s"'%ANALYSISCHANNELCUT['mumu'], 'mutau' : '-c "%s"'%ANALYSISCHANNELCUT['mutau'], 'tautau' : '-c "%s"'%ANALYSISCHANNELCUT['tautau']}}
 
 for y in ANALYSISTRIGGERDATA:
+    print y
     ANALYSISCUT[y]={}
     for c in ANALYSISTRIGGERDATA[y]:
         ANALYSISCUT[y][c]='--cut %s&&%s --json %s'%(ANALYSISTRIGGERDATA[y][c],ANALYSISCHANNELCUT[c],cmssw+'/src/MyNanoAnalyzer/TauG2/data/'+ANALYSISGRL[y]) # for data (json applied)

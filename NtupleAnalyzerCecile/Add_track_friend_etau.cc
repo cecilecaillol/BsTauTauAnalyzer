@@ -74,6 +74,17 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("LepCand_tautriggersf", &LepCand_tautriggersf);
     arbre->SetBranchAddress("LepCand_eleMVAiso80", &LepCand_eleMVAiso80);
     arbre->SetBranchAddress("LepCand_eleMVAiso90", &LepCand_eleMVAiso90);
+    arbre->SetBranchAddress("LepCand_dz2", &LepCand_dz2);
+    arbre->SetBranchAddress("LepCand_dz3", &LepCand_dz3);
+    arbre->SetBranchAddress("LepCand_tk1Pt", &LepCand_tk1Pt);
+    arbre->SetBranchAddress("LepCand_tk1Eta", &LepCand_tk1Eta);
+    arbre->SetBranchAddress("LepCand_tk1Phi", &LepCand_tk1Phi);
+    arbre->SetBranchAddress("LepCand_tk2Pt", &LepCand_tk2Pt);
+    arbre->SetBranchAddress("LepCand_tk2Eta", &LepCand_tk2Eta);
+    arbre->SetBranchAddress("LepCand_tk2Phi", &LepCand_tk2Phi);
+    arbre->SetBranchAddress("LepCand_tk3Pt", &LepCand_tk3Pt);
+    arbre->SetBranchAddress("LepCand_tk3Eta", &LepCand_tk3Eta);
+    arbre->SetBranchAddress("LepCand_tk3Phi", &LepCand_tk3Phi);
 
     arbre->SetBranchAddress("GenVtx_z", &GenVtx_z);
     arbre->SetBranchAddress("PV_z", &PV_z);
@@ -111,6 +122,17 @@ int main(int argc, char** argv) {
    auto b1_9=arbre->GetBranch("LepCand_DecayMode");
    auto b1_10=arbre->GetBranch("LepCand_dz");
    auto b1_11=arbre->GetBranch("PV_z");
+   auto b1_12=arbre->GetBranch("LepCand_dz2");
+   auto b1_13=arbre->GetBranch("LepCand_dz3");
+   auto b1_14=arbre->GetBranch("LepCand_tk1Pt");
+   auto b1_15=arbre->GetBranch("LepCand_tk1Eta");
+   auto b1_16=arbre->GetBranch("LepCand_tk1Phi");
+   auto b1_17=arbre->GetBranch("LepCand_tk2Pt");
+   auto b1_18=arbre->GetBranch("LepCand_tk2Eta");
+   auto b1_19=arbre->GetBranch("LepCand_tk2Phi");
+   auto b1_20=arbre->GetBranch("LepCand_tk3Pt");
+   auto b1_21=arbre->GetBranch("LepCand_tk3Eta");
+   auto b1_22=arbre->GetBranch("LepCand_tk3Phi");
 
    auto b7_1=arbre->GetBranch("nTracks");
    auto b7_2=arbre->GetBranch("Track_dz");
@@ -127,6 +149,10 @@ int main(int argc, char** argv) {
    f_beamspotz->SetParameter(1,-0.138);
    f_beamspotz->SetParameter(2,0.254);
 
+int nb_all=0;
+int nb_HS0=0;
+int nb_HS0_PU0=0;
+int nb_PU0=0;
 
    for (Int_t i = 0; i < nentries_wtn; i++) {
 	//arbre->LoadTree(i);
@@ -134,7 +160,15 @@ int main(int argc, char** argv) {
         if (i % 10000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
         fflush(stdout);
 
-        b1_1->GetEntry(i); b1_2->GetEntry(i); b1_3->GetEntry(i); b1_4->GetEntry(i); b1_6->GetEntry(i); b1_9->GetEntry(i); b1_10->GetEntry(i); b1_11->GetEntry(i);
+      if (input=="/eoaaaaas/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/EGammaA.root" and i>=464459 and i<475000){
+        ntracks_friend=9999;
+        ntracksPU_friend=9999;
+        ntracksHS_friend=9999;
+        ntracksAll_friend=9999;
+      }
+      else{
+        b1_6->GetEntry(i); b1_1->GetEntry(i); b1_3->GetEntry(i); b1_4->GetEntry(i); b1_2->GetEntry(i); b1_9->GetEntry(i); b1_10->GetEntry(i); b1_11->GetEntry(i);
+	b1_12->GetEntry(i);b1_13->GetEntry(i);b1_14->GetEntry(i);b1_15->GetEntry(i);b1_16->GetEntry(i);b1_17->GetEntry(i);b1_18->GetEntry(i);b1_19->GetEntry(i);b1_20->GetEntry(i);b1_21->GetEntry(i);b1_22->GetEntry(i);
         if (sample!="data_obs") {b1_5->GetEntry(i); b1_7->GetEntry(i); b1_8->GetEntry(i);}
 
 	/*TLorentzVector my_tau;
@@ -160,8 +194,10 @@ int main(int argc, char** argv) {
            }
         }
         TLorentzVector my_tau; my_tau.SetPtEtaPhiM(LepCand_pt[tau_index],LepCand_eta[tau_index],LepCand_phi[tau_index],0);
+        TLorentzVector my_tauTk1; my_tauTk1.SetPtEtaPhiM(LepCand_tk1Pt[tau_index],LepCand_tk1Eta[tau_index],LepCand_tk1Phi[tau_index],0);
+        TLorentzVector my_tauTk2; my_tauTk2.SetPtEtaPhiM(LepCand_tk2Pt[tau_index],LepCand_tk2Eta[tau_index],LepCand_tk2Phi[tau_index],0);
+        TLorentzVector my_tauTk3; my_tauTk3.SetPtEtaPhiM(LepCand_tk3Pt[tau_index],LepCand_tk3Eta[tau_index],LepCand_tk3Phi[tau_index],0);
         TLorentzVector my_ele; my_ele.SetPtEtaPhiM(LepCand_pt[ele_index],LepCand_eta[ele_index],LepCand_phi[ele_index],0);
-
 
 	// Block tracks
 	b7_1->GetEntry(i); b7_2->GetEntry(i); b7_3->GetEntry(i); b7_4->GetEntry(i); b7_5->GetEntry(i); b7_6->GetEntry(i);
@@ -171,12 +207,22 @@ int main(int argc, char** argv) {
 	int ntracksAll=0;
         float rnd_beamspot=h_bs_width->GetRandom();
         float rnd_beamspotz=f_beamspotz->GetRandom();
+        //cout<<"ele pt, eta, phi, dz: "<<LepCand_pt[ele_index]<<", "<<LepCand_eta[ele_index]<<", "<<LepCand_phi[ele_index]<<", "<<LepCand_dz[ele_index]<<endl;
+        //cout<<"tau pt, eta, phi, dz: "<<LepCand_pt[tau_index]<<", "<<LepCand_eta[tau_index]<<", "<<LepCand_phi[tau_index]<<", "<<LepCand_dz[tau_index]<<endl;
+        //cout<<"tau track1 pt, eta, phi, dz: "<<LepCand_tk1Pt[tau_index]<<", "<<LepCand_tk1Eta[tau_index]<<", "<<LepCand_tk1Phi[tau_index]<<", "<<LepCand_dz[tau_index]<<endl;
+        //cout<<"tau track2 pt, eta, phi, dz: "<<LepCand_tk2Pt[tau_index]<<", "<<LepCand_tk2Eta[tau_index]<<", "<<LepCand_tk2Phi[tau_index]<<", "<<LepCand_dz2[tau_index]<<endl;
+        //cout<<"tau track3 pt, eta, phi, dz: "<<LepCand_tk3Pt[tau_index]<<", "<<LepCand_tk3Eta[tau_index]<<", "<<LepCand_tk3Phi[tau_index]<<", "<<LepCand_dz3[tau_index]<<endl;
 	for (int nt=0; nt<nTracks; ++nt){
-	   //if (Track_pt[nt]>0.5 and fabs(Track_dz[nt]-0.5*LepCand_dz[tau_index]-0.5*LepCand_dz[ele_index])<0.05 and fabs(Track_eta[nt])<2.5) ntracks++;
+//cout<<"track pt, eta, phi, dz: "<<Track_pt[nt]<<", "<<Track_eta[nt]<<", "<<Track_phi[nt]<<", "<<Track_dz[nt]<<endl;
                  float raw_dz=fabs(Track_dz[nt]-0.5*LepCand_dz[tau_index]-0.5*LepCand_dz[ele_index]);
 	 	 TLorentzVector mytrack;
                  mytrack.SetPtEtaPhiM(Track_pt[nt],Track_eta[nt],Track_phi[nt],0);
-		 bool is_matchedToETau=((my_tau.DeltaR(mytrack)<0.2 and fabs(Track_dz[nt]-LepCand_dz[tau_index])<0.05) or (my_ele.DeltaR(mytrack)<0.2 and fabs(Track_dz[nt]-LepCand_dz[ele_index])<0.05));
+		 bool is_matchedToETau=false;
+                 TLorentzVector my_track; my_track.SetPtEtaPhiM(Track_pt[nt],Track_eta[nt],Track_phi[nt],0);
+		 if (fabs(Track_pt[nt]-LepCand_pt[ele_index])/LepCand_pt[ele_index]<0.1 and my_ele.DeltaR(my_track)<0.002) is_matchedToETau=true;
+		 if (LepCand_tk1Pt[tau_index]>0 and fabs(Track_pt[nt]-LepCand_tk1Pt[tau_index])/LepCand_tk1Pt[tau_index]<0.1 and my_tauTk1.DeltaR(my_track)<0.002) is_matchedToETau=true;
+                 if (LepCand_tk2Pt[tau_index]>0 and fabs(Track_pt[nt]-LepCand_tk2Pt[tau_index])/LepCand_tk2Pt[tau_index]<0.1 and my_tauTk2.DeltaR(my_track)<0.002) is_matchedToETau=true;
+                 if (LepCand_tk3Pt[tau_index]>0 and fabs(Track_pt[nt]-LepCand_tk3Pt[tau_index])/LepCand_tk3Pt[tau_index]<0.1 and my_tauTk3.DeltaR(my_track)<0.002) is_matchedToETau=true;
                  if (Track_pt[nt]>0.5 and raw_dz<0.05 and fabs(Track_eta[nt])<2.5 and !is_matchedToETau){ ntracksAll++;}
                  if (sample!="data_obs"){
                     float BScorrected_dz=fabs(((PV_z+Track_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488))-PV_z-0.5*LepCand_dz[tau_index]-0.5*LepCand_dz[ele_index]);
@@ -188,6 +234,46 @@ int main(int argc, char** argv) {
 
 
 	}
+//cout<<ntracksHS+ntracksPU<<" "<<ntracksHS<<" "<<ntracksPU<<endl;
+
+/*nb_all++;
+if (ntracksHS==0) nb_HS0++;
+if (ntracksHS==0 and ntracksPU==0) nb_HS0_PU0++;
+if (ntracksPU==0) nb_PU0++;
+
+///////////////////////////////////////////////////
+if (ntracksHS>0){
+        cout<<"ele pt, eta, phi, dz: "<<LepCand_pt[ele_index]<<", "<<LepCand_eta[ele_index]<<", "<<LepCand_phi[ele_index]<<", "<<LepCand_dz[ele_index]<<endl;
+        cout<<"tau pt, eta, phi, dz: "<<LepCand_pt[tau_index]<<", "<<LepCand_eta[tau_index]<<", "<<LepCand_phi[tau_index]<<", "<<LepCand_dz[tau_index]<<endl;
+        cout<<"tau DM: "<<LepCand_DecayMode[tau_index]<<endl;
+        cout<<"tau track1 pt, eta, phi, dz: "<<LepCand_tk1Pt[tau_index]<<", "<<LepCand_tk1Eta[tau_index]<<", "<<LepCand_tk1Phi[tau_index]<<", "<<LepCand_dz[tau_index]<<endl;
+        cout<<"tau track2 pt, eta, phi, dz: "<<LepCand_tk2Pt[tau_index]<<", "<<LepCand_tk2Eta[tau_index]<<", "<<LepCand_tk2Phi[tau_index]<<", "<<LepCand_dz2[tau_index]<<endl;
+        cout<<"tau track3 pt, eta, phi, dz: "<<LepCand_tk3Pt[tau_index]<<", "<<LepCand_tk3Eta[tau_index]<<", "<<LepCand_tk3Phi[tau_index]<<", "<<LepCand_dz3[tau_index]<<endl;
+        for (int nt=0; nt<nTracks; ++nt){
+                 float raw_dz=fabs(Track_dz[nt]-0.5*LepCand_dz[tau_index]-0.5*LepCand_dz[ele_index]);
+                 TLorentzVector mytrack;
+                 mytrack.SetPtEtaPhiM(Track_pt[nt],Track_eta[nt],Track_phi[nt],0);
+//cout<<"track pt, eta, phi, dz: "<<Track_pt[nt]<<", "<<Track_eta[nt]<<", "<<Track_phi[nt]<<", "<<Track_dz[nt]<<endl;
+                 bool is_matchedToETau=false;
+                 TLorentzVector my_track; my_track.SetPtEtaPhiM(Track_pt[nt],Track_eta[nt],Track_phi[nt],0);
+                 if (fabs(Track_dz[nt]-LepCand_dz[ele_index])<0.05 and fabs(Track_pt[nt]-LepCand_pt[ele_index])/LepCand_pt[ele_index]<0.1 and my_ele.DeltaR(my_track)<0.001) is_matchedToETau=true;
+                 if (LepCand_tk1Pt[tau_index]>0 and fabs(Track_dz[nt]-LepCand_dz[tau_index])<0.05 and fabs(Track_pt[nt]-LepCand_tk1Pt[tau_index])/LepCand_tk1Pt[tau_index]<0.1 and my_tauTk1.DeltaR(my_track)<0.001) is_matchedToETau=true;
+                 if (LepCand_tk2Pt[tau_index]>0 and fabs(Track_dz[nt]-LepCand_dz2[tau_index])<0.05 and fabs(Track_pt[nt]-LepCand_tk2Pt[tau_index])/LepCand_tk2Pt[tau_index]<0.1 and my_tauTk2.DeltaR(my_track)<0.001) is_matchedToETau=true;
+                 if (LepCand_tk3Pt[tau_index]>0 and fabs(Track_dz[nt]-LepCand_dz3[tau_index])<0.05 and fabs(Track_pt[nt]-LepCand_tk3Pt[tau_index])/LepCand_tk3Pt[tau_index]<0.1 and my_tauTk3.DeltaR(my_track)<0.001) is_matchedToETau=true;
+                 if (Track_pt[nt]>0.5 and raw_dz<0.05 and fabs(Track_eta[nt])<2.5 and !is_matchedToETau){ ntracksAll++;}
+                 if (sample!="data_obs"){
+                    float BScorrected_dz=fabs(((PV_z+Track_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488))-PV_z-0.5*LepCand_dz[tau_index]-0.5*LepCand_dz[ele_index]);
+                    if (Track_isMatchedToHS[nt] and Track_pt[nt]>0.5 and raw_dz<0.05 and fabs(Track_eta[nt])<2.5  and !is_matchedToETau) cout<<"track HS pt, eta, phi, dz: "<<Track_pt[nt]<<", "<<Track_eta[nt]<<", "<<Track_phi[nt]<<", "<<Track_dz[nt]<<endl;
+                    if (!Track_isMatchedToHS[nt] and Track_pt[nt]>0.5 and BScorrected_dz<0.05 and fabs(Track_eta[nt])<2.5 and !is_matchedToETau) cout<<"track PU pt, eta, phi, dz: "<<Track_pt[nt]<<", "<<Track_eta[nt]<<", "<<Track_phi[nt]<<", "<<Track_dz[nt]<<endl;
+                 }
+
+
+        }
+cout<<endl;
+}*/
+//////////////////////////////////////////////////////
+
+//if (i>460000) cout<<"test4"<<endl;
 	/*ntracksAll-=1; // for the electron
 	if (ntracksHS>0) ntracksHS-=1;
 	else if (ntracksPU>0) ntracksPU-=1;
@@ -230,13 +316,18 @@ int main(int argc, char** argv) {
            }
 	   cout<<endl;
 	}*/
-
+//if (i>460000) cout<<"test5"<<endl;
         ntracks_friend=ntracks;
         ntracksPU_friend=ntracksPU;
         ntracksHS_friend=ntracksHS;
         ntracksAll_friend=ntracksAll;
-        tree_friend->Fill();
+      }
+      tree_friend->Fill();
     } // end of loop over events
+cout<<"All, HS0, HS0PU0, PU0: "<<nb_all<<" "<<nb_HS0<<" "<<nb_HS0_PU0<<" "<<nb_PU0<<endl;
+cout<<"Fraction without track: "<<1.0*nb_HS0_PU0/nb_all<<endl;
+cout<<"Fraction with HS track: "<<1.0*(nb_all-nb_HS0)/nb_all<<" "<<1.0*(nb_PU0-nb_HS0_PU0)/nb_PU0<<endl;
+
     f_friend->cd();
     tree_friend->Write();
     delete f_Double;

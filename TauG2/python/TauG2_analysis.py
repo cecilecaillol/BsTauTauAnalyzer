@@ -165,6 +165,17 @@ class Analysis(Module):
         self.out.branch("LepCand_tautriggersf_up",    "F",  lenVar = "nLepCand");# trigger sf for ditau channel
         self.out.branch("LepCand_tautriggersf_down",    "F",  lenVar = "nLepCand");# trigger sf for ditau channel
         self.out.branch("LepCand_trgmatch",      "I",  lenVar = "nLepCand");
+        self.out.branch("LepCand_dz2",      "F",  lenVar = "nLepCand");
+        self.out.branch("LepCand_dz3",      "F",  lenVar = "nLepCand");
+        self.out.branch("LepCand_tk1Pt",      "F",  lenVar = "nLepCand");
+        self.out.branch("LepCand_tk1Eta",      "F",  lenVar = "nLepCand");
+        self.out.branch("LepCand_tk1Phi",      "F",  lenVar = "nLepCand");
+        self.out.branch("LepCand_tk2Pt",      "F",  lenVar = "nLepCand");
+        self.out.branch("LepCand_tk2Eta",      "F",  lenVar = "nLepCand");
+        self.out.branch("LepCand_tk2Phi",      "F",  lenVar = "nLepCand");
+        self.out.branch("LepCand_tk3Pt",      "F",  lenVar = "nLepCand");
+        self.out.branch("LepCand_tk3Eta",      "F",  lenVar = "nLepCand");
+        self.out.branch("LepCand_tk3Phi",      "F",  lenVar = "nLepCand");
 
         self.out.branch("nGenCand",              "I");
         self.out.branch("GenCand_id",            "I",  lenVar = "nGenCand");
@@ -432,6 +443,17 @@ class Analysis(Module):
         lep_taues=[]
         lep_taues_up=[]
         lep_taues_down=[]
+        lep_dz2=[]
+        lep_dz3=[]
+        lep_tk1Pt=[]
+        lep_tk1Eta=[]
+        lep_tk1Phi=[]
+        lep_tk2Pt=[]
+        lep_tk2Eta=[]
+        lep_tk2Phi=[]
+        lep_tk3Pt=[]
+        lep_tk3Eta=[]
+        lep_tk3Phi=[]
         lep_antielesf=[]
         lep_antielesf_up=[]
         lep_antielesf_down=[]
@@ -478,8 +500,9 @@ class Analysis(Module):
                 for to in event.selectedTriggerObjects:
                    top4=ROOT.TLorentzVector()
                    top4.SetPtEtaPhiM(to.pt,to.eta,to.phi,0)
-                   if self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==11 and lep.p4().DeltaR(top4)<0.3 and (bool(to.filterBits&1024) or bool(to.filterBits&64) or bool(to.filterBits&2)): is_matched=1
-                   if self.channel=="emu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==11 and lep.p4().DeltaR(top4)<0.3 and (bool(to.filterBits&2) or bool(to.filterBits&1024) or bool(to.filterBits&32)): is_matched=1
+                   if self.year=="2017" and self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==11 and lep.p4().DeltaR(top4)<0.5 and ((bool(to.filterBits&1024) and bool(to.filterBits&2)) or bool(to.filterBits&64)): is_matched=1
+		   elif self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==11 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&2) or bool(to.filterBits&64)): is_matched=1
+                   if self.channel=="emu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==11 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&32)): is_matched=1
                 lep_trgmatch.append(is_matched)
 
             else:
@@ -502,15 +525,26 @@ class Analysis(Module):
                 for to in event.selectedTriggerObjects:
                    top4=ROOT.TLorentzVector()
                    top4.SetPtEtaPhiM(to.pt,to.eta,to.phi,0)
-                   if self.channel=="mutau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.3 and (bool(to.filterBits&64) or bool(to.filterBits&8)): is_matched=1
-                   elif self.channel=="mumu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.3 and (bool(to.filterBits&8)): is_matched=1
-                   elif self.channel=="emu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.3 and (bool(to.filterBits&32)): is_matched=1
+                   if self.channel=="mutau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&64) or bool(to.filterBits&8)): is_matched=1
+                   elif self.channel=="mumu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&8)): is_matched=1
+                   elif self.channel=="emu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&32)): is_matched=1
                 lep_trgmatch.append(is_matched)
             else:
                 lep_muonMediumId.append(-1)
                 lep_muonIso.append(-1)
               
             if lep.id==15:
+	        lep_dz2.append(lep.dz2)
+                lep_dz3.append(lep.dz3)
+                lep_tk1Pt.append(lep.tk1Pt)
+                lep_tk1Eta.append(lep.tk1Eta)
+                lep_tk1Phi.append(lep.tk1Phi)
+                lep_tk2Pt.append(lep.tk2Pt)
+                lep_tk2Eta.append(lep.tk2Eta)
+                lep_tk2Phi.append(lep.tk2Phi)
+                lep_tk3Pt.append(lep.tk3Pt)
+                lep_tk3Eta.append(lep.tk3Eta)
+                lep_tk3Phi.append(lep.tk3Phi)
                 lep_decaymode.append(lep.decayMode)
                 lep_vsjet.append(lep.idDeepTau2017v2p1VSjet)
                 lep_vse.append(lep.idDeepTau2017v2p1VSe)
@@ -519,9 +553,9 @@ class Analysis(Module):
                 for to in event.selectedTriggerObjects:
                    top4=ROOT.TLorentzVector()
                    top4.SetPtEtaPhiM(to.pt,to.eta,to.phi,0)
-                   if self.channel=="mutau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.3 and (bool(to.filterBits&256)): is_matched=1
-                   elif self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.3 and (bool(to.filterBits&128)): is_matched=1
-                   elif self.channel=="tautau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.3 and (bool(to.filterBits&64)): is_matched=1
+                   if self.channel=="mutau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&256)): is_matched=1
+                   elif self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&128)): is_matched=1
+                   elif self.channel=="tautau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&64)): is_matched=1
                 lep_trgmatch.append(is_matched)
                 
                 if self.isMC and lep.genPartFlav==5:
@@ -658,6 +692,17 @@ class Analysis(Module):
                 lep_antielesf_down.append(1.0)
                 lep_taues.append(1.0)
                 lep_decaymode.append(-1)
+                lep_dz2.append(-99)
+                lep_dz3.append(-99)
+                lep_tk1Pt.append(-99)
+                lep_tk1Eta.append(-99)
+                lep_tk1Phi.append(-99)
+                lep_tk2Pt.append(-99)
+                lep_tk2Eta.append(-99)
+                lep_tk2Phi.append(-99)
+                lep_tk3Pt.append(-99)
+                lep_tk3Eta.append(-99)
+                lep_tk3Phi.append(-99)
                 lep_taues_up.append(1.0)
                 lep_taues_down.append(1.0)
                 lep_tautriggersf.append(1.0)
@@ -716,6 +761,17 @@ class Analysis(Module):
         self.out.fillBranch("LepCand_charge",        lep_charge)
         self.out.fillBranch("LepCand_dxy",           lep_dxy)
         self.out.fillBranch("LepCand_dz",            lep_dz)
+        self.out.fillBranch("LepCand_dz2",            lep_dz2)
+        self.out.fillBranch("LepCand_dz3",            lep_dz3)
+        self.out.fillBranch("LepCand_tk1Pt",            lep_tk1Pt)
+        self.out.fillBranch("LepCand_tk1Eta",            lep_tk1Eta)
+        self.out.fillBranch("LepCand_tk1Phi",            lep_tk1Phi)
+        self.out.fillBranch("LepCand_tk2Pt",            lep_tk2Pt)
+        self.out.fillBranch("LepCand_tk2Eta",            lep_tk2Eta)
+        self.out.fillBranch("LepCand_tk2Phi",            lep_tk2Phi)
+        self.out.fillBranch("LepCand_tk3Pt",            lep_tk3Pt)
+        self.out.fillBranch("LepCand_tk3Eta",            lep_tk3Eta)
+        self.out.fillBranch("LepCand_tk3Phi",            lep_tk3Phi)
         self.out.fillBranch("LepCand_gen",           lep_gen)
         self.out.fillBranch("LepCand_vse",           lep_vse)
         self.out.fillBranch("LepCand_vsmu",          lep_vsmu)

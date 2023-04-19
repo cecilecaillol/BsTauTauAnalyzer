@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
 
 	//if (my_mu1.Pt()<30 or my_mu2.Pt()<30) continue;
 
-	if (acoplanarity_<0.02 and os_ and ((name!="data_obs" and sum_ntracks_==1) or (name=="data_obs" and ntracksAll_==1))) h_lownt->Fill(mvis,weight_*aweight_*npvs_weight_*ntpu_weight_);
+	if (acoplanarity_<0.02 and os_ and ((name!="data_obs" and sum_ntracks_==0) or (name=="data_obs" and ntracksAll_==0))) h_lownt->Fill(mvis,weight_*aweight_*npvs_weight_*ntpu_weight_);
         if (acoplanarity_<0.02 and os_ and ((name!="data_obs" and sum_ntracks_>=5) or (name=="data_obs" and ntracksAll_>=5))) h_highnt->Fill(mvis,weight_*aweight_*npvs_weight_*ntpu_weight_);
 
     }

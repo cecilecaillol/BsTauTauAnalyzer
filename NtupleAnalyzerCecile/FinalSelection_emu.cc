@@ -58,6 +58,12 @@ int main(int argc, char** argv) {
     size_t start_pos = input.find("2018/");
     std::string input_friend=input;
     if(start_pos != std::string::npos)  input_friend.replace(start_pos, 5, "2018/friend_");
+    start_pos = input.find("2017/");
+    if(start_pos != std::string::npos)  input_friend.replace(start_pos, 5, "2017/friend_");
+    start_pos = input.find("2016pre/");
+    if(start_pos != std::string::npos)  input_friend.replace(start_pos, 8, "2016pre/friend_");
+    start_pos = input.find("2016post/");
+    if(start_pos != std::string::npos)  input_friend.replace(start_pos, 9, "2016post/friend_");
     cout<<input<<" "<<input_friend<<endl;
     TFile *f_Friend = new TFile(input_friend.c_str());//FIXME
     TTree *ami = (TTree*) f_Friend->Get("friend_tree");
@@ -135,12 +141,15 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
     arbre->SetBranchAddress("LepCand_dxy", &LepCand_dxy);
     arbre->SetBranchAddress("LepCand_dz", &LepCand_dz);
     arbre->SetBranchAddress("LepCand_eleMVAiso80", &LepCand_eleMVAiso80);
+    arbre->SetBranchAddress("LepCand_eleMVAisoL", &LepCand_eleMVAisoL);
     arbre->SetBranchAddress("LepCand_eleMVAiso90", &LepCand_eleMVAiso90);
     arbre->SetBranchAddress("LepCand_eleMVAnoiso80", &LepCand_eleMVAnoiso80);
+    arbre->SetBranchAddress("LepCand_eleMVAnoisoL", &LepCand_eleMVAnoisoL);
     arbre->SetBranchAddress("LepCand_eleMVAnoiso90", &LepCand_eleMVAnoiso90);
     arbre->SetBranchAddress("LepCand_eleIso", &LepCand_eleIso);
     arbre->SetBranchAddress("LepCand_muonIso", &LepCand_muonIso);
     arbre->SetBranchAddress("LepCand_muonMediumId", &LepCand_muonMediumId);
+    arbre->SetBranchAddress("LepCand_trgmatch", &LepCand_trgmatch);
 
     arbre->SetBranchAddress("GenVtx_z", &GenVtx_z);
     arbre->SetBranchAddress("PV_z", &PV_z);
@@ -161,12 +170,118 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
     arbre->SetBranchAddress("pu_weight", &pu_weight);
     arbre->SetBranchAddress("genWeight", &genWeight);
-    arbre->SetBranchAddress("nJets", &nJets);
+    //arbre->SetBranchAddress("nJets", &nJets);
 
     arbre->SetBranchAddress("MET_pt", &MET_pt);
     arbre->SetBranchAddress("MET_phi", &MET_phi);
     arbre->SetBranchAddress("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ", &HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ);
     arbre->SetBranchAddress("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", &HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ);
+    arbre->SetBranchAddress("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL", &HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL);
+    arbre->SetBranchAddress("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL", &HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL);
+
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_40p0", &TauG2Weights_ceBRe33_40p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_39p2", &TauG2Weights_ceBRe33_39p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_38p4", &TauG2Weights_ceBRe33_38p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_37p6", &TauG2Weights_ceBRe33_37p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_36p8", &TauG2Weights_ceBRe33_36p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_36p0", &TauG2Weights_ceBRe33_36p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_35p2", &TauG2Weights_ceBRe33_35p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_34p4", &TauG2Weights_ceBRe33_34p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_33p6", &TauG2Weights_ceBRe33_33p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_32p8", &TauG2Weights_ceBRe33_32p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_32p0", &TauG2Weights_ceBRe33_32p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_31p2", &TauG2Weights_ceBRe33_31p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_30p4", &TauG2Weights_ceBRe33_30p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_29p6", &TauG2Weights_ceBRe33_29p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_28p8", &TauG2Weights_ceBRe33_28p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_28p0", &TauG2Weights_ceBRe33_28p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_27p2", &TauG2Weights_ceBRe33_27p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_26p4", &TauG2Weights_ceBRe33_26p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_25p6", &TauG2Weights_ceBRe33_25p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_24p8", &TauG2Weights_ceBRe33_24p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_24p0", &TauG2Weights_ceBRe33_24p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_23p2", &TauG2Weights_ceBRe33_23p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_22p4", &TauG2Weights_ceBRe33_22p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_21p6", &TauG2Weights_ceBRe33_21p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_20p8", &TauG2Weights_ceBRe33_20p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_20p0", &TauG2Weights_ceBRe33_20p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_19p2", &TauG2Weights_ceBRe33_19p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_18p4", &TauG2Weights_ceBRe33_18p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_17p6", &TauG2Weights_ceBRe33_17p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_16p8", &TauG2Weights_ceBRe33_16p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_16p0", &TauG2Weights_ceBRe33_16p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_15p2", &TauG2Weights_ceBRe33_15p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_14p4", &TauG2Weights_ceBRe33_14p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_13p6", &TauG2Weights_ceBRe33_13p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_12p8", &TauG2Weights_ceBRe33_12p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_12p0", &TauG2Weights_ceBRe33_12p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_11p2", &TauG2Weights_ceBRe33_11p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_10p4", &TauG2Weights_ceBRe33_10p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_9p6", &TauG2Weights_ceBRe33_9p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_8p8", &TauG2Weights_ceBRe33_8p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_8p0", &TauG2Weights_ceBRe33_8p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_7p2", &TauG2Weights_ceBRe33_7p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_6p4", &TauG2Weights_ceBRe33_6p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_5p6", &TauG2Weights_ceBRe33_5p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_4p8", &TauG2Weights_ceBRe33_4p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_4p0", &TauG2Weights_ceBRe33_4p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_3p2", &TauG2Weights_ceBRe33_3p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_2p4", &TauG2Weights_ceBRe33_2p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_1p6", &TauG2Weights_ceBRe33_1p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_0p8", &TauG2Weights_ceBRe33_0p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_0p0", &TauG2Weights_ceBRe33_0p0);
+
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m40p0", &TauG2Weights_ceBRe33_m40p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m39p2", &TauG2Weights_ceBRe33_m39p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m38p4", &TauG2Weights_ceBRe33_m38p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m37p6", &TauG2Weights_ceBRe33_m37p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m36p8", &TauG2Weights_ceBRe33_m36p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m36p0", &TauG2Weights_ceBRe33_m36p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m35p2", &TauG2Weights_ceBRe33_m35p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m34p4", &TauG2Weights_ceBRe33_m34p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m33p6", &TauG2Weights_ceBRe33_m33p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m32p8", &TauG2Weights_ceBRe33_m32p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m32p0", &TauG2Weights_ceBRe33_m32p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m31p2", &TauG2Weights_ceBRe33_m31p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m30p4", &TauG2Weights_ceBRe33_m30p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m29p6", &TauG2Weights_ceBRe33_m29p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m28p8", &TauG2Weights_ceBRe33_m28p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m28p0", &TauG2Weights_ceBRe33_m28p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m27p2", &TauG2Weights_ceBRe33_m27p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m26p4", &TauG2Weights_ceBRe33_m26p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m25p6", &TauG2Weights_ceBRe33_m25p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m24p8", &TauG2Weights_ceBRe33_m24p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m24p0", &TauG2Weights_ceBRe33_m24p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m23p2", &TauG2Weights_ceBRe33_m23p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m22p4", &TauG2Weights_ceBRe33_m22p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m21p6", &TauG2Weights_ceBRe33_m21p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m20p8", &TauG2Weights_ceBRe33_m20p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m20p0", &TauG2Weights_ceBRe33_m20p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m19p2", &TauG2Weights_ceBRe33_m19p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m18p4", &TauG2Weights_ceBRe33_m18p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m17p6", &TauG2Weights_ceBRe33_m17p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m16p8", &TauG2Weights_ceBRe33_m16p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m16p0", &TauG2Weights_ceBRe33_m16p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m15p2", &TauG2Weights_ceBRe33_m15p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m14p4", &TauG2Weights_ceBRe33_m14p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m13p6", &TauG2Weights_ceBRe33_m13p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m12p8", &TauG2Weights_ceBRe33_m12p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m12p0", &TauG2Weights_ceBRe33_m12p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m11p2", &TauG2Weights_ceBRe33_m11p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m10p4", &TauG2Weights_ceBRe33_m10p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m9p6", &TauG2Weights_ceBRe33_m9p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m8p8", &TauG2Weights_ceBRe33_m8p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m8p0", &TauG2Weights_ceBRe33_m8p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m7p2", &TauG2Weights_ceBRe33_m7p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m6p4", &TauG2Weights_ceBRe33_m6p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m5p6", &TauG2Weights_ceBRe33_m5p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m4p8", &TauG2Weights_ceBRe33_m4p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m4p0", &TauG2Weights_ceBRe33_m4p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m3p2", &TauG2Weights_ceBRe33_m3p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m2p4", &TauG2Weights_ceBRe33_m2p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m1p6", &TauG2Weights_ceBRe33_m1p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m0p8", &TauG2Weights_ceBRe33_m0p8);
+
 
     ami->SetBranchAddress("ntracks_friend", &ntracks_friend);
     ami->SetBranchAddress("ntracksHS_friend", &ntracksHS_friend);
@@ -326,7 +441,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
    }
 
-   float bins_taupt[] = {10,15,20,24,30,40,100};
+   float bins_taupt[] = {10,15,20,24,30,35,100};
    int  binnum_taupt = sizeof(bins_taupt)/sizeof(Float_t) - 1;
    float bins_nt[] = {-1,0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100};
    int  binnum_nt = sizeof(bins_nt)/sizeof(Float_t) - 1;
@@ -341,42 +456,32 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
    TString uncertainties[11]={"","_CMS_pileup_2018Down","_CMS_pileup_2018Up","_CMS_topptreweightingDown","_CMS_topptreweightingUp","_CMS_emutrg_lowmuhighe_2018Down","_CMS_emutrg_lowmuhighe_2018Up","_CMS_emutrg_highmulowe_2018Down","_CMS_emutrg_highmulowe_2018Up","_CMS_emutrg_highmuhighe_2018Down","_CMS_emutrg_highmuhighe_2018Up"};
    TString fake_uncertainties[1]={""};
-   TFile* f_eleIDSF=new TFile("scalefactors/egammaEffi.txt_Ele_wp90noiso_EGM2D.root","read");
+   TFile* f_eleIDSF=new TFile("scalefactors/egammaEffi.txt_Ele_wp80iso_EGM2D.root","read");
    TH2F* h_eleIDSF= (TH2F*) f_eleIDSF->Get("EGamma_SF2D");
 
    TFile* f_muonID=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2018_UL_ID.root","read");
    TFile* f_muonIso=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2018_UL_ISO.root","read");
-   TH2F* h_muonIsoSF= (TH2F*) f_muonIso->Get("NUM_TightRelIso_DEN_MediumID_abseta_pt");
+   TH2F* h_muonIsoSF= (TH2F*) f_muonIso->Get("NUM_LooseRelIso_DEN_MediumID_abseta_pt");
    TH2F* h_muonIDSF= (TH2F*) f_muonID->Get("NUM_MediumID_DEN_TrackerMuons_abseta_pt");
 
-   TFile* f_e_trg24=new TFile("scalefactors_emu/e_trg24_UL18.root","read");
-   TFile* f_e_trg12=new TFile("scalefactors_emu/e_trg12_UL18.root","read");
-   TH2F* h_e_trg24_data= (TH2F*) f_e_trg24->Get("data_trg_eff");
-   TH2F* h_e_trg24_zll= (TH2F*) f_e_trg24->Get("ZLL_trg_eff");
-   TH2F* h_e_trg12_data= (TH2F*) f_e_trg12->Get("data_trg_eff");
-   TH2F* h_e_trg12_zll= (TH2F*) f_e_trg12->Get("ZLL_trg_eff");
-   TH2F* h_e_id24_data= (TH2F*) f_e_trg24->Get("data_id_eff");
-   TH2F* h_e_id24_zll= (TH2F*) f_e_trg24->Get("ZLL_id_eff");
-   TH2F* h_e_id12_data= (TH2F*) f_e_trg12->Get("data_id_eff");
-   TH2F* h_e_id12_zll= (TH2F*) f_e_trg12->Get("ZLL_id_eff");
-   TH2F* h_e_iso24_data= (TH2F*) f_e_trg24->Get("data_iso_eff");
-   TH2F* h_e_iso24_zll= (TH2F*) f_e_trg24->Get("ZLL_iso_eff");
-   TH2F* h_e_iso12_data= (TH2F*) f_e_trg12->Get("data_iso_eff");
-   TH2F* h_e_iso12_zll= (TH2F*) f_e_trg12->Get("ZLL_iso_eff");
-   TFile* f_mu_trg24=new TFile("scalefactors_emu/mu_trg24_UL18.root","read");
-   TFile* f_mu_trg8=new TFile("scalefactors_emu/mu_trg8_UL18.root","read");
-   TH2F* h_mu_trg24_data= (TH2F*) f_mu_trg24->Get("data_trg_eff");
-   TH2F* h_mu_trg24_zll= (TH2F*) f_mu_trg24->Get("ZLL_trg_eff");
-   TH2F* h_mu_trg8_data= (TH2F*) f_mu_trg8->Get("data_trg_eff");
-   TH2F* h_mu_trg8_zll= (TH2F*) f_mu_trg8->Get("ZLL_trg_eff");
-   TH2F* h_mu_id24_data= (TH2F*) f_mu_trg24->Get("data_id_eff");
-   TH2F* h_mu_id24_zll= (TH2F*) f_mu_trg24->Get("ZLL_id_eff");
-   TH2F* h_mu_id8_data= (TH2F*) f_mu_trg8->Get("data_id_eff");
-   TH2F* h_mu_id8_zll= (TH2F*) f_mu_trg8->Get("ZLL_id_eff");
-   TH2F* h_mu_iso24_data= (TH2F*) f_mu_trg24->Get("data_iso_eff");
-   TH2F* h_mu_iso24_zll= (TH2F*) f_mu_trg24->Get("ZLL_iso_eff");
-   TH2F* h_mu_iso8_data= (TH2F*) f_mu_trg8->Get("data_iso_eff");
-   TH2F* h_mu_iso8_zll= (TH2F*) f_mu_trg8->Get("ZLL_iso_eff");
+   if (year=="2016pre"){
+      TFile* f_muonID=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ID.root","read");
+      TFile* f_muonIso=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_ISO.root","read");
+      h_muonIsoSF= (TH2F*) f_muonIso->Get("NUM_LooseRelIso_DEN_MediumID_abseta_pt");
+      h_muonIDSF= (TH2F*) f_muonID->Get("NUM_MediumID_DEN_TrackerMuons_abseta_pt");
+   }
+   if (year=="2016post"){
+      TFile* f_muonID=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2016_UL_ID.root","read");
+      TFile* f_muonIso=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2016_UL_ISO.root","read");
+      h_muonIsoSF= (TH2F*) f_muonIso->Get("NUM_LooseRelIso_DEN_MediumID_abseta_pt");
+      h_muonIDSF= (TH2F*) f_muonID->Get("NUM_MediumID_DEN_TrackerMuons_abseta_pt");
+   }
+   if (year=="2017"){
+      TFile* f_muonID=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root","read");
+      TFile* f_muonIso=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2017_UL_ISO.root","read");
+      h_muonIsoSF= (TH2F*) f_muonIso->Get("NUM_LooseRelIso_DEN_MediumID_abseta_pt");
+      h_muonIDSF= (TH2F*) f_muonID->Get("NUM_MediumID_DEN_TrackerMuons_abseta_pt");
+   }
 
    TFile* f_e_trg24_c=new TFile("scalefactors/sf_el_2018_HLTMu8Ele23.root","read");
    TFile* f_e_trg12_c=new TFile("scalefactors/sf_el_2018_HLTMu23Ele12.root","read");
@@ -391,11 +496,72 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    TH2F* h_e_trg12_data_c= (TH2F*) f_e_trg12_c->Get("eff_data");
    TH2F* h_e_trg12_zll_c= (TH2F*) f_e_trg12_c->Get("eff_mc");
 
+   if (year=="2017"){
+      TFile* f_e_trg24_c=new TFile("scalefactors/sf_el_2018_HLTMu8Ele23.root","read");
+      TFile* f_e_trg12_c=new TFile("scalefactors/sf_el_2018_HLTMu23Ele12.root","read");
+      TFile* f_mu_trg24_c=new TFile("scalefactors/sf_mu_2018_HLTMu23Ele12.root","read");
+      TFile* f_mu_trg8_c=new TFile("scalefactors/sf_mu_2018_HLTMu8Ele23.root","read");
+      h_mu_trg24_data_c= (TH2F*) f_mu_trg24_c->Get("eff_data");
+      h_mu_trg24_zll_c= (TH2F*) f_mu_trg24_c->Get("eff_mc");
+      h_mu_trg8_data_c= (TH2F*) f_mu_trg8_c->Get("eff_data");
+      h_mu_trg8_zll_c= (TH2F*) f_mu_trg8_c->Get("eff_mc");
+      h_e_trg24_data_c= (TH2F*) f_e_trg24_c->Get("eff_data");
+      h_e_trg24_zll_c= (TH2F*) f_e_trg24_c->Get("eff_mc");
+      h_e_trg12_data_c= (TH2F*) f_e_trg12_c->Get("eff_data");
+      h_e_trg12_zll_c= (TH2F*) f_e_trg12_c->Get("eff_mc");
+   }
+   else if (year=="2016post"){
+      TFile* f_e_trg24_c=new TFile("scalefactors/sf_el_2018_HLTMu8Ele23.root","read");
+      TFile* f_e_trg12_c=new TFile("scalefactors/sf_el_2018_HLTMu23Ele12.root","read");
+      TFile* f_mu_trg24_c=new TFile("scalefactors/sf_mu_2018_HLTMu23Ele12.root","read");
+      TFile* f_mu_trg8_c=new TFile("scalefactors/sf_mu_2018_HLTMu8Ele23.root","read");
+      h_mu_trg24_data_c= (TH2F*) f_mu_trg24_c->Get("eff_data");
+      h_mu_trg24_zll_c= (TH2F*) f_mu_trg24_c->Get("eff_mc");
+      h_mu_trg8_data_c= (TH2F*) f_mu_trg8_c->Get("eff_data");
+      h_mu_trg8_zll_c= (TH2F*) f_mu_trg8_c->Get("eff_mc");
+      h_e_trg24_data_c= (TH2F*) f_e_trg24_c->Get("eff_data");
+      h_e_trg24_zll_c= (TH2F*) f_e_trg24_c->Get("eff_mc");
+      h_e_trg12_data_c= (TH2F*) f_e_trg12_c->Get("eff_data");
+      h_e_trg12_zll_c= (TH2F*) f_e_trg12_c->Get("eff_mc");
+   }
+   else if (year=="2016pre"){
+      TFile* f_e_trg24_c=new TFile("scalefactors/sf_el_2018_HLTMu8Ele23.root","read");
+      TFile* f_e_trg12_c=new TFile("scalefactors/sf_el_2018_HLTMu23Ele12.root","read");
+      TFile* f_mu_trg24_c=new TFile("scalefactors/sf_mu_2018_HLTMu23Ele12.root","read");
+      TFile* f_mu_trg8_c=new TFile("scalefactors/sf_mu_2018_HLTMu8Ele23.root","read");
+      h_mu_trg24_data_c= (TH2F*) f_mu_trg24_c->Get("eff_data");
+      h_mu_trg24_zll_c= (TH2F*) f_mu_trg24_c->Get("eff_mc");
+      h_mu_trg8_data_c= (TH2F*) f_mu_trg8_c->Get("eff_data");
+      h_mu_trg8_zll_c= (TH2F*) f_mu_trg8_c->Get("eff_mc");
+      h_e_trg24_data_c= (TH2F*) f_e_trg24_c->Get("eff_data");
+      h_e_trg24_zll_c= (TH2F*) f_e_trg24_c->Get("eff_mc");
+      h_e_trg12_data_c= (TH2F*) f_e_trg12_c->Get("eff_data");
+      h_e_trg12_zll_c= (TH2F*) f_e_trg12_c->Get("eff_mc");
+   }
+
 
    TFile* f_fr=new TFile("emu_fr_2018.root","read");
    TH2F* h_fr=(TH2F*) f_fr->Get("FR");
    TH2F* h_frantimu=(TH2F*) f_fr->Get("FRantimu");
    TF1* fit_frnt=(TF1*) f_fr->Get("fit_frnt");
+   if (year=="2017"){
+      TFile* f_fr=new TFile("emu_fr_2018.root","read");
+      h_fr=(TH2F*) f_fr->Get("FR");
+      h_frantimu=(TH2F*) f_fr->Get("FRantimu");
+      fit_frnt=(TF1*) f_fr->Get("fit_frnt");
+   }
+   else if (year=="2016pre"){
+      TFile* f_fr=new TFile("emu_fr_2018.root","read");
+      h_fr=(TH2F*) f_fr->Get("FR");
+      h_frantimu=(TH2F*) f_fr->Get("FRantimu");
+      fit_frnt=(TF1*) f_fr->Get("fit_frnt");
+   }
+   else if (year=="2016post"){
+      TFile* f_fr=new TFile("emu_fr_2018.root","read");
+      h_fr=(TH2F*) f_fr->Get("FR");
+      h_frantimu=(TH2F*) f_fr->Get("FRantimu");
+      fit_frnt=(TF1*) f_fr->Get("fit_frnt");
+   }
 
    TH1F* h_vtxresolution_PV = new TH1F("h_vtxresolution_PV","h_vtxresolution_PV",200,-1,1); h_vtxresolution_PV->Sumw2();
    TH1F* h_vtxresolution_simpleditau = new TH1F("h_vtxresolution_simpleditau","h_vtxresolution_simpleditau",200,-1,1); h_vtxresolution_simpleditau->Sumw2();
@@ -415,6 +581,8 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
    auto b2_1=arbre->GetBranch("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ");
    auto b2_2=arbre->GetBranch("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ");
+   auto b2_3=arbre->GetBranch("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL");
+   auto b2_4=arbre->GetBranch("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL");
 
    auto b2_6=arbre->GetBranch("run");
 
@@ -426,6 +594,9 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    auto b3_6=arbre->GetBranch("LepCand_eleMVAnoiso80");
    auto b3_7=arbre->GetBranch("LepCand_eleMVAnoiso90");
    auto b3_8=arbre->GetBranch("LepCand_eleIso");
+   auto b3_9=arbre->GetBranch("LepCand_eleMVAnoisoL");
+   auto b3_10=arbre->GetBranch("LepCand_eleMVAisoL");
+   auto b3_11=arbre->GetBranch("LepCand_trgmatch");
 
    auto b4_1=arbre->GetBranch("pu_weight");
    auto b4_2=arbre->GetBranch("genWeight");
@@ -454,6 +625,110 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    auto b8_3=ami->GetBranch("ntracksHS_friend");
    auto b8_4=ami->GetBranch("ntracksPU_friend");
 
+   auto b9_1=arbre->GetBranch("TauG2Weights_ceBRe33_0p0");
+   auto b9_2=arbre->GetBranch("TauG2Weights_ceBRe33_0p8");
+   auto b9_3=arbre->GetBranch("TauG2Weights_ceBRe33_1p6");
+   auto b9_4=arbre->GetBranch("TauG2Weights_ceBRe33_2p4");
+   auto b9_5=arbre->GetBranch("TauG2Weights_ceBRe33_3p2");
+   auto b9_6=arbre->GetBranch("TauG2Weights_ceBRe33_4p0");
+   auto b9_7=arbre->GetBranch("TauG2Weights_ceBRe33_4p8");
+   auto b9_8=arbre->GetBranch("TauG2Weights_ceBRe33_5p6");
+   auto b9_9=arbre->GetBranch("TauG2Weights_ceBRe33_6p4");
+   auto b9_10=arbre->GetBranch("TauG2Weights_ceBRe33_7p2");
+   auto b9_11=arbre->GetBranch("TauG2Weights_ceBRe33_8p0");
+   auto b9_12=arbre->GetBranch("TauG2Weights_ceBRe33_8p8");
+   auto b9_13=arbre->GetBranch("TauG2Weights_ceBRe33_9p6");
+   auto b9_14=arbre->GetBranch("TauG2Weights_ceBRe33_10p4");
+   auto b9_15=arbre->GetBranch("TauG2Weights_ceBRe33_11p2");
+   auto b9_16=arbre->GetBranch("TauG2Weights_ceBRe33_12p0");
+   auto b9_17=arbre->GetBranch("TauG2Weights_ceBRe33_12p8");
+   auto b9_18=arbre->GetBranch("TauG2Weights_ceBRe33_13p6");
+   auto b9_19=arbre->GetBranch("TauG2Weights_ceBRe33_14p4");
+   auto b9_20=arbre->GetBranch("TauG2Weights_ceBRe33_15p2");
+   auto b9_21=arbre->GetBranch("TauG2Weights_ceBRe33_16p0");
+   auto b9_22=arbre->GetBranch("TauG2Weights_ceBRe33_16p8");
+   auto b9_23=arbre->GetBranch("TauG2Weights_ceBRe33_17p6");
+   auto b9_24=arbre->GetBranch("TauG2Weights_ceBRe33_18p4");
+   auto b9_25=arbre->GetBranch("TauG2Weights_ceBRe33_19p2");
+   auto b9_26=arbre->GetBranch("TauG2Weights_ceBRe33_20p0");
+   auto b9_27=arbre->GetBranch("TauG2Weights_ceBRe33_20p8");
+   auto b9_28=arbre->GetBranch("TauG2Weights_ceBRe33_21p6");
+   auto b9_29=arbre->GetBranch("TauG2Weights_ceBRe33_22p4");
+   auto b9_30=arbre->GetBranch("TauG2Weights_ceBRe33_23p2");
+   auto b9_31=arbre->GetBranch("TauG2Weights_ceBRe33_24p0");
+   auto b9_32=arbre->GetBranch("TauG2Weights_ceBRe33_24p8");
+   auto b9_33=arbre->GetBranch("TauG2Weights_ceBRe33_25p6");
+   auto b9_34=arbre->GetBranch("TauG2Weights_ceBRe33_26p4");
+   auto b9_35=arbre->GetBranch("TauG2Weights_ceBRe33_27p2");
+   auto b9_36=arbre->GetBranch("TauG2Weights_ceBRe33_28p0");
+   auto b9_37=arbre->GetBranch("TauG2Weights_ceBRe33_28p8");
+   auto b9_38=arbre->GetBranch("TauG2Weights_ceBRe33_29p6");
+   auto b9_39=arbre->GetBranch("TauG2Weights_ceBRe33_30p4");
+   auto b9_40=arbre->GetBranch("TauG2Weights_ceBRe33_31p2");
+   auto b9_41=arbre->GetBranch("TauG2Weights_ceBRe33_32p0");
+   auto b9_42=arbre->GetBranch("TauG2Weights_ceBRe33_32p8");
+   auto b9_43=arbre->GetBranch("TauG2Weights_ceBRe33_33p6");
+   auto b9_44=arbre->GetBranch("TauG2Weights_ceBRe33_34p4");
+   auto b9_45=arbre->GetBranch("TauG2Weights_ceBRe33_35p2");
+   auto b9_46=arbre->GetBranch("TauG2Weights_ceBRe33_36p0");
+   auto b9_47=arbre->GetBranch("TauG2Weights_ceBRe33_36p8");
+   auto b9_48=arbre->GetBranch("TauG2Weights_ceBRe33_37p6");
+   auto b9_49=arbre->GetBranch("TauG2Weights_ceBRe33_38p4");
+   auto b9_50=arbre->GetBranch("TauG2Weights_ceBRe33_39p2");
+   auto b9_51=arbre->GetBranch("TauG2Weights_ceBRe33_40p0");
+
+   auto b9_52=arbre->GetBranch("TauG2Weights_ceBRe33_m0p8");
+   auto b9_53=arbre->GetBranch("TauG2Weights_ceBRe33_m1p6");
+   auto b9_54=arbre->GetBranch("TauG2Weights_ceBRe33_m2p4");
+   auto b9_55=arbre->GetBranch("TauG2Weights_ceBRe33_m3p2");
+   auto b9_56=arbre->GetBranch("TauG2Weights_ceBRe33_m4p0");
+   auto b9_57=arbre->GetBranch("TauG2Weights_ceBRe33_m4p8");
+   auto b9_58=arbre->GetBranch("TauG2Weights_ceBRe33_m5p6");
+   auto b9_59=arbre->GetBranch("TauG2Weights_ceBRe33_m6p4");
+   auto b9_60=arbre->GetBranch("TauG2Weights_ceBRe33_m7p2");
+   auto b9_61=arbre->GetBranch("TauG2Weights_ceBRe33_m8p0");
+   auto b9_62=arbre->GetBranch("TauG2Weights_ceBRe33_m8p8");
+   auto b9_63=arbre->GetBranch("TauG2Weights_ceBRe33_m9p6");
+   auto b9_64=arbre->GetBranch("TauG2Weights_ceBRe33_m10p4");
+   auto b9_65=arbre->GetBranch("TauG2Weights_ceBRe33_m11p2");
+   auto b9_66=arbre->GetBranch("TauG2Weights_ceBRe33_m12p0");
+   auto b9_67=arbre->GetBranch("TauG2Weights_ceBRe33_m12p8");
+   auto b9_68=arbre->GetBranch("TauG2Weights_ceBRe33_m13p6");
+   auto b9_69=arbre->GetBranch("TauG2Weights_ceBRe33_m14p4");
+   auto b9_70=arbre->GetBranch("TauG2Weights_ceBRe33_m15p2");
+   auto b9_71=arbre->GetBranch("TauG2Weights_ceBRe33_m16p0");
+   auto b9_72=arbre->GetBranch("TauG2Weights_ceBRe33_m16p8");
+   auto b9_73=arbre->GetBranch("TauG2Weights_ceBRe33_m17p6");
+   auto b9_74=arbre->GetBranch("TauG2Weights_ceBRe33_m18p4");
+   auto b9_75=arbre->GetBranch("TauG2Weights_ceBRe33_m19p2");
+   auto b9_76=arbre->GetBranch("TauG2Weights_ceBRe33_m20p0");
+   auto b9_77=arbre->GetBranch("TauG2Weights_ceBRe33_m20p8");
+   auto b9_78=arbre->GetBranch("TauG2Weights_ceBRe33_m21p6");
+   auto b9_79=arbre->GetBranch("TauG2Weights_ceBRe33_m22p4");
+   auto b9_80=arbre->GetBranch("TauG2Weights_ceBRe33_m23p2");
+   auto b9_81=arbre->GetBranch("TauG2Weights_ceBRe33_m24p0");
+   auto b9_82=arbre->GetBranch("TauG2Weights_ceBRe33_m24p8");
+   auto b9_83=arbre->GetBranch("TauG2Weights_ceBRe33_m25p6");
+   auto b9_84=arbre->GetBranch("TauG2Weights_ceBRe33_m26p4");
+   auto b9_85=arbre->GetBranch("TauG2Weights_ceBRe33_m27p2");
+   auto b9_86=arbre->GetBranch("TauG2Weights_ceBRe33_m28p0");
+   auto b9_87=arbre->GetBranch("TauG2Weights_ceBRe33_m28p8");
+   auto b9_88=arbre->GetBranch("TauG2Weights_ceBRe33_m29p6");
+   auto b9_89=arbre->GetBranch("TauG2Weights_ceBRe33_m30p4");
+   auto b9_90=arbre->GetBranch("TauG2Weights_ceBRe33_m31p2");
+   auto b9_91=arbre->GetBranch("TauG2Weights_ceBRe33_m32p0");
+   auto b9_92=arbre->GetBranch("TauG2Weights_ceBRe33_m32p8");
+   auto b9_93=arbre->GetBranch("TauG2Weights_ceBRe33_m33p6");
+   auto b9_94=arbre->GetBranch("TauG2Weights_ceBRe33_m34p4");
+   auto b9_95=arbre->GetBranch("TauG2Weights_ceBRe33_m35p2");
+   auto b9_96=arbre->GetBranch("TauG2Weights_ceBRe33_m36p0");
+   auto b9_97=arbre->GetBranch("TauG2Weights_ceBRe33_m36p8");
+   auto b9_98=arbre->GetBranch("TauG2Weights_ceBRe33_m37p6");
+   auto b9_99=arbre->GetBranch("TauG2Weights_ceBRe33_m38p4");
+   auto b9_100=arbre->GetBranch("TauG2Weights_ceBRe33_m39p2");
+   auto b9_101=arbre->GetBranch("TauG2Weights_ceBRe33_m40p0");
+
+
    TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
    TF1* fit_aco = (TF1*) f_aco->Get("fit_A");
 
@@ -477,6 +752,70 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
    TFile* f_npvs=new TFile("correction_npvs_2018.root","read");
    TH1F* h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
+
+   if (year=="2017"){
+      TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
+      fit_aco = (TF1*) f_aco->Get("fit_A");
+      TFile* f_aco_fine=new TFile("correction_acoplanarity_fine_2018.root","read");
+      fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
+      fit_aco_3040_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_2030");
+      fit_aco_4050_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_2030");
+      fit_aco_gt50_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_2030");
+      fit_aco_3040_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_3040");
+      fit_aco_4050_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_3040");
+      fit_aco_gt50_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_3040");
+      fit_aco_4050_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_4050");
+      fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
+      fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
+      TFile *f_punt=new TFile("npu_correction_2018.root");
+      correction_map=(TH2F*) f_punt->Get("correction_map");
+      TFile *f_hsnt=new TFile("nhs_correction_2018.root");
+      correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
+      TFile* f_npvs=new TFile("correction_npvs_2018.root","read");
+      h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
+   }
+   else if (year=="2016post"){
+      TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
+      fit_aco = (TF1*) f_aco->Get("fit_A");
+      TFile* f_aco_fine=new TFile("correction_acoplanarity_fine_2018.root","read");
+      fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
+      fit_aco_3040_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_2030");
+      fit_aco_4050_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_2030");
+      fit_aco_gt50_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_2030");
+      fit_aco_3040_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_3040");
+      fit_aco_4050_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_3040");
+      fit_aco_gt50_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_3040");
+      fit_aco_4050_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_4050");
+      fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
+      fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
+      TFile *f_punt=new TFile("npu_correction_2018.root");
+      correction_map=(TH2F*) f_punt->Get("correction_map");
+      TFile *f_hsnt=new TFile("nhs_correction_2018.root");
+      correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
+      TFile* f_npvs=new TFile("correction_npvs_2018.root","read");
+      h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
+   }
+   else if (year=="2016pre"){
+      TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
+      fit_aco = (TF1*) f_aco->Get("fit_A");
+      TFile* f_aco_fine=new TFile("correction_acoplanarity_fine_2018.root","read");
+      fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
+      fit_aco_3040_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_2030");
+      fit_aco_4050_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_2030");
+      fit_aco_gt50_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_2030");
+      fit_aco_3040_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_3040");
+      fit_aco_4050_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_3040");
+      fit_aco_gt50_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_3040");
+      fit_aco_4050_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_4050");
+      fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
+      fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
+      TFile *f_punt=new TFile("npu_correction_2018.root");
+      correction_map=(TH2F*) f_punt->Get("correction_map");
+      TFile *f_hsnt=new TFile("nhs_correction_2018.root");
+      correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
+      TFile* f_npvs=new TFile("correction_npvs_2018.root","read");
+      h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
+   }
 
 
    for (Int_t i = 0; i < nentries_wtn; i++) {
@@ -507,25 +846,47 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
 
 	// Trigger block
-	b2_1->GetEntry(i); b2_2->GetEntry(i);
+	if (year=="2017" or year=="2018"){b2_1->GetEntry(i); b2_2->GetEntry(i);}
+	else{b2_3->GetEntry(i); b2_4->GetEntry(i);}
 
-	bool is_mu8ele23=(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ and my_ele.Pt()>24 and my_mu.Pt()>10);
-	bool is_mu23ele12=(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ and my_ele.Pt()>13 and my_mu.Pt()>24);
-	if (!is_mu8ele23 and !is_mu23ele12) continue;
+	bool is_mu8ele23=false;
+	bool is_mu23ele12=false;
+	if (year=="2017" or year=="2018"){
+	   is_mu8ele23=(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ and my_ele.Pt()>24 and my_mu.Pt()>10);
+	   is_mu23ele12=(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ and my_ele.Pt()>13 and my_mu.Pt()>24);
+	   if (!is_mu8ele23 and !is_mu23ele12) continue;
+	}
+	else{
+           is_mu8ele23=(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ and my_ele.Pt()>24 and my_mu.Pt()>10);
+           is_mu23ele12=(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ and my_ele.Pt()>13 and my_mu.Pt()>24);
+           if (!is_mu8ele23 and !is_mu23ele12) continue;
+        }
 
 
 	// Block ID/iso/charge
-	b3_1->GetEntry(i); b3_2->GetEntry(i); b3_3->GetEntry(i); b3_4->GetEntry(i); b3_5->GetEntry(i); b3_6->GetEntry(i); b3_7->GetEntry(i); b3_8->GetEntry(i);
-	if (LepCand_eleIso[ele_index]>0.50 or !LepCand_eleMVAnoiso90[ele_index]) continue;
+	b3_1->GetEntry(i); b3_2->GetEntry(i); b3_3->GetEntry(i); b3_4->GetEntry(i); b3_5->GetEntry(i); b3_6->GetEntry(i); b3_7->GetEntry(i); b3_8->GetEntry(i);b3_9->GetEntry(i); b3_10->GetEntry(i); b3_11->GetEntry(i);
+	//if (LepCand_eleIso[ele_index]>0.50 or !LepCand_eleMVAnoiso90[ele_index]) continue;
+	if (!LepCand_eleMVAisoL[ele_index]) continue;
 	if (LepCand_muonIso[mu_index]>0.50 or !LepCand_muonMediumId[mu_index]) continue;
+//cout<<LepCand_trgmatch[ele_index]<<" "<<LepCand_trgmatch[mu_index]<<endl;
+	//if (input=="/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/MuonEGB.root" and !LepCand_trgmatch[ele_index]) continue;
+        //if (input!="/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/MuonEGB.root" and (!LepCand_trgmatch[ele_index] or !LepCand_trgmatch[mu_index])) continue;
+        if (name!="data_obs" and (!LepCand_trgmatch[ele_index] or !LepCand_trgmatch[mu_index])) continue;
 
 	bool is_OS = (LepCand_charge[mu_index]*LepCand_charge[ele_index]<0);
-	bool is_isolated = (LepCand_muonIso[mu_index]<0.20 and LepCand_eleIso[ele_index]<0.15);
+	/*bool is_isolated = (LepCand_muonIso[mu_index]<0.20 and LepCand_eleIso[ele_index]<0.15);
 	bool is_relaxedisolated = (LepCand_muonIso[mu_index]<0.50 and LepCand_eleIso[ele_index]<0.50);
 	bool is_FF = (LepCand_muonIso[mu_index]>0.20 and LepCand_eleIso[ele_index]>0.15);
         bool is_PF = (LepCand_muonIso[mu_index]<0.20 and LepCand_eleIso[ele_index]>0.15);
         bool is_FP = (LepCand_muonIso[mu_index]>0.20 and LepCand_eleIso[ele_index]<0.15);
-        bool is_PP = (LepCand_muonIso[mu_index]<0.20 and LepCand_eleIso[ele_index]<0.15);
+        bool is_PP = (LepCand_muonIso[mu_index]<0.20 and LepCand_eleIso[ele_index]<0.15);*/
+
+ 	bool is_isolated = (LepCand_muonIso[mu_index]<0.25 and LepCand_eleMVAiso80[ele_index]);
+        bool is_relaxedisolated = (LepCand_muonIso[mu_index]<0.50 and LepCand_eleMVAisoL[ele_index]);
+        bool is_FF = (LepCand_muonIso[mu_index]>0.25 and !LepCand_eleMVAiso80[ele_index]);
+        bool is_PF = (LepCand_muonIso[mu_index]<0.25 and !LepCand_eleMVAiso80[ele_index]);
+        bool is_FP = (LepCand_muonIso[mu_index]>0.25 and LepCand_eleMVAiso80[ele_index]);
+        bool is_PP = (LepCand_muonIso[mu_index]<0.25 and LepCand_eleMVAiso80[ele_index]);
 
 	//bool is_isolated = (LepCand_muonIso[mu_index]<0.20 and LepCand_eleMVAiso90[ele_index]);
 
@@ -561,10 +922,10 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 	float aweight=1.0;
 	if (name!="data_obs"){
 	   aweight=aweight*pu_weight*genWeight;
-	   //float ept=my_ele.Pt();
-	   //if (ept>120) ept=119;
-           //float elIDSF = h_eleIDSF->GetBinContent(h_eleIDSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleIDSF->GetYaxis()->FindBin(ept));
-	   //aweight=aweight*elIDSF;
+	   float ept=my_ele.Pt();
+	   if (ept>120) ept=119;
+           float elIDSF = h_eleIDSF->GetBinContent(h_eleIDSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleIDSF->GetYaxis()->FindBin(ept));
+	   aweight=aweight*elIDSF;
            aweight*=h_npvs_weight->GetBinContent(h_npvs_weight->GetXaxis()->FindBin(PV_npvs));
 
            float weight_aco=1.0;
@@ -601,12 +962,12 @@ cout<<idsf1*muonIsoSF1<<" "<<((eff_mu_id8_data*eff_mu_iso8_data)/(eff_mu_id8_zll
 	   if (ept2>200) ept2=199;
            float mupt2=my_mu.Pt();
            if (mupt2>200) mupt2=199;
-	   float eff_e_id12_data=h_e_id12_data->GetBinContent(h_e_id12_data->GetXaxis()->FindBin(ept2),h_e_id12_data->GetYaxis()->FindBin(fabs(my_ele.Eta())));
+	   /*float eff_e_id12_data=h_e_id12_data->GetBinContent(h_e_id12_data->GetXaxis()->FindBin(ept2),h_e_id12_data->GetYaxis()->FindBin(fabs(my_ele.Eta())));
            float eff_e_iso12_data=h_e_iso12_data->GetBinContent(h_e_iso12_data->GetXaxis()->FindBin(ept2),h_e_iso12_data->GetYaxis()->FindBin(fabs(my_ele.Eta())));
            float eff_e_id12_zll=h_e_id12_zll->GetBinContent(h_e_id12_zll->GetXaxis()->FindBin(ept2),h_e_id12_zll->GetYaxis()->FindBin(fabs(my_ele.Eta())));
            float eff_e_iso12_zll=h_e_iso12_zll->GetBinContent(h_e_iso12_zll->GetXaxis()->FindBin(ept2),h_e_iso12_zll->GetYaxis()->FindBin(fabs(my_ele.Eta())));
 	   aweight*=((eff_e_id12_data*eff_e_iso12_data)/(eff_e_id12_zll*eff_e_iso12_zll));
-	   //cout<<elIDSF<<" "<<((eff_e_id12_data*eff_e_iso12_data)/(eff_e_id12_zll*eff_e_iso12_zll))<<" "<<((eff_e_id24_data*eff_e_iso24_data)/(eff_e_id24_zll*eff_e_iso24_zll))<<endl;
+	   //cout<<elIDSF<<" "<<((eff_e_id12_data*eff_e_iso12_data)/(eff_e_id12_zll*eff_e_iso12_zll))<<" "<<((eff_e_id24_data*eff_e_iso24_data)/(eff_e_id24_zll*eff_e_iso24_zll))<<endl;*/
 
 	   /*if (ept2<20) ept2=20;
            if (mupt2<20) mupt2=15;
@@ -709,6 +1070,124 @@ cout<<idsf1*muonIsoSF1<<" "<<((eff_mu_id8_data*eff_mu_iso8_data)/(eff_mu_id8_zll
 
 	bool is_lowNT=(ntracks<20000);
 	bool is_lowA=(acoplanarity<200000.02);
+
+        if (sample=="GGTT"){ // rescaling from mumu region
+           if (ntracks==0) aweight*=2.65;
+           else if (ntracks==1) aweight*=1.87;
+           b9_1->GetEntry(i); b9_2->GetEntry(i); b9_3->GetEntry(i);b9_4->GetEntry(i); b9_5->GetEntry(i); b9_6->GetEntry(i);b9_7->GetEntry(i); b9_8->GetEntry(i); b9_9->GetEntry(i);
+           b9_10->GetEntry(i); b9_11->GetEntry(i); b9_12->GetEntry(i); b9_13->GetEntry(i);b9_14->GetEntry(i); b9_15->GetEntry(i); b9_16->GetEntry(i);b9_17->GetEntry(i); b9_18->GetEntry(i); b9_19->GetEntry(i);
+           b9_20->GetEntry(i); b9_21->GetEntry(i); b9_22->GetEntry(i); b9_23->GetEntry(i);b9_24->GetEntry(i); b9_25->GetEntry(i); b9_26->GetEntry(i);b9_27->GetEntry(i); b9_28->GetEntry(i); b9_29->GetEntry(i);
+           b9_30->GetEntry(i); b9_31->GetEntry(i); b9_32->GetEntry(i); b9_33->GetEntry(i);b9_34->GetEntry(i); b9_35->GetEntry(i); b9_36->GetEntry(i);b9_37->GetEntry(i); b9_38->GetEntry(i); b9_39->GetEntry(i);
+           b9_40->GetEntry(i); b9_41->GetEntry(i); b9_42->GetEntry(i); b9_43->GetEntry(i);b9_44->GetEntry(i); b9_45->GetEntry(i); b9_46->GetEntry(i);b9_47->GetEntry(i); b9_48->GetEntry(i); b9_49->GetEntry(i);
+           b9_50->GetEntry(i); b9_51->GetEntry(i); b9_52->GetEntry(i); b9_53->GetEntry(i);b9_54->GetEntry(i); b9_55->GetEntry(i); b9_56->GetEntry(i);b9_57->GetEntry(i); b9_58->GetEntry(i); b9_59->GetEntry(i);
+           b9_60->GetEntry(i); b9_61->GetEntry(i); b9_62->GetEntry(i); b9_63->GetEntry(i);b9_64->GetEntry(i); b9_65->GetEntry(i); b9_66->GetEntry(i);b9_67->GetEntry(i); b9_68->GetEntry(i); b9_69->GetEntry(i);
+           b9_70->GetEntry(i); b9_71->GetEntry(i); b9_72->GetEntry(i); b9_73->GetEntry(i);b9_74->GetEntry(i); b9_75->GetEntry(i); b9_76->GetEntry(i);b9_77->GetEntry(i); b9_78->GetEntry(i); b9_79->GetEntry(i);
+           b9_80->GetEntry(i); b9_81->GetEntry(i); b9_82->GetEntry(i); b9_83->GetEntry(i);b9_84->GetEntry(i); b9_85->GetEntry(i); b9_86->GetEntry(i);b9_87->GetEntry(i); b9_88->GetEntry(i); b9_89->GetEntry(i);
+           b9_90->GetEntry(i); b9_91->GetEntry(i); b9_92->GetEntry(i); b9_93->GetEntry(i);b9_94->GetEntry(i); b9_95->GetEntry(i); b9_96->GetEntry(i);b9_97->GetEntry(i); b9_98->GetEntry(i); b9_99->GetEntry(i);
+           b9_100->GetEntry(i); b9_101->GetEntry(i);
+           if (name=="GGTT_40p0") aweight*=TauG2Weights_ceBRe33_0p0;
+           else if (name=="GGTT_0p8") aweight*=TauG2Weights_ceBRe33_0p8;
+           else if (name=="GGTT_1p6") aweight*=TauG2Weights_ceBRe33_1p6;
+           else if (name=="GGTT_2p4") aweight*=TauG2Weights_ceBRe33_2p4;
+           else if (name=="GGTT_3p2") aweight*=TauG2Weights_ceBRe33_3p2;
+           else if (name=="GGTT_4p0") aweight*=TauG2Weights_ceBRe33_4p0;
+           else if (name=="GGTT_4p8") aweight*=TauG2Weights_ceBRe33_4p8;
+           else if (name=="GGTT_5p6") aweight*=TauG2Weights_ceBRe33_5p6;
+           else if (name=="GGTT_6p4") aweight*=TauG2Weights_ceBRe33_6p4;
+           else if (name=="GGTT_7p2") aweight*=TauG2Weights_ceBRe33_7p2;
+           else if (name=="GGTT_8p0") aweight*=TauG2Weights_ceBRe33_8p0;
+           else if (name=="GGTT_8p8") aweight*=TauG2Weights_ceBRe33_8p8;
+           else if (name=="GGTT_9p6") aweight*=TauG2Weights_ceBRe33_9p6;
+           else if (name=="GGTT_10p4") aweight*=TauG2Weights_ceBRe33_10p4;
+           else if (name=="GGTT_11p2") aweight*=TauG2Weights_ceBRe33_11p2;
+           else if (name=="GGTT_12p0") aweight*=TauG2Weights_ceBRe33_12p0;
+           else if (name=="GGTT_12p8") aweight*=TauG2Weights_ceBRe33_12p8;
+           else if (name=="GGTT_13p6") aweight*=TauG2Weights_ceBRe33_13p6;
+           else if (name=="GGTT_14p4") aweight*=TauG2Weights_ceBRe33_14p4;
+           else if (name=="GGTT_15p2") aweight*=TauG2Weights_ceBRe33_15p2;
+           else if (name=="GGTT_16p0") aweight*=TauG2Weights_ceBRe33_16p0;
+           else if (name=="GGTT_16p8") aweight*=TauG2Weights_ceBRe33_16p8;
+           else if (name=="GGTT_17p6") aweight*=TauG2Weights_ceBRe33_17p6;
+           else if (name=="GGTT_18p4") aweight*=TauG2Weights_ceBRe33_18p4;
+           else if (name=="GGTT_19p2") aweight*=TauG2Weights_ceBRe33_19p2;
+           else if (name=="GGTT_20p0") aweight*=TauG2Weights_ceBRe33_20p0;
+           else if (name=="GGTT_20p8") aweight*=TauG2Weights_ceBRe33_20p8;
+           else if (name=="GGTT_21p6") aweight*=TauG2Weights_ceBRe33_21p6;
+           else if (name=="GGTT_22p4") aweight*=TauG2Weights_ceBRe33_22p4;
+           else if (name=="GGTT_23p2") aweight*=TauG2Weights_ceBRe33_23p2;
+           else if (name=="GGTT_24p0") aweight*=TauG2Weights_ceBRe33_24p0;
+           else if (name=="GGTT_24p8") aweight*=TauG2Weights_ceBRe33_24p8;
+           else if (name=="GGTT_25p6") aweight*=TauG2Weights_ceBRe33_25p6;
+           else if (name=="GGTT_26p4") aweight*=TauG2Weights_ceBRe33_26p4;
+           else if (name=="GGTT_27p2") aweight*=TauG2Weights_ceBRe33_27p2;
+           else if (name=="GGTT_28p0") aweight*=TauG2Weights_ceBRe33_28p0;
+           else if (name=="GGTT_28p8") aweight*=TauG2Weights_ceBRe33_28p8;
+           else if (name=="GGTT_29p6") aweight*=TauG2Weights_ceBRe33_29p6;
+           else if (name=="GGTT_30p4") aweight*=TauG2Weights_ceBRe33_30p4;
+           else if (name=="GGTT_31p2") aweight*=TauG2Weights_ceBRe33_31p2;
+           else if (name=="GGTT_32p0") aweight*=TauG2Weights_ceBRe33_32p0;
+           else if (name=="GGTT_32p8") aweight*=TauG2Weights_ceBRe33_32p8;
+           else if (name=="GGTT_33p6") aweight*=TauG2Weights_ceBRe33_33p6;
+           else if (name=="GGTT_34p4") aweight*=TauG2Weights_ceBRe33_34p4;
+           else if (name=="GGTT_35p2") aweight*=TauG2Weights_ceBRe33_35p2;
+           else if (name=="GGTT_36p0") aweight*=TauG2Weights_ceBRe33_36p0;
+           else if (name=="GGTT_36p8") aweight*=TauG2Weights_ceBRe33_36p8;
+           else if (name=="GGTT_37p6") aweight*=TauG2Weights_ceBRe33_37p6;
+           else if (name=="GGTT_38p4") aweight*=TauG2Weights_ceBRe33_38p4;
+           else if (name=="GGTT_39p2") aweight*=TauG2Weights_ceBRe33_39p2;
+           else if (name=="GGTT_40p0") aweight*=TauG2Weights_ceBRe33_40p0;
+           else if (name=="GGTT_m0p8") aweight*=TauG2Weights_ceBRe33_m0p8;
+           else if (name=="GGTT_m1p6") aweight*=TauG2Weights_ceBRe33_m1p6;
+           else if (name=="GGTT_m2p4") aweight*=TauG2Weights_ceBRe33_m2p4;
+           else if (name=="GGTT_m3p2") aweight*=TauG2Weights_ceBRe33_m3p2;
+           else if (name=="GGTT_m4p0") aweight*=TauG2Weights_ceBRe33_m4p0;
+           else if (name=="GGTT_m4p8") aweight*=TauG2Weights_ceBRe33_m4p8;
+           else if (name=="GGTT_m5p6") aweight*=TauG2Weights_ceBRe33_m5p6;
+           else if (name=="GGTT_m6p4") aweight*=TauG2Weights_ceBRe33_m6p4;
+           else if (name=="GGTT_m7p2") aweight*=TauG2Weights_ceBRe33_m7p2;
+           else if (name=="GGTT_m8p0") aweight*=TauG2Weights_ceBRe33_m8p0;
+           else if (name=="GGTT_m8p8") aweight*=TauG2Weights_ceBRe33_m8p8;
+           else if (name=="GGTT_m9p6") aweight*=TauG2Weights_ceBRe33_m9p6;
+           else if (name=="GGTT_m10p4") aweight*=TauG2Weights_ceBRe33_m10p4;
+           else if (name=="GGTT_m11p2") aweight*=TauG2Weights_ceBRe33_m11p2;
+           else if (name=="GGTT_m12p0") aweight*=TauG2Weights_ceBRe33_m12p0;
+           else if (name=="GGTT_m12p8") aweight*=TauG2Weights_ceBRe33_m12p8;
+           else if (name=="GGTT_m13p6") aweight*=TauG2Weights_ceBRe33_m13p6;
+           else if (name=="GGTT_m14p4") aweight*=TauG2Weights_ceBRe33_m14p4;
+           else if (name=="GGTT_m15p2") aweight*=TauG2Weights_ceBRe33_m15p2;
+           else if (name=="GGTT_m16p0") aweight*=TauG2Weights_ceBRe33_m16p0;
+           else if (name=="GGTT_m16p8") aweight*=TauG2Weights_ceBRe33_m16p8;
+           else if (name=="GGTT_m17p6") aweight*=TauG2Weights_ceBRe33_m17p6;
+           else if (name=="GGTT_m18p4") aweight*=TauG2Weights_ceBRe33_m18p4;
+           else if (name=="GGTT_m19p2") aweight*=TauG2Weights_ceBRe33_m19p2;
+           else if (name=="GGTT_m20p0") aweight*=TauG2Weights_ceBRe33_m20p0;
+           else if (name=="GGTT_m20p8") aweight*=TauG2Weights_ceBRe33_m20p8;
+           else if (name=="GGTT_m21p6") aweight*=TauG2Weights_ceBRe33_m21p6;
+           else if (name=="GGTT_m22p4") aweight*=TauG2Weights_ceBRe33_m22p4;
+           else if (name=="GGTT_m23p2") aweight*=TauG2Weights_ceBRe33_m23p2;
+           else if (name=="GGTT_m24p0") aweight*=TauG2Weights_ceBRe33_m24p0;
+           else if (name=="GGTT_m24p8") aweight*=TauG2Weights_ceBRe33_m24p8;
+           else if (name=="GGTT_m25p6") aweight*=TauG2Weights_ceBRe33_m25p6;
+           else if (name=="GGTT_m26p4") aweight*=TauG2Weights_ceBRe33_m26p4;
+           else if (name=="GGTT_m27p2") aweight*=TauG2Weights_ceBRe33_m27p2;
+           else if (name=="GGTT_m28p0") aweight*=TauG2Weights_ceBRe33_m28p0;
+           else if (name=="GGTT_m28p8") aweight*=TauG2Weights_ceBRe33_m28p8;
+           else if (name=="GGTT_m29p6") aweight*=TauG2Weights_ceBRe33_m29p6;
+           else if (name=="GGTT_m30p4") aweight*=TauG2Weights_ceBRe33_m30p4;
+           else if (name=="GGTT_m31p2") aweight*=TauG2Weights_ceBRe33_m31p2;
+           else if (name=="GGTT_m32p0") aweight*=TauG2Weights_ceBRe33_m32p0;
+           else if (name=="GGTT_m32p8") aweight*=TauG2Weights_ceBRe33_m32p8;
+           else if (name=="GGTT_m33p6") aweight*=TauG2Weights_ceBRe33_m33p6;
+           else if (name=="GGTT_m34p4") aweight*=TauG2Weights_ceBRe33_m34p4;
+           else if (name=="GGTT_m35p2") aweight*=TauG2Weights_ceBRe33_m35p2;
+           else if (name=="GGTT_m36p0") aweight*=TauG2Weights_ceBRe33_m36p0;
+           else if (name=="GGTT_m36p8") aweight*=TauG2Weights_ceBRe33_m36p8;
+           else if (name=="GGTT_m37p6") aweight*=TauG2Weights_ceBRe33_m37p6;
+           else if (name=="GGTT_m38p4") aweight*=TauG2Weights_ceBRe33_m38p4;
+           else if (name=="GGTT_m39p2") aweight*=TauG2Weights_ceBRe33_m39p2;
+           else if (name=="GGTT_m40p0") aweight*=TauG2Weights_ceBRe33_m40p0;
+        }
+
 
         for (int k=0; k<nbhist; ++k){
            my_mu=save_mu;
@@ -878,6 +1357,8 @@ cout<<idsf1*muonIsoSF1<<" "<<((eff_mu_id8_data*eff_mu_iso8_data)/(eff_mu_id8_zll
     h_frFF_iso->Write();
     h_frFP_anti->Write();
     h_frFP_iso->Write();
+
+cout<<h0[0]->Integral()<<endl;
 
     bool isMC=(name!="data_obs");
     WriteHistToFileEMu(fout, h0, name, "em_0", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);

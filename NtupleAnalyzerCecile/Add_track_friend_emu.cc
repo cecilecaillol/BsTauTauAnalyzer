@@ -150,9 +150,11 @@ int main(int argc, char** argv) {
 	for (int nt=0; nt<nTracks; ++nt){
 	   float is_matched=false;
 	   TLorentzVector my_track; my_track.SetPtEtaPhiM(Track_pt[nt],Track_eta[nt],Track_phi[nt],0);
-	   //cout<<"track pt, eta, phi, dz: "<<Track_pt[nt]<<", "<<Track_eta[nt]<<", "<<Track_phi[nt]<<", "<<Track_dz[nt]<<endl;
-	   if (fabs(Track_dz[nt]-LepCand_dz[mu_index])<0.1 and fabs(Track_pt[nt]-LepCand_pt[mu_index])/LepCand_pt[mu_index]<0.2 and my_mu.DeltaR(my_track)<0.1) {is_matched=true; matched++;}
-           if (fabs(Track_dz[nt]-LepCand_dz[ele_index])<0.1 and fabs(Track_pt[nt]-LepCand_pt[ele_index])/LepCand_pt[ele_index]<0.2 and my_ele.DeltaR(my_track)<0.1) {is_matched=true; matched++;}
+	   //if (Track_pt[nt]>5) cout<<"track pt, eta, phi, dz: "<<Track_pt[nt]<<", "<<Track_eta[nt]<<", "<<Track_phi[nt]<<", "<<Track_dz[nt]<<" ("<<fabs(Track_pt[nt]-LepCand_pt[mu_index])/LepCand_pt[mu_index]<<", "<<my_mu.DeltaR(my_track)<<", "<<fabs(Track_dz[nt]-LepCand_dz[mu_index])<<"), ("<<fabs(Track_pt[nt]-LepCand_pt[ele_index])/LepCand_pt[ele_index]<<", "<<my_ele.DeltaR(my_track)<<", "<<fabs(Track_dz[nt]-LepCand_dz[ele_index])<<")"<<endl;
+	   //if (Track_pt[nt]>5 and fabs(Track_dz[nt]-LepCand_dz[mu_index])<0.05 and fabs(Track_pt[nt]-LepCand_pt[mu_index])/LepCand_pt[mu_index]<0.10 and my_mu.DeltaR(my_track)<0.001) cout<<"ok"<<endl;
+           //if (Track_pt[nt]>5 and fabs(Track_dz[nt]-LepCand_dz[ele_index])<0.05 and fabs(Track_pt[nt]-LepCand_pt[ele_index])/LepCand_pt[ele_index]<0.10 and my_ele.DeltaR(my_track)<0.001) cout<<"ok"<<endl;
+	   if (fabs(Track_pt[nt]-LepCand_pt[mu_index])/LepCand_pt[mu_index]<0.1 and my_mu.DeltaR(my_track)<0.002) {is_matched=true; matched++;}
+           if (fabs(Track_pt[nt]-LepCand_pt[ele_index])/LepCand_pt[ele_index]<0.1 and my_ele.DeltaR(my_track)<0.002) {is_matched=true; matched++;}
 	   if (!is_matched){
 	      float raw_dz=fabs(Track_dz[nt]-0.5*LepCand_dz[mu_index]-0.5*LepCand_dz[ele_index]);
 	      if (Track_pt[nt]>0.5 and raw_dz<0.05 and fabs(Track_eta[nt])<2.5) ntracks++;
@@ -163,6 +165,7 @@ int main(int argc, char** argv) {
 	      }
 	   }
 	}
+	//cout<<endl;
 	//cout<<matched<<endl;
 	//ntracks-=2;
 	//if (ntracks<0) ntracks=0;

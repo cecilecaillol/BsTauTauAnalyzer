@@ -155,6 +155,7 @@ cout<<ngen<<" "<<ngenu<<endl;
     arbre->SetBranchAddress("ChargedPFCandidates_isMatchedToGenHS", &ChargedPFCandidates_isMatchedToGenHS);
 
     arbre->SetBranchAddress("HLT_IsoMu24", &HLT_IsoMu24);
+    arbre->SetBranchAddress("HLT_IsoTkMu24", &HLT_IsoTkMu24);
     arbre->SetBranchAddress("HLT_IsoMu27", &HLT_IsoMu27);
     arbre->SetBranchAddress("pu_weight", &pu_weight);
     arbre->SetBranchAddress("puWeight", &puWeight);
@@ -180,6 +181,8 @@ cout<<ngen<<" "<<ngenu<<endl;
    arbre->AddBranchToCache(b1_8, true);*/
 
    auto b2_1=arbre->GetBranch("HLT_IsoMu24");
+   auto b2_2=arbre->GetBranch("HLT_IsoTkMu24");
+   auto b2_3=arbre->GetBranch("HLT_IsoMu27");
    //arbre->AddBranchToCache(b2_1, true);
 
    auto b3_1=arbre->GetBranch("LepCand_charge");
@@ -361,7 +364,7 @@ cout<<ngen<<" "<<ngenu<<endl;
       TFile* f_muonTrg=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2016_UL_HIPM_SingleMuonTriggers.root","read");
       h_muonIsoSF= (TH2F*) f_muonIso->Get("NUM_TightRelIso_DEN_MediumID_abseta_pt");
       h_muonIDSF= (TH2F*) f_muonID->Get("NUM_MediumID_DEN_TrackerMuons_abseta_pt");
-      h_muonTrgSF= (TH2F*) f_muonTrg->Get("NUM_IsoMu24_DEN_CutBasedIdMedium_and_PFIsoMedium_abseta_pt");
+      h_muonTrgSF= (TH2F*) f_muonTrg->Get("NUM_IsoMu24_or_IsoTkMu24_DEN_CutBasedIdMedium_and_PFIsoMedium_abseta_pt");
    }
    if (year=="2016post"){
       TFile* f_muonID=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2016_UL_ID.root","read");
@@ -369,7 +372,7 @@ cout<<ngen<<" "<<ngenu<<endl;
       TFile* f_muonTrg=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2016_UL_SingleMuonTriggers.root","read");
       h_muonIsoSF= (TH2F*) f_muonIso->Get("NUM_TightRelIso_DEN_MediumID_abseta_pt");
       h_muonIDSF= (TH2F*) f_muonID->Get("NUM_MediumID_DEN_TrackerMuons_abseta_pt");
-      h_muonTrgSF= (TH2F*) f_muonTrg->Get("NUM_IsoMu24_DEN_CutBasedIdMedium_and_PFIsoMedium_abseta_pt");
+      h_muonTrgSF= (TH2F*) f_muonTrg->Get("NUM_IsoMu24_or_IsoTkMu24_DEN_CutBasedIdMedium_and_PFIsoMedium_abseta_pt");
    }
    if (year=="2017"){
       TFile* f_muonID=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.root","read");
@@ -377,7 +380,7 @@ cout<<ngen<<" "<<ngenu<<endl;
       TFile* f_muonTrg=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2017_UL_SingleMuonTriggers.root","read");
       h_muonIsoSF= (TH2F*) f_muonIso->Get("NUM_TightRelIso_DEN_MediumID_abseta_pt");
       h_muonIDSF= (TH2F*) f_muonID->Get("NUM_MediumID_DEN_TrackerMuons_abseta_pt");
-      h_muonTrgSF= (TH2F*) f_muonTrg->Get("NUM_IsoMu24_DEN_CutBasedIdMedium_and_PFIsoMedium_abseta_pt");
+      h_muonTrgSF= (TH2F*) f_muonTrg->Get("NUM_IsoMu27_DEN_CutBasedIdMedium_and_PFIsoMedium_abseta_pt");
    }
 
    TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
@@ -395,6 +398,43 @@ cout<<ngen<<" "<<ngenu<<endl;
    TFile* f_bs=new TFile("beamspot_TF1_2018.root","read");
    TF1* h_bs_width = (TF1*) f_bs->Get("f1");
 
+   if (year=="2017"){
+      TFile* f_aco=new TFile("correction_acoplanarity_2017.root","read");
+      fit_aco = (TF1*) f_aco->Get("fit_acoplanarity");
+      TFile *f_punt=new TFile("npu_correction_2018.root");
+      correction_map=(TH2F*) f_punt->Get("correction_map");
+      TFile *f_hsnt=new TFile("nhs_correction_2018.root");
+      correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
+      TFile* f_npvs=new TFile("correction_npvs_2017.root","read");
+      h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
+      TFile* f_bs=new TFile("beamspot_TF1_2017.root","read");
+      h_bs_width = (TF1*) f_bs->Get("f1");
+   }
+   else if (year=="2016pre"){
+      TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
+      fit_aco = (TF1*) f_aco->Get("fit_A");
+      TFile *f_punt=new TFile("npu_correction_2018.root");
+      correction_map=(TH2F*) f_punt->Get("correction_map");
+      TFile *f_hsnt=new TFile("nhs_correction_2018.root");
+      correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
+      TFile* f_npvs=new TFile("correction_npvs_2018.root","read");
+      h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
+      TFile* f_bs=new TFile("beamspot_TF1_2018.root","read");
+      h_bs_width = (TF1*) f_bs->Get("f1");
+   }
+   else if (year=="2016post"){
+      TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
+      fit_aco = (TF1*) f_aco->Get("fit_A");
+      TFile *f_punt=new TFile("npu_correction_2018.root");
+      correction_map=(TH2F*) f_punt->Get("correction_map");
+      TFile *f_hsnt=new TFile("nhs_correction_2018.root");
+      correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
+      TFile* f_npvs=new TFile("correction_npvs_2018.root","read");
+      h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
+      TFile* f_bs=new TFile("beamspot_TF1_2018.root","read");
+      h_bs_width = (TF1*) f_bs->Get("f1");
+   }
+
    //TF1* fit_npvs = (TF1*) f_aco->Get("fit_npvs");
 
    TF1* f_beamspot=new TF1("f_beamspot","gaus",2.5,4.5);
@@ -406,6 +446,35 @@ cout<<ngen<<" "<<ngenu<<endl;
    f_beamspotz->SetParameter(0,1);
    f_beamspotz->SetParameter(1,-0.138);
    f_beamspotz->SetParameter(2,0.254);
+
+   if (year=="2017"){
+      f_beamspot->SetParameter(0,1);
+      f_beamspot->SetParameter(1,3.35);
+      f_beamspot->SetParameter(2,0.15);
+
+      f_beamspotz->SetParameter(0,1);
+      f_beamspotz->SetParameter(1,-0.138);
+      f_beamspotz->SetParameter(2,0.254);
+   }
+   else if (year=="2016pre"){
+      f_beamspot->SetParameter(0,1);
+      f_beamspot->SetParameter(1,3.35);
+      f_beamspot->SetParameter(2,0.15);
+
+      f_beamspotz->SetParameter(0,1);
+      f_beamspotz->SetParameter(1,-0.138);
+      f_beamspotz->SetParameter(2,0.254);
+   }
+   else if (year=="2016post"){
+      f_beamspot->SetParameter(0,1);
+      f_beamspot->SetParameter(1,3.35);
+      f_beamspot->SetParameter(2,0.15);
+
+      f_beamspotz->SetParameter(0,1);
+      f_beamspotz->SetParameter(1,-0.138);
+      f_beamspotz->SetParameter(2,0.254);
+   }
+
 
    TH1F *h_norm=new TH1F("h_norm","h_norm",10,0,10); h_norm->Sumw2();
 
@@ -449,20 +518,27 @@ cout<<ngen<<" "<<ngenu<<endl;
 
 	if (fabs(my_mu1.Eta())>2.4) continue;
         if (fabs(my_mu2.Eta())>2.4) continue;
-	if (my_mu1.Pt()<25 and my_mu2.Pt()<25) continue;
+	if ((year=="2018" or year=="2016" or year=="2016pre" or year=="2016post") and my_mu1.Pt()<25 and my_mu2.Pt()<25) continue;
+        if ((year=="2017") and my_mu1.Pt()<28 and my_mu2.Pt()<28) continue;
         if (my_mu1.Pt()<10 or my_mu2.Pt()<10) continue;
-        if (LepCand_dxy[0]>0.05 or LepCand_dxy[1]>0.05) continue;
+        if (LepCand_dxy[0]>0.2 or LepCand_dxy[1]>0.2) continue;
         if (fabs(LepCand_dz[0]-LepCand_dz[1])>0.2) continue;
 
 	// Block trigger
-        b2_1->GetEntry(i);
-        if (!HLT_IsoMu24) continue;
+        if (year=="2018") b2_1->GetEntry(i);
+        else if (year=="2017") b2_3->GetEntry(i);
+        else if (year=="2016" or year=="2016pre" or year=="2016post"){ b2_1->GetEntry(i); b2_2->GetEntry(i);}
+
+        if (year=="2018" and !HLT_IsoMu24) continue;
+        else if (year=="2017" and !HLT_IsoMu27) continue;
+        else if ((year=="2016" or year=="2016pre" or year=="2016post") and !HLT_IsoMu24 and !HLT_IsoTkMu24) continue;
+
 	if ((my_mu1+my_mu2).M()<50) continue;
 
 	// Block ID/iso
 	b3_1->GetEntry(i); b3_2->GetEntry(i); b3_3->GetEntry(i);
 	if (!LepCand_muonMediumId[0] or !LepCand_muonMediumId[1]) continue;
-	if (LepCand_muonIso[0]>0.10 or LepCand_muonIso[1]>0.10) continue;
+	if (LepCand_muonIso[0]>0.15 or LepCand_muonIso[1]>0.15) continue;
         bool is_OS=(LepCand_charge[0]*LepCand_charge[1]<0);
 
 	// Block weights

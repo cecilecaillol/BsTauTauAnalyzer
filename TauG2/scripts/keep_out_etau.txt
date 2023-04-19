@@ -20,6 +20,7 @@ keep HLT_Ele35_WPTight_Gsf
 keep HLT_Ele27_WPTight_Gsf
 keep HLT_Ele25_eta2p1_WPTight_Gsf
 keep HLT_Ele32_WPTight_Gsf_L1DoubleEG
+keep HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20
 keep HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1
 keep HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau30
 keep HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1
@@ -53,7 +54,8 @@ keep LepCand_gen
 keep LepCand_id
 keep LepCand_charge
 keep LepCand_dxy
-keep LepCand_dz
+keep LepCand_dz*
+keep LepCand_tk*
 keep LepCand_vse
 keep LepCand_vsmu
 keep LepCand_vsjet

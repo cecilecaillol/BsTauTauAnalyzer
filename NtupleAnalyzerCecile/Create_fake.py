@@ -16,6 +16,7 @@ if __name__ == "__main__":
     fST=ROOT.TFile("output_etau_"+options.year+"/ST.root","r")
     fDY=ROOT.TFile("output_etau_"+options.year+"/DYrescaled.root","r")
     fData=ROOT.TFile("output_etau_"+options.year+"/EGamma.root","r")
+    if options.year=="2017": fData=ROOT.TFile("output_etau_"+options.year+"/SingleElectron.root","r")
     fout=ROOT.TFile("output_etau_"+options.year+"/Fake.root","recreate")
 
     ncat=9
@@ -27,6 +28,8 @@ if __name__ == "__main__":
           postfix=postfixName[k]
           h0=fData.Get("et_"+str(j)+"_anti/data_obs"+postfix)
           h0.Add(fVV.Get("et_"+str(j)+"_anti/VV"+postfix),-1)
+	  print("et_"+str(j)+"_anti/ZLL"+postfix)
+	  print(fDY.Get("et_"+str(j)+"_anti/ZLL"+postfix).Integral())
           h0.Add(fDY.Get("et_"+str(j)+"_anti/ZLL"+postfix),-1)
           h0.Add(fDY.Get("et_"+str(j)+"_anti/ZTT"+postfix),-1)
           h0.Add(fTT.Get("et_"+str(j)+"_anti/TT"+postfix),-1)
