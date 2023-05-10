@@ -1,0 +1,49 @@
+executable	= FinalSelection_tautau.sh
+output		= logs/FinalSelection_tautau_$(Process).out
+error		= logs/FinalSelection_tautau_$(Process).error
+log 		= logs/FinalSelection_tautau.log
+request_cpus = 1
++JobFlavour = "workday"
+requirements = (OpSysAndVer =?= "CentOS7")
+
+
+arguments = 2018 GGToTauTau
+queue 1
+arguments = 2018 GGToWW
+queue 1
+arguments = 2018 DY
+queue 1
+arguments = 2018 WW2L2Nu
+queue 1
+arguments = 2018 WZ2Q2L
+queue 1
+arguments = 2018 WZ3LNu
+queue 1
+arguments = 2018 ZZ2L2Nu
+queue 1
+arguments = 2018 ZZ2Q2L
+queue 1
+arguments = 2018 ZZ4L
+queue 1
+arguments = 2018 TTTo2L2Nu
+queue 1
+arguments = 2018 TTToHadronic
+queue 1
+arguments = 2018 TTToSemiLeptonic
+queue 1
+arguments = 2018 ST_t_top
+queue 1
+arguments = 2018 ST_t_antitop
+queue 1
+arguments = 2018 ST_tW_top
+queue 1
+arguments = 2018 ST_tW_antitop
+queue 1
+arguments = 2018 TauA
+queue 1
+arguments = 2018 TauB
+queue 1
+arguments = 2018 TauC
+queue 1
+arguments = 2018 TauD
+queue 1
