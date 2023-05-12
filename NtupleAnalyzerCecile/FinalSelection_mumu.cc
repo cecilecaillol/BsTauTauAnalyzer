@@ -560,8 +560,8 @@ cout<<ngen<<" "<<ngenu<<endl;
 	float aco_weight=1.0;
         if (name!="data_obs"){
            aweight*=genWeight;
-           //aweight*=pu_weight;
-           aweight*=puWeight;
+           aweight*=pu_weight;//FIXME
+           //aweight*=puWeight; //FIXME
            float trgsf1=1.0;
            float recosf1=1.0;
            float idsf1=1.0;
@@ -619,8 +619,8 @@ cout<<ngen<<" "<<ngenu<<endl;
 
 	float aco = (1.0 -fabs(my_mu1.DeltaPhi(my_mu2))/3.14159);
 	if (sample=="data_obs") {puWeight=1; puWeightUp=1; puWeightDown=1;}
-//aco_weight=1.0;//FIXME
-//npvs_weight=1.0;//FIXME
+aco_weight=1.0;//FIXME
+npvs_weight=1.0;//FIXME
 	if (is_OS){
 	   h_dimumass->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight);
 	   h0->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight);
@@ -660,7 +660,7 @@ cout<<ngen<<" "<<ngenu<<endl;
            h5SS->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight*puWeightUp/puWeight);
         }
 
-	b6_1->GetEntry(i); b6_2->GetEntry(i); b6_3->GetEntry(i);
+	/*b6_1->GetEntry(i); b6_2->GetEntry(i); b6_3->GetEntry(i);
 
 	 //0p2 window width
         int ntracks1=0;
@@ -834,7 +834,7 @@ cout<<ngen<<" "<<ngenu<<endl;
         }
 
         if ((name=="data_obs" and ntracksAll<10) or (name!="data_obs" and sum_ntracks<10)) fillTreeRescaling(tree2,my_mu1.Pt(),my_mu1.Eta(),my_mu1.Phi(),my_mu2.Pt(),my_mu2.Eta(),my_mu2.Phi(),int(is_OS),aco,sum_ntracks,ntracksAll,aweight,weight,npvs_weight,ntpu_weight,nths_weight,aco_weight);
-
+*/
     } // end of loop over events
     TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();

@@ -135,7 +135,7 @@ if __name__ == "__main__":
           physics_model.write(categories[c])
           physics_model.write("_bin")
           physics_model.write(str(jj))
-          physics_model.write("('")
+          physics_model.write('("')
           physics_model.write(str(total.GetParameter(0))+"+"+str(total.GetParameter(1))+"*@0+"+str(total.GetParameter(2))+"*@0*@0+"+str(total.GetParameter(3))+"*@0*@0*@0+"+str(total.GetParameter(4))+"*@0*@0*@0*@0+"+str(total.GetParameter(5))+"*@0*@0*@0*@0*@0")
           physics_model.write('"')
           physics_model.write(",atau)')\n")

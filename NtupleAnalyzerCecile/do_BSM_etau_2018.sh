@@ -105,5 +105,5 @@
 
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToTauTau.root output_etau_2018/GGTT.root GGTT GGTT
 
-hadd -f output_etau_2018/signal.root output_etau_2018/GGTT.root output_etau_2018/GGTT_*p*.root 
+hadd -f output_etau_2018/signal.root output_etau_2018/GGTT_*p*.root output_etau_2018/GGTT.root
 

@@ -398,13 +398,15 @@ class Analysis(Module):
 
         if self.isMC:
             for genp in event.selectedGenParticles:
-                if abs(genp.pdgId)==15 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==23:
+                if abs(genp.pdgId)==15 and (abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==23 or abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==22):
                     event.genCand.append(genp)
 		if (abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==23):
                     event.genCand.append(genp)
                 if (abs(genp.pdgId)==11 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==23):
                     event.genCand.append(genp)
-                if abs(genp.pdgId)==6:
+                if abs(genp.pdgId)==6: # for ttbar reweighting
+                    event.genCand.append(genp)
+                if (abs(genp.pdgId)==24 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==22): # for GGWWW
                     event.genCand.append(genp)
 
         if self.isMC:

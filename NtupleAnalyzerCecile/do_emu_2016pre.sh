@@ -24,15 +24,15 @@ hadd -f output_emu_2016pre/VV.root output_emu_2016pre/WW2L2Nu.root output_emu_20
 ./FinalSelection_emu.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2016pre/TTTo2L2Nu_small.root output_emu_2016pre/TTTo2L2Nu.root TTTo2L2Nu TT
 hadd -f output_emu_2016pre/TT.root output_emu_2016pre/TTToHadronic.root output_emu_2016pre/TTToSemiLeptonic.root output_emu_2016pre/TTTo2L2Nu.root
 hadd -f output_emu_2016pre/MC.root output_emu_2016pre/DYrescaled.root output_emu_2016pre/ST.root output_emu_2016pre/VV.root output_emu_2016pre/TT.root
-./FinalSelection_emu.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2016pre/GGToTauTau.root output_emu_2016pre/GGTT.root GGTT GGTT
-./FinalSelection_emu.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2016pre/GGToWW.root output_emu_2016pre/GGWW.root GGWW GGWW
+#./FinalSelection_emu.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2016pre/GGToTauTau.root output_emu_2016pre/GGTT.root GGTT GGTT
+#./FinalSelection_emu.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2016pre/GGToWW.root output_emu_2016pre/GGWW.root GGWW GGWW
 
 python Create_fake_emu.py --year=2016pre
 
 
 
-hadd -f datacard_emu_2016pre.root output_emu_2016pre/Fake.root output_emu_2016pre/MC.root output_emu_2016pre/MuonEG.root output_emu_2016pre/GGTT.root output_emu_2016pre/GGWW.root 
+hadd -f datacard_emu_2016pre.root output_emu_2016pre/Fake.root output_emu_2016pre/MC.root output_emu_2016pre/MuonEG.root #output_emu_2016pre/GGTT.root output_emu_2016pre/GGWW.root 
 
-sh do_emu_BSM_2016pre.sh
-python Prepare_BSM_combine.py --year="2016pre" --channel="emu"
-hadd -f datacard_emu_2016pre.root output_emu_2016pre/Fake.root output_emu_2016pre/MC.root output_emu_2016pre/MuonEG.root output_emu_2016pre/GGTT.root output_emu_2016pre/GGWW.root output_emu_2016pre/bsm.root
+#sh do_emu_BSM_2016pre.sh
+#python Prepare_BSM_combine.py --year="2016pre" --channel="emu"
+#hadd -f datacard_emu_2016pre.root output_emu_2016pre/Fake.root output_emu_2016pre/MC.root output_emu_2016pre/MuonEG.root output_emu_2016pre/GGTT.root output_emu_2016pre/GGWW.root output_emu_2016pre/bsm.root

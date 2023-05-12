@@ -5,6 +5,7 @@
 ./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/MuonEGD.root output_emu_2018/MuonEGD.root data_obs data_obs
 hadd -f output_emu_2018/MuonEG.root output_emu_2018/MuonEGA.root output_emu_2018/MuonEGB.root output_emu_2018/MuonEGC.root output_emu_2018/MuonEGD.root
 ./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/DY.root output_emu_2018/DY.root DY ZTT
+./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/DYemu.root output_emu_2018/DYemu.root DYemu ZTT
 python Relax_DY_em.py --year=2018
 ./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/W.root output_emu_2018/W.root W W 
 ./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/ST_t_antitop.root output_emu_2018/ST_t_antitop.root ST_t_antitop ST
@@ -32,6 +33,6 @@ python Create_fake_emu.py --year=2018
 
 hadd -f datacard_emu_2018.root output_emu_2018/Fake.root output_emu_2018/MC.root output_emu_2018/MuonEG.root output_emu_2018/GGTT.root output_emu_2018/GGWW.root 
 
-sh do_emu_BSM_2018.sh
-python Prepare_BSM_combine.py --year="2018" --channel="emu"
-hadd -f datacard_emu_2018.root output_emu_2018/Fake.root output_emu_2018/MC.root output_emu_2018/MuonEG.root output_emu_2018/GGTT.root output_emu_2018/GGWW.root output_emu_2018/bsm.root
+#sh do_emu_BSM_2018.sh
+#python Prepare_BSM_combine.py --year="2018" --channel="emu"
+#hadd -f datacard_emu_2018.root output_emu_2018/Fake.root output_emu_2018/MC.root output_emu_2018/MuonEG.root output_emu_2018/GGTT.root output_emu_2018/GGWW.root output_emu_2018/bsm.root

@@ -1,0 +1,3 @@
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleElectron/SingleElectron_Run2016postF-RunIISummer20UL16_NanoAODv9/230421_134202/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleElectron/SingleElectron_Run2016postG-RunIISummer20UL16_NanoAODv9/230421_134221/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleElectron/SingleElectron_Run2016postH-RunIISummer20UL16_NanoAODv9/230421_134237/0000

@@ -5,7 +5,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 #parser.add_argument('--tes', default="nominal", choices=['nominal', 'up', 'down'], help="TES?")
-parser.add_argument('--year', default="2016", choices=['2016', '2017', '2018'], help="Year?")
+parser.add_argument('--year')
 options = parser.parse_args()
 
 hist=[
@@ -29,20 +29,20 @@ hist=[
 "h_tauFRnt_W_dm11_VVVL","h_tauFRnt_W_dm11_M"
 ]
 
-fileData=ROOT.TFile("output_etau_2018/EGamma.root","r")
-fileMC=ROOT.TFile("output_etau_2018/MC.root","r")
-fileDataSub=ROOT.TFile("output_etau_2018/DataSub.root","recreate")
-
-if options.year=="2017":
-  fileData=ROOT.TFile("output_etau_2017/SingleElectron.root","r")
-  fileMC=ROOT.TFile("output_etau_2017/MC.root","r")
-  fileDataSub=ROOT.TFile("output_etau_2017/DataSub.root","recreate") 
+fileData=ROOT.TFile("output_etau_"+options.year+"/EGamma.root","r")
+if options.year=="2018": fileData=ROOT.TFile("output_etau_"+options.year+"/EGamma.root","r")
+fileMC=ROOT.TFile("output_etau_"+options.year+"/MC.root","r")
+fileDataSub=ROOT.TFile("output_etau_"+options.year+"/DataSub.root","recreate")
 
 ncat=20+16
 
 for i in range (0,ncat):
    Data=fileData.Get(hist[i])
+   for j in range(1,Data.GetSize()-1):
+       if Data.GetBinContent(j)<1: Data.SetBinError(j,1.8)
    Data.Add(fileMC.Get(hist[i]),-1)
+   for j in range(1,Data.GetSize()-1):
+       if Data.GetBinContent(j)<0: Data.SetBinContent(j,0.0)
    Data.SetName(hist[i])
    fileDataSub.cd()
    Data.Write()

@@ -31,12 +31,12 @@ hadd -f output_etau_2016pre/VV.root output_etau_2016pre/WW2L2Nu.root output_etau
 ./FinalSelection_etau.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016pre/TTTo2L2Nu.root output_etau_2016pre/TTTo2L2Nu.root TTTo2L2Nu TT
 hadd -f output_etau_2016pre/TT.root output_etau_2016pre/TTToHadronic.root output_etau_2016pre/TTToSemiLeptonic.root output_etau_2016pre/TTTo2L2Nu.root
 hadd -f output_etau_2016pre/MC.root output_etau_2016pre/DYrescaled.root output_etau_2016pre/ST.root output_etau_2016pre/VV.root output_etau_2016pre/TT.root
-./FinalSelection_etau.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016pre/GGToTauTau.root output_etau_2016pre/GGTT.root GGTT GGTT
-./FinalSelection_etau.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016pre/GGToWW.root output_etau_2016pre/GGWW.root GGWW GGWW
+#./FinalSelection_etau.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016pre/GGToTauTau.root output_etau_2016pre/GGTT.root GGTT GGTT
+#./FinalSelection_etau.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016pre/GGToWW.root output_etau_2016pre/GGWW.root GGWW GGWW
 
-cp output_etau_2016pre/GGTT.root output_etau_2016pre/signal.root
+#cp output_etau_2016pre/GGTT.root output_etau_2016pre/signal.root
 #sh do_etau_BSM_2016pre.sh
 #python Prepare_BSM_combine.py --year="2016pre" --channel="etau"
 
 python Create_fake.py --year=2016pre
-hadd -f datacard_etau_2016pre.root output_etau_2016pre/Fake.root output_etau_2016pre/MC.root  output_etau_2016pre/SingleElectron.root output_etau_2016pre/GGTT.root output_etau_2016pre/GGWW.root output_etau_2016pre/W.root #output_etau_2016pre/bsm.root
+hadd -f datacard_etau_2016pre.root output_etau_2016pre/Fake.root output_etau_2016pre/MC.root  output_etau_2016pre/SingleElectron.root output_etau_2016pre/W.root #output_etau_2016pre/GGTT.root output_etau_2016pre/GGWW.root #output_etau_2016pre/bsm.root

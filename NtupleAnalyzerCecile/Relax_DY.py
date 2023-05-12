@@ -4,12 +4,13 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--year', default="2016", choices=['2016', '2017', '2018'], help="Which TES?")
+    parser.add_argument('--year')
 
     options = parser.parse_args()
-    postfixName=["","_CMS_tauid_pt30to35_2018Down","_CMS_tauid_pt30to35_2018Up","_CMS_tauid_pt35to40_2018Down","_CMS_tauid_pt35to40_2018Up","_CMS_tauid_ptgt40_2018Down","_CMS_tauid_ptgt40_2018Up","_CMS_taues_dm0_2018Down","_CMS_taues_dm0_2018Up","_CMS_taues_dm1_2018Down","_CMS_taues_dm1_2018Up","_CMS_taues_3prong_2018Down","_CMS_taues_3prong_2018Up","_CMS_etauFR_barrel_2018Down","_CMS_etauFR_barrel_2018Up","_CMS_etauFR_endcap_2018Down","_CMS_etauFR_endcap_2018Up","_CMS_etauFES_dm0_2018Down","_CMS_etauFES_dm0_2018Up","_CMS_etauFES_dm1_2018Down","_CMS_etauFES_dm1_2018Up","_CMS_pileup_2018Down","_CMS_pileup_2018Up","_CMS_etautrg_2018Down","_CMS_etautrg_2018Up","_CMS_etrg_2018Down","_CMS_etrg_2018Up"]
+    postfixName=["","_CMS_tauid_stat1_dm0_2018Down","_CMS_tauid_stat1_dm0_2018Up","_CMS_tauid_stat1_dm1_2018Down","_CMS_tauid_stat1_dm1_2018Up","_CMS_tauid_stat1_dm10_2018Down","_CMS_tauid_stat1_dm10_2018Up","_CMS_tauid_stat1_dm11_2018Down","_CMS_tauid_stat1_dm11_2018Up","_CMS_tauid_stat2_dm0_2018Down","_CMS_tauid_stat2_dm0_2018Up","_CMS_tauid_stat2_dm1_2018Down","_CMS_tauid_stat2_dm1_2018Up","_CMS_tauid_stat2_dm10_2018Down","_CMS_tauid_stat2_dm10_2018Up","_CMS_tauid_stat2_dm11_2018Down","_CMS_tauid_stat2_dm11_2018Up","_CMS_tauid_syst_allerasDown","_CMS_tauid_syst_allerasUp","_CMS_tauid_syst_2018Down","_CMS_tauid_syst_2018Up","_CMS_tauid_syst_dm0_2018Down","_CMS_tauid_syst_dm0_2018Up","_CMS_tauid_syst_dm1_2018Down","_CMS_tauid_syst_dm1_2018Up","_CMS_tauid_syst_dm10_2018Down","_CMS_tauid_syst_dm10_2018Up","_CMS_tauid_syst_dm11_2018Down","_CMS_tauid_syst_dm11_2018Up","_CMS_taues_dm0_2018Down","_CMS_taues_dm0_2018Up","_CMS_taues_dm1_2018Down","_CMS_taues_dm1_2018Up","_CMS_taues_3prong_2018Down","_CMS_taues_3prong_2018Up","_CMS_etauFR_barrel_2018Down","_CMS_etauFR_barrel_2018Up","_CMS_etauFR_endcap_2018Down","_CMS_etauFR_endcap_2018Up","_CMS_etauFES_dm0_2018Down","_CMS_etauFES_dm0_2018Up","_CMS_etauFES_dm1_2018Down","_CMS_etauFES_dm1_2018Up","_CMS_pileup_2018Down","_CMS_pileup_2018Up","_CMS_etautrg_2018Down","_CMS_etautrg_2018Up","_CMS_etrg_2018Down","_CMS_etrg_2018Up"]
+#"","_CMS_tauid_pt30to35_2018Down","_CMS_tauid_pt30to35_2018Up","_CMS_tauid_pt35to40_2018Down","_CMS_tauid_pt35to40_2018Up","_CMS_tauid_ptgt40_2018Down","_CMS_tauid_ptgt40_2018Up","_CMS_taues_dm0_2018Down","_CMS_taues_dm0_2018Up","_CMS_taues_dm1_2018Down","_CMS_taues_dm1_2018Up","_CMS_taues_3prong_2018Down","_CMS_taues_3prong_2018Up","_CMS_etauFR_barrel_2018Down","_CMS_etauFR_barrel_2018Up","_CMS_etauFR_endcap_2018Down","_CMS_etauFR_endcap_2018Up","_CMS_etauFES_dm0_2018Down","_CMS_etauFES_dm0_2018Up","_CMS_etauFES_dm1_2018Down","_CMS_etauFES_dm1_2018Up","_CMS_pileup_2018Down","_CMS_pileup_2018Up","_CMS_etautrg_2018Down","_CMS_etautrg_2018Up","_CMS_etrg_2018Down","_CMS_etrg_2018Up"]
 
-    nbhist=1#+26 
+    nbhist=1#+48 
 
     fDY=ROOT.TFile("output_etau_"+options.year+"/DY.root","r")
     fout=ROOT.TFile("output_etau_"+options.year+"/DYrescaled.root","recreate")

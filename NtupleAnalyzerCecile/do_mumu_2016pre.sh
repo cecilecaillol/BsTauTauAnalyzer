@@ -8,6 +8,6 @@ hadd -f output_mumu_2016pre/Data.root output_mumu_2016pre/SingleMuonB.root outpu
 ./FinalSelection_mumu.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mumu_2016pre/DY.root output_mumu_2016pre/DY.root DY DY
 ./FinalSelection_mumu.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mumu_2016pre/TTTo2L2Nu.root output_mumu_2016pre/TTTo2L2Nu.root TTTo2L2Nu TT
 ./FinalSelection_mumu.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mumu_2016pre/WW2L2Nu.root output_mumu_2016pre/WW2L2Nu.root WW2L2Nu VV
-./FinalSelection_mumu.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mumu_2016pre/GGMM.root output_mumu_2016pre/GGMM.root GGMM GGMM
+#./FinalSelection_mumu.exe 2016pre /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_mumu_2016pre/GGMM.root output_mumu_2016pre/GGMM.root GGMM GGMM
 python Create_fake_mumu.py --year=2016pre
-hadd -f datacard_mumu_2016pre.root output_mumu_2016pre/Fake.root output_mumu_2016pre/TTTo2L2Nu.root output_mumu_2016pre/WW2L2Nu.root output_mumu_2016pre/Data.root output_mumu_2016pre/DY.root output_mumu_2016pre/GGMM.root
+hadd -f datacard_mumu_2016pre.root output_mumu_2016pre/Fake.root output_mumu_2016pre/TTTo2L2Nu.root output_mumu_2016pre/WW2L2Nu.root output_mumu_2016pre/Data.root output_mumu_2016pre/DY.root #output_mumu_2016pre/GGMM.root

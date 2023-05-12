@@ -65,8 +65,8 @@ int main(int argc, char** argv) {
     start_pos = input.find("2016post/");
     if(start_pos != std::string::npos)  input_friend.replace(start_pos, 9, "2016post/friend_");
     cout<<input<<" "<<input_friend<<endl;
-    TFile *f_Friend = new TFile(input_friend.c_str());//FIXME
-    TTree *ami = (TTree*) f_Friend->Get("friend_tree");
+    //TFile *f_Friend = new TFile(input_friend.c_str());//FIXME
+    //TTree *ami = (TTree*) f_Friend->Get("friend_tree");
 
 
     float xs=1.0; float weight=1.0; float luminosity=59830.0;
@@ -74,6 +74,7 @@ int main(int argc, char** argv) {
     if (year=="2016pre") luminosity=19520.0;
     if (year=="2016post") luminosity=16810.0;
     if (sample=="Z" or sample=="DY" or sample=="ZL" or sample=="ZTT" or sample=="ZJ" or sample=="ZLL"){ xs=6225.42; weight=luminosity*xs/ngen;}
+    else if (sample=="DYemu"){ xs=1967.0*(0.178+0.174)*(0.178+0.174); weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt100to250"){ xs=689.75; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt250to400"){ xs=24.51; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt400to600"){cout<<"trouve"<<endl; xs=3.110; weight=luminosity*xs/ngen;}
@@ -112,6 +113,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
     //if (output.find("renano") < 140){
       if (sample=="DY") weight*=0.318*0.985;
+      else if (sample=="DYemu") weight*=0.116*0.9713;
       else if (sample=="TTTo2L2Nu") weight*=0.657;
       else if (sample=="TTToSemiLeptonic") weight*=0.401;
       else if (sample=="TTToHadronic") weight*=0.170;
@@ -283,11 +285,11 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
     arbre->SetBranchAddress("TauG2Weights_ceBRe33_m0p8", &TauG2Weights_ceBRe33_m0p8);
 
 
-    ami->SetBranchAddress("ntracks_friend", &ntracks_friend);
-    ami->SetBranchAddress("ntracksHS_friend", &ntracksHS_friend);
-    ami->SetBranchAddress("ntracksPU_friend", &ntracksPU_friend);
+    //ami->SetBranchAddress("ntracks_friend", &ntracks_friend);
+    //ami->SetBranchAddress("ntracksHS_friend", &ntracksHS_friend);
+    //ami->SetBranchAddress("ntracksPU_friend", &ntracksPU_friend);
 
-    arbre->AddFriend(ami);
+    //arbre->AddFriend(ami);
 
    int nbhist=1;
    int nbhist_offset=0;
@@ -343,8 +345,10 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    float bins8[] = {0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity
 
    // Signal region
-   /*float bins0[] = {25,40,55,70,85,100,150,200,350,500};//mvis
-   float bins1[] = {25,40,55,70,85,100,150,200,350,500};//mvis
+   /*//float bins0[] = {25,40,55,70,85,100,150,200,350,500};//mvis
+   //float bins1[] = {25,40,55,70,85,100,150,200,350,500};//mvis
+   float bins0[] = {30,45,60,75,90,105,120,150,180,210};
+   float bins1[] = {30,45,60,75,90,105,120,150,180,210};
    float bins2[] = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120};//mvis
    float bins3[] = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120};//mvis
    float bins4[] = {25,40,55,70,85,100,150,200,350,500};//mvis
@@ -456,8 +460,38 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
    TString uncertainties[11]={"","_CMS_pileup_2018Down","_CMS_pileup_2018Up","_CMS_topptreweightingDown","_CMS_topptreweightingUp","_CMS_emutrg_lowmuhighe_2018Down","_CMS_emutrg_lowmuhighe_2018Up","_CMS_emutrg_highmulowe_2018Down","_CMS_emutrg_highmulowe_2018Up","_CMS_emutrg_highmuhighe_2018Down","_CMS_emutrg_highmuhighe_2018Up"};
    TString fake_uncertainties[1]={""};
+
    TFile* f_eleIDSF=new TFile("scalefactors/egammaEffi.txt_Ele_wp80iso_EGM2D.root","read");
    TH2F* h_eleIDSF= (TH2F*) f_eleIDSF->Get("EGamma_SF2D");
+   TFile* f_eleRecoSF=new TFile("scalefactors/egammaEffi_ptAbove20.txt_EGM2D_UL2018.root","read");
+   TH2F* h_eleRecoSF= (TH2F*) f_eleRecoSF->Get("EGamma_SF2D");
+   TFile* f_eleRecoBelowSF=new TFile("scalefactors/egammaEffi_ptBelow20.txt_EGM2D_UL2018.root","read");
+   TH2F* h_eleRecoBelowSF= (TH2F*) f_eleRecoBelowSF->Get("EGamma_SF2D");
+
+   if (year=="2017"){
+      TFile* f_eleIDSF=new TFile("scalefactors/egammaEffi.txt_EGM2D_MVA80iso_UL17.root","read");
+      h_eleIDSF= (TH2F*) f_eleIDSF->Get("EGamma_SF2D");
+      TFile* f_eleRecoSF=new TFile("scalefactors/egammaEffi_ptAbove20.txt_EGM2D_UL2017.root","read");
+      h_eleRecoSF= (TH2F*) f_eleRecoSF->Get("EGamma_SF2D");
+      TFile* f_eleRecoBelowSF=new TFile("scalefactors/egammaEffi_ptBelow20.txt_EGM2D_UL2017.root","read");
+      h_eleRecoBelowSF= (TH2F*) f_eleRecoBelowSF->Get("EGamma_SF2D");
+   }
+   else if (year=="2016post"){
+      TFile* f_eleIDSF=new TFile("scalefactors/egammaEffi.txt_Ele_wp80iso_postVFP_EGM2D.root","read");
+      h_eleIDSF= (TH2F*) f_eleIDSF->Get("EGamma_SF2D");
+      TFile* f_eleRecoSF=new TFile("scalefactors/egammaEffi_ptAbove20.txt_EGM2D_UL2016postVFP.root","read");
+      h_eleRecoSF= (TH2F*) f_eleRecoSF->Get("EGamma_SF2D");
+      TFile* f_eleRecoBelowSF=new TFile("scalefactors/egammaEffi_ptBelow20.txt_EGM2D_UL2016postVFP.root","read");
+      h_eleRecoBelowSF= (TH2F*) f_eleRecoBelowSF->Get("EGamma_SF2D");
+   }
+   else if (year=="2016pre"){
+      TFile* f_eleIDSF=new TFile("scalefactors/egammaEffi.txt_Ele_wp80iso_preVFP_EGM2D.root","read");
+      h_eleIDSF= (TH2F*) f_eleIDSF->Get("EGamma_SF2D");
+      TFile* f_eleRecoSF=new TFile("scalefactors/egammaEffi_ptAbove20.txt_EGM2D_UL2016preVFP.root","read");
+      h_eleRecoSF= (TH2F*) f_eleRecoSF->Get("EGamma_SF2D");
+      TFile* f_eleRecoBelowSF=new TFile("scalefactors/egammaEffi_ptBelow20.txt_EGM2D_UL2016preVFP.root","read");
+      h_eleRecoBelowSF= (TH2F*) f_eleRecoBelowSF->Get("EGamma_SF2D");
+   }
 
    TFile* f_muonID=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2018_UL_ID.root","read");
    TFile* f_muonIso=new TFile("scalefactors/Efficiencies_muon_generalTracks_Z_Run2018_UL_ISO.root","read");
@@ -540,24 +574,24 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    }
 
 
-   TFile* f_fr=new TFile("emu_fr_2018.root","read");
+   TFile* f_fr=new TFile("fakerate/emu_fr_2018.root","read");
    TH2F* h_fr=(TH2F*) f_fr->Get("FR");
    TH2F* h_frantimu=(TH2F*) f_fr->Get("FRantimu");
    TF1* fit_frnt=(TF1*) f_fr->Get("fit_frnt");
    if (year=="2017"){
-      TFile* f_fr=new TFile("emu_fr_2018.root","read");
+      TFile* f_fr=new TFile("fakerate/emu_fr_2018.root","read");
       h_fr=(TH2F*) f_fr->Get("FR");
       h_frantimu=(TH2F*) f_fr->Get("FRantimu");
       fit_frnt=(TF1*) f_fr->Get("fit_frnt");
    }
    else if (year=="2016pre"){
-      TFile* f_fr=new TFile("emu_fr_2018.root","read");
+      TFile* f_fr=new TFile("fakerate/emu_fr_2018.root","read");
       h_fr=(TH2F*) f_fr->Get("FR");
       h_frantimu=(TH2F*) f_fr->Get("FRantimu");
       fit_frnt=(TF1*) f_fr->Get("fit_frnt");
    }
    else if (year=="2016post"){
-      TFile* f_fr=new TFile("emu_fr_2018.root","read");
+      TFile* f_fr=new TFile("fakerate/emu_fr_2018.root","read");
       h_fr=(TH2F*) f_fr->Get("FR");
       h_frantimu=(TH2F*) f_fr->Get("FRantimu");
       fit_frnt=(TF1*) f_fr->Get("fit_frnt");
@@ -621,9 +655,9 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    auto b7_4=arbre->GetBranch("Track_phi");
    auto b7_5=arbre->GetBranch("Track_pt");
 
-   auto b8_1=ami->GetBranch("ntracks_friend");
-   auto b8_3=ami->GetBranch("ntracksHS_friend");
-   auto b8_4=ami->GetBranch("ntracksPU_friend");
+   //auto b8_1=ami->GetBranch("ntracks_friend");
+   //auto b8_3=ami->GetBranch("ntracksHS_friend");
+   //auto b8_4=ami->GetBranch("ntracksPU_friend");
 
    auto b9_1=arbre->GetBranch("TauG2Weights_ceBRe33_0p0");
    auto b9_2=arbre->GetBranch("TauG2Weights_ceBRe33_0p8");
@@ -847,7 +881,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
 	// Trigger block
 	if (year=="2017" or year=="2018"){b2_1->GetEntry(i); b2_2->GetEntry(i);}
-	else{b2_3->GetEntry(i); b2_4->GetEntry(i);}
+	else {b2_1->GetEntry(i); b2_2->GetEntry(i); b2_3->GetEntry(i); b2_4->GetEntry(i); }
 
 	bool is_mu8ele23=false;
 	bool is_mu23ele12=false;
@@ -857,11 +891,20 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 	   if (!is_mu8ele23 and !is_mu23ele12) continue;
 	}
 	else{
-           is_mu8ele23=(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ and my_ele.Pt()>24 and my_mu.Pt()>10);
-           is_mu23ele12=(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ and my_ele.Pt()>13 and my_mu.Pt()>24);
+           /*if (sample=="aaadata_obs" and year=="2016post" and input!="/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2016post/MuonEGF.root") is_mu8ele23=(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ and my_ele.Pt()>24 and my_mu.Pt()>10);
+	   else is_mu8ele23=(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL and my_ele.Pt()>24 and my_mu.Pt()>10);
+           if (sample=="aaadata_obs" and year=="2016post" and input!="/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2016post/MuonEGF.root") is_mu23ele12=(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ and my_ele.Pt()>13 and my_mu.Pt()>24);
+ 	   else is_mu23ele12=(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL and my_ele.Pt()>13 and my_mu.Pt()>24);*/
+	   if (sample=="data_obs"){
+              is_mu8ele23=((HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL or HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ) and my_ele.Pt()>24 and my_mu.Pt()>10);
+              is_mu23ele12=((HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL or HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ) and my_ele.Pt()>13 and my_mu.Pt()>24);
+	   }
+	   else{
+              is_mu8ele23=(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL and my_ele.Pt()>24 and my_mu.Pt()>10);
+              is_mu23ele12=(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL and my_ele.Pt()>13 and my_mu.Pt()>24);
+	   }
            if (!is_mu8ele23 and !is_mu23ele12) continue;
         }
-
 
 	// Block ID/iso/charge
 	b3_1->GetEntry(i); b3_2->GetEntry(i); b3_3->GetEntry(i); b3_4->GetEntry(i); b3_5->GetEntry(i); b3_6->GetEntry(i); b3_7->GetEntry(i); b3_8->GetEntry(i);b3_9->GetEntry(i); b3_10->GetEntry(i); b3_11->GetEntry(i);
@@ -871,7 +914,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 //cout<<LepCand_trgmatch[ele_index]<<" "<<LepCand_trgmatch[mu_index]<<endl;
 	//if (input=="/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/MuonEGB.root" and !LepCand_trgmatch[ele_index]) continue;
         //if (input!="/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/MuonEGB.root" and (!LepCand_trgmatch[ele_index] or !LepCand_trgmatch[mu_index])) continue;
-        if (name!="data_obs" and (!LepCand_trgmatch[ele_index] or !LepCand_trgmatch[mu_index])) continue;
+        //if (name!="data_obs" and (!LepCand_trgmatch[ele_index] or !LepCand_trgmatch[mu_index])) continue; //FIXME doesnt work in 2016
 
 	bool is_OS = (LepCand_charge[mu_index]*LepCand_charge[ele_index]<0);
 	/*bool is_isolated = (LepCand_muonIso[mu_index]<0.20 and LepCand_eleIso[ele_index]<0.15);
@@ -925,11 +968,14 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 	   float ept=my_ele.Pt();
 	   if (ept>120) ept=119;
            float elIDSF = h_eleIDSF->GetBinContent(h_eleIDSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleIDSF->GetYaxis()->FindBin(ept));
-	   aweight=aweight*elIDSF;
-           aweight*=h_npvs_weight->GetBinContent(h_npvs_weight->GetXaxis()->FindBin(PV_npvs));
+           float elRecoSF = 1.0;
+           if (ept<20) elRecoSF = h_eleRecoBelowSF->GetBinContent(h_eleRecoBelowSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleRecoBelowSF->GetYaxis()->FindBin(ept));
+	   else elRecoSF = h_eleRecoSF->GetBinContent(h_eleRecoSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleRecoSF->GetYaxis()->FindBin(ept));
+	   aweight=aweight*elIDSF*elRecoSF;
+           //aweight*=h_npvs_weight->GetBinContent(h_npvs_weight->GetXaxis()->FindBin(PV_npvs)); //FIXME uncomment
 
            float weight_aco=1.0;
-           if (sample=="DY" or name=="ZTT" or name=="ZLL"){
+           if (sample=="DY" or name=="ZTT" or name=="ZLL" or sample=="DYemu"){
               if (my_gen1.Pt()<30 and my_gen2.Pt()<30) weight_aco=fit_aco_2030_2030->Eval(gen_aco);
               else if (my_gen1.Pt()>=30  and my_gen1.Pt()<40 and my_gen2.Pt()<30) weight_aco=fit_aco_3040_2030->Eval(gen_aco);
               else if (my_gen1.Pt()>=40  and my_gen1.Pt()<50 and my_gen2.Pt()<30) weight_aco=fit_aco_4050_2030->Eval(gen_aco);
@@ -1047,7 +1093,7 @@ cout<<idsf1*muonIsoSF1<<" "<<((eff_mu_id8_data*eff_mu_iso8_data)/(eff_mu_id8_zll
 	//   cout<<endl;
 	//}*/
 	//
-        b8_1->GetEntry(i); b8_3->GetEntry(i); b8_4->GetEntry(i);
+        //b8_1->GetEntry(i); b8_3->GetEntry(i); b8_4->GetEntry(i); //FIXME uncomment
         int ntracks=ntracks_friend;
         h_ntracks->Fill(ntracks);
 
@@ -1056,24 +1102,31 @@ cout<<idsf1*muonIsoSF1<<" "<<((eff_mu_id8_data*eff_mu_iso8_data)/(eff_mu_id8_zll
         else if (zpos>10) zpos=9.99;
         int ntpu=ntracksPU_friend;
         if (ntpu>50) ntpu=50;
-        if (sample!="data_obs") {aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));}
+        //if (sample!="data_obs") {aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));} //FIXME uncomment
 
-        if (sample=="DY" or sample=="DYcondor"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); }
+        //if (sample=="DYemu" or sample=="DY" or sample=="DYcondor"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); } //FIXME uncomment
 
 
         h_acoreso->Fill(fabs(gen_aco-acoplanarity));
 	if (my_mu.Pt()>30 and my_ele.Pt()>30) h_acoreso_high->Fill(fabs(gen_aco-acoplanarity));
+
 
 	TLorentzVector save_mu=my_mu;
         TLorentzVector save_ele=my_ele;
         TLorentzVector save_met=my_met;
 
 	bool is_lowNT=(ntracks<20000);
-	bool is_lowA=(acoplanarity<200000.02);
+	bool is_lowA=true;
+	if (is_control==0) is_lowA=(acoplanarity<0.02);
+
+        if (sample=="GGWW"){ // rescaling from mumu region
+           if (ntracks==0) aweight*=2.39;
+           else if (ntracks==1) aweight*=2.16;
+	}
 
         if (sample=="GGTT"){ // rescaling from mumu region
-           if (ntracks==0) aweight*=2.65;
-           else if (ntracks==1) aweight*=1.87;
+           if (ntracks==0) aweight*=2.39;
+           else if (ntracks==1) aweight*=2.16;
            b9_1->GetEntry(i); b9_2->GetEntry(i); b9_3->GetEntry(i);b9_4->GetEntry(i); b9_5->GetEntry(i); b9_6->GetEntry(i);b9_7->GetEntry(i); b9_8->GetEntry(i); b9_9->GetEntry(i);
            b9_10->GetEntry(i); b9_11->GetEntry(i); b9_12->GetEntry(i); b9_13->GetEntry(i);b9_14->GetEntry(i); b9_15->GetEntry(i); b9_16->GetEntry(i);b9_17->GetEntry(i); b9_18->GetEntry(i); b9_19->GetEntry(i);
            b9_20->GetEntry(i); b9_21->GetEntry(i); b9_22->GetEntry(i); b9_23->GetEntry(i);b9_24->GetEntry(i); b9_25->GetEntry(i); b9_26->GetEntry(i);b9_27->GetEntry(i); b9_28->GetEntry(i); b9_29->GetEntry(i);
@@ -1085,7 +1138,7 @@ cout<<idsf1*muonIsoSF1<<" "<<((eff_mu_id8_data*eff_mu_iso8_data)/(eff_mu_id8_zll
            b9_80->GetEntry(i); b9_81->GetEntry(i); b9_82->GetEntry(i); b9_83->GetEntry(i);b9_84->GetEntry(i); b9_85->GetEntry(i); b9_86->GetEntry(i);b9_87->GetEntry(i); b9_88->GetEntry(i); b9_89->GetEntry(i);
            b9_90->GetEntry(i); b9_91->GetEntry(i); b9_92->GetEntry(i); b9_93->GetEntry(i);b9_94->GetEntry(i); b9_95->GetEntry(i); b9_96->GetEntry(i);b9_97->GetEntry(i); b9_98->GetEntry(i); b9_99->GetEntry(i);
            b9_100->GetEntry(i); b9_101->GetEntry(i);
-           if (name=="GGTT_40p0") aweight*=TauG2Weights_ceBRe33_0p0;
+           if (name=="GGTT_0p0") aweight*=TauG2Weights_ceBRe33_0p0;
            else if (name=="GGTT_0p8") aweight*=TauG2Weights_ceBRe33_0p8;
            else if (name=="GGTT_1p6") aweight*=TauG2Weights_ceBRe33_1p6;
            else if (name=="GGTT_2p4") aweight*=TauG2Weights_ceBRe33_2p4;
@@ -1202,7 +1255,6 @@ cout<<idsf1*muonIsoSF1<<" "<<((eff_mu_id8_data*eff_mu_iso8_data)/(eff_mu_id8_zll
            if (my_ele.Pt()<24 and my_mu.Pt()<24) continue;
 	   if (is_mu8ele23 and !is_mu23ele12 and my_ele.Pt()<24) continue;
            if (!is_mu8ele23 and is_mu23ele12 and my_mu.Pt()<24) continue;
-
            bool is_cat0=(mvis>0);
            bool is_cat1=(mvis>0);
            bool is_cat2=(mvis>0);
@@ -1380,7 +1432,7 @@ cout<<h0[0]->Integral()<<endl;
     WriteHistToFileEMu(fout, h8, name, "em_8", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
     WriteHistToFileEMu(fout, h8_anti, name, "em_8_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
 
-    if (sample=="DY"){
+    if (sample=="DY" or sample=="DYemu"){
        WriteHistToFileETau(fout, h0R, name, "emR_0", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
        WriteHistToFileETau(fout, h1R, name, "emR_1", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
        WriteHistToFileETau(fout, h2R, name, "emR_2", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);

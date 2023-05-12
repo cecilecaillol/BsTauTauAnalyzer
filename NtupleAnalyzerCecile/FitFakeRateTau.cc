@@ -88,7 +88,7 @@ Double_t fitFlat(Double_t *x, Double_t *par) {
     return par[0];
 }
 
-TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::string denum, TH2F * hist2D_lep, Double_t fMin, Double_t fMax, int year) {
+TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::string denum, TH2F * hist2D_lep, Double_t fMin, Double_t fMax, int year, int myfit, double *err) {
     //SetStyle();
     TFile *inputFile = new TFile(files.c_str());
 
@@ -118,7 +118,7 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
     const int nPar = 4; // number of parameters in the fit
 
     TF1 * theFit = new TF1("theFit", fitFunc_Exp3Par, fMin, fMax, nPar);
-    TF1 * theFit2 = new TF1("theFit2", fitFunc_Exp3Par2, 0, 40, nPar);
+    TF1 * theFit2 = new TF1("theFit2", fitFunc_Exp3Par2, 0, 25, nPar); //FIXME default 25
 
     if (type=="Flat"){
       theFit = new TF1("theFit", fitFlat, fMin, fMax, 1);
@@ -190,6 +190,24 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
       theFit2->SetParameter(2, 0.04);
       theFit2->SetParameter(3, 0.9);
     }
+    if (year==2018 and (num.find("tauFRnt_QCD_dm0")!=std::string::npos or num.find("tauFRnt_QCD_dm11")!=std::string::npos)){
+      theFit2 = new TF1("theFit2", fitFunc_Exp3Par2, 0, 30, nPar); //FIXME
+      theFit2->SetParameter(0, 0.56);
+      theFit2->SetParameter(1, 1.2);
+      theFit2->SetParameter(2, 0.04);
+      theFit2->SetParameter(3, -0.16);
+std::cout<<"found"<<std::endl;
+
+    }
+
+    if (year==2018 and num.find("tauFRnt_QCD_dm11")!=std::string::npos){
+      theFit2->SetParameter(0, 0.0);
+      theFit2->SetParameter(1, 1.2);
+      theFit2->SetParameter(2, 0.0);
+      theFit2->SetParameter(3, 0.0);
+
+    }
+
 
     if (year==2018 and num.find("tauFRnt_W")!=std::string::npos){
       theFit->SetParameter(0, 1.5);
@@ -205,9 +223,10 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
     TGraph_FR->GetYaxis()->SetRangeUser(0.00, 1.00);
     if (num.find("dm10")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 0.30);
     if (num.find("dm11")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 0.30);
+    if (num.find("dm0")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 1.5);
 
 
-    if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 3.50);
+    if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 5.00);
 
     TGraph_FR->GetYaxis()->SetTitle("f_{#tau}");
     TGraph_FR->GetXaxis()->SetRangeUser(0, 5000);
@@ -218,10 +237,14 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
     TGraph_FR->SetLineWidth(3);
     std::string outNaming = "plots/fit" + num + "_" + denum + ".pdf";
     if (year==2016) outNaming = "plots_tau_2016/fit" + num + "_" + denum + ".pdf";
+    if (year==20161) outNaming = "plots_tau_2016pre/fit" + num + "_" + denum + ".pdf";
+    if (year==20162) outNaming = "plots_tau_2016post/fit" + num + "_" + denum + ".pdf";
     if (year==2017) outNaming = "plots_tau_2017/fit" + num + "_" + denum + ".pdf";
     if (year==2018) outNaming = "plots_2018/fit" + num + "_" + denum + ".pdf";
     std::string outNamingPng = "plots/fit" + num + "_" + denum + ".png";
     if (year==2016) outNamingPng = "plots_tau_2016/fit" + num + "_" + denum + ".png";
+    if (year==20161) outNamingPng = "plots_tau_2016pre/fit" + num + "_" + denum + ".png";
+    if (year==20162) outNamingPng = "plots_tau_2016post/fit" + num + "_" + denum + ".png";
     if (year==2017) outNamingPng = "plots_tau_2017/fit" + num + "_" + denum + ".png";
     if (year==2018) outNamingPng = "plots_2018/fit" + num + "_" + denum + ".png";
     TLatex t = TLatex();
@@ -230,13 +253,15 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
     t.SetTextAlign(12);
     t.SetTextSize(0.04);
     if (year==2016) t.DrawLatex(0.55, .95, "36 fb^{-1} (2016, 13 TeV)");
+    if (year==20161) t.DrawLatex(0.5, .95, "19 fb^{-1} (2016 preVFP, 13 TeV)");
+    if (year==20162) t.DrawLatex(0.5, .95, "16 fb^{-1} (2016 postVFP, 13 TeV)");
     if (year==2017) t.DrawLatex(0.55, .95, "41 fb^{-1} (2017, 13 TeV)");
     if (year==2018) t.DrawLatex(0.55, .95, "60 fb^{-1} (2018, 13 TeV)");
 
     theFit->Draw("SAME");
     theFit->SetLineColor(2);
 
-    if (num.find("tauFRnt")!=std::string::npos){
+    /*if (num.find("tauFRnt")!=std::string::npos){
       TH1D *hint = new TH1D("hint",
          "Fitted Gaussian with .68 conf.band", 100, 0, 100);
       (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hint,0.68);
@@ -244,26 +269,59 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
       hint->SetFillColor(kCyan);
       hint->SetFillStyle(3001);
       hint->Draw("e3 same");
-    }
+    }*/
 
     if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->Fit("theFit2", "R0");
     theFit->Draw("SAME");
     if (num.find("tauFRnt")!=std::string::npos) theFit2->Draw("SAME");
     if (num.find("tauFRnt")!=std::string::npos) theFit2->SetLineColor(3);
+
+    if (num.find("tauFRnt")!=std::string::npos){
+      TH1D *hint = new TH1D("hint",
+         "Fitted Gaussian with .68 conf.band", 100, 0, 25);
+      (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hint,0.68);
+      hint->SetStats(false);
+      hint->SetFillColor(kCyan);
+      hint->SetFillStyle(3001);
+      hint->Draw("e3 same");
+      cout<<hint->GetBinContent(1)<<" "<<hint->GetBinError(1)<<endl;
+      *err=hint->GetBinError(1)/hint->GetBinContent(1);
+    }
+    theFit->Draw("SAME");
+    theFit2->Draw("SAME");
+
+    if (num.find("tauFRnt")==std::string::npos){
+       double x[100], yup[100], ydown[100];
+       int n = 100;
+       for (int i=0;i<n;i++) {
+         x[i] = 30+i*2.7;
+         yup[i] = theFit->Eval(x[i])*(1.0+((x[i]-30)/540+0.00));
+         ydown[i] = theFit->Eval(x[i])*(1.0-((x[i]-30)/540+0.00));
+       }
+       auto gup = new TGraph(n,x,yup);
+       gup->SetLineColor(2);
+       gup->Draw("CSAME");
+       auto gdown = new TGraph(n,x,ydown);
+       gdown->SetLineColor(2);
+       gdown->Draw("CSAME");
+    }
    
     canvas->SaveAs(outNaming.c_str());
     canvas->SaveAs(outNamingPng.c_str());
 
     TFile *FR_H = new TFile("FitHistograms_FR.root", "UPDATE");
     if (year==2016) FR_H = new TFile("FitHistograms_tauFR_2016.root", "UPDATE");
+    if (year==20161) FR_H = new TFile("FitHistograms_tauFR_2016pre.root", "UPDATE");
+    if (year==20162) FR_H = new TFile("FitHistograms_tauFR_2016post.root", "UPDATE");
     if (year==2017) FR_H = new TFile("FitHistograms_tauFR_2017.root", "UPDATE");
     if (year==2018) FR_H = new TFile("FitHistograms_tauFR_2018.root", "UPDATE");
     FR_H->cd();
     TGraph_FR->SetName(TString(num) + "_" + TString(denum));
     TGraph_FR->Write();
     FR_H->Close();
-
-    return theFit;
+    
+    if (myfit==2) return theFit2;
+    else return theFit;
 }
 
 void FitFakeRateTau(int year) {
@@ -272,6 +330,8 @@ void FitFakeRateTau(int year) {
     if (year==2016) FR_File = new TFile("FitValues_tauFR_2016.root", "RECREATE");
     if (year==2017) FR_File = new TFile("FitValues_tauFR_2017.root", "RECREATE");
     if (year==2018) FR_File = new TFile("FitValues_tauFR_2018.root", "RECREATE");
+    if (year==20161) FR_File = new TFile("FitValues_tauFR_2016pre.root", "RECREATE");
+    if (year==20162) FR_File = new TFile("FitValues_tauFR_2016post.root", "RECREATE");
 
     TH2F * Fit_Value_tau = new TH2F("Fit_Value_tau", "Fit_Value_tau", 40, 0, 40, 40, 0, 40);
 
@@ -281,29 +341,55 @@ void FitFakeRateTau(int year) {
     if (year==2016) datafile="output_etau_2016/DataSub.root";
     if (year==2017) datafile="output_etau_2017/DataSub.root";
     if (year==2018) datafile="output_etau_2018/DataSub.root";
+    if (year==20161) datafile="output_etau_2016pre/DataSub.root";
+    if (year==20162) datafile="output_etau_2016post/DataSub.root";
 
-    TF1* m101 = M_FR(1, "Exp3Par", datafile, "h_tauFR_QCD_dm0_M","h_tauFR_QCD_dm0_VVVL", Fit_Value_tau, fMin, fMax, year);
-    TF1* m102 = M_FR(2, "Exp3Par", datafile, "h_tauFR_QCD_dm1_M","h_tauFR_QCD_dm1_VVVL", Fit_Value_tau, fMin, fMax, year);
-    TF1* m103 = M_FR(3, "Exp3Par", datafile, "h_tauFR_QCD_dm10_M","h_tauFR_QCD_dm10_VVVL", Fit_Value_tau, fMin, fMax, year);
-    TF1* m104 = M_FR(4, "Exp3Par", datafile, "h_tauFR_QCD_dm11_M","h_tauFR_QCD_dm11_VVVL", Fit_Value_tau, fMin, fMax, year);
-    TF1* m105 = M_FR(5, "Exp3Par", datafile, "h_tauFR_W_dm0_M","h_tauFR_W_dm0_VVVL", Fit_Value_tau, fMin, 400, year);
-    TF1* m106 = M_FR(6, "Exp3Par", datafile, "h_tauFR_W_dm1_M","h_tauFR_W_dm1_VVVL", Fit_Value_tau, fMin, fMax, year);
-    TF1* m107 = M_FR(7, "Exp3Par", datafile, "h_tauFR_W_dm10_M","h_tauFR_W_dm10_VVVL", Fit_Value_tau, fMin, fMax, year);
-    TF1* m108 = M_FR(8, "Exp3Par", datafile, "h_tauFR_W_dm11_M","h_tauFR_W_dm11_VVVL", Fit_Value_tau, fMin, fMax, year);
-    TF1* m109 = M_FR(9, "Flat", datafile, "h_tauFR_QCD_xtrg_M","h_tauFR_QCD_xtrg_VVVL", Fit_Value_tau, 35, fMax, year);
-    TF1* m110 = M_FR(10, "Flat", datafile, "h_tauFR_W_xtrg_M","h_tauFR_W_xtrg_VVVL", Fit_Value_tau, 35, fMax, year);
+    double *err;
+    *err=0.0;
+    TH1F *err_nt0_ffW=new TH1F("err_nt0_ffW","err_nt0_ffW",12,0,12);
+    TH1F *err_nt0_ffQCD=new TH1F("err_nt0_ffQCD","err_nt0_ffQCD",12,0,12);
 
-    TF1* m111 = M_FR(11, "Exp3Par", datafile, "h_tauFRnt_QCD_dm0_M","h_tauFRnt_QCD_dm0_VVVL", Fit_Value_tau, 0, 100, year);
-    TF1* m112 = M_FR(12, "Exp3Par", datafile, "h_tauFRnt_QCD_dm1_M","h_tauFRnt_QCD_dm1_VVVL", Fit_Value_tau, 0, 100, year);
-    TF1* m113 = M_FR(13, "Exp3Par", datafile, "h_tauFRnt_QCD_dm10_M","h_tauFRnt_QCD_dm10_VVVL", Fit_Value_tau, 0, 100, year);
-    TF1* m114 = M_FR(14, "Exp3Par", datafile, "h_tauFRnt_QCD_dm11_M","h_tauFRnt_QCD_dm11_VVVL", Fit_Value_tau, 0, 100, year);
-    TF1* m115 = M_FR(15, "Exp3Par", datafile, "h_tauFRnt_W_dm0_M","h_tauFRnt_W_dm0_VVVL", Fit_Value_tau, 0, 60, year);
-    TF1* m116 = M_FR(16, "Exp3Par", datafile, "h_tauFRnt_W_dm1_M","h_tauFRnt_W_dm1_VVVL", Fit_Value_tau, 0, 100, year);
-    TF1* m117 = M_FR(17, "Exp3Par", datafile, "h_tauFRnt_W_dm10_M","h_tauFRnt_W_dm10_VVVL", Fit_Value_tau, 0, 100, year);
-    TF1* m118 = M_FR(18, "Exp3Par", datafile, "h_tauFRnt_W_dm11_M","h_tauFRnt_W_dm11_VVVL", Fit_Value_tau, 0, 100, year);
+    TF1* m101 = M_FR(1, "Exp3Par", datafile, "h_tauFR_QCD_dm0_M","h_tauFR_QCD_dm0_VVVL", Fit_Value_tau, fMin, fMax, year, 1, err);
+    TF1* m102 = M_FR(2, "Exp3Par", datafile, "h_tauFR_QCD_dm1_M","h_tauFR_QCD_dm1_VVVL", Fit_Value_tau, fMin, fMax, year, 1, err);
+    TF1* m103 = M_FR(3, "Exp3Par", datafile, "h_tauFR_QCD_dm10_M","h_tauFR_QCD_dm10_VVVL", Fit_Value_tau, fMin, fMax, year, 1, err);
+    TF1* m104 = M_FR(4, "Exp3Par", datafile, "h_tauFR_QCD_dm11_M","h_tauFR_QCD_dm11_VVVL", Fit_Value_tau, fMin, fMax, year, 1, err);
+    TF1* m105 = M_FR(5, "Exp3Par", datafile, "h_tauFR_W_dm0_M","h_tauFR_W_dm0_VVVL", Fit_Value_tau, fMin, 400, year, 1, err);
+    TF1* m106 = M_FR(6, "Exp3Par", datafile, "h_tauFR_W_dm1_M","h_tauFR_W_dm1_VVVL", Fit_Value_tau, fMin, fMax, year, 1, err);
+    TF1* m107 = M_FR(7, "Exp3Par", datafile, "h_tauFR_W_dm10_M","h_tauFR_W_dm10_VVVL", Fit_Value_tau, fMin, fMax, year, 1, err);
+    TF1* m108 = M_FR(8, "Exp3Par", datafile, "h_tauFR_W_dm11_M","h_tauFR_W_dm11_VVVL", Fit_Value_tau, fMin, fMax, year, 1, err);
+    TF1* m109 = M_FR(9, "Flat", datafile, "h_tauFR_QCD_xtrg_M","h_tauFR_QCD_xtrg_VVVL", Fit_Value_tau, 35, fMax, year, 1, err);
+    TF1* m110 = M_FR(10, "Flat", datafile, "h_tauFR_W_xtrg_M","h_tauFR_W_xtrg_VVVL", Fit_Value_tau, 35, fMax, year, 1, err);
+
+    TF1* m111 = M_FR(11, "Exp3Par", datafile, "h_tauFRnt_QCD_dm0_M","h_tauFRnt_QCD_dm0_VVVL", Fit_Value_tau, 25, 100, year, 1, err);
+    TF1* m112 = M_FR(12, "Exp3Par", datafile, "h_tauFRnt_QCD_dm1_M","h_tauFRnt_QCD_dm1_VVVL", Fit_Value_tau, 25, 100, year, 1, err);
+    TF1* m113 = M_FR(13, "Exp3Par", datafile, "h_tauFRnt_QCD_dm10_M","h_tauFRnt_QCD_dm10_VVVL", Fit_Value_tau, 25, 100, year, 1, err);
+    TF1* m114 = M_FR(14, "Exp3Par", datafile, "h_tauFRnt_QCD_dm11_M","h_tauFRnt_QCD_dm11_VVVL", Fit_Value_tau, 25, 100, year, 1, err);
+    TF1* m115 = M_FR(15, "Exp3Par", datafile, "h_tauFRnt_W_dm0_M","h_tauFRnt_W_dm0_VVVL", Fit_Value_tau, 25, 100, year, 1, err);
+    TF1* m116 = M_FR(16, "Exp3Par", datafile, "h_tauFRnt_W_dm1_M","h_tauFRnt_W_dm1_VVVL", Fit_Value_tau, 25, 100, year, 1, err);
+    TF1* m117 = M_FR(17, "Exp3Par", datafile, "h_tauFRnt_W_dm10_M","h_tauFRnt_W_dm10_VVVL", Fit_Value_tau, 25, 100, year, 1, err);
+    TF1* m118 = M_FR(18, "Exp3Par", datafile, "h_tauFRnt_W_dm11_M","h_tauFRnt_W_dm11_VVVL", Fit_Value_tau, 25, 100, year, 1, err);
+
+    TF1* m111_2 = M_FR(21, "Exp3Par", datafile, "h_tauFRnt_QCD_dm0_M","h_tauFRnt_QCD_dm0_VVVL", Fit_Value_tau, 25, 100, year, 2, err);
+    err_nt0_ffQCD->SetBinContent(1,*err);
+    TF1* m112_2 = M_FR(22, "Exp3Par", datafile, "h_tauFRnt_QCD_dm1_M","h_tauFRnt_QCD_dm1_VVVL", Fit_Value_tau, 25, 100, year, 2, err);
+    err_nt0_ffQCD->SetBinContent(2,*err);
+    TF1* m113_2 = M_FR(23, "Exp3Par", datafile, "h_tauFRnt_QCD_dm10_M","h_tauFRnt_QCD_dm10_VVVL", Fit_Value_tau, 25, 100, year, 2, err);
+    err_nt0_ffQCD->SetBinContent(11,*err);
+    TF1* m114_2 = M_FR(24, "Exp3Par", datafile, "h_tauFRnt_QCD_dm11_M","h_tauFRnt_QCD_dm11_VVVL", Fit_Value_tau, 25, 100, year, 2, err);
+    err_nt0_ffQCD->SetBinContent(12,*err);
+    TF1* m115_2 = M_FR(25, "Exp3Par", datafile, "h_tauFRnt_W_dm0_M","h_tauFRnt_W_dm0_VVVL", Fit_Value_tau, 25, 100, year, 2, err);
+    err_nt0_ffW->SetBinContent(1,*err);
+    TF1* m116_2 = M_FR(26, "Exp3Par", datafile, "h_tauFRnt_W_dm1_M","h_tauFRnt_W_dm1_VVVL", Fit_Value_tau, 25, 100, year, 2, err);
+    err_nt0_ffW->SetBinContent(2,*err);
+    TF1* m117_2 = M_FR(27, "Exp3Par", datafile, "h_tauFRnt_W_dm10_M","h_tauFRnt_W_dm10_VVVL", Fit_Value_tau, 25, 100, year, 2, err);
+    err_nt0_ffW->SetBinContent(11,*err);
+    TF1* m118_2 = M_FR(28, "Exp3Par", datafile, "h_tauFRnt_W_dm11_M","h_tauFRnt_W_dm11_VVVL", Fit_Value_tau, 25, 100, year, 2, err);
+    err_nt0_ffW->SetBinContent(12,*err);
 
     FR_File->Write();
     FR_File->cd();
+    err_nt0_ffQCD->Write();
+    err_nt0_ffW->Write();
     m101->SetName("theFit_QCD_dm0");
     m101->Write();
     m102->SetName("theFit_QCD_dm1");
@@ -341,6 +427,23 @@ void FitFakeRateTau(int year) {
     m117->Write();
     m118->SetName("theFit_nt_W_dm11");
     m118->Write();
+
+    m111_2->SetName("theFit2_nt_QCD_dm0");
+    m111_2->Write();
+    m112_2->SetName("theFit2_nt_QCD_dm1");
+    m112_2->Write();
+    m113_2->SetName("theFit2_nt_QCD_dm10");
+    m113_2->Write();
+    m114_2->SetName("theFit2_nt_QCD_dm11");
+    m114_2->Write();
+    m115_2->SetName("theFit2_nt_W_dm0");
+    m115_2->Write();
+    m116_2->SetName("theFit2_nt_W_dm1");
+    m116_2->Write();
+    m117_2->SetName("theFit2_nt_W_dm10");
+    m117_2->Write();
+    m118_2->SetName("theFit2_nt_W_dm11");
+    m118_2->Write();
 
     FR_File->Close();
 }

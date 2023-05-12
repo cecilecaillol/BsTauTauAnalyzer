@@ -351,7 +351,7 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
 
     arbre->AddFriend(ami);
 
-   int nbhist=1+26;
+   int nbhist=1+48;
    int nbhist_offset=0;
    nbhist=1;//FIXME
 	
@@ -571,6 +571,27 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    TString fake_uncertainties[1]={""};
    TFile* f_eleIDSF=new TFile("scalefactors/egammaEffi.txt_Ele_wp80iso_EGM2D.root","read");
    TH2F* h_eleIDSF= (TH2F*) f_eleIDSF->Get("EGamma_SF2D");
+   TFile* f_eleRecoSF=new TFile("scalefactors/egammaEffi_ptAbove20.txt_EGM2D_UL2018.root","read");
+   TH2F* h_eleRecoSF= (TH2F*) f_eleRecoSF->Get("EGamma_SF2D");
+
+   if (year=="2017"){
+      TFile* f_eleIDSF=new TFile("scalefactors/egammaEffi.txt_EGM2D_MVA80iso_UL17.root","read");
+      h_eleIDSF= (TH2F*) f_eleIDSF->Get("EGamma_SF2D");
+      TFile* f_eleRecoSF=new TFile("scalefactors/egammaEffi_ptAbove20.txt_EGM2D_UL2017.root","read");
+      h_eleRecoSF= (TH2F*) f_eleRecoSF->Get("EGamma_SF2D");
+   }
+   else if (year=="2016post"){
+      TFile* f_eleIDSF=new TFile("scalefactors/egammaEffi.txt_Ele_wp80iso_postVFP_EGM2D.root","read");
+      h_eleIDSF= (TH2F*) f_eleIDSF->Get("EGamma_SF2D");
+      TFile* f_eleRecoSF=new TFile("scalefactors/egammaEffi_ptAbove20.txt_EGM2D_UL2016postVFP.root","read");
+      h_eleRecoSF= (TH2F*) f_eleRecoSF->Get("EGamma_SF2D");
+   }
+   else if (year=="2016pre"){
+      TFile* f_eleIDSF=new TFile("scalefactors/egammaEffi.txt_Ele_wp80iso_preVFP_EGM2D.root","read");
+      h_eleIDSF= (TH2F*) f_eleIDSF->Get("EGamma_SF2D");
+      TFile* f_eleRecoSF=new TFile("scalefactors/egammaEffi_ptAbove20.txt_EGM2D_UL2016preVFP.root","read");
+      h_eleRecoSF= (TH2F*) f_eleRecoSF->Get("EGamma_SF2D");
+   }
 
    TFile* f_etautrgSF=new TFile("scalefactors/electron_SF_etautrg_2018UL.root","read");
    TH2F* h_etautrgData= (TH2F*) f_etautrgSF->Get("data_trg_eff");
@@ -598,8 +619,83 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    TF1 *fit_taufrnt_W_dm10 = (TF1*) f_taufr->Get("theFit_nt_W_dm10");
    TF1 *fit_taufrnt_W_dm11 = (TF1*) f_taufr->Get("theFit_nt_W_dm11");
 
+   TF1 *fitlow_taufrnt_QCD_dm0 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm0");
+   TF1 *fitlow_taufrnt_QCD_dm1 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm1");
+   TF1 *fitlow_taufrnt_QCD_dm10 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm10");
+   TF1 *fitlow_taufrnt_QCD_dm11 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm11");
+   TF1 *fitlow_taufrnt_W_dm0 = (TF1*) f_taufr->Get("theFit2_nt_W_dm0");
+   TF1 *fitlow_taufrnt_W_dm1 = (TF1*) f_taufr->Get("theFit2_nt_W_dm1");
+   TF1 *fitlow_taufrnt_W_dm10 = (TF1*) f_taufr->Get("theFit2_nt_W_dm10");
+   TF1 *fitlow_taufrnt_W_dm11 = (TF1*) f_taufr->Get("theFit2_nt_W_dm11");
+
    TF1 *fit_taufr_QCD_xtrg = (TF1*) f_taufr->Get("theFit_QCD_xtrg");
    TF1 *fit_taufr_W_xtrg = (TF1*) f_taufr->Get("theFit_W_xtrg");
+
+   if (year=="2016pre"){
+      TFile* f_taufr = new TFile("fakerate/FitValues_tauFR_2016pre.root");
+      fit_taufr_QCD_dm0 = (TF1*) f_taufr->Get("theFit_QCD_dm0");
+      fit_taufr_QCD_dm1 = (TF1*) f_taufr->Get("theFit_QCD_dm1");
+      fit_taufr_QCD_dm10 = (TF1*) f_taufr->Get("theFit_QCD_dm10");
+      fit_taufr_QCD_dm11 = (TF1*) f_taufr->Get("theFit_QCD_dm11");
+      fit_taufr_W_dm0 = (TF1*) f_taufr->Get("theFit_W_dm0");
+      fit_taufr_W_dm1 = (TF1*) f_taufr->Get("theFit_W_dm1");
+      fit_taufr_W_dm10 = (TF1*) f_taufr->Get("theFit_W_dm10");
+      fit_taufr_W_dm11 = (TF1*) f_taufr->Get("theFit_W_dm11");
+
+      fit_taufrnt_QCD_dm0 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm0");
+      fit_taufrnt_QCD_dm1 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm1");
+      fit_taufrnt_QCD_dm10 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm10");
+      fit_taufrnt_QCD_dm11 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm11");
+      fit_taufrnt_W_dm0 = (TF1*) f_taufr->Get("theFit_nt_W_dm0");
+      fit_taufrnt_W_dm1 = (TF1*) f_taufr->Get("theFit_nt_W_dm1");
+      fit_taufrnt_W_dm10 = (TF1*) f_taufr->Get("theFit_nt_W_dm10");
+      fit_taufrnt_W_dm11 = (TF1*) f_taufr->Get("theFit_nt_W_dm11");
+
+      fitlow_taufrnt_QCD_dm0 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm0");
+      fitlow_taufrnt_QCD_dm1 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm1");
+      fitlow_taufrnt_QCD_dm10 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm10");
+      fitlow_taufrnt_QCD_dm11 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm11");
+      fitlow_taufrnt_W_dm0 = (TF1*) f_taufr->Get("theFit2_nt_W_dm0");
+      fitlow_taufrnt_W_dm1 = (TF1*) f_taufr->Get("theFit2_nt_W_dm1");
+      fitlow_taufrnt_W_dm10 = (TF1*) f_taufr->Get("theFit2_nt_W_dm10");
+      fitlow_taufrnt_W_dm11 = (TF1*) f_taufr->Get("theFit2_nt_W_dm11");
+
+      fit_taufr_QCD_xtrg = (TF1*) f_taufr->Get("theFit_QCD_xtrg");
+      fit_taufr_W_xtrg = (TF1*) f_taufr->Get("theFit_W_xtrg");
+   }
+
+   if (year=="2016post"){
+      TFile* f_taufr = new TFile("fakerate/FitValues_tauFR_2016post.root");
+      fit_taufr_QCD_dm0 = (TF1*) f_taufr->Get("theFit_QCD_dm0");
+      fit_taufr_QCD_dm1 = (TF1*) f_taufr->Get("theFit_QCD_dm1");
+      fit_taufr_QCD_dm10 = (TF1*) f_taufr->Get("theFit_QCD_dm10");
+      fit_taufr_QCD_dm11 = (TF1*) f_taufr->Get("theFit_QCD_dm11");
+      fit_taufr_W_dm0 = (TF1*) f_taufr->Get("theFit_W_dm0");
+      fit_taufr_W_dm1 = (TF1*) f_taufr->Get("theFit_W_dm1");
+      fit_taufr_W_dm10 = (TF1*) f_taufr->Get("theFit_W_dm10");
+      fit_taufr_W_dm11 = (TF1*) f_taufr->Get("theFit_W_dm11");
+
+      fit_taufrnt_QCD_dm0 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm0");
+      fit_taufrnt_QCD_dm1 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm1");
+      fit_taufrnt_QCD_dm10 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm10");
+      fit_taufrnt_QCD_dm11 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm11");
+      fit_taufrnt_W_dm0 = (TF1*) f_taufr->Get("theFit_nt_W_dm0");
+      fit_taufrnt_W_dm1 = (TF1*) f_taufr->Get("theFit_nt_W_dm1");
+      fit_taufrnt_W_dm10 = (TF1*) f_taufr->Get("theFit_nt_W_dm10");
+      fit_taufrnt_W_dm11 = (TF1*) f_taufr->Get("theFit_nt_W_dm11");
+
+      fitlow_taufrnt_QCD_dm0 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm0");
+      fitlow_taufrnt_QCD_dm1 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm1");
+      fitlow_taufrnt_QCD_dm10 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm10");
+      fitlow_taufrnt_QCD_dm11 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm11");
+      fitlow_taufrnt_W_dm0 = (TF1*) f_taufr->Get("theFit2_nt_W_dm0");
+      fitlow_taufrnt_W_dm1 = (TF1*) f_taufr->Get("theFit2_nt_W_dm1");
+      fitlow_taufrnt_W_dm10 = (TF1*) f_taufr->Get("theFit2_nt_W_dm10");
+      fitlow_taufrnt_W_dm11 = (TF1*) f_taufr->Get("theFit2_nt_W_dm11");
+
+      fit_taufr_QCD_xtrg = (TF1*) f_taufr->Get("theFit_QCD_xtrg");
+      fit_taufr_W_xtrg = (TF1*) f_taufr->Get("theFit_W_xtrg");
+   }
 
    TH2F *fractionOS=new TH2F("fractionOS","fractionOS",3,0,75,4,50,250);
    TH2F *fractionSS=new TH2F("fractionSS","fractionSS",3,0,75,4,50,250);
@@ -880,7 +976,7 @@ cout<<"novs"<<endl;
         if (i % 10000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
         fflush(stdout);
 
-      if (input=="/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/EGammaA.root" and i>=464459 and i<475000) continue;//FIXME
+      if (input=="/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018aaaaaa/EGammaA.root" and i>=464459 and i<475000) continue;//FIXME
 	
 	if (name=="W"){
 	  b0_1->GetEntry(i);
@@ -963,7 +1059,7 @@ cout<<"novs"<<endl;
 	b3_1->GetEntry(i); b3_2->GetEntry(i); b3_3->GetEntry(i); b3_4->GetEntry(i); b3_5->GetEntry(i); b3_6->GetEntry(i); b3_7->GetEntry(i);
 	if (LepCand_vse[tau_index]<63 or LepCand_vsmu[tau_index]<1 or LepCand_vsjet[tau_index]<1) continue; //was 127
 	if (!LepCand_eleMVAiso80[ele_index]) continue;
-	if (is_eletrg and !LepCand_trgmatch[ele_index]) continue;
+	if (is_eletrg and !LepCand_trgmatch[ele_index]) continue; //FIXME uncomment
 	//if (!is_eletrg and !LepCand_trgmatch[tau_index]) continue; //FIXME
 
 	bool is_OS = (LepCand_charge[tau_index]*LepCand_charge[ele_index]<0);
@@ -1016,6 +1112,8 @@ cout<<"novs"<<endl;
            if (ept>500) ept=499;
            float elIDSF = h_eleIDSF->GetBinContent(h_eleIDSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleIDSF->GetYaxis()->FindBin(ept));
 	   aweight=aweight*elIDSF;
+           float elRecoSF = h_eleRecoSF->GetBinContent(h_eleRecoSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleRecoSF->GetYaxis()->FindBin(ept));
+           aweight=aweight*elRecoSF;
 	   float weight_aco=1.0;
 
            if (sample=="DY" or name=="ZTT" or name=="ZLL"){ 
@@ -1031,7 +1129,7 @@ cout<<"novs"<<endl;
               else if (my_gen1.Pt()>=50 and my_gen2.Pt()>=50) weight_aco=fit_aco_gt50_gt50->Eval(gen_aco);
 	   }
            aweight=aweight*weight_aco;
-	   aweight*=h_npvs_weight->GetBinContent(h_npvs_weight->GetXaxis()->FindBin(PV_npvs));
+	   aweight*=h_npvs_weight->GetBinContent(h_npvs_weight->GetXaxis()->FindBin(PV_npvs));//FIXME uncomment
 	}
 
 	// Block MET
@@ -1041,7 +1139,7 @@ cout<<"novs"<<endl;
 	float mt = TMass_F(my_ele.Pt(), my_ele.Px(), my_ele.Py(), my_met.Pt(), my_met.Phi());
 
 
-	bool is_QCDregion = (mt<50 and !is_OS);
+	bool is_QCDregion = (!is_OS); // FIXME was (mt<50 and !is_OS);
 	bool is_Wregion = (is_OS and mt>75);
 
 	bool is_real=(name=="GGTT" or name=="GGTT2" or name=="data_obs" or (LepCand_gen[tau_index]>=1 and LepCand_gen[tau_index]<=5));
@@ -1086,7 +1184,7 @@ cout<<"novs"<<endl;
 	//   }
 	//   cout<<endl;
 	//}*/
-	b8_1->GetEntry(i); b8_2->GetEntry(i); b8_3->GetEntry(i); b8_4->GetEntry(i);//FIXME
+	b8_1->GetEntry(i); b8_2->GetEntry(i); b8_3->GetEntry(i); b8_4->GetEntry(i);//FIXME uncomment
 	int ntracks=ntracks_friend;
 	h_ntracks->Fill(ntracks);
 
@@ -1095,23 +1193,29 @@ cout<<"novs"<<endl;
         else if (zpos>10) zpos=9.99;
         int ntpu=ntracksPU_friend;
         if (ntpu>50) ntpu=50;
-        if (sample!="data_obs") {aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));}
+        if (sample!="data_obs") {aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));} //FIXME uncomment
 
-        if (sample=="DY"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); }
+        if (sample=="DY"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); }//FIXME uncomment
 
 	TLorentzVector save_tau=my_tau;
         TLorentzVector save_ele=my_ele;
         TLorentzVector save_met=my_met;
 
 	bool is_lowNT=(ntracks<20000);//FIXME
-	bool is_lowA=(acoplanarity<200000.02);
+	bool is_lowA=(acoplanarity<0.02);
+	if (is_control>0) is_lowA=true;
 	//if (mt>50 or (my_ele+my_tau).M()>90) continue;
 
 	//if (!is_lowA or ntracks>10) continue;
 
+        if (sample=="GGWW"){ // rescaling from mumu region
+           if (ntracks==0) aweight*=2.39;
+           else if (ntracks==1) aweight*=2.16;
+	}
+
 	if (sample=="GGTT"){ // rescaling from mumu region
-	   if (ntracks==0) aweight*=2.65;
-           else if (ntracks==1) aweight*=1.87;
+	   if (ntracks==0) aweight*=2.39;
+           else if (ntracks==1) aweight*=2.16;
 	   b9_1->GetEntry(i); b9_2->GetEntry(i); b9_3->GetEntry(i);b9_4->GetEntry(i); b9_5->GetEntry(i); b9_6->GetEntry(i);b9_7->GetEntry(i); b9_8->GetEntry(i); b9_9->GetEntry(i);
            b9_10->GetEntry(i); b9_11->GetEntry(i); b9_12->GetEntry(i); b9_13->GetEntry(i);b9_14->GetEntry(i); b9_15->GetEntry(i); b9_16->GetEntry(i);b9_17->GetEntry(i); b9_18->GetEntry(i); b9_19->GetEntry(i);
            b9_20->GetEntry(i); b9_21->GetEntry(i); b9_22->GetEntry(i); b9_23->GetEntry(i);b9_24->GetEntry(i); b9_25->GetEntry(i); b9_26->GetEntry(i);b9_27->GetEntry(i); b9_28->GetEntry(i); b9_29->GetEntry(i);
@@ -1123,7 +1227,7 @@ cout<<"novs"<<endl;
            b9_80->GetEntry(i); b9_81->GetEntry(i); b9_82->GetEntry(i); b9_83->GetEntry(i);b9_84->GetEntry(i); b9_85->GetEntry(i); b9_86->GetEntry(i);b9_87->GetEntry(i); b9_88->GetEntry(i); b9_89->GetEntry(i);
            b9_90->GetEntry(i); b9_91->GetEntry(i); b9_92->GetEntry(i); b9_93->GetEntry(i);b9_94->GetEntry(i); b9_95->GetEntry(i); b9_96->GetEntry(i);b9_97->GetEntry(i); b9_98->GetEntry(i); b9_99->GetEntry(i);
            b9_100->GetEntry(i); b9_101->GetEntry(i);
-	   if (name=="GGTT_40p0") aweight*=TauG2Weights_ceBRe33_0p0;
+	   if (name=="GGTT_0p0") aweight*=TauG2Weights_ceBRe33_0p0;
            else if (name=="GGTT_0p8") aweight*=TauG2Weights_ceBRe33_0p8;
            else if (name=="GGTT_1p6") aweight*=TauG2Weights_ceBRe33_1p6;
            else if (name=="GGTT_2p4") aweight*=TauG2Weights_ceBRe33_2p4;
@@ -1454,16 +1558,49 @@ cout<<"novs"<<endl;
            else if (is_eletrg and LepCand_DecayMode[tau_index]==11) tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm11->Eval(tpt))*fit_taufrnt_QCD_dm11->Eval(TMath::Max(1,ntracks));
            else if (is_etautrg or is_etauHPStrg) tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_xtrg->Eval(tpt));*/
 
-	   if (LepCand_DecayMode[tau_index]==0) tfr_W=TMath::Min(1.0,fit_taufr_W_dm0->Eval(tpt))*fit_taufrnt_W_dm0->Eval(TMath::Max(0,ntracks));
-           else if (LepCand_DecayMode[tau_index]==1) tfr_W=TMath::Min(1.0,fit_taufr_W_dm1->Eval(tpt))*fit_taufrnt_W_dm1->Eval(TMath::Max(0,ntracks));
-           else if (LepCand_DecayMode[tau_index]==10) tfr_W=TMath::Min(1.0,fit_taufr_W_dm10->Eval(tpt))*fit_taufrnt_W_dm10->Eval(TMath::Max(0,ntracks));
-           else if (LepCand_DecayMode[tau_index]==11) tfr_W=TMath::Min(1.0,fit_taufr_W_dm11->Eval(tpt))*fit_taufrnt_W_dm11->Eval(TMath::Max(0,ntracks));
+	   if (LepCand_DecayMode[tau_index]==0){ 
+	      tfr_W=TMath::Min(1.0,fit_taufr_W_dm0->Eval(tpt));
+	      if (ntracks<25) tfr_W*=fitlow_taufrnt_W_dm0->Eval(TMath::Max(0,ntracks));
+	      else tfr_W*=fit_taufrnt_W_dm0->Eval(TMath::Max(0,ntracks)); //FIXME uncomment
+	   }
+           else if (LepCand_DecayMode[tau_index]==1){ 
+	      tfr_W=TMath::Min(1.0,fit_taufr_W_dm1->Eval(tpt));
+              if (ntracks<25) tfr_W*=fitlow_taufrnt_W_dm1->Eval(TMath::Max(0,ntracks));
+	      else tfr_W*=fit_taufrnt_W_dm1->Eval(TMath::Max(0,ntracks));
+	   }
+           else if (LepCand_DecayMode[tau_index]==10){ 
+	      tfr_W=TMath::Min(1.0,fit_taufr_W_dm10->Eval(tpt));
+              if (ntracks<25) tfr_W*=fitlow_taufrnt_W_dm10->Eval(TMath::Max(0,ntracks));
+	      else tfr_W*=fit_taufrnt_W_dm10->Eval(TMath::Max(0,ntracks));
+	   }
+           else if (LepCand_DecayMode[tau_index]==11){ 
+	      tfr_W=TMath::Min(1.0,fit_taufr_W_dm11->Eval(tpt));
+              if (ntracks<25) tfr_W*=fitlow_taufrnt_W_dm11->Eval(TMath::Max(0,ntracks));
+              else tfr_W*=fit_taufrnt_W_dm11->Eval(TMath::Max(0,ntracks));
+	   }
            if (is_etautrg or is_etauHPStrg) tfr_W*=1.7; //FIXME take the histogram instead of hardcoding
+
            float tfr_QCD=0.1;
-           if (LepCand_DecayMode[tau_index]==0) tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm0->Eval(tpt))*fit_taufrnt_QCD_dm0->Eval(TMath::Max(0,ntracks));
-           else if (LepCand_DecayMode[tau_index]==1) tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm1->Eval(tpt))*fit_taufrnt_QCD_dm1->Eval(TMath::Max(0,ntracks));
-           else if (LepCand_DecayMode[tau_index]==10) tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm10->Eval(tpt))*fit_taufrnt_QCD_dm10->Eval(TMath::Max(0,ntracks));
-           else if (LepCand_DecayMode[tau_index]==11) tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm11->Eval(tpt))*fit_taufrnt_QCD_dm11->Eval(TMath::Max(0,ntracks));
+           if (LepCand_DecayMode[tau_index]==0){
+	      tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm0->Eval(tpt));
+              if (ntracks<25) tfr_QCD*=fit_taufrnt_QCD_dm0->Eval(TMath::Max(0,ntracks));
+	      else tfr_QCD*=fitlow_taufrnt_QCD_dm0->Eval(TMath::Max(0,ntracks));
+	   }
+           else if (LepCand_DecayMode[tau_index]==1){
+	      tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm1->Eval(tpt));
+              if (ntracks<25) tfr_QCD*=fitlow_taufrnt_QCD_dm1->Eval(TMath::Max(0,ntracks));
+	      else tfr_QCD*=fit_taufrnt_QCD_dm1->Eval(TMath::Max(0,ntracks));
+	   }
+           else if (LepCand_DecayMode[tau_index]==10){ 
+	      tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm10->Eval(tpt));
+              if (ntracks<25) tfr_QCD*=fitlow_taufrnt_QCD_dm10->Eval(TMath::Max(0,ntracks));
+	      else tfr_QCD*=fit_taufrnt_QCD_dm10->Eval(TMath::Max(0,ntracks));
+	   }
+           else if (LepCand_DecayMode[tau_index]==11){ 
+	      tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm11->Eval(tpt));
+              if (ntracks<25) tfr_QCD*=fitlow_taufrnt_QCD_dm11->Eval(TMath::Max(0,ntracks));
+	      else tfr_QCD*=fit_taufrnt_QCD_dm11->Eval(TMath::Max(0,ntracks));
+	   }
            if (is_etautrg or is_etauHPStrg) tfr_QCD*=1.7; //FIXME dont hardcode
 
 	   float mymt=mt;

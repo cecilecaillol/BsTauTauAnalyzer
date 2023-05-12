@@ -4,6 +4,7 @@
 ./Add_track_friend_emu.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/MuonEGC.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_MuonEGC.root data_obs 
 ./Add_track_friend_emu.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/MuonEGD.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_MuonEGD.root data_obs 
 ./Add_track_friend_emu.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/DY.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_DY.root DY 
+./Add_track_friend_emu.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/DYemu.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_DYemu.root DYe
 ./Add_track_friend_emu.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/W.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_W.root W  
 ./Add_track_friend_emu.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/ST_t_antitop.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_ST_t_antitop.root ST_t_antitop 
 ./Add_track_friend_emu.exe /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/ST_t_top.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_ST_t_top.root ST_t_top 

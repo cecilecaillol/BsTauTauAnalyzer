@@ -4,7 +4,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--year', default="2016", choices=['2016', '2017', '2018'], help="Which TES?")
+    parser.add_argument('--year')
 
     options = parser.parse_args()
     postfixName=[""]

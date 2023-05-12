@@ -1,0 +1,5 @@
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleMuon/SingleMuon_Run2016preB-RunIISummer20UL16APV_NanoAODv9/230420_083226/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleMuon/SingleMuon_Run2016preC-RunIISummer20UL16APV_NanoAODv9/230420_083239/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleMuon/SingleMuon_Run2016preD-RunIISummer20UL16APV_NanoAODv9/230420_083252/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleMuon/SingleMuon_Run2016preE-RunIISummer20UL16APV_NanoAODv9/230420_083304/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleMuon/SingleMuon_Run2016preF-RunIISummer20UL16APV_NanoAODv9/230420_083317/0000

@@ -4,7 +4,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--year', default="2016", choices=['2016', '2017', '2018'], help="Which TES?")
+    parser.add_argument('--year')
 
     options = parser.parse_args()
     postfixName=[""]
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     fST=ROOT.TFile("output_etau_"+options.year+"/ST.root","r")
     fDY=ROOT.TFile("output_etau_"+options.year+"/DYrescaled.root","r")
     fData=ROOT.TFile("output_etau_"+options.year+"/EGamma.root","r")
-    if options.year=="2017": fData=ROOT.TFile("output_etau_"+options.year+"/SingleElectron.root","r")
+    if options.year=="2017" or options.year=="2016pre" or options.year=="2016post": fData=ROOT.TFile("output_etau_"+options.year+"/SingleElectron.root","r")
     fout=ROOT.TFile("output_etau_"+options.year+"/Fake.root","recreate")
 
     ncat=9
