@@ -1,4 +1,0 @@
-dataA SingleMuon_Run2018A-UL2018_MiniAODv2_NanoAODv9-v2_mutau
-dataB SingleMuon_Run2018B-UL2018_MiniAODv2_NanoAODv9-v2_mutau
-dataC SingleMuon_Run2018C-UL2018_MiniAODv2_NanoAODv9-v2_mutau
-dataD SingleMuon_Run2018D-UL2018_MiniAODv2_NanoAODv9-v1_mutau
