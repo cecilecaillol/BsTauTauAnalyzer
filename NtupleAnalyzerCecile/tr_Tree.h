@@ -100,6 +100,10 @@
    Float_t         TauG2Weights_ceBRe33_39p2;
    Float_t         TauG2Weights_ceBRe33_40p0;
 
+   Float_t         L1PreFiringWeight_Nom;
+   Float_t         L1PreFiringWeight_Up;
+   Float_t         L1PreFiringWeight_Dn;
+
    Int_t           ntracks_friend;
    Int_t           ntracksAll_friend;
    Int_t           ntracksHS_friend;
@@ -184,6 +188,10 @@
    Bool_t          HLT_Photon200;
    Bool_t          HLT_MediumChargedIsoPFTau180HighPtRelaxedIso_Trk50_eta2p1;
    Bool_t          HLT_DoubleTightChargedIsoPFTauHPS40_Trk1_eta2p1_Reg;
+   Bool_t          HLT_DoubleMediumChargedIsoPFTauHPS35_Trk1_eta2p1_Reg;
+   Bool_t          HLT_DoubleTightChargedIsoPFTau35_Trk1_TightID_eta2p1_Reg;
+   Bool_t          HLT_DoubleMediumChargedIsoPFTau40_Trk1_TightID_eta2p1_Reg;
+   Bool_t          HLT_DoubleTightChargedIsoPFTau40_Trk1_eta2p1_Reg;
    Int_t           nLepCand;
    Int_t           LepCand_id[6];   //[nLepCand]
    Float_t         LepCand_pt[6];   //[nLepCand]

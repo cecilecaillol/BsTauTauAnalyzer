@@ -29,8 +29,8 @@ hist=[
 "h_tauFRnt_W_dm11_VVVL","h_tauFRnt_W_dm11_M"
 ]
 
-fileData=ROOT.TFile("output_etau_"+options.year+"/EGamma.root","r")
-if options.year=="2018": fileData=ROOT.TFile("output_etau_"+options.year+"/EGamma.root","r")
+fileData=ROOT.TFile("output_etau_2018/EGamma.root","r")
+if options.year!="2018": fileData=ROOT.TFile("output_etau_"+options.year+"/SingleElectron.root","r")
 fileMC=ROOT.TFile("output_etau_"+options.year+"/MC.root","r")
 fileDataSub=ROOT.TFile("output_etau_"+options.year+"/DataSub.root","recreate")
 

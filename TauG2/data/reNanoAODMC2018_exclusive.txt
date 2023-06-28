@@ -2,3 +2,4 @@
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL18_GGToMuMu/GGToMuMu/230323_171025/0000/
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL18_GGToTauTau/GGToTauTau/230323_171045/0000/
 /eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL18_GGToWW/GGToWW/230323_171059/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL18_GGToTauTau_Ctb20/GGToTauTau_Ctb20/230626_115648/0000/

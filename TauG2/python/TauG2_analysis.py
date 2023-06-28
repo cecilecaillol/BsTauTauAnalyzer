@@ -362,10 +362,10 @@ class Analysis(Module):
             if event.selectedMuons[0].pt<24: return False
 
         if self.channel=="etau" or self.channel=="ee":
-            if event.selectedElectrons[0].pt<25: return False
+            if event.selectedElectrons[0].pt<24: return False
 
-        if self.channel=="etau":
-	    if event.selectedElectrons[0].pt<32 and event.selectedTaus[0].pt<34: return False
+        #if self.channel=="etau":
+	#    if event.selectedElectrons[0].pt<32 and event.selectedTaus[0].pt<34: return False
 
         if self.channel=="tautau":
             if event.selectedTaus[0].pt<39: return False
@@ -383,7 +383,7 @@ class Analysis(Module):
         if self.channel=="etau":
             tau_vse=False
             for k in range(0,len(event.selectedTaus)):
-               if event.selectedTaus[k].idDeepTau2017v2p1VSe>=32: tau_vse=True #pass tight VSmu
+               if event.selectedTaus[k].idDeepTau2017v2p1VSe>=32: tau_vse=True #pass tight VSe
             if not tau_vse: return False
 
         self.selectTracks(event)

@@ -58,7 +58,7 @@ if __name__ == "__main__":
     canv=ROOT.TCanvas("canvas","",0,0,900,600)
     canv.SetLeftMargin(0.15)
     canv.cd()
-
+    #canv.SetLogy()
 
     fin=ROOT.TFile("output_"+options.channel+"_"+options.year+"/signal.root","r")
     fout=ROOT.TFile("output_"+options.channel+"_"+options.year+"/bsm.root","recreate")
@@ -73,10 +73,19 @@ if __name__ == "__main__":
     ncat=2
 
     shapes=[]
+    year4=""
+    if options.year=="2018": year4="2018"
+    if options.year=="2017": year4="2017"
+    if options.year=="2016pre": year4="2016preVFP"
+    if options.year=="2016post": year4="2016postVFP"
+    if options.channel=="etau":
+	shapes=["CMS_tauid_stat1_dm0_"+year4,"CMS_tauid_stat1_dm1_"+year4,"CMS_tauid_stat1_dm10_"+year4,"CMS_tauid_stat1_dm11_"+year4,"CMS_tauid_stat2_dm0_"+year4,"CMS_tauid_stat2_dm1_"+year4,"CMS_tauid_stat2_dm10_"+year4,"CMS_tauid_stat2_dm11_"+year4,"CMS_tauid_syst_alleras","CMS_tauid_syst_"+year4,"CMS_tauid_syst_dm0_"+year4,"CMS_tauid_syst_dm1_"+year4,"CMS_tauid_syst_dm10_"+year4,"CMS_tauid_syst_dm11_"+year4,"CMS_taues_dm0_"+year4,"CMS_taues_dm1_"+year4,"CMS_taues_3prong_"+year4,"CMS_etauFR_barrel_"+year4,"CMS_etauFR_endcap_"+year4,"CMS_etauFES_dm0_"+year4,"CMS_etauFES_dm1_"+year4,"CMS_pileup_"+year4,"CMS_etautrg_"+year4,"CMS_etrg_"+year4,"CMS_elasticRescaling"]
+    if options.channel=="emu":
+	shapes=["CMS_pileup_"+year4,"CMS_emutrg_lowmuhighe_syst","CMS_emutrg_highmulowe_syst","CMS_emutrg_highmuhighe_syst","CMS_elasticRescaling","CMS_muId_syst","CMS_muId_stat_"+year4,"CMS_muIso_syst","CMS_muIso_stat_"+year4,"CMS_elId_syst"]
 
     for c in range(0,ncat):
 
-       nominal=fin.Get(categories[c]).Get("GGTT")
+       nominal=fin.Get(categories[c]).Get("GGTT_0p0")
        mydir=fout.mkdir(categories[c])
        mydir.cd()
 
@@ -89,16 +98,17 @@ if __name__ == "__main__":
 	     else:
                 myhist.SetBinContent(jjj,1.0)
                 if nominal.GetBinContent(jj)>0: myhist.SetBinError(jjj,1.0*nominal.GetBinError(jj)/nominal.GetBinContent(jj))
-	  myhist.SetName("TauG2_"+categories[c]+"_bin"+str(jj))
+	  myhist.SetName("TauG2_"+categories[c]+"_"+options.year+"_bin"+str(jj))
           myhist.Write()
 	  for s in shapes:
 	     myhist_up=myhist.Clone()
-	     myhist_up.Scale(fin.Get(categories[c]).Get("GGTT_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
-  	     myhist_up.SetName("TauG2_"+categories[c]+"_bin"+str(jj)+"_"+s+"Up")
+	     print "GGTT_0p0_"+s+"Up"
+	     myhist_up.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
+  	     myhist_up.SetName("TauG2_"+categories[c]+"_"+options.year+"_bin"+str(jj)+"_"+s+"Up")
 	     myhist_up.Write()
              myhist_down=myhist.Clone()
-             myhist_down.Scale(fin.Get(categories[c]).Get("GGTT_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
-             myhist_down.SetName("TauG2_"+categories[c]+"_bin"+str(jj)+"_"+s+"Down")
+             myhist_down.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
+             myhist_down.SetName("TauG2_"+categories[c]+"_"+options.year+"_bin"+str(jj)+"_"+s+"Down")
              myhist_down.Write()
 
           nom=nominal.GetBinContent(jj)
@@ -133,12 +143,14 @@ if __name__ == "__main__":
 	  #self.modelBuilder.factory_('expr::scale_et_0_bin1("@0*@1",mu_fid,rho_0_45)')
  	  physics_model.write("self.modelBuilder.factory_('expr::scale_")
           physics_model.write(categories[c])
+          physics_model.write("_")
+          physics_model.write(options.year)
           physics_model.write("_bin")
           physics_model.write(str(jj))
-          physics_model.write('("')
-          physics_model.write(str(total.GetParameter(0))+"+"+str(total.GetParameter(1))+"*@0+"+str(total.GetParameter(2))+"*@0*@0+"+str(total.GetParameter(3))+"*@0*@0*@0+"+str(total.GetParameter(4))+"*@0*@0*@0*@0+"+str(total.GetParameter(5))+"*@0*@0*@0*@0*@0")
+          physics_model.write('("(')
+          physics_model.write(str(total.GetParameter(0))+"+"+str(total.GetParameter(1))+"*@0+"+str(total.GetParameter(2))+"*@0*@0+"+str(total.GetParameter(3))+"*@0*@0*@0+"+str(total.GetParameter(4))+"*@0*@0*@0*@0+"+str(total.GetParameter(5))+"*@0*@0*@0*@0*@0)*@1")
           physics_model.write('"')
-          physics_model.write(",atau)')\n")
+          physics_model.write(",atau,mu)')\n")
 
 
           canv.cd()

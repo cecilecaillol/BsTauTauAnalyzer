@@ -13,22 +13,21 @@ python Relax_DY.py --year=2016post
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/W3.root output_etau_2016post/W3.root W3 W
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/W4.root output_etau_2016post/W4.root W4 W
 hadd -f output_etau_2016post/W.root output_etau_2016post/Wincl.root output_etau_2016post/W1.root output_etau_2016post/W2.root output_etau_2016post/W3.root output_etau_2016post/W4.root
-./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ST_t_antitop.root output_etau_2016post/ST_t_antitop.root ST_t_antitop ST
-./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ST_t_top.root output_etau_2016post/ST_t_top.root ST_t_top ST
-./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ST_tW_antitop.root output_etau_2016post/ST_tW_antitop.root ST_tW_antitop ST
-./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ST_tW_top.root output_etau_2016post/ST_tW_top.root ST_tW_top ST
-hadd -f output_etau_2016post/ST.root output_etau_2016post/ST_t_antitop.root output_etau_2016post/ST_t_top.root output_etau_2016post/ST_tW_antitop.root output_etau_2016post/ST_tW_top.root 
+./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ST_t_antitop.root output_etau_2016post/ST_t_antitop.root ST_t_antitop top
+./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ST_t_top.root output_etau_2016post/ST_t_top.root ST_t_top top
+./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ST_tW_antitop.root output_etau_2016post/ST_tW_antitop.root ST_tW_antitop top
+./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ST_tW_top.root output_etau_2016post/ST_tW_top.root ST_tW_top top
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/WW2L2Nu.root output_etau_2016post/WW2L2Nu.root WW2L2Nu VV
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/WZ2Q2L.root output_etau_2016post/WZ2Q2L.root WZ2Q2L VV
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/WZ3LNu.root output_etau_2016post/WZ3LNu.root WZ3LNu VV
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ZZ2L2Nu.root output_etau_2016post/ZZ2L2Nu.root ZZ2L2Nu VV
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ZZ4L.root output_etau_2016post/ZZ4L.root ZZ4L VV
-hadd -f output_etau_2016post/VV.root output_etau_2016post/WW2L2Nu.root output_etau_2016post/WZ2Q2L.root output_etau_2016post/WZ3LNu.root output_etau_2016post/ZZ2L2Nu.root output_etau_2016post/ZZ4L.root
-./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/TTToHadronic.root output_etau_2016post/TTToHadronic.root TTToHadronic TT
-./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/TTToSemiLeptonic.root output_etau_2016post/TTToSemiLeptonic.root TTToSemiLeptonic TT
-./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/TTTo2L2Nu.root output_etau_2016post/TTTo2L2Nu.root TTTo2L2Nu TT
-hadd -f output_etau_2016post/TT.root output_etau_2016post/TTToHadronic.root output_etau_2016post/TTToSemiLeptonic.root output_etau_2016post/TTTo2L2Nu.root
-hadd -f output_etau_2016post/MC.root output_etau_2016post/DYrescaled.root output_etau_2016post/ST.root output_etau_2016post/VV.root output_etau_2016post/TT.root
+hadd -f output_etau_2016post/VV.root output_etau_2016post/WW2L2Nu.root output_etau_2016post/WZ2Q2L.root output_etau_2016post/ZZ2L2Nu.root output_etau_2016post/ZZ4L.root #output_etau_2016post/WZ3LNu.root
+./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/TTToHadronic.root output_etau_2016post/TTToHadronic.root TTToHadronic top
+./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/TTToSemiLeptonic.root output_etau_2016post/TTToSemiLeptonic.root TTToSemiLeptonic top
+./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/TTTo2L2Nu.root output_etau_2016post/TTTo2L2Nu.root TTTo2L2Nu top
+hadd -f output_etau_2016post/top.root output_etau_2016post/TTToHadronic.root output_etau_2016post/TTToSemiLeptonic.root output_etau_2016post/TTTo2L2Nu.root output_etau_2016post/ST_t_antitop.root output_etau_2016post/ST_t_top.root output_etau_2016post/ST_tW_antitop.root output_etau_2016post/ST_tW_top.root
+hadd -f output_etau_2016post/MC.root output_etau_2016post/DYrescaled.root output_etau_2016post/VV.root output_etau_2016post/top.root
 #./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/GGToTauTau.root output_etau_2016post/GGTT.root GGTT GGTT
 #./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/GGToWW.root output_etau_2016post/GGWW.root GGWW GGWW
 

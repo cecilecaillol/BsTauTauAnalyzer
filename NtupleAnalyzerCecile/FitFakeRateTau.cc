@@ -132,9 +132,9 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
       theFit->SetParameter(3, 400);
     }
 
-    if (year==2018 and num.find("tauFRnt_")!=std::string::npos) theFit = new TF1("theFit", fitFunc_Exp3Par2, fMin, fMax, nPar);
+    if (num.find("tauFRnt_")!=std::string::npos) theFit = new TF1("theFit", fitFunc_Exp3Par2, fMin, fMax, nPar);
 
-    if (year==2018 and num.find("tauFRnt_W")!=std::string::npos) theFit = new TF1("theFit", fitFunc_Line2Par, fMin, fMax, 2);
+    if (num.find("tauFRnt_W")!=std::string::npos) theFit = new TF1("theFit", fitFunc_Line2Par, fMin, fMax, 2);
 
     /*theFit->SetParameter(0, 0.15);
     theFit->SetParameter(1, 0.0);
@@ -146,35 +146,35 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
     theFit->SetParameter(2, 300);
     theFit->SetParameter(3, 70);
 
-    if (year==2018 and num.find("dm1_")!=std::string::npos){
+    if (num.find("dm1_")!=std::string::npos){
       theFit->SetParameter(0, 0.7);
       theFit->SetParameter(1, -3.0);
       theFit->SetParameter(2, 191);
       theFit->SetParameter(3, 248);
     }
 
-    if (year==2018 and num.find("dm0_")!=std::string::npos){
+    if (num.find("dm0_")!=std::string::npos){
       theFit->SetParameter(0, 7.0);
       theFit->SetParameter(1, -37);
       theFit->SetParameter(2, 99);
       theFit->SetParameter(3, 180);
     }
 
-    if (year==2018 and num.find("W_dm0_")!=std::string::npos){
+    if (num.find("W_dm0_")!=std::string::npos){
       theFit->SetParameter(0, 1.8);
       theFit->SetParameter(1, -9);
       theFit->SetParameter(2, 130);
       theFit->SetParameter(3, 240);
     }
 
-    if (year==2018 and num.find("dm10_")!=std::string::npos){
+    if (num.find("dm10_")!=std::string::npos){
       theFit->SetParameter(0, 0.24);
       theFit->SetParameter(1, -1.4);
       theFit->SetParameter(2, 2410);
       theFit->SetParameter(3, 1630);
     }
 
-    if (year==2018 and num.find("tauFRnt_")!=std::string::npos){
+    if (num.find("tauFRnt_")!=std::string::npos){
       /*theFit->SetParameter(0, 0.54);
       theFit->SetParameter(1, 12.6);
       theFit->SetParameter(2, -26);
@@ -190,7 +190,7 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
       theFit2->SetParameter(2, 0.04);
       theFit2->SetParameter(3, 0.9);
     }
-    if (year==2018 and (num.find("tauFRnt_QCD_dm0")!=std::string::npos or num.find("tauFRnt_QCD_dm11")!=std::string::npos)){
+    if ((num.find("tauFRnt_QCD_dm0")!=std::string::npos or num.find("tauFRnt_QCD_dm11")!=std::string::npos)){
       theFit2 = new TF1("theFit2", fitFunc_Exp3Par2, 0, 30, nPar); //FIXME
       theFit2->SetParameter(0, 0.56);
       theFit2->SetParameter(1, 1.2);
@@ -200,7 +200,7 @@ std::cout<<"found"<<std::endl;
 
     }
 
-    if (year==2018 and num.find("tauFRnt_QCD_dm11")!=std::string::npos){
+    if (num.find("tauFRnt_QCD_dm11")!=std::string::npos){
       theFit2->SetParameter(0, 0.0);
       theFit2->SetParameter(1, 1.2);
       theFit2->SetParameter(2, 0.0);
@@ -209,7 +209,7 @@ std::cout<<"found"<<std::endl;
     }
 
 
-    if (year==2018 and num.find("tauFRnt_W")!=std::string::npos){
+    if (num.find("tauFRnt_W")!=std::string::npos){
       theFit->SetParameter(0, 1.5);
       theFit->SetParameter(1, -0.01);
     }
@@ -444,6 +444,19 @@ void FitFakeRateTau(int year) {
     m117_2->Write();
     m118_2->SetName("theFit2_nt_W_dm11");
     m118_2->Write();
+
+    TFile *inputFileX = new TFile(datafile.c_str());
+    TH1D *NumeratorQCD = (TH1D*) inputFileX->Get("h_tauFR_QCD_xtrg_M");
+    TH1D *DenumeratorQCD = (TH1D*) inputFileX->Get("h_tauFR_QCD_xtrg_VVVL");
+    NumeratorQCD->Divide(DenumeratorQCD);
+
+    TH1D *NumeratorW = (TH1D*) inputFileX->Get("h_tauFR_W_xtrg_M");
+    TH1D *DenumeratorW = (TH1D*) inputFileX->Get("h_tauFR_W_xtrg_VVVL");
+    NumeratorW->Divide(DenumeratorW);
+
+    FR_File->cd();
+    NumeratorQCD->Write();
+    NumeratorW->Write();
 
     FR_File->Close();
 }

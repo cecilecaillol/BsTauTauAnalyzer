@@ -20,14 +20,14 @@ class ElectronSelector(ObjectSelector):
         if isEBEE: return False       
         if el.pt < self.minPt: return False
         if abs(el.eta) > 2.5: return False
-        if not el.mvaFall17V2noIso_WPL: return False
+        if not el.mvaFall17V2Iso_WPL: return False
 	##if el.miniPFRelIso_all>0.50: return False
         ##if abs(el.dxy) > 0.05 or abs(el.dz) > 0.2: return False
 
         return True
 
 class TauSelector(ObjectSelector):
-    def __init__(self, _minPt = 19):
+    def __init__(self, _minPt = 24):
         self.minPt = _minPt
 
     def evalTau(self, tau):

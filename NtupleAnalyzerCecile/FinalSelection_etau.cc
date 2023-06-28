@@ -31,7 +31,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-    int is_control=1;
+    int is_control=0;
 
     std::string year = *(argv + 1);
     std::string input = *(argv + 2);
@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
     if (year=="2017") luminosity=41480.0;
     if (year=="2016pre") luminosity=19520.0;
     if (year=="2016post") luminosity=16810.0;
-    if (sample=="Z" or sample=="DY" or sample=="ZL" or sample=="ZTT" or sample=="ZJ" or sample=="ZLL"){ xs=6225.42; weight=luminosity*xs/ngen;}
+    if (sample=="Z" or sample=="DY" or sample=="ZL" or sample=="ZTT" or sample=="ZJ" or sample=="ZLL"){ xs=6077.2; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt100to250"){ xs=689.75; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt250to400"){ xs=24.51; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt400to600"){cout<<"trouve"<<endl; xs=3.110; weight=luminosity*xs/ngen;}
@@ -106,12 +106,14 @@ int main(int argc, char** argv) {
     else if (sample=="ST_tW_antitop"){ xs=35.6; weight=luminosity*xs/ngen;}
     else if (sample=="ST_t_top"){ xs=136.02; weight=luminosity*xs/ngen;}
     else if (sample=="ST_t_antitop"){ xs=80.95; weight=luminosity*xs/ngen;}
-    //else if (sample=="GGTT"){ xs=0.669*0.0172; weight=luminosity*xs/ngen;}
     else if (sample=="GGWW"){ xs=0.009625 * 0.40; weight=luminosity*xs/ngen;}
-    //else if (sample=="GGTT2"){ xs=0.669*0.0172*3.59; weight=luminosity*xs/ngen;}
-    else if (sample=="GGTT"){ xs=1.161*0.00871; weight=luminosity*xs/ngen;}
+    else if (sample=="GGTT"){ xs=1.161*0.008735; weight=luminosity*xs/ngen;}
+    else if (sample=="GGTT_Ctb20"){ xs=1.355*0.027169; weight=luminosity*xs/ngen;}
     else if (name=="data_obs"){ weight=1.0;}
     else if (name=="test") { xs=1.0; weight=luminosity*xs/ngen;}
+
+//if (sample=="GGTT" and year=="2017") weight*=1.0/0.1975; //FIXME Ctb=20p0
+    //if (sample=="GGTT" and year=="2017"){ xs=1.35*0.070; weight=luminosity*xs/ngen;}
 
 cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
 
@@ -150,6 +152,19 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
     float ngenW2=1153860.0/0.0928;
     float ngenW3=1450910.0/0.132;
     float ngenW4=1509960.0/0.184;
+
+    if (year=="2017"){
+       /*ngenW=1894170.0/0.0240;
+       ngenW1=1782300.0/0.0380;
+       ngenW2=1716170.0/0.0637;
+       ngenW3=1879860.0/0.1042;
+       ngenW4=1228160.0/0.1278;*/
+       ngenW=1894170.0/0.0305;
+       ngenW1=1782300.0/0.0523;
+       ngenW2=1716170.0/0.0928;
+       ngenW3=1879860.0/0.132;
+       ngenW4=1228160.0/0.184;
+    }
 
     float LW=ngenW/xsW;
     float LW1=ngenW1/xsW1;
@@ -228,6 +243,9 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
     arbre->SetBranchAddress("puWeightDown", &puWeightDown);
     arbre->SetBranchAddress("puWeightUp", &puWeightUp);
     arbre->SetBranchAddress("genWeight", &genWeight);
+    arbre->SetBranchAddress("L1PreFiringWeight_Nom", &L1PreFiringWeight_Nom);
+    arbre->SetBranchAddress("L1PreFiringWeight_Up", &L1PreFiringWeight_Up);
+    arbre->SetBranchAddress("L1PreFiringWeight_Dn", &L1PreFiringWeight_Dn);
 
     arbre->SetBranchAddress("MET_pt", &MET_pt);
     arbre->SetBranchAddress("MET_phi", &MET_phi);
@@ -351,9 +369,22 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
 
     arbre->AddFriend(ami);
 
-   int nbhist=1+48;
+   int nbhist=1;
    int nbhist_offset=0;
-   nbhist=1;//FIXME
+   int nbhistMC=0;
+
+   if (is_control==0){
+      if (name!="data_obs"){
+           nbhist=1+54+42;
+           nbhist_offset=0;
+           nbhistMC=54;
+      }
+      if (name=="data_obs"){
+           nbhist=1+42;
+           nbhist_offset=54;
+           nbhistMC=54;
+      }
+   }
 	
    std::vector<TH1F*> h0;
    std::vector<TH1F*> h0_anti;
@@ -395,7 +426,7 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
 
 
    // Control 1
-   float bins0[] = {0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,400,500};//mvis
+   /*float bins0[] = {0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,400,500};//mvis
    float bins1[] = {25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71,73,75,77,79,81,83,85,87,89,91,93,95,97,99,110,120};//e pt
    float bins2[] = {20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120};//tau pt
    float bins3[] = {-2.5,-2.3,-2.1,-1.9,-1.7,-1.5,-1.3,-1.1,-0.9,-0.7,-0.5,-0.3,-0.1,0.1,0.3,0.5,0.7,0.9,1.1,1.3,1.5,1.7,1.9,2.1,2.3,2.5};//e eta
@@ -404,18 +435,20 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    float bins6[] = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180};//mt
    //float bins7[] = {0,1,2,3,4,5,6,7,8,9,10,11};//njets
    float bins7[] = {0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100};
-   float bins8[] = {0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity
+   float bins8[] = {0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity*/
 
    // Signal region
-   /*float bins0[] = {60,75,90,105,120,135,180,250};//mvis
-   float bins1[] = {60,70,80,90,100,110,120,150,200,250};//mvis
+   //float bins0[] = {60,75,90,105,120,135,180,250};//mvis
+   //float bins1[] = {60,70,80,90,100,110,120,150,200,250};//mvis
+   float bins0[] = {55,70,85,100,115,130,160,190,220};//mvis
+   float bins1[] = {55,70,85,100,115,130,160,190,220};//mvis
    float bins2[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins3[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins4[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins5[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins6[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins7[] = {40,55,70,85,100,125,150,200,350,500};//mvis
-   float bins8[] = {40,55,70,85,100,125,150,200,350,500};//mvis*/
+   float bins8[] = {40,55,70,85,100,125,150,200,350,500};//mvis
 
    int  binnum0 = sizeof(bins0)/sizeof(Float_t) - 1;
    int  binnum1 = sizeof(bins1)/sizeof(Float_t) - 1;
@@ -558,9 +591,9 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    TH1F *h_tauFR_W_xtrg_M=new TH1F("h_tauFR_W_xtrg_M","h_tauFR_W_xtrg_M",3,0,3); h_tauFR_W_xtrg_M->Sumw2();
    TH1F *h_tauFR_W_xtrg_VVVL=new TH1F("h_tauFR_W_xtrg_VVVL","h_tauFR_W_xtrg_VVVL",3,0,3); h_tauFR_W_xtrg_VVVL->Sumw2();
 
-   TString uncertainties[49]={"","_CMS_tauid_stat1_dm0_yearDown","_CMS_tauid_stat1_dm0_yearUp","_CMS_tauid_stat1_dm1_yearDown","_CMS_tauid_stat1_dm1_yearUp","_CMS_tauid_stat1_dm10_yearDown","_CMS_tauid_stat1_dm10_yearUp","_CMS_tauid_stat1_dm11_yearDown","_CMS_tauid_stat1_dm11_yearUp","_CMS_tauid_stat2_dm0_yearDown","_CMS_tauid_stat2_dm0_yearUp","_CMS_tauid_stat2_dm1_yearDown","_CMS_tauid_stat2_dm1_yearUp","_CMS_tauid_stat2_dm10_yearDown","_CMS_tauid_stat2_dm10_yearUp","_CMS_tauid_stat2_dm11_yearDown","_CMS_tauid_stat2_dm11_yearUp","_CMS_tauid_syst_allerasDown","_CMS_tauid_syst_allerasUp","_CMS_tauid_syst_yearDown","_CMS_tauid_syst_yearUp","_CMS_tauid_syst_dm0_yearDown","_CMS_tauid_syst_dm0_yearUp","_CMS_tauid_syst_dm1_yearDown","_CMS_tauid_syst_dm1_yearUp","_CMS_tauid_syst_dm10_yearDown","_CMS_tauid_syst_dm10_yearUp","_CMS_tauid_syst_dm11_yearDown","_CMS_tauid_syst_dm11_yearUp","_CMS_taues_dm0_yearDown","_CMS_taues_dm0_yearUp","_CMS_taues_dm1_yearDown","_CMS_taues_dm1_yearUp","_CMS_taues_3prong_yearDown","_CMS_taues_3prong_yearUp","_CMS_etauFR_barrel_yearDown","_CMS_etauFR_barrel_yearUp","_CMS_etauFR_endcap_yearDown","_CMS_etauFR_endcap_yearUp","_CMS_etauFES_dm0_yearDown","_CMS_etauFES_dm0_yearUp","_CMS_etauFES_dm1_yearDown","_CMS_etauFES_dm1_yearUp","_CMS_pileup_yearDown","_CMS_pileup_yearUp","_CMS_etautrg_yearDown","_CMS_etautrg_yearUp","_CMS_etrg_yearDown","_CMS_etrg_yearUp"};
+   TString uncertainties[55]={"","_CMS_tauid_stat1_dm0_yearDown","_CMS_tauid_stat1_dm0_yearUp","_CMS_tauid_stat1_dm1_yearDown","_CMS_tauid_stat1_dm1_yearUp","_CMS_tauid_stat1_dm10_yearDown","_CMS_tauid_stat1_dm10_yearUp","_CMS_tauid_stat1_dm11_yearDown","_CMS_tauid_stat1_dm11_yearUp","_CMS_tauid_stat2_dm0_yearDown","_CMS_tauid_stat2_dm0_yearUp","_CMS_tauid_stat2_dm1_yearDown","_CMS_tauid_stat2_dm1_yearUp","_CMS_tauid_stat2_dm10_yearDown","_CMS_tauid_stat2_dm10_yearUp","_CMS_tauid_stat2_dm11_yearDown","_CMS_tauid_stat2_dm11_yearUp","_CMS_tauid_syst_allerasDown","_CMS_tauid_syst_allerasUp","_CMS_tauid_syst_yearDown","_CMS_tauid_syst_yearUp","_CMS_tauid_syst_dm0_yearDown","_CMS_tauid_syst_dm0_yearUp","_CMS_tauid_syst_dm1_yearDown","_CMS_tauid_syst_dm1_yearUp","_CMS_tauid_syst_dm10_yearDown","_CMS_tauid_syst_dm10_yearUp","_CMS_tauid_syst_dm11_yearDown","_CMS_tauid_syst_dm11_yearUp","_CMS_taues_dm0_yearDown","_CMS_taues_dm0_yearUp","_CMS_taues_dm1_yearDown","_CMS_taues_dm1_yearUp","_CMS_taues_3prong_yearDown","_CMS_taues_3prong_yearUp","_CMS_etauFR_barrel_yearDown","_CMS_etauFR_barrel_yearUp","_CMS_etauFR_endcap_yearDown","_CMS_etauFR_endcap_yearUp","_CMS_etauFES_dm0_yearDown","_CMS_etauFES_dm0_yearUp","_CMS_etauFES_dm1_yearDown","_CMS_etauFES_dm1_yearUp","_CMS_pileup_yearDown","_CMS_pileup_yearUp","_CMS_etautrg_yearDown","_CMS_etautrg_yearUp","_CMS_etrg_yearDown","_CMS_etrg_yearUp","_CMS_elasticRescalingDown","_CMS_elasticRescalingUp","_CMS_L1PrefiringDown","_CMS_L1PrefiringUp","_CMS_elId_systDown","_CMS_elId_systUp"};
 
-   for (int k = 0; k < 49; ++k){
+   for (int k = 0; k < 55; ++k){
       if (year=="2016pre") uncertainties[k]=uncertainties[k].ReplaceAll("year","2016preVFP");
       if (year=="2016post") uncertainties[k]=uncertainties[k].ReplaceAll("year","2016postVFP");
       if (year=="2017") uncertainties[k]=uncertainties[k].ReplaceAll("year","2017");
@@ -568,7 +601,15 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    }
 
 
-   TString fake_uncertainties[1]={""};
+   TString fake_uncertainties[42]={"_CMS_jetfake_w_invertMTDown","_CMS_jetfake_w_invertMTUp","_CMS_jetfake_qcd_invertOSDown","_CMS_jetfake_qcd_invertOSUp","_CMS_jetfake_tauptextrap_w_et_dm0_yearDown","_CMS_jetfake_tauptextrap_w_et_dm0_yearUp","_CMS_jetfake_tauptextrap_w_et_dm1_yearDown","_CMS_jetfake_tauptextrap_w_et_dm1_yearUp","_CMS_jetfake_tauptextrap_w_et_dm10_yearDown","_CMS_jetfake_tauptextrap_w_et_dm10_yearUp","_CMS_jetfake_tauptextrap_w_et_dm11_yearDown","_CMS_jetfake_tauptextrap_w_et_dm11_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm0_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm0_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm1_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm1_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm10_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm10_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm11_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm11_yearUp","_CMS_jetfake_wfractionDown","_CMS_jetfake_wfractionUp","_CMS_jetfake_ntracksextrap_w_et_dm0_yearDown","_CMS_jetfake_ntracksextrap_w_et_dm0_yearUp","_CMS_jetfake_ntracksextrap_w_et_dm1_yearDown","_CMS_jetfake_ntracksextrap_w_et_dm1_yearUp","_CMS_jetfake_ntracksextrap_w_et_dm10_yearDown","_CMS_jetfake_ntracksextrap_w_et_dm10_yearUp","_CMS_jetfake_ntracksextrap_w_et_dm11_yearDown","_CMS_jetfake_ntracksextrap_w_et_dm11_yearUp","_CMS_jetfake_ntracksextrap_qcd_et_dm0_yearDown","_CMS_jetfake_ntracksextrap_qcd_et_dm0_yearUp","_CMS_jetfake_ntracksextrap_qcd_et_dm1_yearDown","_CMS_jetfake_ntracksextrap_qcd_et_dm1_yearUp","_CMS_jetfake_ntracksextrap_qcd_et_dm10_yearDown","_CMS_jetfake_ntracksextrap_qcd_et_dm10_yearUp","_CMS_jetfake_ntracksextrap_qcd_et_dm11_yearDown","_CMS_jetfake_ntracksextrap_qcd_et_dm11_yearUp","_CMS_jetfake_ntracksextrap_w_et_yearDown","_CMS_jetfake_ntracksextrap_w_et_yearUp","_CMS_jetfake_ntracksextrap_qcd_et_yearDown","_CMS_jetfake_ntracksextrap_qcd_et_yearUp"};
+
+   for (int k = 0; k < 42; ++k){
+      if (year=="2016pre") fake_uncertainties[k]=fake_uncertainties[k].ReplaceAll("year","2016preVFP");
+      if (year=="2016post") fake_uncertainties[k]=fake_uncertainties[k].ReplaceAll("year","2016postVFP");
+      if (year=="2017") fake_uncertainties[k]=fake_uncertainties[k].ReplaceAll("year","2017");
+      if (year=="2018") fake_uncertainties[k]=fake_uncertainties[k].ReplaceAll("year","2018");
+   }
+
    TFile* f_eleIDSF=new TFile("scalefactors/egammaEffi.txt_Ele_wp80iso_EGM2D.root","read");
    TH2F* h_eleIDSF= (TH2F*) f_eleIDSF->Get("EGamma_SF2D");
    TFile* f_eleRecoSF=new TFile("scalefactors/egammaEffi_ptAbove20.txt_EGM2D_UL2018.root","read");
@@ -593,14 +634,37 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
       h_eleRecoSF= (TH2F*) f_eleRecoSF->Get("EGamma_SF2D");
    }
 
-   TFile* f_etautrgSF=new TFile("scalefactors/electron_SF_etautrg_2018UL.root","read");
+   /*TFile* f_etautrgSF=new TFile("scalefactors/electron_SF_etautrg_2018UL.root","read");
    TH2F* h_etautrgData= (TH2F*) f_etautrgSF->Get("data_trg_eff");
    TH2F* h_etautrgMC= (TH2F*) f_etautrgSF->Get("ZLL_trg_eff");
    TFile* f_e32trgSF=new TFile("scalefactors/electron_SF_e32trg_2018UL.root","read");
    TH2F* h_e32trgData= (TH2F*) f_etautrgSF->Get("data_trg_eff");
-   TH2F* h_e32trgMC= (TH2F*) f_etautrgSF->Get("ZLL_trg_eff");
+   TH2F* h_e32trgMC= (TH2F*) f_etautrgSF->Get("ZLL_trg_eff");*/
+
+   TFile* f_etautrgSF=new TFile("scalefactors/sf_el_2018_HLTEle24Tau30.root","read");
+   TH2F* h_etautrgSF= (TH2F*) f_etautrgSF->Get("SF2D");
+   TFile* f_etrgSF=new TFile("scalefactors/sf_el_2018_HLTEle32.root","read");
+   TH2F* h_etrgSF= (TH2F*) f_etrgSF->Get("SF2D");
+   if (year=="2017"){
+      TFile* f_etautrgSF=new TFile("scalefactors/sf_el_2017_HLTEle24Tau30.root","read");
+      h_etautrgSF= (TH2F*) f_etautrgSF->Get("SF2D");
+      TFile* f_etrgSF=new TFile("scalefactors/sf_el_2017_HLTEle32.root","read");
+      h_etrgSF= (TH2F*) f_etrgSF->Get("SF2D");
+   }
+   else if (year=="2016pre"){
+      TFile* f_etrgSF=new TFile("scalefactors/sf_el_2016pre_HLTEle25.root","read");
+      h_etrgSF= (TH2F*) f_etrgSF->Get("SF2D");
+   }
+   else if (year=="2016post"){
+      TFile* f_etrgSF=new TFile("scalefactors/sf_el_2016post_HLTEle25.root","read");
+      h_etrgSF= (TH2F*) f_etrgSF->Get("SF2D");
+   }
 
    TFile* f_taufr = new TFile("fakerate/FitValues_tauFR_2018.root");
+
+   TH1F *err_nt0_ffW = (TH1F*) f_taufr->Get("err_nt0_ffW");
+   TH1F *err_nt0_ffQCD = (TH1F*) f_taufr->Get("err_nt0_ffQCD");
+
    TF1 *fit_taufr_QCD_dm0 = (TF1*) f_taufr->Get("theFit_QCD_dm0");
    TF1 *fit_taufr_QCD_dm1 = (TF1*) f_taufr->Get("theFit_QCD_dm1");
    TF1 *fit_taufr_QCD_dm10 = (TF1*) f_taufr->Get("theFit_QCD_dm10");
@@ -628,11 +692,11 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    TF1 *fitlow_taufrnt_W_dm10 = (TF1*) f_taufr->Get("theFit2_nt_W_dm10");
    TF1 *fitlow_taufrnt_W_dm11 = (TF1*) f_taufr->Get("theFit2_nt_W_dm11");
 
-   TF1 *fit_taufr_QCD_xtrg = (TF1*) f_taufr->Get("theFit_QCD_xtrg");
-   TF1 *fit_taufr_W_xtrg = (TF1*) f_taufr->Get("theFit_W_xtrg");
+   TH1F *corr_taufr_QCD_xtrg = (TH1F*) f_taufr->Get("h_tauFR_QCD_xtrg_M");
+   TH1F *corr_taufr_W_xtrg = (TH1F*) f_taufr->Get("h_tauFR_W_xtrg_M");
 
    if (year=="2016pre"){
-      TFile* f_taufr = new TFile("fakerate/FitValues_tauFR_2016pre.root");
+      TFile* f_taufr = new TFile("fakerate/FitValues_tauFR_2016pre.root"); 
       fit_taufr_QCD_dm0 = (TF1*) f_taufr->Get("theFit_QCD_dm0");
       fit_taufr_QCD_dm1 = (TF1*) f_taufr->Get("theFit_QCD_dm1");
       fit_taufr_QCD_dm10 = (TF1*) f_taufr->Get("theFit_QCD_dm10");
@@ -660,8 +724,8 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
       fitlow_taufrnt_W_dm10 = (TF1*) f_taufr->Get("theFit2_nt_W_dm10");
       fitlow_taufrnt_W_dm11 = (TF1*) f_taufr->Get("theFit2_nt_W_dm11");
 
-      fit_taufr_QCD_xtrg = (TF1*) f_taufr->Get("theFit_QCD_xtrg");
-      fit_taufr_W_xtrg = (TF1*) f_taufr->Get("theFit_W_xtrg");
+      corr_taufr_QCD_xtrg = (TH1F*) f_taufr->Get("theFit_QCD_xtrg");
+      corr_taufr_W_xtrg = (TH1F*) f_taufr->Get("theFit_W_xtrg");
    }
 
    if (year=="2016post"){
@@ -693,14 +757,53 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
       fitlow_taufrnt_W_dm10 = (TF1*) f_taufr->Get("theFit2_nt_W_dm10");
       fitlow_taufrnt_W_dm11 = (TF1*) f_taufr->Get("theFit2_nt_W_dm11");
 
-      fit_taufr_QCD_xtrg = (TF1*) f_taufr->Get("theFit_QCD_xtrg");
-      fit_taufr_W_xtrg = (TF1*) f_taufr->Get("theFit_W_xtrg");
+      corr_taufr_QCD_xtrg = (TH1F*) f_taufr->Get("theFit_QCD_xtrg");
+      corr_taufr_W_xtrg = (TH1F*) f_taufr->Get("theFit_W_xtrg");
+   }
+
+   if (year=="2017"){
+      TFile* f_taufr = new TFile("fakerate/FitValues_tauFR_2017.root");
+      fit_taufr_QCD_dm0 = (TF1*) f_taufr->Get("theFit_QCD_dm0");
+      fit_taufr_QCD_dm1 = (TF1*) f_taufr->Get("theFit_QCD_dm1");
+      fit_taufr_QCD_dm10 = (TF1*) f_taufr->Get("theFit_QCD_dm10");
+      fit_taufr_QCD_dm11 = (TF1*) f_taufr->Get("theFit_QCD_dm11");
+      fit_taufr_W_dm0 = (TF1*) f_taufr->Get("theFit_W_dm0");
+      fit_taufr_W_dm1 = (TF1*) f_taufr->Get("theFit_W_dm1");
+      fit_taufr_W_dm10 = (TF1*) f_taufr->Get("theFit_W_dm10");
+      fit_taufr_W_dm11 = (TF1*) f_taufr->Get("theFit_W_dm11");
+
+      fit_taufrnt_QCD_dm0 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm0");
+      fit_taufrnt_QCD_dm1 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm1");
+      fit_taufrnt_QCD_dm10 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm10");
+      fit_taufrnt_QCD_dm11 = (TF1*) f_taufr->Get("theFit_nt_QCD_dm11");
+      fit_taufrnt_W_dm0 = (TF1*) f_taufr->Get("theFit_nt_W_dm0");
+      fit_taufrnt_W_dm1 = (TF1*) f_taufr->Get("theFit_nt_W_dm1");
+      fit_taufrnt_W_dm10 = (TF1*) f_taufr->Get("theFit_nt_W_dm10");
+      fit_taufrnt_W_dm11 = (TF1*) f_taufr->Get("theFit_nt_W_dm11");
+
+      fitlow_taufrnt_QCD_dm0 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm0");
+      fitlow_taufrnt_QCD_dm1 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm1");
+      fitlow_taufrnt_QCD_dm10 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm10");
+      fitlow_taufrnt_QCD_dm11 = (TF1*) f_taufr->Get("theFit2_nt_QCD_dm11");
+      fitlow_taufrnt_W_dm0 = (TF1*) f_taufr->Get("theFit2_nt_W_dm0");
+      fitlow_taufrnt_W_dm1 = (TF1*) f_taufr->Get("theFit2_nt_W_dm1");
+      fitlow_taufrnt_W_dm10 = (TF1*) f_taufr->Get("theFit2_nt_W_dm10");
+      fitlow_taufrnt_W_dm11 = (TF1*) f_taufr->Get("theFit2_nt_W_dm11");
+
+      corr_taufr_QCD_xtrg = (TH1F*) f_taufr->Get("h_tauFR_QCD_xtrg_M");
+      corr_taufr_W_xtrg = (TH1F*) f_taufr->Get("h_tauFR_W_xtrg_M");
    }
 
    TH2F *fractionOS=new TH2F("fractionOS","fractionOS",3,0,75,4,50,250);
    TH2F *fractionSS=new TH2F("fractionSS","fractionSS",3,0,75,4,50,250);
+   TH1F *fractionNtrackOS=new TH1F("fractionNtrackOS","fractionNtrackOS",14,0,70);
+   TH1F *fractionNtrackSS=new TH1F("fractionNtrackSS","fractionNtrackSS",14,0,70);
+   TH1F *fractionAcoplanarityOS=new TH1F("fractionAcoplanarityOS","fractionAcoplanarityOS",21,-0.05,1.0);
+   TH1F *fractionAcoplanaritySS=new TH1F("fractionAcoplanaritySS","fractionAcoplanaritySS",21,-0.05,1.0);
 
-   TFile* f_frac=new TFile("output_etau_2018/fractions.root","read");
+   //TFile* f_frac=new TFile("output_etau_2018/fractions.root","read");
+   TFile* f_frac=new TFile("fakerate/fractions_2018.root","read");
+   //TFile* f_frac=new TFile("fractions_2018.root","read");//FIXME
    TH2F* h_fracW= (TH2F*) f_frac->Get("frac_W");
 
    TH1F* h_vtxresolution_PV = new TH1F("h_vtxresolution_PV","h_vtxresolution_PV",200,-1,1); h_vtxresolution_PV->Sumw2();
@@ -790,7 +893,9 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    auto b4_29=arbre->GetBranch("GenCand_pt");
    auto b4_30=arbre->GetBranch("GenCand_eta");
    auto b4_31=arbre->GetBranch("GenCand_phi");
-
+   auto b4_32=arbre->GetBranch("L1PreFiringWeight_Nom");
+   auto b4_33=arbre->GetBranch("L1PreFiringWeight_Up");
+   auto b4_34=arbre->GetBranch("L1PreFiringWeight_Dn");
 
    auto b5_1=arbre->GetBranch("MET_pt");
    auto b5_2=arbre->GetBranch("MET_phi");
@@ -969,6 +1074,7 @@ cout<<"novs"<<endl;
    cout<<luminosity*nnlo/(LW+LW3)<<endl;
    cout<<luminosity*nnlo/(LW+LW4)<<endl;
 
+   TH1F* h_DY_ABCD=new TH1F("h_DY_ABCD","h_DY_ABCD",6,0,6); h_DY_ABCD->Sumw2();
 
    for (Int_t i = 0; i < nentries_wtn; i++) {
 	arbre->LoadTree(i);
@@ -976,8 +1082,7 @@ cout<<"novs"<<endl;
         if (i % 10000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
         fflush(stdout);
 
-      if (input=="/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018aaaaaa/EGammaA.root" and i>=464459 and i<475000) continue;//FIXME
-	
+
 	if (name=="W"){
 	  b0_1->GetEntry(i);
           if (sample=="W" and LHE_Njets==0) weight=luminosity*nnlo/LW;
@@ -1011,11 +1116,13 @@ cout<<"novs"<<endl;
 	if (name=="ZTT" and LepCand_gen[tau_index]!=5) continue;
         if (name=="ZLL" and LepCand_gen[tau_index]==5) continue;
 
+
 	if (fabs(my_tau.Eta())>2.3) continue;
         if (fabs(my_ele.Eta())>2.1) continue;
 	if (my_tau.DeltaR(my_ele)<0.5) continue;
 
 	// Trigger block
+	b3_7->GetEntry(i);
 	if (name=="data_obs") {b2_4->GetEntry(i);}
 	if (year=="2018"){
            b2_1->GetEntry(i);
@@ -1026,7 +1133,6 @@ cout<<"novs"<<endl;
 	   b2_2017_1->GetEntry(i); b2_2017_2->GetEntry(i);
         }
 	else if (year=="2016" or year=="2016pre" or year=="2016post"){
-	   //FIXME what is the MC trigger?
            b2_2016_1->GetEntry(i); 
 	   if (name=="data_obs" and run<276215) b2_2016_3->GetEntry(i);
            else if (name=="data_obs" and run>276214 and run<278270) b2_2016_2->GetEntry(i);
@@ -1037,8 +1143,9 @@ cout<<"novs"<<endl;
 	bool is_etautrg=false;
 	bool is_etauHPStrg=false;
 	if (year=="2018"){
-	   is_eletrg=(HLT_Ele32_WPTight_Gsf and my_ele.Pt()>32);
-	   if (name!="data_obs" or run>=317509) is_etauHPStrg=(HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_CrossL1 and my_ele.Pt()>24 and my_tau.Pt()>34 and my_ele.Pt()<34 and fabs(my_tau.Eta())<2.1 and fabs(my_ele.Eta())<2.1);
+	   is_eletrg=(HLT_Ele32_WPTight_Gsf and my_ele.Pt()>32 and LepCand_trgmatch[ele_index]);
+	   if (name!="data_obs") is_etauHPStrg=(HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_CrossL1 and my_ele.Pt()>24 and my_tau.Pt()>34 and my_ele.Pt()<34 and fabs(my_tau.Eta())<2.1 and fabs(my_ele.Eta())<2.1 and LepCand_trgmatch[ele_index]);
+           if (name=="data_obs" and run>=317509) is_etauHPStrg=(HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTauHPS30_eta2p1_CrossL1 and my_ele.Pt()>24 and my_tau.Pt()>34 and my_ele.Pt()<34 and fabs(my_tau.Eta())<2.1 and fabs(my_ele.Eta())<2.1);
            if (name=="data_obs" and run<317509) is_etautrg=(HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1 and my_ele.Pt()>24 and my_tau.Pt()>34 and my_ele.Pt()<34 and fabs(my_tau.Eta())<2.1 and fabs(my_ele.Eta())<2.1);
 	
 	   if (name!="data_obs" and !is_eletrg and !is_etauHPStrg) continue;
@@ -1046,29 +1153,32 @@ cout<<"novs"<<endl;
            if (name=="data_obs" and run>=317509 and !is_eletrg and !is_etauHPStrg) continue;
 	}
 	else if (year=="2017"){
-	   is_eletrg=(HLT_Ele32_WPTight_Gsf_L1DoubleEG and my_ele.Pt()>32);
-	   is_etautrg=(HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1 and my_ele.Pt()>24 and my_tau.Pt()>34 and my_ele.Pt()<34 and fabs(my_tau.Eta())<2.1 and fabs(my_ele.Eta())<2.1);
+	   is_eletrg=(HLT_Ele32_WPTight_Gsf_L1DoubleEG and my_ele.Pt()>32 and LepCand_trgmatch[ele_index]);
+	   if (name=="data_obs") is_etautrg=(HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1 and my_ele.Pt()>24 and my_tau.Pt()>34 and my_ele.Pt()<34 and fabs(my_tau.Eta())<2.1 and fabs(my_ele.Eta())<2.1);
+           if (name!="data_obs") is_etautrg=(HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1 and my_ele.Pt()>24 and my_tau.Pt()>34 and my_ele.Pt()<34 and fabs(my_tau.Eta())<2.1 and fabs(my_ele.Eta())<2.1 and LepCand_trgmatch[ele_index] and LepCand_trgmatch[tau_index]);
 	   if (!is_eletrg and !is_etautrg) continue;
 	}
         else if (year=="2016" or year=="2016pre" or year=="2016post"){
-           is_eletrg=(HLT_Ele25_eta2p1_WPTight_Gsf and my_ele.Pt()>25);
+           is_eletrg=(HLT_Ele25_eta2p1_WPTight_Gsf and my_ele.Pt()>25 and LepCand_trgmatch[ele_index]);
 	   if (!is_eletrg) continue;
         }
 
 	// Block ID/iso/charge
-	b3_1->GetEntry(i); b3_2->GetEntry(i); b3_3->GetEntry(i); b3_4->GetEntry(i); b3_5->GetEntry(i); b3_6->GetEntry(i); b3_7->GetEntry(i);
+	b3_1->GetEntry(i); b3_2->GetEntry(i); b3_3->GetEntry(i); b3_4->GetEntry(i); b3_5->GetEntry(i); b3_6->GetEntry(i); //b3_7->GetEntry(i);
 	if (LepCand_vse[tau_index]<63 or LepCand_vsmu[tau_index]<1 or LepCand_vsjet[tau_index]<1) continue; //was 127
 	if (!LepCand_eleMVAiso80[ele_index]) continue;
-	if (is_eletrg and !LepCand_trgmatch[ele_index]) continue; //FIXME uncomment
+	//if (is_eletrg and !LepCand_trgmatch[ele_index]) continue; 
+//if (is_etautrg or is_etauHPStrg) cout<<LepCand_trgmatch[ele_index]<<" "<<LepCand_trgmatch[tau_index]<<endl;
 	//if (!is_eletrg and !LepCand_trgmatch[tau_index]) continue; //FIXME
 
 	bool is_OS = (LepCand_charge[tau_index]*LepCand_charge[ele_index]<0);
-	bool is_isolated = (LepCand_vsjet[tau_index]>=16);
+	bool is_isolated = (LepCand_vsjet[tau_index]>=16); 
 
 	// Block weights
 	if (name!="data_obs") {b4_1->GetEntry(i); b4_2->GetEntry(i); b4_3->GetEntry(i); b4_4->GetEntry(i); b4_5->GetEntry(i); b4_6->GetEntry(i); b4_24->GetEntry(i); }
         if (name!="data_obs" and nbhist>1){ b4_8->GetEntry(i); b4_9->GetEntry(i); b4_10->GetEntry(i); b4_11->GetEntry(i); b4_12->GetEntry(i); b4_13->GetEntry(i); b4_14->GetEntry(i); b4_15->GetEntry(i); b4_16->GetEntry(i); b4_17->GetEntry(i); b4_18->GetEntry(i); b4_19->GetEntry(i); b4_20->GetEntry(i);b4_21->GetEntry(i); b4_22->GetEntry(i); b4_23->GetEntry(i); b4_25->GetEntry(i); b4_26->GetEntry(i);}
         if (name!="data_obs"){ b4_27->GetEntry(i); b4_28->GetEntry(i); b4_29->GetEntry(i); b4_30->GetEntry(i); b4_31->GetEntry(i);}
+        if (name!="data_obs" and year!="2018"){ b4_32->GetEntry(i); b4_33->GetEntry(i); b4_34->GetEntry(i);}
 
 	b4_7->GetEntry(i);
         float acoplanarity = (1.0 -fabs(my_ele.DeltaPhi(my_tau))/3.14159);
@@ -1088,16 +1198,22 @@ cout<<"novs"<<endl;
            gen_aco = (1.0 -fabs(my_gen1.DeltaPhi(my_gen2))/3.14159);
         }
         if (gen_aco>0.35) gen_aco=0.35;
+	float gen_mtt=200.0;
+	if (nGenCand>1 and (sample=="GGTT" or sample=="GGWW" or sample=="GGTT_Ctb20")) gen_mtt=(my_gen1+my_gen2).M();
 
 	float aweight=1.0;
 	float tauidSF=1.0;
+        float elidsf_nom=1.0;
+        float elidsf_up=1.0;
+        float elidsf_down=1.0;
 	if (name!="data_obs"){
 	   aweight=aweight*puWeight;
+	   if (year!="2018") aweight=aweight*L1PreFiringWeight_Nom;
 	   if (name!="W") aweight*=genWeight;
 	   if (LepCand_gen[tau_index]==5) tauidSF=LepCand_tauidMsf[tau_index];
            if (LepCand_gen[tau_index]==1 or LepCand_gen[tau_index]==3) aweight=aweight*LepCand_antielesf[tau_index];
            if (LepCand_gen[tau_index]==2 or LepCand_gen[tau_index]==4) aweight=aweight*LepCand_antimusf[tau_index];
-	   if (is_etautrg or is_etauHPStrg){ 
+	   /*if (is_etautrg or is_etauHPStrg){ 
 	      aweight=aweight*LepCand_tautriggersf[tau_index];
 	      float effMC=h_etautrgMC->GetBinContent(h_etautrgMC->GetXaxis()->FindBin(TMath::Min(my_ele.Pt(),199.)),h_etautrgMC->GetYaxis()->FindBin(fabs(my_ele.Eta())));
 	      float effData=h_etautrgData->GetBinContent(h_etautrgData->GetXaxis()->FindBin(TMath::Min(199.,my_ele.Pt())),h_etautrgData->GetYaxis()->FindBin(fabs(my_ele.Eta())));
@@ -1107,11 +1223,22 @@ cout<<"novs"<<endl;
               float effMC=h_e32trgMC->GetBinContent(h_e32trgMC->GetXaxis()->FindBin(TMath::Min(my_ele.Pt(),199.)),h_e32trgMC->GetYaxis()->FindBin(fabs(my_ele.Eta())));
               float effData=h_e32trgData->GetBinContent(h_e32trgData->GetXaxis()->FindBin(TMath::Min(199.,my_ele.Pt())),h_e32trgData->GetYaxis()->FindBin(fabs(my_ele.Eta())));
               if (effMC>0) aweight*=effData/effMC;
+	   }*/
+
+	   if (is_etautrg or is_etauHPStrg){
+	      aweight=aweight*h_etautrgSF->GetBinContent(h_etautrgSF->GetXaxis()->FindBin(TMath::Min(my_ele.Pt(),199.)),h_etautrgSF->GetYaxis()->FindBin(my_ele.Eta()));
+              aweight=aweight*LepCand_tautriggersf[tau_index];
 	   }
+	   else{
+              aweight=aweight*TMath::Min(1.1,h_etrgSF->GetBinContent(h_etrgSF->GetXaxis()->FindBin(TMath::Min(my_ele.Pt(),199.)),h_etrgSF->GetYaxis()->FindBin(my_ele.Eta())));
+	   }
+
            float ept=my_ele.Pt();
            if (ept>500) ept=499;
-           float elIDSF = h_eleIDSF->GetBinContent(h_eleIDSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleIDSF->GetYaxis()->FindBin(ept));
-	   aweight=aweight*elIDSF;
+           elidsf_nom = h_eleIDSF->GetBinContent(h_eleIDSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleIDSF->GetYaxis()->FindBin(ept));
+           elidsf_up = elidsf_nom + h_eleIDSF->GetBinError(h_eleIDSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleIDSF->GetYaxis()->FindBin(ept));
+           elidsf_down = elidsf_nom - h_eleIDSF->GetBinError(h_eleIDSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleIDSF->GetYaxis()->FindBin(ept));
+	   aweight=aweight*elidsf_nom;
            float elRecoSF = h_eleRecoSF->GetBinContent(h_eleRecoSF->GetXaxis()->FindBin(my_ele.Eta()),h_eleRecoSF->GetYaxis()->FindBin(ept));
            aweight=aweight*elRecoSF;
 	   float weight_aco=1.0;
@@ -1129,7 +1256,7 @@ cout<<"novs"<<endl;
               else if (my_gen1.Pt()>=50 and my_gen2.Pt()>=50) weight_aco=fit_aco_gt50_gt50->Eval(gen_aco);
 	   }
            aweight=aweight*weight_aco;
-	   aweight*=h_npvs_weight->GetBinContent(h_npvs_weight->GetXaxis()->FindBin(PV_npvs));//FIXME uncomment
+	   if (year=="2018") aweight*=h_npvs_weight->GetBinContent(h_npvs_weight->GetXaxis()->FindBin(PV_npvs));//FIXME uncomment
 	}
 
 	// Block MET
@@ -1139,19 +1266,16 @@ cout<<"novs"<<endl;
 	float mt = TMass_F(my_ele.Pt(), my_ele.Px(), my_ele.Py(), my_met.Pt(), my_met.Phi());
 
 
-	bool is_QCDregion = (!is_OS); // FIXME was (mt<50 and !is_OS);
-	bool is_Wregion = (is_OS and mt>75);
+	bool is_QCDregion = (!is_OS and mt<75); 
+	bool is_Wregion = (is_OS and mt>75 and mt<150);
 
-	bool is_real=(name=="GGTT" or name=="GGTT2" or name=="data_obs" or (LepCand_gen[tau_index]>=1 and LepCand_gen[tau_index]<=5));
-	//is_real=true;//FIXME
+	bool is_real=(name=="W" or name=="GGTT" or sample=="GGTT" or sample=="GGTT_Ctb20" or name=="data_obs" or (LepCand_gen[tau_index]>=1 and LepCand_gen[tau_index]<=5));
 
 	// Block vertex
         b6_1->GetEntry(i); b6_3->GetEntry(i);
         if (name!="data_obs") b6_2->GetEntry(i);
 	if (fabs(LepCand_dz[tau_index]-LepCand_dz[ele_index])>0.1) continue;
         float simple_ditau_z=0.5*(2*PV_z+LepCand_dz[tau_index]+LepCand_dz[ele_index]);
-
-	//if (fabs(LepCand_dz[tau_index])<0.05) continue;//FIXME
 
         /*if (is_OS){
            float vtxresolution_PV = (GenVtx_z-PV_z)/GenVtx_z;
@@ -1184,7 +1308,7 @@ cout<<"novs"<<endl;
 	//   }
 	//   cout<<endl;
 	//}*/
-	b8_1->GetEntry(i); b8_2->GetEntry(i); b8_3->GetEntry(i); b8_4->GetEntry(i);//FIXME uncomment
+	b8_1->GetEntry(i); b8_2->GetEntry(i); b8_3->GetEntry(i); b8_4->GetEntry(i);
 	int ntracks=ntracks_friend;
 	h_ntracks->Fill(ntracks);
 
@@ -1193,9 +1317,9 @@ cout<<"novs"<<endl;
         else if (zpos>10) zpos=9.99;
         int ntpu=ntracksPU_friend;
         if (ntpu>50) ntpu=50;
-        if (sample!="data_obs") {aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));} //FIXME uncomment
+        if (sample!="data_obs") {aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));} 
 
-        if (sample=="DY"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); }//FIXME uncomment
+        if (sample=="DY"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); }
 
 	TLorentzVector save_tau=my_tau;
         TLorentzVector save_ele=my_ele;
@@ -1209,13 +1333,13 @@ cout<<"novs"<<endl;
 	//if (!is_lowA or ntracks>10) continue;
 
         if (sample=="GGWW"){ // rescaling from mumu region
-           if (ntracks==0) aweight*=2.39;
-           else if (ntracks==1) aweight*=2.16;
+           if (ntracks==0) aweight*=(1.98+0.00231*gen_mtt);
+           else if (ntracks==1) aweight*=(2.43-0.00141*gen_mtt);
 	}
 
-	if (sample=="GGTT"){ // rescaling from mumu region
-	   if (ntracks==0) aweight*=2.39;
-           else if (ntracks==1) aweight*=2.16;
+	if (sample=="GGTT" or sample=="GGTT_Ctb20"){ // rescaling from mumu region
+	   if (ntracks==0) aweight*=(1.98+0.00231*gen_mtt);
+           else if (ntracks==1) aweight*=(2.43-0.00141*gen_mtt);
 	   b9_1->GetEntry(i); b9_2->GetEntry(i); b9_3->GetEntry(i);b9_4->GetEntry(i); b9_5->GetEntry(i); b9_6->GetEntry(i);b9_7->GetEntry(i); b9_8->GetEntry(i); b9_9->GetEntry(i);
            b9_10->GetEntry(i); b9_11->GetEntry(i); b9_12->GetEntry(i); b9_13->GetEntry(i);b9_14->GetEntry(i); b9_15->GetEntry(i); b9_16->GetEntry(i);b9_17->GetEntry(i); b9_18->GetEntry(i); b9_19->GetEntry(i);
            b9_20->GetEntry(i); b9_21->GetEntry(i); b9_22->GetEntry(i); b9_23->GetEntry(i);b9_24->GetEntry(i); b9_25->GetEntry(i); b9_26->GetEntry(i);b9_27->GetEntry(i); b9_28->GetEntry(i); b9_29->GetEntry(i);
@@ -1228,6 +1352,7 @@ cout<<"novs"<<endl;
            b9_90->GetEntry(i); b9_91->GetEntry(i); b9_92->GetEntry(i); b9_93->GetEntry(i);b9_94->GetEntry(i); b9_95->GetEntry(i); b9_96->GetEntry(i);b9_97->GetEntry(i); b9_98->GetEntry(i); b9_99->GetEntry(i);
            b9_100->GetEntry(i); b9_101->GetEntry(i);
 	   if (name=="GGTT_0p0") aweight*=TauG2Weights_ceBRe33_0p0;
+           else if (name=="GGTT") aweight*=TauG2Weights_ceBRe33_0p0;
            else if (name=="GGTT_0p8") aweight*=TauG2Weights_ceBRe33_0p8;
            else if (name=="GGTT_1p6") aweight*=TauG2Weights_ceBRe33_1p6;
            else if (name=="GGTT_2p4") aweight*=TauG2Weights_ceBRe33_2p4;
@@ -1387,6 +1512,18 @@ cout<<"novs"<<endl;
               else if (k==46 and (is_etautrg or is_etauHPStrg)){ weight2=0.99*LepCand_tautriggersf_up[tau_index]/LepCand_tautriggersf[tau_index];}
               else if (k==47 and is_eletrg){ weight2=0.98;}
               else if (k==48 and is_eletrg){ weight2=1.02;}
+	      else if (k==49){ 
+		if (ntracks==0) weight2=2.39/(1.98+0.00231*gen_mtt);
+                if (ntracks==1) weight2=2.16/(2.43-0.00141*gen_mtt);
+	      }
+              else if (k==50){ 
+                if (ntracks==0) weight2=1.0+(1.0-2.39/(1.98+0.00231*gen_mtt));
+                if (ntracks==1) weight2=1.0+(1.0-2.16/(2.43-0.00141*gen_mtt));
+              }
+              else if (k==51 and year!="2018") weight2=L1PreFiringWeight_Dn/L1PreFiringWeight_Nom;
+              else if (k==52 and year!="2018") weight2=L1PreFiringWeight_Up/L1PreFiringWeight_Nom;
+              else if (k==54) weight2=elidsf_down/elidsf_nom;
+              else if (k==55) weight2=elidsf_up/elidsf_nom;
 	   }
 
 	   //Reapply trigger thresholds after shifts
@@ -1488,6 +1625,15 @@ cout<<"novs"<<endl;
               var8 = mvis;
 	   }
 
+           if (k==0 and is_OS and is_isolated){
+	      if (ntracks==0 and acoplanarity<0.02) h_DY_ABCD->Fill(0.5,weight*aweight*tauidSF);
+              if (ntracks==0 and acoplanarity>=0.02) h_DY_ABCD->Fill(1.5,weight*aweight*tauidSF);
+              if (ntracks==1 and acoplanarity<0.02) h_DY_ABCD->Fill(2.5,weight*aweight*tauidSF);
+              if (ntracks==1 and acoplanarity>=0.02) h_DY_ABCD->Fill(3.5,weight*aweight*tauidSF);
+              if (ntracks<10 and acoplanarity<0.02) h_DY_ABCD->Fill(4.5,weight*aweight*tauidSF);
+              if (ntracks<10 and acoplanarity>=0.02) h_DY_ABCD->Fill(5.5,weight*aweight*tauidSF);
+	   }
+
 	   if (k==0 and is_OS and is_isolated){
 	      if (ntracks==0) h_mvis_nt0->Fill(mvis,weight*aweight*tauidSF);
               else if (ntracks==1) h_mvis_nt1->Fill(mvis,weight*aweight*tauidSF);
@@ -1513,13 +1659,20 @@ cout<<"novs"<<endl;
 	   }
 	   float maxmvis=mvis;
 	   if (maxmvis>250) maxmvis=249;
-           if (is_OS and is_isolated){
+           if (is_OS and is_isolated and mt<75) { 
 	      fractionOS->Fill(mt,maxmvis,weight*aweight*weight2*tauidSF);
+              fractionNtrackOS->Fill(ntracks,weight*aweight*weight2*tauidSF);
+              fractionAcoplanarityOS->Fill(acoplanarity,weight*aweight*weight2*tauidSF);
+              fractionAcoplanarityOS->Fill(-0.02,weight*aweight*weight2*tauidSF);
 	   }
-           if (!is_OS and is_isolated){
+           if (!is_OS and is_isolated and mt<75){
               fractionSS->Fill(mt,maxmvis,weight*aweight*weight2*tauidSF);
+              fractionNtrackSS->Fill(ntracks,weight*aweight*weight2*tauidSF);
+              fractionAcoplanaritySS->Fill(acoplanarity,weight*aweight*weight2*tauidSF);
+              fractionAcoplanaritySS->Fill(-0.02,weight*aweight*weight2*tauidSF);
            }
 	
+
 	   if (is_OS and is_isolated and is_real){
 	     float w_iso=weight*aweight*weight2*tauidSF;
 	     if (is_cat0) h0[k]->Fill(var0,w_iso);
@@ -1546,22 +1699,11 @@ cout<<"novs"<<endl;
 	   float tpt=my_tau.Pt();
 	   if (tpt>200) tpt=199;
 	   float tfr_W=0.1;
-           /*if (is_eletrg and LepCand_DecayMode[tau_index]==0) tfr_W=TMath::Min(1.0,fit_taufr_W_dm0->Eval(tpt))*fit_taufrnt_W_dm0->Eval(TMath::Max(1,ntracks));
-           else if (is_eletrg and LepCand_DecayMode[tau_index]==1) tfr_W=TMath::Min(1.0,fit_taufr_W_dm1->Eval(tpt))*fit_taufrnt_W_dm1->Eval(TMath::Max(1,ntracks));
-           else if (is_eletrg and LepCand_DecayMode[tau_index]==10) tfr_W=TMath::Min(1.0,fit_taufr_W_dm10->Eval(tpt))*fit_taufrnt_W_dm10->Eval(TMath::Max(1,ntracks));
-           else if (is_eletrg and LepCand_DecayMode[tau_index]==11) tfr_W=TMath::Min(1.0,fit_taufr_W_dm11->Eval(tpt))*fit_taufrnt_W_dm11->Eval(TMath::Max(1,ntracks));
-	   else if (is_etautrg or is_etauHPStrg) tfr_W=TMath::Min(1.0,fit_taufr_W_xtrg->Eval(tpt));
-           float tfr_QCD=0.1;
-           if (is_eletrg and LepCand_DecayMode[tau_index]==0) tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm0->Eval(tpt))*fit_taufrnt_QCD_dm0->Eval(TMath::Max(1,ntracks));
-           else if (is_eletrg and LepCand_DecayMode[tau_index]==1) tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm1->Eval(tpt))*fit_taufrnt_QCD_dm1->Eval(TMath::Max(1,ntracks));
-           else if (is_eletrg and LepCand_DecayMode[tau_index]==10) tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm10->Eval(tpt))*fit_taufrnt_QCD_dm10->Eval(TMath::Max(1,ntracks));
-           else if (is_eletrg and LepCand_DecayMode[tau_index]==11) tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm11->Eval(tpt))*fit_taufrnt_QCD_dm11->Eval(TMath::Max(1,ntracks));
-           else if (is_etautrg or is_etauHPStrg) tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_xtrg->Eval(tpt));*/
 
 	   if (LepCand_DecayMode[tau_index]==0){ 
 	      tfr_W=TMath::Min(1.0,fit_taufr_W_dm0->Eval(tpt));
 	      if (ntracks<25) tfr_W*=fitlow_taufrnt_W_dm0->Eval(TMath::Max(0,ntracks));
-	      else tfr_W*=fit_taufrnt_W_dm0->Eval(TMath::Max(0,ntracks)); //FIXME uncomment
+	      else tfr_W*=fit_taufrnt_W_dm0->Eval(TMath::Max(0,ntracks)); 
 	   }
            else if (LepCand_DecayMode[tau_index]==1){ 
 	      tfr_W=TMath::Min(1.0,fit_taufr_W_dm1->Eval(tpt));
@@ -1578,13 +1720,14 @@ cout<<"novs"<<endl;
               if (ntracks<25) tfr_W*=fitlow_taufrnt_W_dm11->Eval(TMath::Max(0,ntracks));
               else tfr_W*=fit_taufrnt_W_dm11->Eval(TMath::Max(0,ntracks));
 	   }
-           if (is_etautrg or is_etauHPStrg) tfr_W*=1.7; //FIXME take the histogram instead of hardcoding
+           if (is_etautrg or is_etauHPStrg) tfr_W*=corr_taufr_W_xtrg->GetBinContent(2)/corr_taufr_W_xtrg->GetBinContent(3); 
+           //if (is_etautrg or is_etauHPStrg) tfr_W*=1.7;//FIXME
 
            float tfr_QCD=0.1;
            if (LepCand_DecayMode[tau_index]==0){
 	      tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm0->Eval(tpt));
-              if (ntracks<25) tfr_QCD*=fit_taufrnt_QCD_dm0->Eval(TMath::Max(0,ntracks));
-	      else tfr_QCD*=fitlow_taufrnt_QCD_dm0->Eval(TMath::Max(0,ntracks));
+              if (ntracks<25) tfr_QCD*=fitlow_taufrnt_QCD_dm0->Eval(TMath::Max(0,ntracks));
+	      else tfr_QCD*=fit_taufrnt_QCD_dm0->Eval(TMath::Max(0,ntracks));
 	   }
            else if (LepCand_DecayMode[tau_index]==1){
 	      tfr_QCD=TMath::Min(1.0,fit_taufr_QCD_dm1->Eval(tpt));
@@ -1601,18 +1744,65 @@ cout<<"novs"<<endl;
               if (ntracks<25) tfr_QCD*=fitlow_taufrnt_QCD_dm11->Eval(TMath::Max(0,ntracks));
 	      else tfr_QCD*=fit_taufrnt_QCD_dm11->Eval(TMath::Max(0,ntracks));
 	   }
-           if (is_etautrg or is_etauHPStrg) tfr_QCD*=1.7; //FIXME dont hardcode
+           //if (is_etautrg or is_etauHPStrg) tfr_QCD*=corr_taufr_QCD_xtrg->GetBinContent(2)/corr_taufr_QCD_xtrg->GetBinContent(3); 
+           if (is_etautrg or is_etauHPStrg) tfr_QCD*=1.7;//FIXME
 
 	   float mymt=mt;
 	   float mymvis=mvis;
 	   if (mymvis>250) mymvis=249;
            if (mymvis<50) mymvis=51;
-           if (mymt>75) mymt=74;
+           //if (mymt>75) mymt=74;
 	   float fracW=h_fracW->GetBinContent(h_fracW->GetXaxis()->FindBin(mymt),h_fracW->GetYaxis()->FindBin(mymvis));
+	   float fracWdown=fracW*0.8;//fracW/2.0;
+           float fracWup=fracW*1.2;//2.0;
+	   if (fracWup>1) fracWup=1;
 	   if (mymt>75) fracW=1.0;
-	   //fracW=1.0;//FIXME
 	   float tfr=fracW*tfr_W + (1-fracW)*tfr_QCD;
 	   float wfr=tfr;
+
+
+           if (k==(nbhistMC+1-nbhist_offset)){wfr=fracW*tfr_W*0.95 + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+2-nbhist_offset)){wfr=fracW*tfr_W*1.05 + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+3-nbhist_offset)){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*0.90;}
+           else if (k==(nbhistMC+4-nbhist_offset)){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*1.10;}
+           else if (k==(nbhistMC+5-nbhist_offset) and LepCand_DecayMode[tau_index]==0){wfr=fracW*tfr_W*(1.0-(my_tau.Pt()-30)*0.5/470) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+6-nbhist_offset) and LepCand_DecayMode[tau_index]==0){wfr=fracW*tfr_W*(1.0+(my_tau.Pt()-30)*0.5/470) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+7-nbhist_offset) and LepCand_DecayMode[tau_index]==1){wfr=fracW*tfr_W*(1.0-(my_tau.Pt()-30)*0.5/470) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+8-nbhist_offset) and LepCand_DecayMode[tau_index]==1){wfr=fracW*tfr_W*(1.0+(my_tau.Pt()-30)*0.5/470) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+9-nbhist_offset) and LepCand_DecayMode[tau_index]==10){wfr=fracW*tfr_W*(1.0-(my_tau.Pt()-30)*0.5/470) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+10-nbhist_offset) and LepCand_DecayMode[tau_index]==10){wfr=fracW*tfr_W*(1.0+(my_tau.Pt()-30)*0.5/470) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+11-nbhist_offset) and LepCand_DecayMode[tau_index]==11){wfr=fracW*tfr_W*(1.0-(my_tau.Pt()-30)*0.5/470) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+12-nbhist_offset) and LepCand_DecayMode[tau_index]==11){wfr=fracW*tfr_W*(1.0+(my_tau.Pt()-30)*0.5/470) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+13-nbhist_offset) and LepCand_DecayMode[tau_index]==0){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0-(my_tau.Pt()-30)*0.5/470);}
+           else if (k==(nbhistMC+14-nbhist_offset) and LepCand_DecayMode[tau_index]==0){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0+(my_tau.Pt()-30)*0.5/470);}
+           else if (k==(nbhistMC+15-nbhist_offset) and LepCand_DecayMode[tau_index]==1){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0-(my_tau.Pt()-30)*0.5/470);}
+           else if (k==(nbhistMC+16-nbhist_offset) and LepCand_DecayMode[tau_index]==1){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0+(my_tau.Pt()-30)*0.5/470);}
+           else if (k==(nbhistMC+17-nbhist_offset) and LepCand_DecayMode[tau_index]==10){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0-(my_tau.Pt()-30)*0.5/470);}
+           else if (k==(nbhistMC+18-nbhist_offset) and LepCand_DecayMode[tau_index]==10){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0+(my_tau.Pt()-30)*0.5/470);}
+           else if (k==(nbhistMC+19-nbhist_offset) and LepCand_DecayMode[tau_index]==11){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0-(my_tau.Pt()-30)*0.5/470);}
+           else if (k==(nbhistMC+20-nbhist_offset) and LepCand_DecayMode[tau_index]==11){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0+(my_tau.Pt()-30)*0.5/470);}
+           else if (k==(nbhistMC+21-nbhist_offset)){wfr=fracWdown*tfr_W + (1-fracWdown)*tfr_QCD;}
+           else if (k==(nbhistMC+22-nbhist_offset)){wfr=fracWup*tfr_W + (1-fracWup)*tfr_QCD;}
+           else if (k==(nbhistMC+23-nbhist_offset) and LepCand_DecayMode[tau_index]==0){wfr=fracW*tfr_W*(1.0-err_nt0_ffW->GetBinContent(1)) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+24-nbhist_offset) and LepCand_DecayMode[tau_index]==0){wfr=fracW*tfr_W*(1.0+err_nt0_ffW->GetBinContent(1)) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+25-nbhist_offset) and LepCand_DecayMode[tau_index]==1){wfr=fracW*tfr_W*(1.0-err_nt0_ffW->GetBinContent(2)) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+26-nbhist_offset) and LepCand_DecayMode[tau_index]==1){wfr=fracW*tfr_W*(1.0+err_nt0_ffW->GetBinContent(2)) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+27-nbhist_offset) and LepCand_DecayMode[tau_index]==10){wfr=fracW*tfr_W*(1.0-err_nt0_ffW->GetBinContent(11)) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+28-nbhist_offset) and LepCand_DecayMode[tau_index]==10){wfr=fracW*tfr_W*(1.0+err_nt0_ffW->GetBinContent(11)) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+29-nbhist_offset) and LepCand_DecayMode[tau_index]==11){wfr=fracW*tfr_W*(1.0-err_nt0_ffW->GetBinContent(12)) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+30-nbhist_offset) and LepCand_DecayMode[tau_index]==11){wfr=fracW*tfr_W*(1.0+err_nt0_ffW->GetBinContent(12)) + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+31-nbhist_offset) and LepCand_DecayMode[tau_index]==0){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0-err_nt0_ffQCD->GetBinContent(1));}
+           else if (k==(nbhistMC+32-nbhist_offset) and LepCand_DecayMode[tau_index]==0){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0+err_nt0_ffQCD->GetBinContent(1));}
+           else if (k==(nbhistMC+33-nbhist_offset) and LepCand_DecayMode[tau_index]==1){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0-err_nt0_ffQCD->GetBinContent(2));}
+           else if (k==(nbhistMC+34-nbhist_offset) and LepCand_DecayMode[tau_index]==1){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0+err_nt0_ffQCD->GetBinContent(2));}
+           else if (k==(nbhistMC+35-nbhist_offset) and LepCand_DecayMode[tau_index]==10){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0-err_nt0_ffQCD->GetBinContent(11));}
+           else if (k==(nbhistMC+36-nbhist_offset) and LepCand_DecayMode[tau_index]==10){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0+err_nt0_ffQCD->GetBinContent(11));}
+           else if (k==(nbhistMC+37-nbhist_offset) and LepCand_DecayMode[tau_index]==11){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0-err_nt0_ffQCD->GetBinContent(12));}
+           else if (k==(nbhistMC+38-nbhist_offset) and LepCand_DecayMode[tau_index]==11){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*(1.0+err_nt0_ffQCD->GetBinContent(12));}
+           else if (k==(nbhistMC+39-nbhist_offset)){wfr=fracW*tfr_W*0.90 + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+40-nbhist_offset)){wfr=fracW*tfr_W*1.10 + (1-fracW)*tfr_QCD;}
+           else if (k==(nbhistMC+41-nbhist_offset)){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*0.90;}
+           else if (k==(nbhistMC+42-nbhist_offset)){wfr=fracW*tfr_W + (1-fracW)*tfr_QCD*1.10;}
 
            if (is_OS and !is_isolated and is_real){
 	     float w_noniso=weight*aweight*weight2*wfr;
@@ -1699,6 +1889,8 @@ cout<<"novs"<<endl;
     TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();
 
+    h_DY_ABCD->Write();
+
     h_mvis_nt0->Write();
     h_mvis_nt1->Write();
     h_mvis_nt2->Write();
@@ -1727,6 +1919,10 @@ cout<<"novs"<<endl;
 
     fractionOS->Write();
     fractionSS->Write();
+    fractionNtrackOS->Write();
+    fractionNtrackSS->Write();
+    fractionAcoplanarityOS->Write();
+    fractionAcoplanaritySS->Write();
 
     h_tauFR_W_dm0_M->Write();
     h_tauFR_W_dm1_M->Write();
@@ -1770,43 +1966,47 @@ cout<<"novs"<<endl;
 cout<<h0[0]->Integral()<<endl;
     bool isMC=(name!="data_obs");
     WriteHistToFileETau(fout, h0, name, "et_0", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h0_anti, name, "et_0_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+    WriteHistToFileETau(fout, h0_anti, name, "et_0_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
     WriteHistToFileETau(fout, h1, name, "et_1", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h1_anti, name, "et_1_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h2, name, "et_2", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h2_anti, name, "et_2_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h3, name, "et_3", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h3_anti, name, "et_3_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h4, name, "et_4", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h4_anti, name, "et_4_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h5, name, "et_5", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h5_anti, name, "et_5_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h6, name, "et_6", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h6_anti, name, "et_6_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h7, name, "et_7", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h7_anti, name, "et_7_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h8, name, "et_8", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-    WriteHistToFileETau(fout, h8_anti, name, "et_8_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+    WriteHistToFileETau(fout, h1_anti, name, "et_1_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+    if (is_control>0){
+       WriteHistToFileETau(fout, h2, name, "et_2", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+       WriteHistToFileETau(fout, h2_anti, name, "et_2_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+       WriteHistToFileETau(fout, h3, name, "et_3", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+       WriteHistToFileETau(fout, h3_anti, name, "et_3_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+       WriteHistToFileETau(fout, h4, name, "et_4", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+       WriteHistToFileETau(fout, h4_anti, name, "et_4_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+       WriteHistToFileETau(fout, h5, name, "et_5", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+       WriteHistToFileETau(fout, h5_anti, name, "et_5_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+       WriteHistToFileETau(fout, h6, name, "et_6", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+       WriteHistToFileETau(fout, h6_anti, name, "et_6_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+       WriteHistToFileETau(fout, h7, name, "et_7", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+       WriteHistToFileETau(fout, h7_anti, name, "et_7_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+       WriteHistToFileETau(fout, h8, name, "et_8", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+       WriteHistToFileETau(fout, h8_anti, name, "et_8_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+    }
 
     if (sample=="DY"){
        WriteHistToFileETau(fout, h0R, name, "etR_0", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h0R_anti, name, "etR_0_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+       WriteHistToFileETau(fout, h0R_anti, name, "etR_0_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
        WriteHistToFileETau(fout, h1R, name, "etR_1", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h1R_anti, name, "etR_1_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h2R, name, "etR_2", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h2R_anti, name, "etR_2_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h3R, name, "etR_3", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h3R_anti, name, "etR_3_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h4R, name, "etR_4", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h4R_anti, name, "etR_4_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h5R, name, "etR_5", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h5R_anti, name, "etR_5_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h6R, name, "etR_6", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h6R_anti, name, "etR_6_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h7R, name, "etR_7", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h7R_anti, name, "etR_7_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h8R, name, "etR_8", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
-       WriteHistToFileETau(fout, h8R_anti, name, "etR_8_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+       WriteHistToFileETau(fout, h1R_anti, name, "etR_1_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+       if (is_control>0){
+          WriteHistToFileETau(fout, h2R, name, "etR_2", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+          WriteHistToFileETau(fout, h2R_anti, name, "etR_2_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+          WriteHistToFileETau(fout, h3R, name, "etR_3", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+          WriteHistToFileETau(fout, h3R_anti, name, "etR_3_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+          WriteHistToFileETau(fout, h4R, name, "etR_4", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+          WriteHistToFileETau(fout, h4R_anti, name, "etR_4_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+          WriteHistToFileETau(fout, h5R, name, "etR_5", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+          WriteHistToFileETau(fout, h5R_anti, name, "etR_5_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+          WriteHistToFileETau(fout, h6R, name, "etR_6", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+          WriteHistToFileETau(fout, h6R_anti, name, "etR_6_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+          WriteHistToFileETau(fout, h7R, name, "etR_7", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+          WriteHistToFileETau(fout, h7R_anti, name, "etR_7_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+          WriteHistToFileETau(fout, h8R, name, "etR_8", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, isMC);
+          WriteHistToFileETau(fout, h8R_anti, name, "etR_8_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset, true);
+       }
     }
 
 
