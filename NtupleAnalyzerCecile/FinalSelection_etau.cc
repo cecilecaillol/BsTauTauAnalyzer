@@ -1102,7 +1102,7 @@ cout<<"g2 branches"<<endl;
 
       TFile *f_punt=new TFile("corrs_ntracks_pu_UL2016_postVFP.root");
       correction_map=(TH2F*) f_punt->Get("corr");
-      TFile *f_hsnt=new TFile("corrs_ntracks_hs_UL2016_preVFP.root");
+      TFile *f_hsnt=new TFile("corrs_ntracks_hs_UL2016_postVFP.root");
       correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
    }
 

@@ -374,8 +374,8 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    float bins8[] = {0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity*/
 
    // Signal region
-   float bins0[] = {40,55,70,85,100,150,200,250};//mvis
-   float bins1[] = {40,55,70,85,100,150,200,250};//mvis
+   float bins0[] = {25,40,55,70,85,100,150,200,250};//mvis
+   float bins1[] = {25,40,55,70,85,100,150,200,250};//mvis
    //float bins0[] = {30,45,60,75,90,105,120,150,180,210};
    //float bins1[] = {30,45,60,75,90,105,120,150,180,210};
    float bins2[] = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120};//mvis
@@ -890,7 +890,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
       fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
       TFile *f_punt=new TFile("corrs_ntracks_pu_UL2016_postVFP.root");
       correction_map=(TH2F*) f_punt->Get("corr");
-      TFile *f_hsnt=new TFile("corrs_ntracks_hs_UL2016_preVFP.root");
+      TFile *f_hsnt=new TFile("corrs_ntracks_hs_UL2016_postVFP.root");
       correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
    }
    else if (year=="2016pre"){
@@ -1184,7 +1184,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
         if (zpos<-10) zpos=-9.99;
         else if (zpos>10) zpos=9.99;
         int ntpu=ntracksPU_friend;
-        if (ntpu>50) ntpu=50;
+        if (ntpu>49) ntpu=49;
         if (sample!="data_obs") {aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));} //FIXME uncomment
 
         if (sample=="DYemu" or sample=="DY" or sample=="DYcondor"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); } //FIXME uncomment
