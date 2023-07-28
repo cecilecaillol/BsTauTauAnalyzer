@@ -28,8 +28,9 @@ hadd -f output_etau_2018/VV.root output_etau_2018/WW2L2Nu.root output_etau_2018/
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTToSemiLeptonic.root output_etau_2018/TTToSemiLeptonic.root TTToSemiLeptonic top
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTTo2L2Nu.root output_etau_2018/TTTo2L2Nu.root TTTo2L2Nu top
 hadd -f output_etau_2018/top.root output_etau_2018/TTToHadronic.root output_etau_2018/TTToSemiLeptonic.root output_etau_2018/TTTo2L2Nu.root output_etau_2018/ST_t_antitop.root output_etau_2018/ST_t_top.root output_etau_2018/ST_tW_antitop.root output_etau_2018/ST_tW_top.root
+./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGHTT.root output_etau_2018/GGHTT.root GGHTT GGHTT
 hadd -f output_etau_2018/MC.root output_etau_2018/DYrescaled.root output_etau_2018/VV.root output_etau_2018/top.root
-./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToTauTau.root output_etau_2018/GGTT.root GGTT GGTT
+./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToTauTau_Ctb20.root output_etau_2018/GGTT.root GGTT_Ctb20 GGTT
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToWW.root output_etau_2018/GGWW.root GGWW GGWW
 
 cp output_etau_2018/GGTT.root output_etau_2018/signal.root

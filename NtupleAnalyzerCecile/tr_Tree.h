@@ -285,6 +285,7 @@
    UInt_t          nChargedPFCandidates;
    Float_t         ChargedPFCandidates_dz[1960];   //[nChargedPFCandidates]
    Float_t         ChargedPFCandidates_pt[1960];   //[nChargedPFCandidates]
+   Float_t         ChargedPFCandidates_eta[1960];
    Bool_t          ChargedPFCandidates_isMatchedToGenHS[1960];   //[nChargedPFCandidates]
 
    Float_t         beamspot_dxdz;

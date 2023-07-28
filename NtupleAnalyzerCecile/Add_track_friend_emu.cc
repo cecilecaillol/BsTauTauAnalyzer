@@ -31,9 +31,10 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-    std::string input = *(argv + 1);
-    std::string output = *(argv + 2);
-    std::string sample = *(argv + 3);
+    std::string year = *(argv + 1);
+    std::string input = *(argv + 2);
+    std::string output = *(argv + 3);
+    std::string sample = *(argv + 4);
 
     TFile *f_Double = new TFile(input.c_str());
     cout<<"XXXXXXXXXXXXX "<<input.c_str()<<" XXXXXXXXXXXX"<<endl;
@@ -104,17 +105,48 @@ int main(int argc, char** argv) {
    auto b7_5=arbre->GetBranch("Track_pt");
    auto b7_6=arbre->GetBranch("Track_isMatchedToHS");
 
+   float bs_z_mc=0.0;
+   float bs_zsigma_mc=3.5;
 
-   TF1* f_beamspot=new TF1("f_beamspot","gaus",2.5,4.5);
-   f_beamspot->SetParameter(0,1);
-   f_beamspot->SetParameter(1,3.35);
-   f_beamspot->SetParameter(2,0.15);
+   TFile* f_bs=new TFile("beamspot_UL2018_Data.root","read");
+   TH1F* h_bs_sigma = (TH1F*) f_bs->Get("bs_sigma");
+   TH1F* h_bs_z = (TH1F*) f_bs->Get("bs_z");
+   TFile* f_bs_mc=new TFile("beamspot_UL2018_MC.root","read");
+   TH1F* h_bs_sigma_mc = (TH1F*) f_bs_mc->Get("bs_sigma");
+   TH1F* h_bs_z_mc = (TH1F*) f_bs_mc->Get("bs_z");
+   bs_z_mc=h_bs_z_mc->GetMean();
+   bs_zsigma_mc=h_bs_sigma_mc->GetMean();
 
-   TF1* f_beamspotz=new TF1("f_beamspotz","gaus",-10,10);
-   f_beamspotz->SetParameter(0,1);
-   f_beamspotz->SetParameter(1,-0.138);
-   f_beamspotz->SetParameter(2,0.254);
-
+   if (year=="2017"){
+      TFile* f_bs=new TFile("beamspot_UL2017_Data.root","read");
+      h_bs_sigma = (TH1F*) f_bs->Get("bs_sigma");
+      h_bs_z = (TH1F*) f_bs->Get("bs_z");
+      TFile* f_bs_mc=new TFile("beamspot_UL2017_MC.root","read");
+      h_bs_sigma_mc = (TH1F*) f_bs_mc->Get("bs_sigma");
+      h_bs_z_mc = (TH1F*) f_bs_mc->Get("bs_z");
+      bs_z_mc=h_bs_z_mc->GetMean();
+      bs_zsigma_mc=h_bs_sigma_mc->GetMean();
+   }
+   else if (year=="2016post"){
+      TFile* f_bs=new TFile("beamspot_UL2016_postVFP_Data.root","read");
+      h_bs_sigma = (TH1F*) f_bs->Get("bs_sigma");
+      h_bs_z = (TH1F*) f_bs->Get("bs_z");
+      TFile* f_bs_mc=new TFile("beamspot_UL2016_postVFP_MC.root","read");
+      h_bs_sigma_mc = (TH1F*) f_bs_mc->Get("bs_sigma");
+      h_bs_z_mc = (TH1F*) f_bs_mc->Get("bs_z");
+      bs_z_mc=h_bs_z_mc->GetMean();
+      bs_zsigma_mc=h_bs_sigma_mc->GetMean();
+   }
+   else if (year=="2016pre"){
+      TFile* f_bs=new TFile("beamspot_UL2016_preVFP_Data.root","read");
+      h_bs_sigma = (TH1F*) f_bs->Get("bs_sigma");
+      h_bs_z = (TH1F*) f_bs->Get("bs_z");
+      TFile* f_bs_mc=new TFile("beamspot_UL2016_preVFP_MC.root","read");
+      h_bs_sigma_mc = (TH1F*) f_bs_mc->Get("bs_sigma");
+      h_bs_z_mc = (TH1F*) f_bs_mc->Get("bs_z");
+      bs_z_mc=h_bs_z_mc->GetMean();
+      bs_zsigma_mc=h_bs_sigma_mc->GetMean();
+   }
 
    for (Int_t i = 0; i < nentries_wtn; i++) {
 	//arbre->LoadTree(i);
@@ -142,8 +174,10 @@ int main(int argc, char** argv) {
 	int ntracks=0;
         int ntracksPU=0;
         int ntracksHS=0;
-        float rnd_beamspot=f_beamspot->GetRandom();
-        float rnd_beamspotz=f_beamspotz->GetRandom();
+        float bs_zsigma_obs=h_bs_sigma->GetRandom();
+        float bs_z_obs=h_bs_z->GetRandom();
+	float corr_zsig= (bs_zsigma_obs / bs_zsigma_mc);
+	float corr_z= bs_z_obs - corr_zsig * bs_z_mc;
 	int matched=0;
 	//cout<<"ele pt, eta, phi, dz: "<<LepCand_pt[ele_index]<<", "<<LepCand_eta[ele_index]<<", "<<LepCand_phi[ele_index]<<", "<<LepCand_dz[ele_index]<<endl;
         //cout<<"mu pt, eta, phi, dz: "<<LepCand_pt[mu_index]<<", "<<LepCand_eta[mu_index]<<", "<<LepCand_phi[mu_index]<<", "<<LepCand_dz[mu_index]<<endl;
@@ -159,7 +193,10 @@ int main(int argc, char** argv) {
 	      float raw_dz=fabs(Track_dz[nt]-0.5*LepCand_dz[mu_index]-0.5*LepCand_dz[ele_index]);
 	      if (Track_pt[nt]>0.5 and raw_dz<0.05 and fabs(Track_eta[nt])<2.5) ntracks++;
 	      if (sample!="data_obs"){
-                 float BScorrected_dz=fabs(((PV_z+Track_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488))-PV_z-0.5*LepCand_dz[mu_index]-0.5*LepCand_dz[ele_index]);
+                 //float BScorrected_dz=fabs(((PV_z+Track_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488))-PV_z-0.5*LepCand_dz[mu_index]-0.5*LepCand_dz[ele_index]);
+                 //float BScorrected_dz=raw_dz;//FIXME dont correct BS
+                 float z_corr = corr_z + corr_zsig * (PV_z+Track_dz[nt]);
+		 float BScorrected_dz = fabs(z_corr - PV_z-0.5*LepCand_dz[mu_index]-0.5*LepCand_dz[ele_index]);
                  if (Track_isMatchedToHS[nt] and Track_pt[nt]>0.5 and raw_dz<0.05 and fabs(Track_eta[nt])<2.5) ntracksHS++;
                  if (!Track_isMatchedToHS[nt] and Track_pt[nt]>0.5 and BScorrected_dz<0.05 and fabs(Track_eta[nt])<2.5) ntracksPU++;
 	      }

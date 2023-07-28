@@ -68,15 +68,21 @@ int main(int argc, char** argv) {
         fflush(stdout);
 
 	TLorentzVector my_mu1;
-	my_mu1.SetPtEtaPhiM(mu1pt_,mu1eta_,mu1phi_,0.1);
+	my_mu1.SetPtEtaPhiM(mu1pt_,mu1eta_,mu1phi_,0.106);
         TLorentzVector my_mu2; 
-        my_mu2.SetPtEtaPhiM(mu2pt_,mu2eta_,mu2phi_,0.1);
+        my_mu2.SetPtEtaPhiM(mu2pt_,mu2eta_,mu2phi_,0.106);
 	float mvis=(my_mu1+my_mu2).M();
+	if (year=="2016pre" and my_mu1.Pt()<26 and my_mu2.Pt()<26) continue;
+        if (year=="2016post" and my_mu1.Pt()<26 and my_mu2.Pt()<26) continue;
+        if (year=="2017" and my_mu1.Pt()<29 and my_mu2.Pt()<29) continue;
+        if (year=="2018" and my_mu1.Pt()<26 and my_mu2.Pt()<26) continue;
 
 	//if (my_mu1.Pt()<30 or my_mu2.Pt()<30) continue;
+	//
+	if (name=="data_obs"){weight_=1.0;aweight_=1.0;ntpu_weight_=1.0;}
 
-	if (acoplanarity_<0.02 and os_ and ((name!="data_obs" and sum_ntracks_==0) or (name=="data_obs" and ntracksAll_==0))) h_lownt->Fill(mvis,weight_*aweight_*npvs_weight_*ntpu_weight_);
-        if (acoplanarity_<0.02 and os_ and ((name!="data_obs" and sum_ntracks_>=5) or (name=="data_obs" and ntracksAll_>=5))) h_highnt->Fill(mvis,weight_*aweight_*npvs_weight_*ntpu_weight_);
+	if (acoplanarity_<0.015 and os_ and ((name!="data_obs" and sum_ntracks_==0) or (name=="data_obs" and ntracksAll_==0))) h_lownt->Fill(mvis,weight_*aweight_*ntpu_weight_);
+        if (acoplanarity_<0.015 and os_ and ((name!="data_obs" and sum_ntracks_>=5) or (name=="data_obs" and ntracksAll_>=5))) h_highnt->Fill(mvis,weight_*aweight_*ntpu_weight_);
 
     }
     TString postfixlow="_low";

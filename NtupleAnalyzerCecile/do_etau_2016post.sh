@@ -28,7 +28,7 @@ hadd -f output_etau_2016post/VV.root output_etau_2016post/WW2L2Nu.root output_et
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/TTTo2L2Nu.root output_etau_2016post/TTTo2L2Nu.root TTTo2L2Nu top
 hadd -f output_etau_2016post/top.root output_etau_2016post/TTToHadronic.root output_etau_2016post/TTToSemiLeptonic.root output_etau_2016post/TTTo2L2Nu.root output_etau_2016post/ST_t_antitop.root output_etau_2016post/ST_t_top.root output_etau_2016post/ST_tW_antitop.root output_etau_2016post/ST_tW_top.root
 hadd -f output_etau_2016post/MC.root output_etau_2016post/DYrescaled.root output_etau_2016post/VV.root output_etau_2016post/top.root
-#./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/GGToTauTau.root output_etau_2016post/GGTT.root GGTT GGTT
+./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/GGToTauTau_Ctb20.root output_etau_2016post/GGTT.root GGTT_Ctb20 GGTT
 #./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/GGToWW.root output_etau_2016post/GGWW.root GGWW GGWW
 
 #cp output_etau_2016post/GGTT.root output_etau_2016post/signal.root
@@ -36,4 +36,4 @@ hadd -f output_etau_2016post/MC.root output_etau_2016post/DYrescaled.root output
 #python Prepare_BSM_combine.py --year="2016post" --channel="etau"
 
 python Create_fake.py --year=2016post
-hadd -f datacard_etau_2016post.root output_etau_2016post/Fake.root output_etau_2016post/MC.root  output_etau_2016post/SingleElectron.root output_etau_2016post/W.root #output_etau_2016post/GGTT.root output_etau_2016post/GGWW.root #output_etau_2016post/bsm.root
+hadd -f datacard_etau_2016post.root output_etau_2016post/Fake.root output_etau_2016post/MC.root  output_etau_2016post/SingleElectron.root output_etau_2016post/W.root output_etau_2016post/GGTT.root #output_etau_2016post/GGWW.root #output_etau_2016post/bsm.root

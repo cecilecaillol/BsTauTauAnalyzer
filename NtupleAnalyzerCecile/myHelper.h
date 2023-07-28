@@ -14,6 +14,35 @@
 #include "TRandom3.h"
 #include <TLorentzVector.h>
 
+float GetMuRecoSF(std::string year, float eta){
+    float sf=1.0;
+    if (year=="2016pre"){
+	if (fabs(eta)<0.9) sf=0.9998229551300333;
+	else if (fabs(eta)<1.2) sf=1.0001593416915515;
+	else if (fabs(eta)<2.1) sf=0.9998936144006075;
+	else if (fabs(eta)<2.4) sf=0.9990268820042745;
+    }
+    else if (year=="2016post"){
+        if (fabs(eta)<0.9) sf=1.0000406419782646;
+        else if (fabs(eta)<1.2) sf=0.9997959311146515;
+        else if (fabs(eta)<2.1) sf=0.9994928400570587;
+        else if (fabs(eta)<2.4) sf=0.9990728619505579;
+    }
+    else if (year=="2017"){
+        if (fabs(eta)<0.9) sf=0.9996742562806361;
+        else if (fabs(eta)<1.2) sf=0.9997813602035737;
+        else if (fabs(eta)<2.1) sf=0.9994674742459532;
+        else if (fabs(eta)<2.4) sf=0.9993566412630517;
+    }
+    else if (year=="2018"){
+        if (fabs(eta)<0.9) sf=0.9998088006315689;
+        else if (fabs(eta)<1.2) sf=0.999754701980269;
+        else if (fabs(eta)<2.1) sf=0.9995842791862117;
+        else if (fabs(eta)<2.4) sf=0.9990341741614288;
+    }
+    return sf;
+}
+
 
 float TMass_F(float pt3lep, float px3lep, float py3lep, float met, float metPhi) {
     return sqrt(pow(pt3lep + met, 2) - pow(px3lep + met * cos(metPhi), 2) - pow(py3lep + met * sin(metPhi), 2));
@@ -29,6 +58,12 @@ void WriteHistToFileETau(TFile* myfile, std::vector<TH1F*> hist, std::string nam
        for (int j=0; j<hist[k]->GetSize()-1; ++j){
          if (hist[k]->GetBinContent(j)<0) hist[k]->SetBinContent(j,0);
        }
+       //include overflow in last bin
+       hist[k]->SetBinContent(hist[k]->GetSize()-2,hist[k]->GetBinContent(hist[k]->GetSize()-2)+hist[k]->GetBinContent(hist[k]->GetSize()-1));
+       hist[k]->SetBinError(hist[k]->GetSize()-2,pow(hist[k]->GetBinError(hist[k]->GetSize()-2)*hist[k]->GetBinError(hist[k]->GetSize()-2)+hist[k]->GetBinError(hist[k]->GetSize()-1)*hist[k]->GetBinError(hist[k]->GetSize()-1),0.5));
+       hist[k]->SetBinContent(hist[k]->GetSize()-1,0);
+       hist[k]->SetBinError(hist[k]->GetSize()-1,0);
+
        if (k<(55-nbhist_offset)) postfix=uncertainties[k];
        else postfix=fake_uncertainties[k-(55-nbhist_offset)];
        hist[k]->SetName(name.c_str()+postfix);

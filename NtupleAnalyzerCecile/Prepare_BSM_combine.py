@@ -39,7 +39,7 @@ if __name__ == "__main__":
     ROOT.gStyle.SetOptStat(0)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--year', default="2016", choices=['2016', '2016pre', '2016post', '2017', '2018'], help="Which TES?")
+    parser.add_argument('--year', default="2016", choices=['Run2','2016', '2016pre', '2016post', '2017', '2018'], help="Which TES?")
     parser.add_argument('--channel', default="etau", choices=['etau', 'emu', 'mutau', 'tautau'], help="Which TES?")
 
     options = parser.parse_args()
@@ -62,6 +62,9 @@ if __name__ == "__main__":
 
     fin=ROOT.TFile("output_"+options.channel+"_"+options.year+"/signal.root","r")
     fout=ROOT.TFile("output_"+options.channel+"_"+options.year+"/bsm.root","recreate")
+    falt=ROOT.TFile("output_"+options.channel+"_"+options.year+"/signal.root","r")
+    if (options.channel=="mutau"): falt=ROOT.TFile("/afs/cern.ch/work/c/ccaillol/Combine/CMSSW_10_2_13/src/auxiliaries/shapes/Taug2_mutau_2018.root","r")
+    if (options.channel=="tautau"): falt=ROOT.TFile("/afs/cern.ch/work/c/ccaillol/Combine/CMSSW_10_2_13/src/auxiliaries/shapes/Taug2_tautau_2018.root","r")
 
     physics_model = open("physics_model_"+options.channel+"_"+options.year+".txt","w")
 
@@ -78,14 +81,50 @@ if __name__ == "__main__":
     if options.year=="2017": year4="2017"
     if options.year=="2016pre": year4="2016preVFP"
     if options.year=="2016post": year4="2016postVFP"
-    if options.channel=="etau":
-	shapes=["CMS_tauid_stat1_dm0_"+year4,"CMS_tauid_stat1_dm1_"+year4,"CMS_tauid_stat1_dm10_"+year4,"CMS_tauid_stat1_dm11_"+year4,"CMS_tauid_stat2_dm0_"+year4,"CMS_tauid_stat2_dm1_"+year4,"CMS_tauid_stat2_dm10_"+year4,"CMS_tauid_stat2_dm11_"+year4,"CMS_tauid_syst_alleras","CMS_tauid_syst_"+year4,"CMS_tauid_syst_dm0_"+year4,"CMS_tauid_syst_dm1_"+year4,"CMS_tauid_syst_dm10_"+year4,"CMS_tauid_syst_dm11_"+year4,"CMS_taues_dm0_"+year4,"CMS_taues_dm1_"+year4,"CMS_taues_3prong_"+year4,"CMS_etauFR_barrel_"+year4,"CMS_etauFR_endcap_"+year4,"CMS_etauFES_dm0_"+year4,"CMS_etauFES_dm1_"+year4,"CMS_pileup_"+year4,"CMS_etautrg_"+year4,"CMS_etrg_"+year4,"CMS_elasticRescaling"]
-    if options.channel=="emu":
-	shapes=["CMS_pileup_"+year4,"CMS_emutrg_lowmuhighe_syst","CMS_emutrg_highmulowe_syst","CMS_emutrg_highmuhighe_syst","CMS_elasticRescaling","CMS_muId_syst","CMS_muId_stat_"+year4,"CMS_muIso_syst","CMS_muIso_stat_"+year4,"CMS_elId_syst"]
+    if "201" in options.year:
+       if options.channel=="etau":
+           shapes=["CMS_tauid_stat1_dm0_"+year4,"CMS_tauid_stat1_dm1_"+year4,"CMS_tauid_stat1_dm10_"+year4,"CMS_tauid_stat1_dm11_"+year4,"CMS_tauid_stat2_dm0_"+year4,"CMS_tauid_stat2_dm1_"+year4,"CMS_tauid_stat2_dm10_"+year4,"CMS_tauid_stat2_dm11_"+year4,"CMS_tauid_syst_alleras","CMS_tauid_syst_"+year4,"CMS_tauid_syst_dm0_"+year4,"CMS_tauid_syst_dm1_"+year4,"CMS_tauid_syst_dm10_"+year4,"CMS_tauid_syst_dm11_"+year4,"CMS_taues_dm0_"+year4,"CMS_taues_dm1_"+year4,"CMS_taues_3prong_"+year4,"CMS_etauFR_barrel_"+year4,"CMS_etauFR_endcap_"+year4,"CMS_etauFES_dm0_"+year4,"CMS_etauFES_dm1_"+year4,"CMS_pileup_"+year4,"CMS_etautrg_"+year4,"CMS_etrg_"+year4,"CMS_elId_syst","CMS_elasticRescaling"]
+       elif options.channel=="mutau":
+           shapes=["CMS_tauid_stat1_dm0_"+year4,"CMS_tauid_stat1_dm1_"+year4,"CMS_tauid_stat1_dm10_"+year4,"CMS_tauid_stat1_dm11_"+year4,"CMS_tauid_stat2_dm0_"+year4,"CMS_tauid_stat2_dm1_"+year4,"CMS_tauid_stat2_dm10_"+year4,"CMS_tauid_stat2_dm11_"+year4,"CMS_tauid_syst_alleras","CMS_tauid_syst_"+year4,"CMS_tauid_syst_dm0_"+year4,"CMS_tauid_syst_dm1_"+year4,"CMS_tauid_syst_dm10_"+year4,"CMS_tauid_syst_dm11_"+year4,"CMS_taues_dm0_"+year4,"CMS_taues_dm1_"+year4,"CMS_taues_3prong_"+year4,"CMS_mutauFR_barrel_"+year4,"CMS_mutauFR_endcap_"+year4,"CMS_pileup_"+year4,"CMS_mutautrg_"+year4,"CMS_mutrg_stat_"+year4,"CMS_muIso_stat_"+year4,"CMS_muId_stat_"+year4,"CMS_mutrg_syst","CMS_muIso_syst","CMS_muId_syst","CMS_elasticRescaling"]
+       elif options.channel=="tautau":
+           shapes=["CMS_tauid_stat1_dm0_"+year4,"CMS_tauid_stat1_dm1_"+year4,"CMS_tauid_stat1_dm10_"+year4,"CMS_tauid_stat1_dm11_"+year4,"CMS_tauid_stat2_dm0_"+year4,"CMS_tauid_stat2_dm1_"+year4,"CMS_tauid_stat2_dm10_"+year4,"CMS_tauid_stat2_dm11_"+year4,"CMS_tauid_syst_alleras","CMS_tauid_syst_"+year4,"CMS_tauid_syst_dm0_"+year4,"CMS_tauid_syst_dm1_"+year4,"CMS_tauid_syst_dm10_"+year4,"CMS_tauid_syst_dm11_"+year4,"CMS_taues_dm0_"+year4,"CMS_taues_dm1_"+year4,"CMS_taues_3prong_"+year4,"CMS_pileup_"+year4,"CMS_ditautrg_dm0_"+year4,"CMS_ditautrg_dm1_"+year4,"CMS_ditautrg_3prong_"+year4,"CMS_elasticRescaling"]
+       elif options.channel=="emu":
+	   shapes=["CMS_pileup_"+year4,"CMS_emutrg_lowmuhighe_syst","CMS_emutrg_highmulowe_syst","CMS_emutrg_highmuhighe_syst","CMS_elasticRescaling","CMS_muId_syst","CMS_muId_stat_"+year4,"CMS_muIso_syst","CMS_muIso_stat_"+year4,"CMS_elId_syst"]
+    else:
+       if options.channel=="etau":
+           shapes=[
+            "CMS_tauid_stat1_dm0_2016preVFP","CMS_tauid_stat1_dm1_2016preVFP","CMS_tauid_stat1_dm10_2016preVFP","CMS_tauid_stat1_dm11_2016preVFP","CMS_tauid_stat2_dm0_2016preVFP","CMS_tauid_stat2_dm1_2016preVFP","CMS_tauid_stat2_dm10_2016preVFP","CMS_tauid_stat2_dm11_2016preVFP","CMS_tauid_syst_2016preVFP","CMS_tauid_syst_dm0_2016preVFP","CMS_tauid_syst_dm1_2016preVFP","CMS_tauid_syst_dm10_2016preVFP","CMS_tauid_syst_dm11_2016preVFP","CMS_taues_dm0_2016preVFP","CMS_taues_dm1_2016preVFP","CMS_taues_3prong_2016preVFP","CMS_etauFR_barrel_2016preVFP","CMS_etauFR_endcap_2016preVFP","CMS_etauFES_dm0_2016preVFP","CMS_etauFES_dm1_2016preVFP","CMS_pileup_2016preVFP","CMS_etautrg_2016preVFP","CMS_etrg_2016preVFP",
+            "CMS_tauid_stat1_dm0_2016postVFP","CMS_tauid_stat1_dm1_2016postVFP","CMS_tauid_stat1_dm10_2016postVFP","CMS_tauid_stat1_dm11_2016postVFP","CMS_tauid_stat2_dm0_2016postVFP","CMS_tauid_stat2_dm1_2016postVFP","CMS_tauid_stat2_dm10_2016postVFP","CMS_tauid_stat2_dm11_2016postVFP","CMS_tauid_syst_2016postVFP","CMS_tauid_syst_dm0_2016postVFP","CMS_tauid_syst_dm1_2016postVFP","CMS_tauid_syst_dm10_2016postVFP","CMS_tauid_syst_dm11_2016postVFP","CMS_taues_dm0_2016postVFP","CMS_taues_dm1_2016postVFP","CMS_taues_3prong_2016postVFP","CMS_etauFR_barrel_2016postVFP","CMS_etauFR_endcap_2016postVFP","CMS_etauFES_dm0_2016postVFP","CMS_etauFES_dm1_2016postVFP","CMS_pileup_2016postVFP","CMS_etautrg_2016postVFP","CMS_etrg_2016postVFP",
+            "CMS_tauid_stat1_dm0_2017","CMS_tauid_stat1_dm1_2017","CMS_tauid_stat1_dm10_2017","CMS_tauid_stat1_dm11_2017","CMS_tauid_stat2_dm0_2017","CMS_tauid_stat2_dm1_2017","CMS_tauid_stat2_dm10_2017","CMS_tauid_stat2_dm11_2017","CMS_tauid_syst_2017","CMS_tauid_syst_dm0_2017","CMS_tauid_syst_dm1_2017","CMS_tauid_syst_dm10_2017","CMS_tauid_syst_dm11_2017","CMS_taues_dm0_2017","CMS_taues_dm1_2017","CMS_taues_3prong_2017","CMS_etauFR_barrel_2017","CMS_etauFR_endcap_2017","CMS_etauFES_dm0_2017","CMS_etauFES_dm1_2017","CMS_pileup_2017","CMS_etautrg_2017","CMS_etrg_2017",
+            "CMS_tauid_stat1_dm0_2018","CMS_tauid_stat1_dm1_2018","CMS_tauid_stat1_dm10_2018","CMS_tauid_stat1_dm11_2018","CMS_tauid_stat2_dm0_2018","CMS_tauid_stat2_dm1_2018","CMS_tauid_stat2_dm10_2018","CMS_tauid_stat2_dm11_2018","CMS_tauid_syst_2018","CMS_tauid_syst_dm0_2018","CMS_tauid_syst_dm1_2018","CMS_tauid_syst_dm10_2018","CMS_tauid_syst_dm11_2018","CMS_taues_dm0_2018","CMS_taues_dm1_2018","CMS_taues_3prong_2018","CMS_etauFR_barrel_2018","CMS_etauFR_endcap_2018","CMS_etauFES_dm0_2018","CMS_etauFES_dm1_2018","CMS_pileup_2018","CMS_etautrg_2018","CMS_etrg_2018",
+           "CMS_tauid_syst_alleras","CMS_elId_syst","CMS_elasticRescaling"]
+       elif options.channel=="emu":
+           shapes=[
+              "CMS_pileup_2016preVFP","CMS_muId_stat_2016preVFP","CMS_muIso_stat_2016preVFP",
+              "CMS_pileup_2016postVFP","CMS_muId_stat_2016postVFP","CMS_muIso_stat_2016postVFP",
+              "CMS_pileup_2017","CMS_muId_stat_2017","CMS_muIso_stat_2017",
+              "CMS_pileup_2018","CMS_muId_stat_2018","CMS_muIso_stat_2018",
+              "CMS_emutrg_lowmuhighe_syst","CMS_emutrg_highmulowe_syst","CMS_emutrg_highmuhighe_syst","CMS_elasticRescaling","CMS_muId_syst","CMS_elId_syst","CMS_muIso_syst"]
+
+       elif options.channel=="mutau":
+           shapes=[
+              "CMS_tauid_stat1_dm0_2016preVFP","CMS_tauid_stat1_dm1_2016preVFP","CMS_tauid_stat1_dm10_2016preVFP","CMS_tauid_stat1_dm11_2016preVFP","CMS_tauid_stat2_dm0_2016preVFP","CMS_tauid_stat2_dm1_2016preVFP","CMS_tauid_stat2_dm10_2016preVFP","CMS_tauid_stat2_dm11_2016preVFP","CMS_tauid_syst_2016preVFP","CMS_tauid_syst_dm0_2016preVFP","CMS_tauid_syst_dm1_2016preVFP","CMS_tauid_syst_dm10_2016preVFP","CMS_tauid_syst_dm11_2016preVFP","CMS_taues_dm0_2016preVFP","CMS_taues_dm1_2016preVFP","CMS_taues_3prong_2016preVFP","CMS_mutauFR_barrel_2016preVFP","CMS_mutauFR_endcap_2016preVFP","CMS_pileup_2016preVFP","CMS_mutautrg_2016preVFP","CMS_mutrg_stat_2016preVFP","CMS_muId_stat_2016preVFP","CMS_muIso_stat_2016preVFP",
+              "CMS_tauid_stat1_dm0_2016postVFP","CMS_tauid_stat1_dm1_2016postVFP","CMS_tauid_stat1_dm10_2016postVFP","CMS_tauid_stat1_dm11_2016postVFP","CMS_tauid_stat2_dm0_2016postVFP","CMS_tauid_stat2_dm1_2016postVFP","CMS_tauid_stat2_dm10_2016postVFP","CMS_tauid_stat2_dm11_2016postVFP","CMS_tauid_syst_2016postVFP","CMS_tauid_syst_dm0_2016postVFP","CMS_tauid_syst_dm1_2016postVFP","CMS_tauid_syst_dm10_2016postVFP","CMS_tauid_syst_dm11_2016postVFP","CMS_taues_dm0_2016postVFP","CMS_taues_dm1_2016postVFP","CMS_taues_3prong_2016postVFP","CMS_mutauFR_barrel_2016postVFP","CMS_mutauFR_endcap_2016postVFP","CMS_pileup_2016postVFP","CMS_mutautrg_2016postVFP","CMS_mutrg_stat_2016postVFP","CMS_muId_stat_2016postVFP","CMS_muIso_stat_2016postVFP",
+              "CMS_tauid_stat1_dm0_2017","CMS_tauid_stat1_dm1_2017","CMS_tauid_stat1_dm10_2017","CMS_tauid_stat1_dm11_2017","CMS_tauid_stat2_dm0_2017","CMS_tauid_stat2_dm1_2017","CMS_tauid_stat2_dm10_2017","CMS_tauid_stat2_dm11_2017","CMS_tauid_syst_2017","CMS_tauid_syst_dm0_2017","CMS_tauid_syst_dm1_2017","CMS_tauid_syst_dm10_2017","CMS_tauid_syst_dm11_2017","CMS_taues_dm0_2017","CMS_taues_dm1_2017","CMS_taues_3prong_2017","CMS_mutauFR_barrel_2017","CMS_mutauFR_endcap_2017","CMS_pileup_2017","CMS_mutautrg_2017","CMS_mutrg_stat_2017","CMS_muId_stat_2017","CMS_muIso_stat_2017",
+              "CMS_tauid_stat1_dm0_2018","CMS_tauid_stat1_dm1_2018","CMS_tauid_stat1_dm10_2018","CMS_tauid_stat1_dm11_2018","CMS_tauid_stat2_dm0_2018","CMS_tauid_stat2_dm1_2018","CMS_tauid_stat2_dm10_2018","CMS_tauid_stat2_dm11_2018","CMS_tauid_syst_2018","CMS_tauid_syst_dm0_2018","CMS_tauid_syst_dm1_2018","CMS_tauid_syst_dm10_2018","CMS_tauid_syst_dm11_2018","CMS_taues_dm0_2018","CMS_taues_dm1_2018","CMS_taues_3prong_2018","CMS_mutauFR_barrel_2018","CMS_mutauFR_endcap_2018","CMS_pileup_2018","CMS_mutautrg_2018","CMS_mutrg_stat_2018","CMS_muId_stat_2018","CMS_muIso_stat_2018",
+              "CMS_tauid_syst_alleras","CMS_elasticRescaling","CMS_mutrg_syst","CMS_muId_syst","CMS_muIso_syst"]
+       elif options.channel=="tautau":
+           shapes=[
+              "CMS_tauid_stat1_dm0_2016preVFP","CMS_tauid_stat1_dm1_2016preVFP","CMS_tauid_stat1_dm10_2016preVFP","CMS_tauid_stat1_dm11_2016preVFP","CMS_tauid_stat2_dm0_2016preVFP","CMS_tauid_stat2_dm1_2016preVFP","CMS_tauid_stat2_dm10_2016preVFP","CMS_tauid_stat2_dm11_2016preVFP","CMS_tauid_syst_2016preVFP","CMS_tauid_syst_dm0_2016preVFP","CMS_tauid_syst_dm1_2016preVFP","CMS_tauid_syst_dm10_2016preVFP","CMS_tauid_syst_dm11_2016preVFP","CMS_taues_dm0_2016preVFP","CMS_taues_dm1_2016preVFP","CMS_taues_3prong_2016preVFP","CMS_pileup_2016preVFP","CMS_ditautrg_dm0_2016preVFP","CMS_ditautrg_dm1_2016preVFP","CMS_ditautrg_3prong_2016preVFP",
+              "CMS_tauid_stat1_dm0_2016postVFP","CMS_tauid_stat1_dm1_2016postVFP","CMS_tauid_stat1_dm10_2016postVFP","CMS_tauid_stat1_dm11_2016postVFP","CMS_tauid_stat2_dm0_2016postVFP","CMS_tauid_stat2_dm1_2016postVFP","CMS_tauid_stat2_dm10_2016postVFP","CMS_tauid_stat2_dm11_2016postVFP","CMS_tauid_syst_2016postVFP","CMS_tauid_syst_dm0_2016postVFP","CMS_tauid_syst_dm1_2016postVFP","CMS_tauid_syst_dm10_2016postVFP","CMS_tauid_syst_dm11_2016postVFP","CMS_taues_dm0_2016postVFP","CMS_taues_dm1_2016postVFP","CMS_taues_3prong_2016postVFP","CMS_pileup_2016postVFP","CMS_ditautrg_dm0_2016postVFP","CMS_ditautrg_dm1_2016postVFP","CMS_ditautrg_3prong_2016postVFP",
+              "CMS_tauid_stat1_dm0_2017","CMS_tauid_stat1_dm1_2017","CMS_tauid_stat1_dm10_2017","CMS_tauid_stat1_dm11_2017","CMS_tauid_stat2_dm0_2017","CMS_tauid_stat2_dm1_2017","CMS_tauid_stat2_dm10_2017","CMS_tauid_stat2_dm11_2017","CMS_tauid_syst_2017","CMS_tauid_syst_dm0_2017","CMS_tauid_syst_dm1_2017","CMS_tauid_syst_dm10_2017","CMS_tauid_syst_dm11_2017","CMS_taues_dm0_2017","CMS_taues_dm1_2017","CMS_taues_3prong_2017","CMS_pileup_2017","CMS_ditautrg_dm0_2017","CMS_ditautrg_dm1_2017","CMS_ditautrg_3prong_2017",
+              "CMS_tauid_stat1_dm0_2018","CMS_tauid_stat1_dm1_2018","CMS_tauid_stat1_dm10_2018","CMS_tauid_stat1_dm11_2018","CMS_tauid_stat2_dm0_2018","CMS_tauid_stat2_dm1_2018","CMS_tauid_stat2_dm10_2018","CMS_tauid_stat2_dm11_2018","CMS_tauid_syst_2018","CMS_tauid_syst_dm0_2018","CMS_tauid_syst_dm1_2018","CMS_tauid_syst_dm10_2018","CMS_tauid_syst_dm11_2018","CMS_taues_dm0_2018","CMS_taues_dm1_2018","CMS_taues_3prong_2018","CMS_pileup_2018","CMS_ditautrg_dm0_2018","CMS_ditautrg_dm1_2018","CMS_ditautrg_3prong_2018",
+              "CMS_tauid_syst_alleras","CMS_elasticRescaling"]
 
     for c in range(0,ncat):
 
        nominal=fin.Get(categories[c]).Get("GGTT_0p0")
+       if options.channel=="mutau" or options.channel=="tautau": nominal=falt.Get(categories[c]).Get("GGTT")
        mydir=fout.mkdir(categories[c])
        mydir.cd()
 
@@ -98,17 +137,21 @@ if __name__ == "__main__":
 	     else:
                 myhist.SetBinContent(jjj,1.0)
                 if nominal.GetBinContent(jj)>0: myhist.SetBinError(jjj,1.0*nominal.GetBinError(jj)/nominal.GetBinContent(jj))
-	  myhist.SetName("TauG2_"+categories[c]+"_"+options.year+"_bin"+str(jj))
+	  myhist.SetName("TauG2_"+categories[c]+"_bin"+str(jj))
           myhist.Write()
 	  for s in shapes:
 	     myhist_up=myhist.Clone()
 	     print "GGTT_0p0_"+s+"Up"
-	     myhist_up.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
-  	     myhist_up.SetName("TauG2_"+categories[c]+"_"+options.year+"_bin"+str(jj)+"_"+s+"Up")
+	     if nominal.GetBinContent(jj)>0:
+	        if options.channel=="mutau" or options.channel=="tautau": myhist_up.Scale(falt.Get(categories[c]).Get("GGTT_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
+	        else: myhist_up.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
+  	     myhist_up.SetName("TauG2_"+categories[c]+"_bin"+str(jj)+"_"+s+"Up")
 	     myhist_up.Write()
              myhist_down=myhist.Clone()
-             myhist_down.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
-             myhist_down.SetName("TauG2_"+categories[c]+"_"+options.year+"_bin"+str(jj)+"_"+s+"Down")
+             if nominal.GetBinContent(jj)>0:
+	        if options.channel=="mutau" or options.channel=="tautau": myhist_down.Scale(falt.Get(categories[c]).Get("GGTT_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
+                else: myhist_down.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
+             myhist_down.SetName("TauG2_"+categories[c]+"_bin"+str(jj)+"_"+s+"Down")
              myhist_down.Write()
 
           nom=nominal.GetBinContent(jj)
@@ -132,7 +175,10 @@ if __name__ == "__main__":
           gr.SetMarkerStyle( 21 )
           gr.SetTitle( '' )
           gr.GetXaxis().SetTitle( 'a_{#tau} x 100' )
-          gr.GetYaxis().SetTitle( 'Bin content' )
+          gr.GetYaxis().SetTitle( 'Signal count' )
+          gr.GetXaxis().SetTitleSize(0.06)
+          gr.GetYaxis().SetTitleSize(0.06)
+          gr.GetXaxis().SetTitleOffset(0.8)
           #gr.Draw( 'ACP' )
 
           total = ROOT.TF1( 'total', "pol5", -4, 4, 0)
@@ -140,11 +186,28 @@ if __name__ == "__main__":
           total.SetLineWidth(4)
           gr.Fit(total,"R")
           gr.Draw("AP")
+
+
+          categ  = ROOT.TPaveText(0.35, 0.5+0.013, 0.83, 0.50+0.155, "NDC")
+          categ.SetBorderSize(   0 )
+          categ.SetFillStyle(    0 )
+          categ.SetTextAlign(   12 )
+          categ.SetTextSize ( 0.06 )
+          categ.SetTextColor(    1 )
+          categ.SetTextFont (   42 )
+	  if options.channel=="emu": categ.AddText("e#mu "+str(options.year))
+          elif options.channel=="etau": categ.AddText("e#tau_{h} "+str(options.year))
+          elif options.channel=="mutau": categ.AddText("#mu#tau_{h} "+str(options.year))
+          elif options.channel=="tautau": categ.AddText("#tau_{h}#tau_{h} "+str(options.year))
+	  categ.AddText(str(nominal.GetBinLowEdge(jj))+" < m_{vis} < "+str(nominal.GetBinLowEdge(jj)+(nominal.GetBinWidth(jj)))+" GeV")
+          categ.Draw("same")
+
+
 	  #self.modelBuilder.factory_('expr::scale_et_0_bin1("@0*@1",mu_fid,rho_0_45)')
  	  physics_model.write("self.modelBuilder.factory_('expr::scale_")
           physics_model.write(categories[c])
-          physics_model.write("_")
-          physics_model.write(options.year)
+          #physics_model.write("_")
+          #physics_model.write(options.year)
           physics_model.write("_bin")
           physics_model.write(str(jj))
           physics_model.write('("(')
@@ -158,5 +221,6 @@ if __name__ == "__main__":
           ROOT.gPad.RedrawAxis()
           canv.Modified()
           canv.SaveAs("plots_"+short_channel+"_"+options.year+"/bsm_extrap_"+categories[c]+"_bin"+str(jj)+".png")
+          canv.SaveAs("plots_"+short_channel+"_"+options.year+"/bsm_extrap_"+categories[c]+"_bin"+str(jj)+".pdf")
 
     physics_model.close()

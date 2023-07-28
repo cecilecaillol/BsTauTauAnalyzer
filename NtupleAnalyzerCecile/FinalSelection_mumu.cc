@@ -89,7 +89,7 @@ cout<<ngen<<" "<<ngenu<<endl;
     else if (sample=="ST_t_tau"){ xs=(80.95+136.02)*0.108; weight=luminosity*xs/ngen;}
     else if (sample=="ST_t_top"){ xs=136.02; weight=luminosity*xs/ngen;}
     else if (sample=="ST_t_antitop"){ xs=80.95; weight=luminosity*xs/ngen;}
-    else if (sample=="GGMM"){ xs=0.37553; weight=luminosity*xs/ngen;}
+    else if (sample=="GGMM"){ xs=0.324; weight=luminosity*xs/ngen;} //was 0.37553
     else if (name=="data_obs"){ weight=1.0;}
     else if (name=="test") { xs=1.0; weight=luminosity*xs/ngen;}
 
@@ -109,7 +109,7 @@ cout<<ngen<<" "<<ngenu<<endl;
       else if (sample=="ZZ4L") weight*=0.304;
       else if (sample=="ZZ2L2Nu") weight*=0.302;
       else if (sample=="ZZ2L2Q") weight*=0.373;
-      else if (sample=="GGMM") weight*=0.33;
+      else if (sample=="GGMM") weight*=0.328;
     //}
 
 
@@ -143,7 +143,7 @@ cout<<ngen<<" "<<ngenu<<endl;
     arbre->SetBranchAddress("nChargedPFCandidates", &nChargedPFCandidates);
     //arbre->SetBranchAddress("ChargedPFCandidates_dxy", &ChargedPFCandidates_dxy);
     arbre->SetBranchAddress("ChargedPFCandidates_dz", &ChargedPFCandidates_dz);
-    //arbre->SetBranchAddress("ChargedPFCandidates_eta", &ChargedPFCandidates_eta);
+    arbre->SetBranchAddress("ChargedPFCandidates_eta", &ChargedPFCandidates_eta);
     //arbre->SetBranchAddress("ChargedPFCandidates_mass", &ChargedPFCandidates_mass);
     //arbre->SetBranchAddress("ChargedPFCandidates_phi", &ChargedPFCandidates_phi);
     arbre->SetBranchAddress("ChargedPFCandidates_pt", &ChargedPFCandidates_pt);
@@ -218,7 +218,7 @@ cout<<ngen<<" "<<ngenu<<endl;
    auto b6_1=arbre->GetBranch("nChargedPFCandidates");
    auto b6_2=arbre->GetBranch("ChargedPFCandidates_pt");
    auto b6_3=arbre->GetBranch("ChargedPFCandidates_dz");
-   //auto b6_4=arbre->GetBranch("ChargedPFCandidates_eta");
+   auto b6_4=arbre->GetBranch("ChargedPFCandidates_eta");
    //auto b6_5=arbre->GetBranch("ChargedPFCandidates_phi");
    auto b6_6=arbre->GetBranch("ChargedPFCandidates_isMatchedToGenHS");
 
@@ -229,7 +229,7 @@ cout<<ngen<<" "<<ngenu<<endl;
    TH1F* h_vtxresolution_simpledimu = new TH1F("h_vtxresolution_simpledimu","h_vtxresolution_simpledimu",200,-1,1); h_vtxresolution_simpledimu->Sumw2();
    TH1F* h_dimumass = new TH1F("h_dimumass","h_dimumass",20,0,200); h_dimumass->Sumw2();
 
-   float binsNPVS[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,65,70,80,90,100,150};
+   float binsNPVS[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,150};
    int  binnumNPVS = sizeof(binsNPVS)/sizeof(Float_t) - 1;
 
    float binsm[] = {60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,180,200,220,240,260,280,300,350,400,450,500,550,600};
@@ -386,17 +386,35 @@ cout<<ngen<<" "<<ngenu<<endl;
    TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
    TF1* fit_aco = (TF1*) f_aco->Get("fit_A");
 
-   TFile *f_punt=new TFile("npu_correction_2018.root");
-   TH2F* correction_map=(TH2F*) f_punt->Get("correction_map");
+   TFile* f_aco_fine=new TFile("new_correction_acoplanarity_fine_2018.root","read");
+   TF1* fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
+   TF1* fit_aco_3040_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_2030");
+   TF1* fit_aco_4050_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_2030");
+   TF1* fit_aco_gt50_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_2030");
+   TF1* fit_aco_3040_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_3040");
+   TF1* fit_aco_4050_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_3040");
+   TF1* fit_aco_gt50_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_3040");
+   TF1* fit_aco_4050_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_4050");
+   TF1* fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
+   TF1* fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
+
+   //TFile *f_punt=new TFile("npu_correction_2018.root");
+   //TH2F* correction_map=(TH2F*) f_punt->Get("correction_map");
+   TFile *f_punt=new TFile("npu_correction_2018_Izaak.root");
+   TH2F* correction_map=(TH2F*) f_punt->Get("corr_raw");
 
    TFile *f_hsnt=new TFile("nhs_correction_2018.root");
    TH2F* correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
 
-   TFile* f_npvs=new TFile("correction_npvs_2018.root","read");
+   TFile* f_npvs=new TFile("new_correction_npvs_2018.root","read");
    TH1F* h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
 
    TFile* f_bs=new TFile("beamspot_TF1_2018.root","read");
    TF1* h_bs_width = (TF1*) f_bs->Get("f1");
+
+   TFile* f_bs_2=new TFile("beamspot_UL2018_Data.root","read");
+   TH1F* h_bs_sigma = (TH1F*) f_bs_2->Get("bs_sigma");
+   TH1F* h_bs_z = (TH1F*) f_bs_2->Get("bs_z");
 
    if (year=="2017"){
       TFile* f_aco=new TFile("correction_acoplanarity_2017.root","read");
@@ -405,10 +423,22 @@ cout<<ngen<<" "<<ngenu<<endl;
       correction_map=(TH2F*) f_punt->Get("correction_map");
       TFile *f_hsnt=new TFile("nhs_correction_2018.root");
       correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
-      TFile* f_npvs=new TFile("correction_npvs_2017.root","read");
+      TFile* f_npvs=new TFile("new_correction_npvs_2017.root","read");
       h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
       TFile* f_bs=new TFile("beamspot_TF1_2017.root","read");
       h_bs_width = (TF1*) f_bs->Get("f1");
+
+      TFile* f_aco_fine=new TFile("new_correction_acoplanarity_fine_2017.root","read");
+      fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
+      fit_aco_3040_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_2030");
+      fit_aco_4050_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_2030");
+      fit_aco_gt50_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_2030");
+      fit_aco_3040_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_3040");
+      fit_aco_4050_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_3040");
+      fit_aco_gt50_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_3040");
+      fit_aco_4050_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_4050");
+      fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
+      fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
    }
    else if (year=="2016pre"){
       TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
@@ -417,10 +447,22 @@ cout<<ngen<<" "<<ngenu<<endl;
       correction_map=(TH2F*) f_punt->Get("correction_map");
       TFile *f_hsnt=new TFile("nhs_correction_2018.root");
       correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
-      TFile* f_npvs=new TFile("correction_npvs_2018.root","read");
+      TFile* f_npvs=new TFile("new_correction_npvs_2016pre.root","read");
       h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
       TFile* f_bs=new TFile("beamspot_TF1_2018.root","read");
       h_bs_width = (TF1*) f_bs->Get("f1");
+
+      TFile* f_aco_fine=new TFile("new_correction_acoplanarity_fine_2016pre.root","read");
+      fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
+      fit_aco_3040_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_2030");
+      fit_aco_4050_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_2030");
+      fit_aco_gt50_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_2030");
+      fit_aco_3040_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_3040");
+      fit_aco_4050_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_3040");
+      fit_aco_gt50_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_3040");
+      fit_aco_4050_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_4050");
+      fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
+      fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
    }
    else if (year=="2016post"){
       TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
@@ -433,6 +475,18 @@ cout<<ngen<<" "<<ngenu<<endl;
       h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
       TFile* f_bs=new TFile("beamspot_TF1_2018.root","read");
       h_bs_width = (TF1*) f_bs->Get("f1");
+
+      TFile* f_aco_fine=new TFile("new_correction_acoplanarity_fine_2016post.root","read");
+      fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
+      fit_aco_3040_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_2030");
+      fit_aco_4050_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_2030");
+      fit_aco_gt50_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_2030");
+      fit_aco_3040_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_3040");
+      fit_aco_4050_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_3040");
+      fit_aco_gt50_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_3040");
+      fit_aco_4050_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_4050");
+      fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
+      fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
    }
 
    //TF1* fit_npvs = (TF1*) f_aco->Get("fit_npvs");
@@ -498,6 +552,9 @@ cout<<ngen<<" "<<ngenu<<endl;
     tree2->Branch("nths_weight_", &nths_weight_, "nths_weight_/F");
     tree2->Branch("aco_weight_", &aco_weight_, "aco_weight_/F");
 
+   TH1F* h_acoplanarity = new TH1F("h_acoplanarity","h_acoplanarity",30,0.0,0.003);
+   TH1F* h_genacoplanarity = new TH1F("h_genacoplanarity","h_genacoplanarity",20,0.0,0.01);
+
    Int_t nentries_wtn = (Int_t) arbre->GetEntries();
    for (Int_t i = 0; i < nentries_wtn; i++) {
         //arbre->GetEntry(i);
@@ -556,12 +613,14 @@ cout<<ngen<<" "<<ngenu<<endl;
 	  if (gen_aco>0.35) gen_aco=0.35;
 	}
 
+        double aco = (1.0 -fabs(my_mu1.DeltaPhi(my_mu2))/3.14159);
+
         float aweight=1.0;
 	float aco_weight=1.0;
         if (name!="data_obs"){
            aweight*=genWeight;
-           aweight*=pu_weight;//FIXME
-           //aweight*=puWeight; //FIXME
+           //aweight*=pu_weight;//FIXME
+           aweight*=puWeight; //FIXME
            float trgsf1=1.0;
            float recosf1=1.0;
            float idsf1=1.0;
@@ -590,7 +649,33 @@ cout<<ngen<<" "<<ngenu<<endl;
 	   else if (my_mu1.Pt()<=25 and my_mu2.Pt()>25) trgsf=trgsf1;
 	   else if (my_mu1.Pt()>25 and my_mu2.Pt()>25) trgsf=(1-(1-trgsf1)*(1-trgsf2));
 
-	   if (sample=="DY" or sample=="DYcondor") aco_weight=fit_aco->Eval(gen_aco);
+
+	   //if (sample=="DY" or sample=="DYcondor") aco_weight=fit_aco->Eval(gen_aco);
+	   /*if (sample=="DY" or sample=="DYcondor"){ 
+	      if (my_genmu1.Pt()<30 and my_genmu2.Pt()<30) aco_weight=fit_aco_2030_2030->Eval(gen_aco);
+              else if (my_genmu1.Pt()>=30  and my_genmu1.Pt()<40 and my_genmu2.Pt()<30) aco_weight=fit_aco_3040_2030->Eval(gen_aco);
+              else if (my_genmu1.Pt()>=40  and my_genmu1.Pt()<50 and my_genmu2.Pt()<30) aco_weight=fit_aco_4050_2030->Eval(gen_aco);
+              else if (my_genmu1.Pt()>=50  and my_genmu2.Pt()<30) aco_weight=fit_aco_gt50_2030->Eval(gen_aco);
+              else if (my_genmu1.Pt()>=30  and my_genmu1.Pt()<40 and my_genmu2.Pt()>=30 and my_genmu2.Pt()<40) aco_weight=fit_aco_3040_3040->Eval(gen_aco);
+              else if (my_genmu1.Pt()>=40  and my_genmu1.Pt()<50 and my_genmu2.Pt()>=30 and my_genmu2.Pt()<40) aco_weight=fit_aco_4050_3040->Eval(gen_aco);
+              else if (my_genmu1.Pt()>=50 and my_genmu2.Pt()>=30 and my_genmu2.Pt()<40) aco_weight=fit_aco_gt50_3040->Eval(gen_aco);
+              else if (my_genmu1.Pt()>=40 and my_genmu1.Pt()<50 and my_genmu2.Pt()>=40 and my_genmu2.Pt()<50) aco_weight=fit_aco_4050_4050->Eval(gen_aco);
+              else if (my_genmu1.Pt()>=50 and my_genmu2.Pt()>=40 and my_genmu2.Pt()<50) aco_weight=fit_aco_gt50_4050->Eval(gen_aco);
+              else if (my_genmu1.Pt()>=50 and my_genmu2.Pt()>=50) aco_weight=fit_aco_gt50_gt50->Eval(gen_aco);
+     	   }*/
+	   if (sample=="DY" or sample=="DYcondor"){ 
+              if (my_mu1.Pt()<30 and my_mu2.Pt()<30) aco_weight=fit_aco_2030_2030->Eval(TMath::Min(0.35,aco));
+              else if (my_mu1.Pt()>=30  and my_mu1.Pt()<40 and my_mu2.Pt()<30) aco_weight=fit_aco_3040_2030->Eval(TMath::Min(0.35,aco));
+              else if (my_mu1.Pt()>=40  and my_mu1.Pt()<50 and my_mu2.Pt()<30) aco_weight=fit_aco_4050_2030->Eval(TMath::Min(0.35,aco));
+              else if (my_mu1.Pt()>=50  and my_mu2.Pt()<30) aco_weight=fit_aco_gt50_2030->Eval(TMath::Min(0.35,aco));
+              else if (my_mu1.Pt()>=30  and my_mu1.Pt()<40 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) aco_weight=fit_aco_3040_3040->Eval(TMath::Min(0.35,aco));
+              else if (my_mu1.Pt()>=40  and my_mu1.Pt()<50 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) aco_weight=fit_aco_4050_3040->Eval(TMath::Min(0.35,aco));
+              else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) aco_weight=fit_aco_gt50_3040->Eval(TMath::Min(0.35,aco));
+              else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>=40 and my_mu2.Pt()<50) aco_weight=fit_aco_4050_4050->Eval(TMath::Min(0.35,aco));
+              else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=40 and my_mu2.Pt()<50) aco_weight=fit_aco_gt50_4050->Eval(TMath::Min(0.35,aco));
+              else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=50) aco_weight=fit_aco_gt50_gt50->Eval(TMath::Min(0.35,aco));
+//cout<<aco_weight<<" "<<aco<<" "<<my_mu1.Pt()<<" "<<my_mu2.Pt()<<endl;
+           }
            aweight=aweight*trgsf*recosf1*idsf1*muonIsoSF1*recosf2*idsf2*muonIsoSF2;
         }
 
@@ -617,11 +702,14 @@ cout<<ngen<<" "<<ngenu<<endl;
            h_vtxresolution_simpledimu->Fill(vtxresolution_simpledimu);
 	}
 
-	float aco = (1.0 -fabs(my_mu1.DeltaPhi(my_mu2))/3.14159);
+	//float aco = (1.0 -fabs(my_mu1.DeltaPhi(my_mu2))/3.14159);
 	if (sample=="data_obs") {puWeight=1; puWeightUp=1; puWeightDown=1;}
 aco_weight=1.0;//FIXME
 npvs_weight=1.0;//FIXME
 	if (is_OS){
+           h_acoplanarity->Fill(aco);
+           h_genacoplanarity->Fill(gen_aco);
+
 	   h_dimumass->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight);
 	   h0->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight);
            h1->Fill(aco,aweight*weight*aco_weight*npvs_weight);
@@ -660,7 +748,7 @@ npvs_weight=1.0;//FIXME
            h5SS->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight*puWeightUp/puWeight);
         }
 
-	/*b6_1->GetEntry(i); b6_2->GetEntry(i); b6_3->GetEntry(i);
+	b6_1->GetEntry(i); b6_2->GetEntry(i); b6_3->GetEntry(i); b6_4->GetEntry(i);
 
 	 //0p2 window width
         int ntracks1=0;
@@ -673,7 +761,7 @@ npvs_weight=1.0;//FIXME
              int ntracks1=0;
 	     if (simple_dimu_z<-10+(j-5)*0.2 or simple_dimu_z>-10+(j+5)*0.2){
                 for (int nt=0; nt<nChargedPFCandidates; ++nt){
-                   if (ChargedPFCandidates_pt[nt]>0.5 and (PV_z+ChargedPFCandidates_dz[nt])>=-10+j*0.2 and (PV_z+ChargedPFCandidates_dz[nt])<-10+(j+1)*0.2) {
+                   if (fabs(ChargedPFCandidates_eta[nt])<2.5 and ChargedPFCandidates_pt[nt]>0.5 and (PV_z+ChargedPFCandidates_dz[nt])>=-10+j*0.2 and (PV_z+ChargedPFCandidates_dz[nt])<-10+(j+1)*0.2) {
 		     ntracks1++;
 		   }
                 }
@@ -684,15 +772,17 @@ npvs_weight=1.0;//FIXME
 	}
 
 	if (name!="data_obs"){
-	   float rnd_beamspot=h_bs_width->GetRandom();
-           float rnd_beamspotz=f_beamspotz->GetRandom();
+	   //float rnd_beamspot=h_bs_width->GetRandom();
+           //float rnd_beamspotz=f_beamspotz->GetRandom();
+           float rnd_beamspot=h_bs_sigma->GetRandom();
+	   float rnd_beamspotz=h_bs_z->GetRandom();
            if (fabs(91.2-(my_mu1+my_mu2).M())<15 and is_OS){
               for (int j=0; j<100; ++j){
                 int ntracks_corrected1=0;
                 if (simple_dimu_z<-10+(j-5)*0.2 or simple_dimu_z>-10+(j+5)*0.2){
                    for (int nt=0; nt<nChargedPFCandidates; ++nt){
 	   	   float newz=(PV_z+ChargedPFCandidates_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488);
-                      if (ChargedPFCandidates_pt[nt]>0.5 and newz>=-10+j*0.2 and newz<-10+(j+1)*0.2) {            
+                      if (fabs(ChargedPFCandidates_eta[nt])<2.5 and ChargedPFCandidates_pt[nt]>0.5 and newz>=-10+j*0.2 and newz<-10+(j+1)*0.2) {            
                         ntracks_corrected1++;
                       }
                    }
@@ -704,12 +794,12 @@ npvs_weight=1.0;//FIXME
 	}
 
         //0p1 window width
-        if (fabs(91.2-(my_mu1+my_mu2).M())<15 and is_OS){
+        if (fabs(91.2-(my_mu1+my_mu2).M())<15 and is_OS){ 
            for (int j=0; j<200; ++j){
              int ntracks1=0;
-             if (simple_dimu_z<-10+(j-10)*0.1 or simple_dimu_z>-10+(j+10)*0.1){
+             if (simple_dimu_z<-10+(j-10)*0.1-0.05 or simple_dimu_z>-10+(j+10)*0.1+0.05){
                 for (int nt=0; nt<nChargedPFCandidates; ++nt){
-                   if (ChargedPFCandidates_pt[nt]>0.5 and (PV_z+ChargedPFCandidates_dz[nt])>=-10+j*0.1 and (PV_z+ChargedPFCandidates_dz[nt])<-10+(j+1)*0.1) {
+                   if (fabs(ChargedPFCandidates_eta[nt])<2.5 and ChargedPFCandidates_pt[nt]>0.5 and (PV_z+ChargedPFCandidates_dz[nt])>=-10+j*0.1 and (PV_z+ChargedPFCandidates_dz[nt])<-10+(j+1)*0.1) {
                      ntracks1++;
                    }
                 }
@@ -720,15 +810,17 @@ npvs_weight=1.0;//FIXME
         }
 
         if (name!="data_obs"){
-           float rnd_beamspot=h_bs_width->GetRandom();
-           float rnd_beamspotz=f_beamspotz->GetRandom();
-           if (fabs(91.2-(my_mu1+my_mu2).M())<15 and is_OS){
+           //float rnd_beamspot=h_bs_width->GetRandom();
+           //float rnd_beamspotz=f_beamspotz->GetRandom();
+           float rnd_beamspot=h_bs_sigma->GetRandom();
+           float rnd_beamspotz=h_bs_z->GetRandom();
+           if (fabs(91.2-(my_mu1+my_mu2).M())<15 and is_OS){ 
               for (int j=0; j<200; ++j){
                 int ntracks_corrected1=0;
-                if (simple_dimu_z<-10+(j-10)*0.1 or simple_dimu_z>-10+(j+10)*0.1){
+                if (simple_dimu_z<-10+(j-10)*0.1-0.05 or simple_dimu_z>-10+(j+10)*0.1+0.05){
                    for (int nt=0; nt<nChargedPFCandidates; ++nt){
-                   float newz=(PV_z+ChargedPFCandidates_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488);
-                      if (ChargedPFCandidates_pt[nt]>0.5 and newz>=-10+j*0.1 and newz<-10+(j+1)*0.1) {
+                   float newz=(PV_z+rnd_beamspotz-0.02488+ChargedPFCandidates_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488);
+                      if (fabs(ChargedPFCandidates_eta[nt])<2.5 and !ChargedPFCandidates_isMatchedToGenHS[nt] and ChargedPFCandidates_pt[nt]>0.5 and newz>=-10+j*0.1 and newz<-10+(j+1)*0.1) {
                         ntracks_corrected1++;
                       }
                    }
@@ -747,8 +839,11 @@ npvs_weight=1.0;//FIXME
 
         int ntracksAll=0;
         int ntracksPU=0;
-        float rnd_beamspot=h_bs_width->GetRandom();
-        float rnd_beamspotz=f_beamspotz->GetRandom();
+        //float rnd_beamspot=h_bs_width->GetRandom();
+        //float rnd_beamspotz=f_beamspotz->GetRandom();
+        float rnd_beamspot=h_bs_sigma->GetRandom();
+        float rnd_beamspotz=h_bs_z->GetRandom();
+
         int matched=0;
         for (int nt=0; nt<nChargedPFCandidates; ++nt){
            float is_matched=false;
@@ -758,7 +853,8 @@ npvs_weight=1.0;//FIXME
               float raw_dz=fabs(ChargedPFCandidates_dz[nt]-0.5*LepCand_dz[0]-0.5*LepCand_dz[1]);
               if (ChargedPFCandidates_pt[nt]>0.5 and raw_dz<0.05) ntracksAll++;
               if (sample!="data_obs"){
-                 float BScorrected_dz=fabs(((PV_z+ChargedPFCandidates_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488))-PV_z-0.5*LepCand_dz[0]-0.5*LepCand_dz[1]);
+                 //float BScorrected_dz=fabs(((PV_z+ChargedPFCandidates_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488))-PV_z-0.5*LepCand_dz[0]-0.5*LepCand_dz[1]);
+                 float BScorrected_dz=raw_dz;//FIXME removed BS corrections
                  if (ChargedPFCandidates_isMatchedToGenHS[nt] and ChargedPFCandidates_pt[nt]>0.5 and raw_dz<0.05) ntracksHS++;
                  if (!ChargedPFCandidates_isMatchedToGenHS[nt] and ChargedPFCandidates_pt[nt]>0.5 and BScorrected_dz<0.05) ntracksPU++;
               }
@@ -768,13 +864,13 @@ npvs_weight=1.0;//FIXME
 	if (zpos<-10) zpos=-9.99;
 	else if (zpos>10) zpos=9.99;
 	int ntpu=ntracksPU;
-	if (ntracksPU>50) ntpu=50;
+	if (ntracksPU>49) ntpu=49; //FIXME was 50
 	if (sample!="data_obs") ntpu_weight=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));
 	int sum_ntracks=ntracksPU+ntracksHS;
 	if (sum_ntracks>30) sum_ntracks=30;
 	if (ntracksAll>30) ntracksAll=30;
 	//cout<<ntpu_weight<<endl;
-	if (fabs(91.2-(my_mu1+my_mu2).M())<10 and is_OS and aco<0.02){
+	if (fabs(91.2-(my_mu1+my_mu2).M())<10 and is_OS and aco<0.015){
 	  if (name!="data_obs"){
              h_ntracksAll[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
 	     if (ntracksHS==0) h_ntracksAll_genHS0[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
@@ -825,19 +921,23 @@ npvs_weight=1.0;//FIXME
         }
 
 	if (is_OS){
-           if (aco<0.02 and ((name=="data_obs" and ntracksAll==0) or (name!="data_obs" and sum_ntracks==0))) h6->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
-           if (aco<0.02 and ((name=="data_obs" and ntracksAll==5) or (name!="data_obs" and sum_ntracks==5))) h7->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
+           if (aco<0.015 and ((name=="data_obs" and ntracksAll==0) or (name!="data_obs" and sum_ntracks==0))) h6->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
+           if (aco<0.015 and ((name=="data_obs" and ntracksAll==5) or (name!="data_obs" and sum_ntracks==5))) h7->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
 	}
 	else{
-           if (aco<0.02 and ((name=="data_obs" and ntracksAll==0) or (name!="data_obs" and sum_ntracks==0))) h6SS->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
-           if (aco<0.02 and ((name=="data_obs" and ntracksAll==5) or (name!="data_obs" and sum_ntracks==5))) h7SS->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
+           if (aco<0.015 and ((name=="data_obs" and ntracksAll==0) or (name!="data_obs" and sum_ntracks==0))) h6SS->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
+           if (aco<0.015 and ((name=="data_obs" and ntracksAll==5) or (name!="data_obs" and sum_ntracks==5))) h7SS->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
         }
 
         if ((name=="data_obs" and ntracksAll<10) or (name!="data_obs" and sum_ntracks<10)) fillTreeRescaling(tree2,my_mu1.Pt(),my_mu1.Eta(),my_mu1.Phi(),my_mu2.Pt(),my_mu2.Eta(),my_mu2.Phi(),int(is_OS),aco,sum_ntracks,ntracksAll,aweight,weight,npvs_weight,ntpu_weight,nths_weight,aco_weight);
-*/
+
     } // end of loop over events
     TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();
+
+    h_acoplanarity->Write();
+    h_genacoplanarity->Write();
+
     tree2->Write();
     h_norm->Write();
     h_ntracks_test->Write();

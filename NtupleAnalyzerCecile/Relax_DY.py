@@ -52,16 +52,16 @@ if __name__ == "__main__":
        SF_ZTTA=hZTT2A.Integral()/(hZTT1A.Integral()+0.001)
 
        if (is_control==0 and j==0):
-	  SF_ZLL=0.0247
-          SF_ZLLA=0.0247
-          SF_ZTT=0.0247
-          SF_ZTTA=0.0247
+	  SF_ZLL=0.0242
+          SF_ZLLA=0.0242
+          SF_ZTT=0.0242
+          SF_ZTTA=0.0242
 
        if (is_control==0 and j==1):
-          SF_ZLL=0.0491
-          SF_ZLLA=0.0491
-          SF_ZTT=0.0491
-          SF_ZTTA=0.0491
+          SF_ZLL=0.0501
+          SF_ZLLA=0.0501
+          SF_ZTT=0.0501
+          SF_ZTTA=0.0501
 
        print SF_ZLL, SF_ZLLA, SF_ZTT, SF_ZTTA
 

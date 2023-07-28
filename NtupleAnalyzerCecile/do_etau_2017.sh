@@ -30,7 +30,7 @@ hadd -f output_etau_2017/VV.root output_etau_2017/WW2L2Nu.root output_etau_2017/
 ./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/TTTo2L2Nu.root output_etau_2017/TTTo2L2Nu.root TTTo2L2Nu top
 hadd -f output_etau_2017/top.root output_etau_2017/TTToHadronic.root output_etau_2017/TTToSemiLeptonic.root output_etau_2017/TTTo2L2Nu.root output_etau_2017/ST_t_antitop.root output_etau_2017/ST_t_top.root output_etau_2017/ST_tW_antitop.root output_etau_2017/ST_tW_top.root
 hadd -f output_etau_2017/MC.root output_etau_2017/DYrescaled.root output_etau_2017/VV.root output_etau_2017/top.root
-./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/GGToTauTau.root output_etau_2017/GGTT.root GGTT GGTT
+./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/GGToTauTau_Ctb20.root output_etau_2017/GGTT.root GGTT_Ctb20 GGTT
 ./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/GGToWW.root output_etau_2017/GGWW.root GGWW GGWW
 
 #cp output_etau_2017/GGTT.root output_etau_2017/signal.root

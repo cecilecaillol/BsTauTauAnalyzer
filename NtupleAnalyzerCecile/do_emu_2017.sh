@@ -5,7 +5,8 @@
 ./FinalSelection_emu.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/MuonEGE.root output_emu_2017/MuonEGE.root data_obs data_obs
 ./FinalSelection_emu.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/MuonEGF.root output_emu_2017/MuonEGF.root data_obs data_obs
 hadd -f output_emu_2017/MuonEG.root output_emu_2017/MuonEGB.root output_emu_2017/MuonEGC.root output_emu_2017/MuonEGD.root output_emu_2017/MuonEGE.root output_emu_2017/MuonEGF.root
-./FinalSelection_emu.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/DY.root output_emu_2017/DY.root DY ZTT
+./FinalSelection_emu.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/DY.root output_emu_2017/DYLL.root DY ZTT
+./FinalSelection_emu.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/DYemu.root output_emu_2017/DY.root DYemu ZTT
 python Relax_DY_em.py --year=2017
 ./FinalSelection_emu.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/W.root output_emu_2017/W.root W W 
 ./FinalSelection_emu.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/ST_t_antitop.root output_emu_2017/ST_t_antitop.root ST_t_antitop top
@@ -23,7 +24,7 @@ hadd -f output_emu_2017/VV.root output_emu_2017/WW2L2Nu.root output_emu_2017/WZ2
 ./FinalSelection_emu.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/TTTo2L2Nu_small.root output_emu_2017/TTTo2L2Nu.root TTTo2L2Nu top
 hadd -f output_emu_2017/top.root output_emu_2017/TTToHadronic.root output_emu_2017/TTToSemiLeptonic.root output_emu_2017/TTTo2L2Nu.root output_emu_2017/ST_t_antitop.root output_emu_2017/ST_t_top.root output_emu_2017/ST_tW_antitop.root output_emu_2017/ST_tW_top.root
 hadd -f output_emu_2017/MC.root output_emu_2017/DYrescaled.root output_emu_2017/VV.root output_emu_2017/top.root
-./FinalSelection_emu.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/GGToTauTau.root output_emu_2017/GGTT.root GGTT GGTT
+./FinalSelection_emu.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/GGToTauTau_Ctb20.root output_emu_2017/GGTT.root GGTT_Ctb20 GGTT
 ./FinalSelection_emu.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2017/GGToWW.root output_emu_2017/GGWW.root GGWW GGWW
 
 python Create_fake_emu.py --year=2017
