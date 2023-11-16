@@ -56,9 +56,10 @@ int main(int argc, char** argv) {
     arbre->SetBranchAddress("ntracksAll_", &ntracksAll_);
     arbre->SetBranchAddress("sum_ntracks_", &sum_ntracks_);
 
-    float binsm[] = {60,65,70,75,80,85,90,95,100,105,110,120,130,140,150,160,170,180,190,200,220,240,260,280,300,350,400,450,500,550,600};
+    float binsm[] = {60,65,70,75,80,85,90,95,100,105,110,120,130,140,150,160,170,180,190,200,220,240,260,280,300,350,400,500,600,800};
     int  binnumm = sizeof(binsm)/sizeof(Float_t) - 1;
-    TH1F* h_lownt=new TH1F("h_lownt","h_lownt",binnumm,binsm); h_lownt->Sumw2();
+    TH1F* h_lownt0=new TH1F("h_lownt0","h_lownt0",binnumm,binsm); h_lownt0->Sumw2();
+    TH1F* h_lownt1=new TH1F("h_lownt1","h_lownt1",binnumm,binsm); h_lownt1->Sumw2();
     TH1F* h_highnt=new TH1F("h_highnt","h_highnt",binnumm,binsm); h_highnt->Sumw2();
 
     Int_t nentries_wtn = (Int_t) arbre->GetEntries();
@@ -77,21 +78,26 @@ int main(int argc, char** argv) {
         if (year=="2017" and my_mu1.Pt()<29 and my_mu2.Pt()<29) continue;
         if (year=="2018" and my_mu1.Pt()<26 and my_mu2.Pt()<26) continue;
 
-	//if (my_mu1.Pt()<30 or my_mu2.Pt()<30) continue;
+	if (my_mu1.Pt()<40 or my_mu2.Pt()<40) continue;
 	//
 	if (name=="data_obs"){weight_=1.0;aweight_=1.0;ntpu_weight_=1.0;}
 
-	if (acoplanarity_<0.015 and os_ and ((name!="data_obs" and sum_ntracks_==0) or (name=="data_obs" and ntracksAll_==0))) h_lownt->Fill(mvis,weight_*aweight_*ntpu_weight_);
+	if (acoplanarity_<0.015 and os_ and ((name!="data_obs" and sum_ntracks_==0) or (name=="data_obs" and ntracksAll_==0))) h_lownt0->Fill(mvis,weight_*aweight_*ntpu_weight_);
+        if (acoplanarity_<0.015 and os_ and ((name!="data_obs" and sum_ntracks_==1) or (name=="data_obs" and ntracksAll_==1))) h_lownt1->Fill(mvis,weight_*aweight_*ntpu_weight_);
         if (acoplanarity_<0.015 and os_ and ((name!="data_obs" and sum_ntracks_>=5) or (name=="data_obs" and ntracksAll_>=5))) h_highnt->Fill(mvis,weight_*aweight_*ntpu_weight_);
+        //if (acoplanarity_<0.015 and os_ and ((name!="data_obs" and sum_ntracks_>=5) or (name=="data_obs" and ntracksAll_>=5))) h_highnt->Fill(mvis,weight_*aweight_*ntpu_weight_);
 
     }
-    TString postfixlow="_low";
+    TString postfixlow0="_low0";
+    TString postfixlow1="_low1";
     TString postfixhigh="_high";
     TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();
-    h_lownt->SetName(name.c_str()+postfixlow);
+    h_lownt0->SetName(name.c_str()+postfixlow0);
+    h_lownt1->SetName(name.c_str()+postfixlow1);
     h_highnt->SetName(name.c_str()+postfixhigh);
-    h_lownt->Write();
+    h_lownt0->Write();
+    h_lownt1->Write();
     h_highnt->Write();
     fout->Close();
 }

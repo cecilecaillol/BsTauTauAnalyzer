@@ -26,12 +26,13 @@
 #include "TTree.h"
 #include "tr_Tree.h"
 #include "myHelper.h"
+#include "dz_Tree.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
 
-    int is_control=1;
+    int is_control=0;
 
     std::string year = *(argv + 1);
     std::string input = *(argv + 2);
@@ -59,7 +60,7 @@ int main(int argc, char** argv) {
     cout<<"N gen weighted: "<<ngen<<endl;
     cout<<"N gen unweighted: "<<ngenu<<endl;
 
-    /*size_t start_pos = input.find("2018/");
+    size_t start_pos = input.find("2018/");
     std::string input_friend=input;
     if(start_pos != std::string::npos)  input_friend.replace(start_pos, 5, "2018/friend_");
     start_pos = input.find("2017/");
@@ -70,14 +71,13 @@ int main(int argc, char** argv) {
     if(start_pos != std::string::npos)  input_friend.replace(start_pos, 9, "2016post/friend_");
     cout<<input<<" "<<input_friend<<endl;
     TFile *f_Friend = new TFile(input_friend.c_str());//FIXME
-    TTree *ami = (TTree*) f_Friend->Get("friend_tree");*/
-
+    TTree *ami = (TTree*) f_Friend->Get("friend_tree");
 
     float xs=1.0; float weight=1.0; float luminosity=59830.0;
     if (year=="2017") luminosity=41480.0;
     if (year=="2016pre") luminosity=19520.0;
     if (year=="2016post") luminosity=16810.0;
-    if (sample=="Z" or sample=="DY" or sample=="ZL" or sample=="ZTT" or sample=="ZJ" or sample=="ZLL"){ xs=6225.42; weight=luminosity*xs/ngen;}
+    if (sample=="Z" or sample=="DY" or sample=="ZL" or sample=="ZTT" or sample=="ZJ" or sample=="ZLL"){ xs=6077.2; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt100to250"){ xs=689.75; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt250to400"){ xs=24.51; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt400to600"){cout<<"trouve"<<endl; xs=3.110; weight=luminosity*xs/ngen;}
@@ -95,7 +95,7 @@ int main(int argc, char** argv) {
     else if (sample=="ZZ2L2Q"){ xs=3.22; weight=luminosity*xs/ngen;}
     else if (sample=="ZZ2Q2L"){ xs=3.22; weight=luminosity*xs/ngen;}
     else if (sample=="WZ3LNu"){ xs=4.42965; weight=luminosity*xs/ngen;}
-    else if (sample=="VV2L2Nu"){ xs=11.95; weight=luminosity*xs/ngen;}
+    else if (sample=="VV2L2Nu"){ xs=14.26; weight=luminosity*xs/ngen;}
     else if (sample=="WW2L2Nu"){ xs=8.95; weight=luminosity*xs/ngen;}//FIXME
     else if (sample=="WZ2L2Q"){ xs=5.595; weight=luminosity*xs/ngen;}
     else if (sample=="WZ2Q2L"){ xs=5.595; weight=luminosity*xs/ngen;}
@@ -106,17 +106,19 @@ int main(int argc, char** argv) {
     else if (sample=="ST_tW_antitop"){ xs=35.6; weight=luminosity*xs/ngen;}
     else if (sample=="ST_t_top"){ xs=136.02; weight=luminosity*xs/ngen;}
     else if (sample=="ST_t_antitop"){ xs=80.95; weight=luminosity*xs/ngen;}
-    //else if (sample=="GGTT"){ xs=0.669*0.0172; weight=luminosity*xs/ngen;}
-    else if (sample=="GGWW"){ xs=0.009625 * 0.40; weight=luminosity*xs/ngen;}
-    //else if (sample=="GGTT2"){ xs=0.669*0.0172*3.59; weight=luminosity*xs/ngen;}
-    else if (sample=="GGTT"){ xs=1.161*0.00871; weight=luminosity*xs/ngen;}
+    else if (sample=="GGWW"){ xs=0.00692 * 0.368; weight=luminosity*xs/ngen;}
+    else if (sample=="GGTT"){ xs=1.161*0.008735; weight=luminosity*xs/ngen;}
+    else if (sample=="GGTT_Ctb20"){ xs=1.121*0.0269; weight=luminosity*xs/ngen;}
+    else if (sample=="CEPDijets"){ xs=0.1468; weight=luminosity*xs/ngen;}
+    else if (sample=="QCDpomflux"){ xs=2285000.0; weight=luminosity*xs/ngen;}
+    else if (sample=="GGHTT"){ xs=48.30*0.06208; weight=luminosity*xs/ngen;}
     else if (name=="data_obs"){ weight=1.0;}
     else if (name=="test") { xs=1.0; weight=luminosity*xs/ngen;}
+    else if (sample=="GGHWW") {xs=48.30*0.2203*0.3258*0.3258; weight=luminosity*xs/ngen;}
 
 cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
 
-    //if (output.find("renano") < 140){
-      if (sample=="DY") weight*=0.318*0.985;
+      if (sample=="DY") weight*=0.318;
       else if (sample=="TTTo2L2Nu") weight*=0.657;
       else if (sample=="TTToSemiLeptonic") weight*=0.401;
       else if (sample=="TTToHadronic") weight*=0.170;
@@ -125,6 +127,7 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
       else if (sample=="ST_tW_top") weight*=0.273;
       else if (sample=="ST_tW_antitop") weight*=0.272;
       else if (sample=="WW2L2Nu") weight*=0.397;
+      else if (sample=="VV2L2Nu") weight*=0.392;
       else if (sample=="WW2L2Q") weight*=0.341;
       else if (sample=="WZ3LNu") weight*=0.341;
       else if (sample=="ZZ4L") weight*=0.304;
@@ -136,8 +139,10 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
       else if (sample=="W2") weight*=0.0928;
       else if (sample=="W3") weight*=0.132;
       else if (sample=="W4") weight*=0.184;
-    //}
-    //
+      else if (sample=="CEPDijets") weight*=0.0198;
+      else if (sample=="QCDpomflux") weight*=0.00259;
+      else if (sample=="GGHTT") weight*=0.214;
+
     float nnlo=1.162;
     float xsW=52940.0;
     float xsW1=8104.0;
@@ -226,6 +231,9 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
     arbre->SetBranchAddress("puWeightDown", &puWeightDown);
     arbre->SetBranchAddress("puWeightUp", &puWeightUp);
     arbre->SetBranchAddress("genWeight", &genWeight);
+
+    arbre->SetBranchAddress("run", &run);
+    arbre->SetBranchAddress("event", &event);
 
     arbre->SetBranchAddress("MET_pt", &MET_pt);
     arbre->SetBranchAddress("MET_phi", &MET_phi);
@@ -339,14 +347,14 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
     arbre->SetBranchAddress("TauG2Weights_ceBRe33_m0p8", &TauG2Weights_ceBRe33_m0p8);
 
 
-    /*ami->SetBranchAddress("ntracks_friend", &ntracks_friend);
+    ami->SetBranchAddress("ntracks_friend", &ntracks_friend);
     ami->SetBranchAddress("ntracksAll_friend", &ntracksAll_friend);
     ami->SetBranchAddress("ntracksHS_friend", &ntracksHS_friend);
     ami->SetBranchAddress("ntracksPU_friend", &ntracksPU_friend);
 
-    arbre->AddFriend(ami);*/
+    arbre->AddFriend(ami);
 
-   int nbhist=1+26;
+   int nbhist=1;
    int nbhist_offset=0;
    nbhist=1;//FIXME
 	
@@ -390,7 +398,7 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
 
 
    // Control 1
-   float bins0[] = {0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,400,500};//mvis
+   /*float bins0[] = {0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,400,500};//mvis
    float bins1[] = {25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71,73,75,77,79,81,83,85,87,89,91,93,95,97,99,110,120};//e pt
    float bins2[] = {20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120};//tau pt
    float bins3[] = {-2.5,-2.3,-2.1,-1.9,-1.7,-1.5,-1.3,-1.1,-0.9,-0.7,-0.5,-0.3,-0.1,0.1,0.3,0.5,0.7,0.9,1.1,1.3,1.5,1.7,1.9,2.1,2.3,2.5};//e eta
@@ -399,18 +407,18 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    float bins6[] = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180};//mt
    //float bins7[] = {0,1,2,3,4,5,6,7,8,9,10,11};//njets
    float bins7[] = {0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3.0,3.1,3.2,3.3,3.4,3.5,3.6,3.7,3.8,3.9,4.0,4.1,4.2,4.3,4.4,4.5,4.6,4.7,4.8,4.9,5.0};
-   float bins8[] = {0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity
+   float bins8[] = {0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity*/
 
    // Signal region
-   /*float bins0[] = {60,75,90,105,120,135,180,250};//mvis
-   float bins1[] = {60,70,80,90,100,110,120,150,200,250};//mvis
+   float bins0[] = {70,85,100,150,200,250};//mvis
+   float bins1[] = {70,85,100,150,200,250};//mvis
    float bins2[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins3[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins4[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins5[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins6[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins7[] = {40,55,70,85,100,125,150,200,350,500};//mvis
-   float bins8[] = {40,55,70,85,100,125,150,200,350,500};//mvis*/
+   float bins8[] = {40,55,70,85,100,125,150,200,350,500};//mvis
 
    int  binnum0 = sizeof(bins0)/sizeof(Float_t) - 1;
    int  binnum1 = sizeof(bins1)/sizeof(Float_t) - 1;
@@ -500,7 +508,7 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
 
    }
 
-   float bins_taupt0[] = {30,40,50,75,100,200,300};
+   float bins_taupt0[] = {40,50,75,100,200,300};
    int  binnum_taupt0 = sizeof(bins_taupt0)/sizeof(Float_t) - 1;
    float bins_taupt1[] = {20,22,24,26,28,30,35,40,45,50,60,80,100,150,200,300};
    int  binnum_taupt1 = sizeof(bins_taupt1)/sizeof(Float_t) - 1;
@@ -513,15 +521,6 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    float bins_nt[] = {-1,0,1,2,3,4,5,7,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100};
    int  binnum_nt = sizeof(bins_nt)/sizeof(Float_t) - 1;
 
-   TH1F *h_tauFR_W_dm0_VVVL=new TH1F("h_tauFR_W_dm0_VVVL","h_tauFR_W_dm0_VVVL",binnum_taupt0,bins_taupt0); h_tauFR_W_dm0_VVVL->Sumw2();
-   TH1F *h_tauFR_W_dm1_VVVL=new TH1F("h_tauFR_W_dm1_VVVL","h_tauFR_W_dm1_VVVL",binnum_taupt1,bins_taupt1); h_tauFR_W_dm1_VVVL->Sumw2();
-   TH1F *h_tauFR_W_dm10_VVVL=new TH1F("h_tauFR_W_dm10_VVVL","h_tauFR_W_dm10_VVVL",binnum_taupt10,bins_taupt10); h_tauFR_W_dm10_VVVL->Sumw2();
-   TH1F *h_tauFR_W_dm11_VVVL=new TH1F("h_tauFR_W_dm11_VVVL","h_tauFR_W_dm11_VVVL",binnum_taupt11,bins_taupt11); h_tauFR_W_dm11_VVVL->Sumw2();
-   TH1F *h_tauFR_W_dm0_M=new TH1F("h_tauFR_W_dm0_M","h_tauFR_W_dm0_M",binnum_taupt0,bins_taupt0); h_tauFR_W_dm0_M->Sumw2();
-   TH1F *h_tauFR_W_dm1_M=new TH1F("h_tauFR_W_dm1_M","h_tauFR_W_dm1_M",binnum_taupt1,bins_taupt1); h_tauFR_W_dm1_M->Sumw2();
-   TH1F *h_tauFR_W_dm10_M=new TH1F("h_tauFR_W_dm10_M","h_tauFR_W_dm10_M",binnum_taupt10,bins_taupt10); h_tauFR_W_dm10_M->Sumw2();
-   TH1F *h_tauFR_W_dm11_M=new TH1F("h_tauFR_W_dm11_M","h_tauFR_W_dm11_M",binnum_taupt11,bins_taupt11); h_tauFR_W_dm11_M->Sumw2();
-
    TH1F *h_tauFR_QCD_dm0_VVVL=new TH1F("h_tauFR_QCD_dm0_VVVL","h_tauFR_QCD_dm0_VVVL",binnum_taupt0,bins_taupt0); h_tauFR_QCD_dm0_VVVL->Sumw2();
    TH1F *h_tauFR_QCD_dm1_VVVL=new TH1F("h_tauFR_QCD_dm1_VVVL","h_tauFR_QCD_dm1_VVVL",binnum_taupt1,bins_taupt1); h_tauFR_QCD_dm1_VVVL->Sumw2();
    TH1F *h_tauFR_QCD_dm10_VVVL=new TH1F("h_tauFR_QCD_dm10_VVVL","h_tauFR_QCD_dm10_VVVL",binnum_taupt10,bins_taupt10); h_tauFR_QCD_dm10_VVVL->Sumw2();
@@ -531,14 +530,6 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    TH1F *h_tauFR_QCD_dm10_M=new TH1F("h_tauFR_QCD_dm10_M","h_tauFR_QCD_dm10_M",binnum_taupt10,bins_taupt10); h_tauFR_QCD_dm10_M->Sumw2();
    TH1F *h_tauFR_QCD_dm11_M=new TH1F("h_tauFR_QCD_dm11_M","h_tauFR_QCD_dm11_M",binnum_taupt11,bins_taupt11); h_tauFR_QCD_dm11_M->Sumw2();
 
-   TH1F *h_tauFRnt_W_dm0_VVVL=new TH1F("h_tauFRnt_W_dm0_VVVL","h_tauFRnt_W_dm0_VVVL",binnum_nt,bins_nt); h_tauFRnt_W_dm0_VVVL->Sumw2();
-   TH1F *h_tauFRnt_W_dm1_VVVL=new TH1F("h_tauFRnt_W_dm1_VVVL","h_tauFRnt_W_dm1_VVVL",binnum_nt,bins_nt); h_tauFRnt_W_dm1_VVVL->Sumw2();
-   TH1F *h_tauFRnt_W_dm10_VVVL=new TH1F("h_tauFRnt_W_dm10_VVVL","h_tauFRnt_W_dm10_VVVL",binnum_nt,bins_nt); h_tauFRnt_W_dm10_VVVL->Sumw2();
-   TH1F *h_tauFRnt_W_dm11_VVVL=new TH1F("h_tauFRnt_W_dm11_VVVL","h_tauFRnt_W_dm11_VVVL",binnum_nt,bins_nt); h_tauFRnt_W_dm11_VVVL->Sumw2();
-   TH1F *h_tauFRnt_W_dm0_M=new TH1F("h_tauFRnt_W_dm0_M","h_tauFRnt_W_dm0_M",binnum_nt,bins_nt); h_tauFRnt_W_dm0_M->Sumw2();
-   TH1F *h_tauFRnt_W_dm1_M=new TH1F("h_tauFRnt_W_dm1_M","h_tauFRnt_W_dm1_M",binnum_nt,bins_nt); h_tauFRnt_W_dm1_M->Sumw2();
-   TH1F *h_tauFRnt_W_dm10_M=new TH1F("h_tauFRnt_W_dm10_M","h_tauFRnt_W_dm10_M",binnum_nt,bins_nt); h_tauFRnt_W_dm10_M->Sumw2();
-   TH1F *h_tauFRnt_W_dm11_M=new TH1F("h_tauFRnt_W_dm11_M","h_tauFRnt_W_dm11_M",binnum_nt,bins_nt); h_tauFRnt_W_dm11_M->Sumw2();
    TH1F *h_tauFRnt_QCD_dm0_VVVL=new TH1F("h_tauFRnt_QCD_dm0_VVVL","h_tauFRnt_QCD_dm0_VVVL",binnum_nt,bins_nt); h_tauFRnt_QCD_dm0_VVVL->Sumw2();
    TH1F *h_tauFRnt_QCD_dm1_VVVL=new TH1F("h_tauFRnt_QCD_dm1_VVVL","h_tauFRnt_QCD_dm1_VVVL",binnum_nt,bins_nt); h_tauFRnt_QCD_dm1_VVVL->Sumw2();
    TH1F *h_tauFRnt_QCD_dm10_VVVL=new TH1F("h_tauFRnt_QCD_dm10_VVVL","h_tauFRnt_QCD_dm10_VVVL",binnum_nt,bins_nt); h_tauFRnt_QCD_dm10_VVVL->Sumw2();
@@ -548,14 +539,47 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    TH1F *h_tauFRnt_QCD_dm10_M=new TH1F("h_tauFRnt_QCD_dm10_M","h_tauFRnt_QCD_dm10_M",binnum_nt,bins_nt); h_tauFRnt_QCD_dm10_M->Sumw2();
    TH1F *h_tauFRnt_QCD_dm11_M=new TH1F("h_tauFRnt_QCD_dm11_M","h_tauFRnt_QCD_dm11_M",binnum_nt,bins_nt); h_tauFRnt_QCD_dm11_M->Sumw2();
 
-   TH1F *h_tauFR_QCD_xtrg_M=new TH1F("h_tauFR_QCD_xtrg_M","h_tauFR_QCD_xtrg_M",3,0,3); h_tauFR_QCD_xtrg_M->Sumw2();
-   TH1F *h_tauFR_QCD_xtrg_VVVL=new TH1F("h_tauFR_QCD_xtrg_VVVL","h_tauFR_QCD_xtrg_VVVL",3,0,3); h_tauFR_QCD_xtrg_VVVL->Sumw2();
-   TH1F *h_tauFR_W_xtrg_M=new TH1F("h_tauFR_W_xtrg_M","h_tauFR_W_xtrg_M",3,0,3); h_tauFR_W_xtrg_M->Sumw2();
-   TH1F *h_tauFR_W_xtrg_VVVL=new TH1F("h_tauFR_W_xtrg_VVVL","h_tauFR_W_xtrg_VVVL",3,0,3); h_tauFR_W_xtrg_VVVL->Sumw2();
+   TH1F *h_tau1FR_QCD_dm0_VVVL=new TH1F("h_tau1FR_QCD_dm0_VVVL","h_tau1FR_QCD_dm0_VVVL",binnum_taupt0,bins_taupt0); h_tau1FR_QCD_dm0_VVVL->Sumw2();
+   TH1F *h_tau1FR_QCD_dm1_VVVL=new TH1F("h_tau1FR_QCD_dm1_VVVL","h_tau1FR_QCD_dm1_VVVL",binnum_taupt1,bins_taupt1); h_tau1FR_QCD_dm1_VVVL->Sumw2();
+   TH1F *h_tau1FR_QCD_dm10_VVVL=new TH1F("h_tau1FR_QCD_dm10_VVVL","h_tau1FR_QCD_dm10_VVVL",binnum_taupt10,bins_taupt10); h_tau1FR_QCD_dm10_VVVL->Sumw2();
+   TH1F *h_tau1FR_QCD_dm11_VVVL=new TH1F("h_tau1FR_QCD_dm11_VVVL","h_tau1FR_QCD_dm11_VVVL",binnum_taupt11,bins_taupt11); h_tau1FR_QCD_dm11_VVVL->Sumw2();
+   TH1F *h_tau1FR_QCD_dm0_M=new TH1F("h_tau1FR_QCD_dm0_M","h_tau1FR_QCD_dm0_M",binnum_taupt0,bins_taupt0); h_tau1FR_QCD_dm0_M->Sumw2();
+   TH1F *h_tau1FR_QCD_dm1_M=new TH1F("h_tau1FR_QCD_dm1_M","h_tau1FR_QCD_dm1_M",binnum_taupt1,bins_taupt1); h_tau1FR_QCD_dm1_M->Sumw2();
+   TH1F *h_tau1FR_QCD_dm10_M=new TH1F("h_tau1FR_QCD_dm10_M","h_tau1FR_QCD_dm10_M",binnum_taupt10,bins_taupt10); h_tau1FR_QCD_dm10_M->Sumw2();
+   TH1F *h_tau1FR_QCD_dm11_M=new TH1F("h_tau1FR_QCD_dm11_M","h_tau1FR_QCD_dm11_M",binnum_taupt11,bins_taupt11); h_tau1FR_QCD_dm11_M->Sumw2();
 
-   TString uncertainties[49]={"","_CMS_tauid_stat1_dm0_yearDown","_CMS_tauid_stat1_dm0_yearUp","_CMS_tauid_stat1_dm1_yearDown","_CMS_tauid_stat1_dm1_yearUp","_CMS_tauid_stat1_dm10_yearDown","_CMS_tauid_stat1_dm10_yearUp","_CMS_tauid_stat1_dm11_yearDown","_CMS_tauid_stat1_dm11_yearUp","_CMS_tauid_stat2_dm0_yearDown","_CMS_tauid_stat2_dm0_yearUp","_CMS_tauid_stat2_dm1_yearDown","_CMS_tauid_stat2_dm1_yearUp","_CMS_tauid_stat2_dm10_yearDown","_CMS_tauid_stat2_dm10_yearUp","_CMS_tauid_stat2_dm11_yearDown","_CMS_tauid_stat2_dm11_yearUp","_CMS_tauid_syst_allerasDown","_CMS_tauid_syst_allerasUp","_CMS_tauid_syst_yearDown","_CMS_tauid_syst_yearUp","_CMS_tauid_syst_dm0_yearDown","_CMS_tauid_syst_dm0_yearUp","_CMS_tauid_syst_dm1_yearDown","_CMS_tauid_syst_dm1_yearUp","_CMS_tauid_syst_dm10_yearDown","_CMS_tauid_syst_dm10_yearUp","_CMS_tauid_syst_dm11_yearDown","_CMS_tauid_syst_dm11_yearUp","_CMS_taues_dm0_yearDown","_CMS_taues_dm0_yearUp","_CMS_taues_dm1_yearDown","_CMS_taues_dm1_yearUp","_CMS_taues_3prong_yearDown","_CMS_taues_3prong_yearUp","_CMS_etauFR_barrel_yearDown","_CMS_etauFR_barrel_yearUp","_CMS_etauFR_endcap_yearDown","_CMS_etauFR_endcap_yearUp","_CMS_etauFES_dm0_yearDown","_CMS_etauFES_dm0_yearUp","_CMS_etauFES_dm1_yearDown","_CMS_etauFES_dm1_yearUp","_CMS_pileup_yearDown","_CMS_pileup_yearUp","_CMS_etautrg_yearDown","_CMS_etautrg_yearUp","_CMS_etrg_yearDown","_CMS_etrg_yearUp"};
+   TH1F *h_tau1FRnt_QCD_dm0_VVVL=new TH1F("h_tau1FRnt_QCD_dm0_VVVL","h_tau1FRnt_QCD_dm0_VVVL",binnum_nt,bins_nt); h_tau1FRnt_QCD_dm0_VVVL->Sumw2();
+   TH1F *h_tau1FRnt_QCD_dm1_VVVL=new TH1F("h_tau1FRnt_QCD_dm1_VVVL","h_tau1FRnt_QCD_dm1_VVVL",binnum_nt,bins_nt); h_tau1FRnt_QCD_dm1_VVVL->Sumw2();
+   TH1F *h_tau1FRnt_QCD_dm10_VVVL=new TH1F("h_tau1FRnt_QCD_dm10_VVVL","h_tau1FRnt_QCD_dm10_VVVL",binnum_nt,bins_nt); h_tau1FRnt_QCD_dm10_VVVL->Sumw2();
+   TH1F *h_tau1FRnt_QCD_dm11_VVVL=new TH1F("h_tau1FRnt_QCD_dm11_VVVL","h_tau1FRnt_QCD_dm11_VVVL",binnum_nt,bins_nt); h_tau1FRnt_QCD_dm11_VVVL->Sumw2();
+   TH1F *h_tau1FRnt_QCD_dm0_M=new TH1F("h_tau1FRnt_QCD_dm0_M","h_tau1FRnt_QCD_dm0_M",binnum_nt,bins_nt); h_tau1FRnt_QCD_dm0_M->Sumw2();
+   TH1F *h_tau1FRnt_QCD_dm1_M=new TH1F("h_tau1FRnt_QCD_dm1_M","h_tau1FRnt_QCD_dm1_M",binnum_nt,bins_nt); h_tau1FRnt_QCD_dm1_M->Sumw2();
+   TH1F *h_tau1FRnt_QCD_dm10_M=new TH1F("h_tau1FRnt_QCD_dm10_M","h_tau1FRnt_QCD_dm10_M",binnum_nt,bins_nt); h_tau1FRnt_QCD_dm10_M->Sumw2();
+   TH1F *h_tau1FRnt_QCD_dm11_M=new TH1F("h_tau1FRnt_QCD_dm11_M","h_tau1FRnt_QCD_dm11_M",binnum_nt,bins_nt); h_tau1FRnt_QCD_dm11_M->Sumw2();
 
-   for (int k = 0; k < 49; ++k){
+
+   TH1F *h_tau2FR_QCD_dm0_VVVL=new TH1F("h_tau2FR_QCD_dm0_VVVL","h_tau2FR_QCD_dm0_VVVL",binnum_taupt0,bins_taupt0); h_tau2FR_QCD_dm0_VVVL->Sumw2();
+   TH1F *h_tau2FR_QCD_dm1_VVVL=new TH1F("h_tau2FR_QCD_dm1_VVVL","h_tau2FR_QCD_dm1_VVVL",binnum_taupt1,bins_taupt1); h_tau2FR_QCD_dm1_VVVL->Sumw2();
+   TH1F *h_tau2FR_QCD_dm10_VVVL=new TH1F("h_tau2FR_QCD_dm10_VVVL","h_tau2FR_QCD_dm10_VVVL",binnum_taupt10,bins_taupt10); h_tau2FR_QCD_dm10_VVVL->Sumw2();
+   TH1F *h_tau2FR_QCD_dm11_VVVL=new TH1F("h_tau2FR_QCD_dm11_VVVL","h_tau2FR_QCD_dm11_VVVL",binnum_taupt11,bins_taupt11); h_tau2FR_QCD_dm11_VVVL->Sumw2();
+   TH1F *h_tau2FR_QCD_dm0_M=new TH1F("h_tau2FR_QCD_dm0_M","h_tau2FR_QCD_dm0_M",binnum_taupt0,bins_taupt0); h_tau2FR_QCD_dm0_M->Sumw2();
+   TH1F *h_tau2FR_QCD_dm1_M=new TH1F("h_tau2FR_QCD_dm1_M","h_tau2FR_QCD_dm1_M",binnum_taupt1,bins_taupt1); h_tau2FR_QCD_dm1_M->Sumw2();
+   TH1F *h_tau2FR_QCD_dm10_M=new TH1F("h_tau2FR_QCD_dm10_M","h_tau2FR_QCD_dm10_M",binnum_taupt10,bins_taupt10); h_tau2FR_QCD_dm10_M->Sumw2();
+   TH1F *h_tau2FR_QCD_dm11_M=new TH1F("h_tau2FR_QCD_dm11_M","h_tau2FR_QCD_dm11_M",binnum_taupt11,bins_taupt11); h_tau2FR_QCD_dm11_M->Sumw2();
+
+   TH1F *h_tau2FRnt_QCD_dm0_VVVL=new TH1F("h_tau2FRnt_QCD_dm0_VVVL","h_tau2FRnt_QCD_dm0_VVVL",binnum_nt,bins_nt); h_tau2FRnt_QCD_dm0_VVVL->Sumw2();
+   TH1F *h_tau2FRnt_QCD_dm1_VVVL=new TH1F("h_tau2FRnt_QCD_dm1_VVVL","h_tau2FRnt_QCD_dm1_VVVL",binnum_nt,bins_nt); h_tau2FRnt_QCD_dm1_VVVL->Sumw2();
+   TH1F *h_tau2FRnt_QCD_dm10_VVVL=new TH1F("h_tau2FRnt_QCD_dm10_VVVL","h_tau2FRnt_QCD_dm10_VVVL",binnum_nt,bins_nt); h_tau2FRnt_QCD_dm10_VVVL->Sumw2();
+   TH1F *h_tau2FRnt_QCD_dm11_VVVL=new TH1F("h_tau2FRnt_QCD_dm11_VVVL","h_tau2FRnt_QCD_dm11_VVVL",binnum_nt,bins_nt); h_tau2FRnt_QCD_dm11_VVVL->Sumw2();
+   TH1F *h_tau2FRnt_QCD_dm0_M=new TH1F("h_tau2FRnt_QCD_dm0_M","h_tau2FRnt_QCD_dm0_M",binnum_nt,bins_nt); h_tau2FRnt_QCD_dm0_M->Sumw2();
+   TH1F *h_tau2FRnt_QCD_dm1_M=new TH1F("h_tau2FRnt_QCD_dm1_M","h_tau2FRnt_QCD_dm1_M",binnum_nt,bins_nt); h_tau2FRnt_QCD_dm1_M->Sumw2();
+   TH1F *h_tau2FRnt_QCD_dm10_M=new TH1F("h_tau2FRnt_QCD_dm10_M","h_tau2FRnt_QCD_dm10_M",binnum_nt,bins_nt); h_tau2FRnt_QCD_dm10_M->Sumw2();
+   TH1F *h_tau2FRnt_QCD_dm11_M=new TH1F("h_tau2FRnt_QCD_dm11_M","h_tau2FRnt_QCD_dm11_M",binnum_nt,bins_nt); h_tau2FRnt_QCD_dm11_M->Sumw2();
+
+
+   TString uncertainties[1]={""};
+
+   for (int k = 0; k < 1; ++k){
       if (year=="2016pre") uncertainties[k]=uncertainties[k].ReplaceAll("year","2016preVFP");
       if (year=="2016post") uncertainties[k]=uncertainties[k].ReplaceAll("year","2016postVFP");
       if (year=="2017") uncertainties[k]=uncertainties[k].ReplaceAll("year","2017");
@@ -571,17 +595,27 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    TF1 *fit_taufr_QCD_dm10 = (TF1*) f_taufr->Get("theFit_QCD_dm10");
    TF1 *fit_taufr_QCD_dm11 = (TF1*) f_taufr->Get("theFit_QCD_dm11");
 
+   TF1 *fit_taufr_QCD1_dm0 = (TF1*) f_taufr->Get("theFit_QCD1_dm0");
+   TF1 *fit_taufr_QCD1_dm1 = (TF1*) f_taufr->Get("theFit_QCD1_dm1");
+   TF1 *fit_taufr_QCD1_dm10 = (TF1*) f_taufr->Get("theFit_QCD1_dm10");
+   TF1 *fit_taufr_QCD1_dm11 = (TF1*) f_taufr->Get("theFit_QCD1_dm11");
 
-   TH1F* h_vtxresolution_PV = new TH1F("h_vtxresolution_PV","h_vtxresolution_PV",200,-1,1); h_vtxresolution_PV->Sumw2();
-   TH1F* h_vtxresolution_simpleditau = new TH1F("h_vtxresolution_simpleditau","h_vtxresolution_simpleditau",200,-1,1); h_vtxresolution_simpleditau->Sumw2();
-   TH1F* h_ntracks = new TH1F("h_ntracks","h_ntracks",30,0,30); h_ntracks->Sumw2();
+   TF1 *fit_taufr_QCD2_dm0 = (TF1*) f_taufr->Get("theFit_QCD2_dm0");
+   TF1 *fit_taufr_QCD2_dm1 = (TF1*) f_taufr->Get("theFit_QCD2_dm1");
+   TF1 *fit_taufr_QCD2_dm10 = (TF1*) f_taufr->Get("theFit_QCD2_dm10");
+   TF1 *fit_taufr_QCD2_dm11 = (TF1*) f_taufr->Get("theFit_QCD2_dm11");
+
+   TH1F *h_tau1_nt_dm0 = (TH1F*) f_taufr->Get("h_tau1FRnt_QCD_dm0_M");
+   TH1F *h_tau1_nt_dm1 = (TH1F*) f_taufr->Get("h_tau1FRnt_QCD_dm1_M");
+   TH1F *h_tau1_nt_dm10 = (TH1F*) f_taufr->Get("h_tau1FRnt_QCD_dm10_M");
+   TH1F *h_tau1_nt_dm11 = (TH1F*) f_taufr->Get("h_tau1FRnt_QCD_dm11_M");
+   TH1F *h_tau2_nt_dm0 = (TH1F*) f_taufr->Get("h_tau2FRnt_QCD_dm0_M");
+   TH1F *h_tau2_nt_dm1 = (TH1F*) f_taufr->Get("h_tau2FRnt_QCD_dm1_M");
+   TH1F *h_tau2_nt_dm10 = (TH1F*) f_taufr->Get("h_tau2FRnt_QCD_dm10_M");
+   TH1F *h_tau2_nt_dm11 = (TH1F*) f_taufr->Get("h_tau2FRnt_QCD_dm11_M");
+
 
    Int_t nentries_wtn = (Int_t) arbre->GetEntries();
-
-   /* arbre->SetCacheLearnEntries(1);
-    arbre->SetCacheSize(1000000U);
-    arbre->SetCacheEntryRange(0,nentries_wtn);
-    arbre->AddBranchToCache("*",true);*/
 
    auto b0_1=arbre->GetBranch("LHE_Njets");
 
@@ -597,14 +631,6 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    auto b1_10=arbre->GetBranch("LepCand_fes_up");
    auto b1_11=arbre->GetBranch("LepCand_taues_down");
    auto b1_12=arbre->GetBranch("LepCand_fes_down");
-   /*arbre->AddBranchToCache(b1_1, true);
-   arbre->AddBranchToCache(b1_2, true);
-   arbre->AddBranchToCache(b1_3, true);
-   arbre->AddBranchToCache(b1_4, true);
-   arbre->AddBranchToCache(b1_5, true);
-   arbre->AddBranchToCache(b1_6, true);
-   arbre->AddBranchToCache(b1_7, true);
-   arbre->AddBranchToCache(b1_8, true);*/
 
    auto b2_1=arbre->GetBranch("HLT_DoubleMediumChargedIsoPFTauHPS35_Trk1_eta2p1_Reg");
    auto b2_2=arbre->GetBranch("HLT_DoubleTightChargedIsoPFTau35_Trk1_TightID_eta2p1_Reg");
@@ -665,10 +691,10 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    auto b7_4=arbre->GetBranch("Track_phi");
    auto b7_5=arbre->GetBranch("Track_pt");
 
-   /*auto b8_1=ami->GetBranch("ntracks_friend");
+   auto b8_1=ami->GetBranch("ntracks_friend");
    auto b8_2=ami->GetBranch("ntracksAll_friend");
    auto b8_3=ami->GetBranch("ntracksHS_friend");
-   auto b8_4=ami->GetBranch("ntracksPU_friend");*/
+   auto b8_4=ami->GetBranch("ntracksPU_friend");
 
    auto b9_1=arbre->GetBranch("TauG2Weights_ceBRe33_0p0");
    auto b9_2=arbre->GetBranch("TauG2Weights_ceBRe33_0p8");
@@ -773,11 +799,13 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    auto b9_100=arbre->GetBranch("TauG2Weights_ceBRe33_m39p2");
    auto b9_101=arbre->GetBranch("TauG2Weights_ceBRe33_m40p0");
 
-cout<<"g2 branches"<<endl;
+   auto b10_1=arbre->GetBranch("run");
+   auto b10_2=arbre->GetBranch("event");
+
    TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
    TF1* fit_aco = (TF1*) f_aco->Get("fit_A");
 
-   TFile* f_aco_fine=new TFile("correction_acoplanarity_fine_2018.root","read");
+   TFile* f_aco_fine=new TFile("new_correction_acoplanarity_fine_2018.root","read");
    TF1* fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
    TF1* fit_aco_3040_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_2030");
    TF1* fit_aco_4050_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_2030");
@@ -788,30 +816,102 @@ cout<<"g2 branches"<<endl;
    TF1* fit_aco_4050_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_4050");
    TF1* fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
    TF1* fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
+   TF1* fit_aco_all = (TF1*) f_aco_fine->Get("fit_acoplanarity");
 
-   TFile *f_punt=new TFile("npu_correction_2018.root");
-   TH2F* correction_map=(TH2F*) f_punt->Get("correction_map");
+   TFile *f_punt=new TFile("corrs_ntracks_pu_UL2018.root");
+   TH2F* correction_map=(TH2F*) f_punt->Get("corr");
 
-   TFile *f_hsnt=new TFile("nhs_correction_2018.root");
+   TFile *f_hsnt=new TFile("corrs_ntracks_hs_UL2018.root");
    TH2F* correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
 
-   TFile* f_npvs=new TFile("correction_npvs_2018.root","read");
-   TH1F* h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
-   TH1F* h_npvsDown_weight = (TH1F*) f_npvs->Get("correction_hist_npvsDown");
-   TH1F* h_npvsUp_weight = (TH1F*) f_npvs->Get("correction_hist_npvsUp");
+   if (year=="2017"){
+      TFile* f_aco_fine=new TFile("new_correction_acoplanarity_fine_2017.root","read");
+      fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
+      fit_aco_3040_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_2030");
+      fit_aco_4050_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_2030");
+      fit_aco_gt50_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_2030");
+      fit_aco_3040_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_3040");
+      fit_aco_4050_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_3040");
+      fit_aco_gt50_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_3040");
+      fit_aco_4050_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_4050");
+      fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
+      fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
 
-   cout<<luminosity*nnlo/LW<<endl;
-   cout<<luminosity*nnlo/(LW+LW1)<<endl;
-   cout<<luminosity*nnlo/(LW+LW2)<<endl;
-   cout<<luminosity*nnlo/(LW+LW3)<<endl;
-   cout<<luminosity*nnlo/(LW+LW4)<<endl;
+      TFile *f_punt=new TFile("corrs_ntracks_pu_UL2017.root");
+      correction_map=(TH2F*) f_punt->Get("corr");
+      TFile *f_hsnt=new TFile("corrs_ntracks_hs_UL2017.root");
+      correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
+   }
+
+   if (year=="2016pre"){
+      TFile* f_aco_fine=new TFile("new_correction_acoplanarity_fine_2016pre.root","read");
+      fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
+      fit_aco_3040_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_2030");
+      fit_aco_4050_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_2030");
+      fit_aco_gt50_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_2030");
+      fit_aco_3040_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_3040");
+      fit_aco_4050_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_3040");
+      fit_aco_gt50_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_3040");
+      fit_aco_4050_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_4050");
+      fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
+      fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
+
+      TFile *f_punt=new TFile("corrs_ntracks_pu_UL2016_preVFP.root");
+      correction_map=(TH2F*) f_punt->Get("corr");
+      TFile *f_hsnt=new TFile("corrs_ntracks_hs_UL2016_preVFP.root");
+      correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
+   }
+
+   if (year=="2016post"){
+      TFile* f_aco_fine=new TFile("new_correction_acoplanarity_fine_2016post.root","read");
+      fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
+      fit_aco_3040_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_2030");
+      fit_aco_4050_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_2030");
+      fit_aco_gt50_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_2030");
+      fit_aco_3040_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_3040_3040");
+      fit_aco_4050_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_3040");
+      fit_aco_gt50_3040 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_3040");
+      fit_aco_4050_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_4050_4050");
+      fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
+      fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
+
+      TFile *f_punt=new TFile("corrs_ntracks_pu_UL2016_postVFP.root");
+      correction_map=(TH2F*) f_punt->Get("corr");
+      TFile *f_hsnt=new TFile("corrs_ntracks_hs_UL2016_postVFP.root");
+      correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
+   }
+
+   TH1F *h_dz_beforetrigger=new TH1F("h_dz_beforetrigger","h_dz_beforetrigger",40,-10,10); h_dz_beforetrigger->Sumw2();
+   TH1F *h_dz_aftertrigger=new TH1F("h_dz_aftertrigger","h_dz_aftertrigger",40,-10,10); h_dz_aftertrigger->Sumw2();
+   TH1F *h_logdz_beforetrigger=new TH1F("h_logdz_beforetrigger","h_logdz_beforetrigger",50,-10,1); h_logdz_beforetrigger->Sumw2();
+   TH1F *h_logdz_aftertrigger=new TH1F("h_logdz_aftertrigger","h_logdz_aftertrigger",50,-10,1); h_logdz_aftertrigger->Sumw2();
+
+    TTree * tree2 = new TTree("dz_tree", "dz_tree");
+    tree2->SetDirectory(0);
+    tree2->Branch("tau1pt_", &tau1pt_, "tau1pt_/F");
+    tree2->Branch("tau2pt_", &tau2pt_, "tau2pt_/F");
+    tree2->Branch("tau1eta_", &tau1eta_, "tau1eta_/F");
+    tree2->Branch("tau2eta_", &tau2eta_, "tau2eta_/F");
+    tree2->Branch("tau1phi_", &tau1phi_, "tau1phi_/F");
+    tree2->Branch("tau2phi_", &tau2phi_, "tau2phi_/F");
+    tree2->Branch("tau1dm_", &tau1dm_, "tau1dm_/I");
+    tree2->Branch("tau2dm_", &tau2dm_, "tau2dm_/I");
+    tree2->Branch("GenVtx_z_", &GenVtx_z_, "GenVtx_z_/F");
+    tree2->Branch("recoDitau_z_", &recoDitau_z_, "recoDitau_z_/F");
+    tree2->Branch("tau1dz_", &tau1dz_, "tau1dz_/F");
+    tree2->Branch("tau2dz_", &tau2dz_, "tau2dz_/F");
+    tree2->Branch("weight_", &weight_, "weight_/F");
 
 
    for (Int_t i = 0; i < nentries_wtn; i++) {
 	arbre->LoadTree(i);
         //arbre->GetEntry(i);
-        if (i % 10000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
-        fflush(stdout);
+        //if (i % 10000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
+        //fflush(stdout);
+
+        b10_1->GetEntry(i); b10_2->GetEntry(i);
+	bool is_found=false;
+	//if (event==1028757907 or event==1748120543 or event==614015687){ cout<<"found "<<event<<endl; is_found=true;}
 
 	if (name=="W"){
 	  b0_1->GetEntry(i);
@@ -825,14 +925,15 @@ cout<<"g2 branches"<<endl;
         b1_1->GetEntry(i); b1_2->GetEntry(i); b1_3->GetEntry(i); b1_4->GetEntry(i); b1_6->GetEntry(i);
         if (name!="data_obs") {b1_5->GetEntry(i); b1_7->GetEntry(i); b1_8->GetEntry(i);}
         if (name!="data_obs" and nbhist>1) {b1_9->GetEntry(i); b1_10->GetEntry(i); b1_11->GetEntry(i); b1_12->GetEntry(i); }
+	b6_3->GetEntry(i);
 
 	int tau1_index=-1;
 	for (int j=0; j<nLepCand; ++j){
-	   if (tau1_index<0 and LepCand_id[j]==15) tau1_index=j;
+	   if (fabs(LepCand_eta[j])<2.1 and tau1_index<0 and LepCand_id[j]==15) tau1_index=j;
 	}
         int tau2_index=-1; float dz_tmp=10000;
         for (int j=0; j<nLepCand; ++j){
-           if (j!=tau1_index and LepCand_id[j]==15 and fabs(LepCand_dz[j]-LepCand_dz[tau1_index])<dz_tmp){
+           if (fabs(LepCand_eta[j])<2.1 and j!=tau1_index and LepCand_id[j]==15 and fabs(LepCand_dz[j]-LepCand_dz[tau1_index])<dz_tmp){
 	      tau2_index=j; 
 	      dz_tmp=fabs(LepCand_dz[j]-LepCand_dz[tau1_index]);
 	   }
@@ -845,9 +946,12 @@ cout<<"g2 branches"<<endl;
         if (name!="data_obs" and LepCand_gen[tau1_index]==5) my_tau1=my_tau1*LepCand_taues[tau1_index];
         if (name!="data_obs" and LepCand_gen[tau1_index]>=1 and LepCand_gen[tau1_index]<=4) my_tau1=my_tau1*LepCand_fes[tau1_index];
 
+
 	if (fabs(my_tau1.Eta())>2.1) continue;
         if (fabs(my_tau2.Eta())>2.1) continue;
 	if (my_tau2.DeltaR(my_tau1)<0.5) continue;
+
+if (is_found) cout<<event<<" passed eta DR"<<endl;
 
 	// Trigger block
 	if (name=="data_obs") {b2_5->GetEntry(i);}
@@ -855,16 +959,29 @@ cout<<"g2 branches"<<endl;
 	   if (name=="data_obs" and run<317509) {b2_2->GetEntry(i); b2_3->GetEntry(i); b2_4->GetEntry(i);}
 	   else {b2_1->GetEntry(i); }
 	}
+        b3_7->GetEntry(i);
 
+//cout<<my_tau1.Pt()<<" "<<my_tau2.Pt()<<" "<<LepCand_vsjet[tau1_index]<<" "<<LepCand_vsjet[tau2_index]<<" "<<fabs(LepCand_dz[tau1_index]-LepCand_dz[tau2_index])<<" "<<LepCand_gen[tau1_index]<<" "<<LepCand_gen[tau2_index]<<endl;
+	if (my_tau1.Pt()>40 and my_tau2.Pt()>40 and fabs(my_tau1.Eta())<2.1 and fabs(my_tau2.Eta())<2.1 and fabs(LepCand_dz[tau1_index]-LepCand_dz[tau2_index])<0.1 and LepCand_gen[tau1_index]==5 and LepCand_gen[tau2_index]==5) h_dz_beforetrigger->Fill(LepCand_dz[tau1_index]);
+        if (my_tau1.Pt()>40 and my_tau2.Pt()>40 and fabs(my_tau1.Eta())<2.1 and fabs(my_tau2.Eta())<2.1 and fabs(LepCand_dz[tau1_index]-LepCand_dz[tau2_index])<0.1 and LepCand_gen[tau1_index]==5 and LepCand_gen[tau2_index]==5) h_logdz_beforetrigger->Fill(log10(fabs(LepCand_dz[tau1_index])));
 	bool is_trg=false;
 	if (year=="2018"){
 	   if (name!="data_obs" or run>=317509) is_trg=(HLT_DoubleMediumChargedIsoPFTauHPS35_Trk1_eta2p1_Reg and my_tau1.Pt()>40 and my_tau2.Pt()>40 and fabs(my_tau1.Eta())<2.1 and fabs(my_tau2.Eta())<2.1);
 	   else is_trg=((HLT_DoubleTightChargedIsoPFTau35_Trk1_TightID_eta2p1_Reg or HLT_DoubleMediumChargedIsoPFTau40_Trk1_TightID_eta2p1_Reg or HLT_DoubleTightChargedIsoPFTau40_Trk1_eta2p1_Reg) and my_tau1.Pt()>40 and my_tau2.Pt()>40 and fabs(my_tau1.Eta())<2.1 and fabs(my_tau2.Eta())<2.1);
 	}
+	if (year=="2017"){
+           //is_trg=((HLT_DoubleTightChargedIsoPFTau35_Trk1_TightID_eta2p1_Reg or HLT_DoubleTightChargedIsoPFTau40_Trk1_eta2p1_Reg or HLT_DoubleMediumChargedIsoPFTau40_Trk1_TightID_eta2p1_Reg) and my_tau1.Pt()>40 and my_tau2.Pt()>40 and fabs(my_tau1.Eta())<2.1 and fabs(my_tau2.Eta())<2.1);
+	   is_trg=(LepCand_trgmatch[tau1_index]==1 and LepCand_trgmatch[tau2_index]==1);
+	}
+//cout<<is_trg<<" "<<LepCand_trgmatch[tau1_index]<<" "<<LepCand_trgmatch[tau2_index]<<endl;
 	if (!is_trg) continue;
+        if (my_tau1.Pt()>40 and my_tau2.Pt()>40 and fabs(my_tau1.Eta())<2.1 and fabs(my_tau2.Eta())<2.1 and fabs(LepCand_dz[tau1_index]-LepCand_dz[tau2_index])<0.1 and LepCand_gen[tau1_index]==5 and LepCand_gen[tau2_index]==5) h_dz_aftertrigger->Fill(LepCand_dz[tau1_index]);
+        if (my_tau1.Pt()>40 and my_tau2.Pt()>40 and fabs(my_tau1.Eta())<2.1 and fabs(my_tau2.Eta())<2.1 and fabs(LepCand_dz[tau1_index]-LepCand_dz[tau2_index])<0.1 and LepCand_gen[tau1_index]==5 and LepCand_gen[tau2_index]==5) h_logdz_aftertrigger->Fill(log10(fabs(LepCand_dz[tau1_index])));
+
+if (is_found) cout<<event<<" passed trigger"<<endl;
 
 	// Block ID/iso/charge
-	b3_1->GetEntry(i); b3_2->GetEntry(i); b3_3->GetEntry(i); b3_4->GetEntry(i); b3_6->GetEntry(i); b3_7->GetEntry(i);
+	b3_1->GetEntry(i); b3_2->GetEntry(i); b3_3->GetEntry(i); b3_4->GetEntry(i); b3_6->GetEntry(i); 
 	if (LepCand_vse[tau1_index]<2 or LepCand_vsmu[tau1_index]<1 or LepCand_vsjet[tau1_index]<1) continue; //was 127
         if (LepCand_vse[tau2_index]<2 or LepCand_vsmu[tau2_index]<1 or LepCand_vsjet[tau2_index]<1) continue;
 	bool is_OS = (LepCand_charge[tau1_index]*LepCand_charge[tau2_index]<0);
@@ -872,6 +989,8 @@ cout<<"g2 branches"<<endl;
 	bool is_PF=(LepCand_vsjet[tau1_index]>=16 and LepCand_vsjet[tau2_index]<16);
         bool is_FP=(LepCand_vsjet[tau1_index]<16 and LepCand_vsjet[tau2_index]>=16);
         bool is_FF=(LepCand_vsjet[tau1_index]<16 and LepCand_vsjet[tau2_index]<16);
+
+if (is_found) cout<<event<<" passed loose iso"<<endl;
 
 	// Block weights
 	if (name!="data_obs") {b4_1->GetEntry(i); b4_2->GetEntry(i); b4_3->GetEntry(i); b4_4->GetEntry(i); b4_5->GetEntry(i); b4_6->GetEntry(i); b4_24->GetEntry(i); }
@@ -884,6 +1003,7 @@ cout<<"g2 branches"<<endl;
 	float gen_aco=acoplanarity;
         TLorentzVector my_gen1; my_gen1.SetPtEtaPhiM(0,0,0,0);
         TLorentzVector my_gen2; my_gen2.SetPtEtaPhiM(0,0,0,0);
+//cout<<event<<" "<<nGenCand<<" "<<GenCand_pt[0]<<" "<<GenCand_pt[1]<<endl;
         if (name!="data_obs" and nGenCand>1) {
 	   if (GenCand_pt[0]>GenCand_pt[1]){
              my_gen1.SetPtEtaPhiM(GenCand_pt[0],GenCand_eta[0],GenCand_phi[0],0);
@@ -896,6 +1016,9 @@ cout<<"g2 branches"<<endl;
            gen_aco = (1.0 -fabs(my_gen1.DeltaPhi(my_gen2))/3.14159);
         }
         if (gen_aco>0.35) gen_aco=0.35;
+        float gen_mtt=200.0;
+        if (nGenCand>1 and (sample=="GGTT" or sample=="GGWW" or sample=="GGTT_Ctb20")) gen_mtt=(my_gen1+my_gen2).M();
+
 
 	float aweight=1.0;
 	float tauidSF=1.0;
@@ -903,6 +1026,7 @@ cout<<"g2 branches"<<endl;
 	   aweight=aweight*puWeight;
 	   if (name!="W") aweight*=genWeight;
 	   if (LepCand_gen[tau1_index]==5) tauidSF=LepCand_tauidMsf[tau1_index];
+           if (LepCand_gen[tau2_index]==5) tauidSF=tauidSF*LepCand_tauidMsf[tau2_index];
            if (LepCand_gen[tau1_index]==1 or LepCand_gen[tau1_index]==3) aweight=aweight*LepCand_antielesf[tau1_index];
            if (LepCand_gen[tau1_index]==2 or LepCand_gen[tau1_index]==4) aweight=aweight*LepCand_antimusf[tau1_index];
            if (LepCand_gen[tau2_index]==1 or LepCand_gen[tau2_index]==3) aweight=aweight*LepCand_antielesf[tau2_index];
@@ -923,8 +1047,8 @@ cout<<"g2 branches"<<endl;
               else if (my_gen1.Pt()>=50 and my_gen2.Pt()>=50) weight_aco=fit_aco_gt50_gt50->Eval(gen_aco);
 	   }
            aweight=aweight*weight_aco;
-	   aweight*=h_npvs_weight->GetBinContent(h_npvs_weight->GetXaxis()->FindBin(PV_npvs));
 	}
+
 
 	// Block MET
 	b5_1->GetEntry(i); b5_2->GetEntry(i);
@@ -933,17 +1057,42 @@ cout<<"g2 branches"<<endl;
 
 	bool is_QCDregion = (!is_OS);
 
-	bool is_real=(name=="GGTT" or name=="GGTT2" or name=="data_obs" or (LepCand_gen[tau2_index]>=1 and LepCand_gen[tau2_index]<=5));
+	bool is_real=(name=="GGTT" or name=="GGTT2" or name=="data_obs" or (LepCand_gen[tau1_index]>=1 and LepCand_gen[tau1_index]<=5 and LepCand_gen[tau2_index]>=1 and LepCand_gen[tau2_index]<=5));
+//if (is_real) cout<<TMath::Min((my_tau1.DeltaR(my_gen1)+my_tau2.DeltaR(my_gen2)),(my_tau1.DeltaR(my_gen2)+my_tau2.DeltaR(my_gen1)))<<" "<<my_gen1.Pt()<<" "<<my_gen2.Pt()<<" "<<nGenCand<<endl;
+	if ((name=="ZTT" or sample=="GGTT" or sample=="GGTT_Ctb20") and (my_tau1.DeltaR(my_gen1)+my_tau2.DeltaR(my_gen2))>0.2 and (my_tau1.DeltaR(my_gen2)+my_tau2.DeltaR(my_gen1))>0.2) is_real=false; //FIXME
+
 	//is_real=true;//FIXME
 
+
 	// Block vertex
-        b6_1->GetEntry(i); b6_3->GetEntry(i);
+        b6_1->GetEntry(i); 
         if (name!="data_obs") b6_2->GetEntry(i);
-	if (fabs(LepCand_dz[tau1_index]-LepCand_dz[tau2_index])>0.1) continue;
+	//if (fabs(LepCand_dz[tau1_index]-LepCand_dz[tau2_index])>0.1) continue; //FIXME
         float simple_ditau_z=0.5*(2*PV_z+LepCand_dz[tau1_index]+LepCand_dz[tau2_index]);
 
+if (is_found) cout<<event<<" passed dz"<<endl;
+
+        b8_1->GetEntry(i); b8_2->GetEntry(i); b8_3->GetEntry(i); b8_4->GetEntry(i);
+        int ntracks=ntracks_friend;
+
+        float zpos=simple_ditau_z;
+        if (zpos<-10) zpos=-9.99;
+        else if (zpos>10) zpos=9.99;
+        int ntpu=ntracksPU_friend;
+        if (ntpu>49) ntpu=49;
+        if (sample!="data_obs") {aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));}
+
+        if (sample=="DY"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); }
+
+        if (sample=="GGTT" or sample=="GGTT_Ctb20"){ // rescaling from mumu region
+           if (ntracks==0) aweight*=(2.22+0.00572*gen_mtt);
+           else if (ntracks==1) aweight*=(1.93+0.00218*gen_mtt);
+           b9_1->GetEntry(i);
+           if (name=="GGTT_0p0" or name=="GGTT") aweight*=TauG2Weights_ceBRe33_0p0;
+        }
+
 	bool is_lowNT=true;//FIXME
-	bool is_lowA=(acoplanarity<200000.02);
+	bool is_lowA=(acoplanarity<0.015);
 
         for (int k=0; k<nbhist; ++k){
 	   float weight2=1.0;
@@ -953,6 +1102,8 @@ cout<<"g2 branches"<<endl;
 	   if (mvis<40) continue;
 	   if (my_tau2.Pt()<40) continue;
            if (my_tau1.Pt()<40) continue;
+
+if (is_found) cout<<event<<" passed pt mvis"<<endl;
 
            bool is_cat0=true;
            bool is_cat1=true;
@@ -985,8 +1136,8 @@ cout<<"g2 branches"<<endl;
            float var8 = acoplanarity;
 
 	   if (is_control==0){
-	      is_cat0=(is_lowA);
-              is_cat1=(is_lowA);
+	      is_cat0=(is_lowA and ntracks==0 );
+              is_cat1=(is_lowA and ntracks==1 );
               is_cat2=(is_lowA and LepCand_DecayMode[tau1_index]==0);
               is_cat3=(is_lowA and LepCand_DecayMode[tau1_index]==1);
               is_cat4=(is_lowA and LepCand_DecayMode[tau1_index]==10);
@@ -995,8 +1146,8 @@ cout<<"g2 branches"<<endl;
               is_cat7=(is_lowA);
               is_cat8=(is_lowA);
 
-              is_cat0R=(is_lowA);
-              is_cat1R=(is_lowA);
+              is_cat0R=(is_lowA and ntracks<10);
+              is_cat1R=(is_lowA and ntracks<10);
               is_cat2R=(is_lowA and LepCand_DecayMode[tau1_index]==0);
               is_cat3R=(is_lowA and LepCand_DecayMode[tau1_index]==1);
               is_cat4R=(is_lowA and LepCand_DecayMode[tau1_index]==10);
@@ -1004,8 +1155,6 @@ cout<<"g2 branches"<<endl;
               is_cat6R=(is_lowA);
               is_cat7R=(is_lowA);
               is_cat8R=(is_lowA);
-
-	      if (mvis>250) mvis=249;
 
               var0 = mvis;
               var1 = mvis;
@@ -1020,6 +1169,21 @@ cout<<"g2 branches"<<endl;
 
 	   if (is_OS and is_isolated and is_real){
 	     float w_iso=weight*aweight*weight2*tauidSF;
+
+/*if (is_cat0R) cout<<"reco: ("<<my_tau1.Pt()<<", "<<my_tau1.Eta()<<", "<<my_tau1.Phi()<<") ("<<my_tau2.Pt()<<", "<<my_tau2.Eta()<<", "<<my_tau2.Phi()<<")"<<endl;
+if (is_cat0R) cout<<"gen match: "<<LepCand_gen[tau1_index]<<" "<<LepCand_gen[tau2_index]<<endl;
+if (is_cat0R) cout<<"gen: ("<<my_gen1.Pt()<<", "<<my_gen1.Eta()<<", "<<my_gen1.Phi()<<") ("<<my_gen2.Pt()<<", "<<my_gen2.Eta()<<", "<<my_gen2.Phi()<<")"<<endl;*/
+//if (is_cat0) cout<<run<<":"<<event<<endl;
+
+if (is_found) cout<<event<<" passed OS iso real"<<endl;
+if (is_found) cout<<acoplanarity<<" "<<ntracks<<endl;
+if (is_found and is_cat0) cout<<event<<" passed ntracks and aco"<<endl;
+
+//if (is_cat0) cout<<event<<" "<<my_tau1.Pt()<<" "<<my_tau2.Pt()<<" "<<var0<<" "<<weight*genWeight<<" "<<puWeight<<" "<<TauG2Weights_ceBRe33_0p0<<" "<<(LepCand_tautriggersf[tau1_index]*LepCand_tautriggersf[tau2_index])<<" "<<tauidSF<<" "<<correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos))<<" "<<(2.22+0.00572*gen_mtt)<<endl;
+//
+             if (k==0) fillTreeDzTautau(tree2,my_tau1.Pt(),my_tau2.Pt(),my_tau1.Eta(),my_tau2.Eta(),my_tau1.Phi(),my_tau2.Phi(),LepCand_DecayMode[tau1_index],LepCand_DecayMode[tau2_index],GenVtx_z,simple_ditau_z,LepCand_dz[tau1_index],LepCand_dz[tau2_index],w_iso);
+
+
 	     if (is_cat0) h0[k]->Fill(var0,w_iso);
              if (is_cat1) h1[k]->Fill(var1,w_iso);
              if (is_cat2) h2[k]->Fill(var2,w_iso);
@@ -1042,21 +1206,45 @@ cout<<"g2 branches"<<endl;
 	   }
 
 	   float tpt1=my_tau1.Pt();
-	   if (tpt1>200) tpt1=199;
+	   if (tpt1>300) tpt1=299;
            float tfr1_QCD=0.1;
-           if (LepCand_DecayMode[tau1_index]==0) tfr1_QCD=TMath::Min(1.0,fit_taufr_QCD_dm0->Eval(tpt1));
-           else if (LepCand_DecayMode[tau1_index]==1) tfr1_QCD=TMath::Min(1.0,fit_taufr_QCD_dm1->Eval(tpt1));
-           else if (LepCand_DecayMode[tau1_index]==10) tfr1_QCD=TMath::Min(1.0,fit_taufr_QCD_dm10->Eval(tpt1));
-           else if (LepCand_DecayMode[tau1_index]==11) tfr1_QCD=TMath::Min(1.0,fit_taufr_QCD_dm11->Eval(tpt1));
+           if (LepCand_DecayMode[tau1_index]==0) tfr1_QCD=TMath::Min(1.0,fit_taufr_QCD1_dm0->Eval(tpt1));
+           else if (LepCand_DecayMode[tau1_index]==1) tfr1_QCD=TMath::Min(1.0,fit_taufr_QCD1_dm1->Eval(tpt1));
+           else if (LepCand_DecayMode[tau1_index]==10) tfr1_QCD=TMath::Min(1.0,fit_taufr_QCD1_dm10->Eval(tpt1));
+           else if (LepCand_DecayMode[tau1_index]==11) tfr1_QCD=TMath::Min(1.0,fit_taufr_QCD1_dm11->Eval(tpt1));
+	   if (ntracks==0){
+              if (LepCand_DecayMode[tau1_index]==0) tfr1_QCD*=h_tau1_nt_dm0->GetBinContent(2);
+              else if (LepCand_DecayMode[tau1_index]==1) tfr1_QCD*=h_tau1_nt_dm1->GetBinContent(2);
+              else if (LepCand_DecayMode[tau1_index]==10) tfr1_QCD*=h_tau1_nt_dm10->GetBinContent(2);
+              else if (LepCand_DecayMode[tau1_index]==11) tfr1_QCD*=h_tau1_nt_dm11->GetBinContent(2);
+ 	   }
+	   else if (ntracks==1){
+              if (LepCand_DecayMode[tau1_index]==0) tfr1_QCD*=h_tau1_nt_dm0->GetBinContent(3);
+              else if (LepCand_DecayMode[tau1_index]==1) tfr1_QCD*=h_tau1_nt_dm1->GetBinContent(3);
+              else if (LepCand_DecayMode[tau1_index]==10) tfr1_QCD*=h_tau1_nt_dm10->GetBinContent(3);
+              else if (LepCand_DecayMode[tau1_index]==11) tfr1_QCD*=h_tau1_nt_dm11->GetBinContent(3);
+           }
 	   float wfr1=tfr1_QCD;
 
            float tpt2=my_tau2.Pt();
-           if (tpt2>200) tpt2=199;
+           if (tpt2>300) tpt2=299;
            float tfr2_QCD=0.1;
-           if (LepCand_DecayMode[tau2_index]==0) tfr2_QCD=TMath::Min(1.0,fit_taufr_QCD_dm0->Eval(tpt2));
-           else if (LepCand_DecayMode[tau2_index]==1) tfr2_QCD=TMath::Min(1.0,fit_taufr_QCD_dm1->Eval(tpt2));
-           else if (LepCand_DecayMode[tau2_index]==10) tfr2_QCD=TMath::Min(1.0,fit_taufr_QCD_dm10->Eval(tpt2));
-           else if (LepCand_DecayMode[tau2_index]==11) tfr2_QCD=TMath::Min(1.0,fit_taufr_QCD_dm11->Eval(tpt2));
+           if (LepCand_DecayMode[tau2_index]==0) tfr2_QCD=TMath::Min(1.0,fit_taufr_QCD2_dm0->Eval(tpt2));
+           else if (LepCand_DecayMode[tau2_index]==1) tfr2_QCD=TMath::Min(1.0,fit_taufr_QCD2_dm1->Eval(tpt2));
+           else if (LepCand_DecayMode[tau2_index]==10) tfr2_QCD=TMath::Min(1.0,fit_taufr_QCD2_dm10->Eval(tpt2));
+           else if (LepCand_DecayMode[tau2_index]==11) tfr2_QCD=TMath::Min(1.0,fit_taufr_QCD2_dm11->Eval(tpt2));
+           if (ntracks==0){
+              if (LepCand_DecayMode[tau2_index]==0) tfr2_QCD*=h_tau2_nt_dm0->GetBinContent(2);
+              else if (LepCand_DecayMode[tau2_index]==1) tfr2_QCD*=h_tau2_nt_dm1->GetBinContent(2);
+              else if (LepCand_DecayMode[tau2_index]==10) tfr2_QCD*=h_tau2_nt_dm10->GetBinContent(2);
+              else if (LepCand_DecayMode[tau2_index]==11) tfr2_QCD*=h_tau2_nt_dm11->GetBinContent(2);
+           }
+           else if (ntracks==1){
+              if (LepCand_DecayMode[tau2_index]==0) tfr2_QCD*=h_tau2_nt_dm0->GetBinContent(3);
+              else if (LepCand_DecayMode[tau2_index]==1) tfr2_QCD*=h_tau2_nt_dm1->GetBinContent(3);
+              else if (LepCand_DecayMode[tau2_index]==10) tfr2_QCD*=h_tau2_nt_dm10->GetBinContent(3);
+              else if (LepCand_DecayMode[tau2_index]==11) tfr2_QCD*=h_tau2_nt_dm11->GetBinContent(3);
+           }
            float wfr2=tfr2_QCD;
 
            if (is_OS and is_PF and is_real){
@@ -1126,52 +1314,61 @@ cout<<"g2 branches"<<endl;
              if (is_cat8R) h8R_anti[k]->Fill(var8,w_noniso);
            }
 
-           /*if (is_OS and !is_isolated and is_real){
-	     float w_noniso=weight*aweight*weight2*wfr;
-             if (is_cat0) h0_anti[k]->Fill(var0,w_noniso);
-             if (is_cat1) h1_anti[k]->Fill(var1,w_noniso);
-             if (is_cat2) h2_anti[k]->Fill(var2,w_noniso);
-             if (is_cat3) h3_anti[k]->Fill(var3,w_noniso);
-             if (is_cat4) h4_anti[k]->Fill(var4,w_noniso);
-             if (is_cat5) h5_anti[k]->Fill(var5,w_noniso);
-             if (is_cat6) h6_anti[k]->Fill(var6,w_noniso);
-             if (is_cat7) h7_anti[k]->Fill(var7,w_noniso);
-             if (is_cat8) h8_anti[k]->Fill(var8,w_noniso);
-
-             if (is_cat0R) h0R_anti[k]->Fill(var0,w_noniso);
-             if (is_cat1R) h1R_anti[k]->Fill(var1,w_noniso);
-             if (is_cat2R) h2R_anti[k]->Fill(var2,w_noniso);
-             if (is_cat3R) h3R_anti[k]->Fill(var3,w_noniso);
-             if (is_cat4R) h4R_anti[k]->Fill(var4,w_noniso);
-             if (is_cat5R) h5R_anti[k]->Fill(var5,w_noniso);
-             if (is_cat6R) h6R_anti[k]->Fill(var6,w_noniso);
-             if (is_cat7R) h7R_anti[k]->Fill(var7,w_noniso);
-             if (is_cat8R) h8R_anti[k]->Fill(var8,w_noniso);
-           }*/
-
 	   if (k==0 and is_QCDregion and is_real){
 	     float w_iso=weight*aweight*tauidSF;
 	     float w_noniso=weight*aweight;
-	     int ntracks=1;
-	     if (is_FF or is_PF){
+	     //tau2
+             //if (is_PF){
+             if (is_FF){
+                if (LepCand_DecayMode[tau2_index]==0){ h_tau2FR_QCD_dm0_VVVL->Fill(my_tau2.Pt(),w_noniso); h_tau2FRnt_QCD_dm0_VVVL->Fill(ntracks,w_noniso); h_tau2FRnt_QCD_dm0_VVVL->Fill(-1,w_noniso);}
+                else if (LepCand_DecayMode[tau2_index]==1){ h_tau2FR_QCD_dm1_VVVL->Fill(my_tau2.Pt(),w_noniso); h_tau2FRnt_QCD_dm1_VVVL->Fill(ntracks,w_noniso); h_tau2FRnt_QCD_dm1_VVVL->Fill(-1,w_noniso);}
+                else if (LepCand_DecayMode[tau2_index]==10){ h_tau2FR_QCD_dm10_VVVL->Fill(my_tau2.Pt(),w_noniso); h_tau2FRnt_QCD_dm10_VVVL->Fill(ntracks,w_noniso); h_tau2FRnt_QCD_dm10_VVVL->Fill(-1,w_noniso);}
+                else{ h_tau2FR_QCD_dm11_VVVL->Fill(my_tau2.Pt(),w_noniso); h_tau2FRnt_QCD_dm11_VVVL->Fill(ntracks,w_noniso); h_tau2FRnt_QCD_dm11_VVVL->Fill(-1,w_noniso);}
+             }
+             //if (is_isolated){
+             if (is_FP){
+                if (LepCand_DecayMode[tau2_index]==0){ h_tau2FR_QCD_dm0_M->Fill(my_tau2.Pt(),w_iso); h_tau2FRnt_QCD_dm0_M->Fill(ntracks,w_iso); h_tau2FRnt_QCD_dm0_M->Fill(-1,w_iso);}
+                else if (LepCand_DecayMode[tau2_index]==1){ h_tau2FR_QCD_dm1_M->Fill(my_tau2.Pt(),w_iso); h_tau2FRnt_QCD_dm1_M->Fill(ntracks,w_iso); h_tau2FRnt_QCD_dm1_M->Fill(-1,w_iso);}
+                else if (LepCand_DecayMode[tau2_index]==10){ h_tau2FR_QCD_dm10_M->Fill(my_tau2.Pt(),w_iso); h_tau2FRnt_QCD_dm10_M->Fill(ntracks,w_iso); h_tau2FRnt_QCD_dm10_M->Fill(-1,w_iso);}
+                else{ h_tau2FR_QCD_dm11_M->Fill(my_tau2.Pt(),w_iso); h_tau2FRnt_QCD_dm11_M->Fill(ntracks,w_iso); h_tau2FRnt_QCD_dm11_M->Fill(-1,w_iso);}
+             }
+
+	     // tau 1
+             //if (is_FP){
+             if (is_FF){
+                if (LepCand_DecayMode[tau1_index]==0){ h_tau1FR_QCD_dm0_VVVL->Fill(my_tau1.Pt(),w_noniso); h_tau1FRnt_QCD_dm0_VVVL->Fill(ntracks,w_noniso); h_tau1FRnt_QCD_dm0_VVVL->Fill(-1,w_noniso);}
+                else if (LepCand_DecayMode[tau1_index]==1){ h_tau1FR_QCD_dm1_VVVL->Fill(my_tau1.Pt(),w_noniso); h_tau1FRnt_QCD_dm1_VVVL->Fill(ntracks,w_noniso); h_tau1FRnt_QCD_dm1_VVVL->Fill(-1,w_noniso);}
+                else if (LepCand_DecayMode[tau1_index]==10){ h_tau1FR_QCD_dm10_VVVL->Fill(my_tau1.Pt(),w_noniso); h_tau1FRnt_QCD_dm10_VVVL->Fill(ntracks,w_noniso); h_tau1FRnt_QCD_dm10_VVVL->Fill(-1,w_noniso);}
+                else{ h_tau1FR_QCD_dm11_VVVL->Fill(my_tau1.Pt(),w_noniso); h_tau1FRnt_QCD_dm11_VVVL->Fill(ntracks,w_noniso); h_tau1FRnt_QCD_dm11_VVVL->Fill(-1,w_noniso);}
+             }
+             //if (is_isolated){
+             if (is_PF){
+                if (LepCand_DecayMode[tau1_index]==0){ h_tau1FR_QCD_dm0_M->Fill(my_tau1.Pt(),w_iso); h_tau1FRnt_QCD_dm0_M->Fill(ntracks,w_iso); h_tau1FRnt_QCD_dm0_M->Fill(-1,w_iso);}
+                else if (LepCand_DecayMode[tau1_index]==1){ h_tau1FR_QCD_dm1_M->Fill(my_tau1.Pt(),w_iso); h_tau1FRnt_QCD_dm1_M->Fill(ntracks,w_iso); h_tau1FRnt_QCD_dm1_M->Fill(-1,w_iso);}
+                else if (LepCand_DecayMode[tau1_index]==10){ h_tau1FR_QCD_dm10_M->Fill(my_tau1.Pt(),w_iso); h_tau1FRnt_QCD_dm10_M->Fill(ntracks,w_iso); h_tau1FRnt_QCD_dm10_M->Fill(-1,w_iso);}
+                else{ h_tau1FR_QCD_dm11_M->Fill(my_tau1.Pt(),w_iso); h_tau1FRnt_QCD_dm11_M->Fill(ntracks,w_iso); h_tau1FRnt_QCD_dm11_M->Fill(-1,w_iso);}
+             }
+
+	     // combined
+	     if (is_FF){
                 if (LepCand_DecayMode[tau2_index]==0){ h_tauFR_QCD_dm0_VVVL->Fill(my_tau2.Pt(),w_noniso); h_tauFRnt_QCD_dm0_VVVL->Fill(ntracks,w_noniso); h_tauFRnt_QCD_dm0_VVVL->Fill(-1,w_noniso);}
                 else if (LepCand_DecayMode[tau2_index]==1){ h_tauFR_QCD_dm1_VVVL->Fill(my_tau2.Pt(),w_noniso); h_tauFRnt_QCD_dm1_VVVL->Fill(ntracks,w_noniso); h_tauFRnt_QCD_dm1_VVVL->Fill(-1,w_noniso);}
                 else if (LepCand_DecayMode[tau2_index]==10){ h_tauFR_QCD_dm10_VVVL->Fill(my_tau2.Pt(),w_noniso); h_tauFRnt_QCD_dm10_VVVL->Fill(ntracks,w_noniso); h_tauFRnt_QCD_dm10_VVVL->Fill(-1,w_noniso);}
                 else{ h_tauFR_QCD_dm11_VVVL->Fill(my_tau2.Pt(),w_noniso); h_tauFRnt_QCD_dm11_VVVL->Fill(ntracks,w_noniso); h_tauFRnt_QCD_dm11_VVVL->Fill(-1,w_noniso);}
 	     }
-	     if (is_isolated or is_FP){
+	     if (is_FP){
                 if (LepCand_DecayMode[tau2_index]==0){ h_tauFR_QCD_dm0_M->Fill(my_tau2.Pt(),w_iso); h_tauFRnt_QCD_dm0_M->Fill(ntracks,w_iso); h_tauFRnt_QCD_dm0_M->Fill(-1,w_iso);}
                 else if (LepCand_DecayMode[tau2_index]==1){ h_tauFR_QCD_dm1_M->Fill(my_tau2.Pt(),w_iso); h_tauFRnt_QCD_dm1_M->Fill(ntracks,w_iso); h_tauFRnt_QCD_dm1_M->Fill(-1,w_iso);}
                 else if (LepCand_DecayMode[tau2_index]==10){ h_tauFR_QCD_dm10_M->Fill(my_tau2.Pt(),w_iso); h_tauFRnt_QCD_dm10_M->Fill(ntracks,w_iso); h_tauFRnt_QCD_dm10_M->Fill(-1,w_iso);}
                 else{ h_tauFR_QCD_dm11_M->Fill(my_tau2.Pt(),w_iso); h_tauFRnt_QCD_dm11_M->Fill(ntracks,w_iso); h_tauFRnt_QCD_dm11_M->Fill(-1,w_iso);}
              }
-             if (is_FF or is_FP){
+             if (is_FF){
                 if (LepCand_DecayMode[tau1_index]==0){ h_tauFR_QCD_dm0_VVVL->Fill(my_tau1.Pt(),w_noniso); h_tauFRnt_QCD_dm0_VVVL->Fill(ntracks,w_noniso); h_tauFRnt_QCD_dm0_VVVL->Fill(-1,w_noniso);}
                 else if (LepCand_DecayMode[tau1_index]==1){ h_tauFR_QCD_dm1_VVVL->Fill(my_tau1.Pt(),w_noniso); h_tauFRnt_QCD_dm1_VVVL->Fill(ntracks,w_noniso); h_tauFRnt_QCD_dm1_VVVL->Fill(-1,w_noniso);}
                 else if (LepCand_DecayMode[tau1_index]==10){ h_tauFR_QCD_dm10_VVVL->Fill(my_tau1.Pt(),w_noniso); h_tauFRnt_QCD_dm10_VVVL->Fill(ntracks,w_noniso); h_tauFRnt_QCD_dm10_VVVL->Fill(-1,w_noniso);}
                 else{ h_tauFR_QCD_dm11_VVVL->Fill(my_tau1.Pt(),w_noniso); h_tauFRnt_QCD_dm11_VVVL->Fill(ntracks,w_noniso); h_tauFRnt_QCD_dm11_VVVL->Fill(-1,w_noniso);}
              }
-             if (is_isolated or is_PF){
+             if (is_PF){
                 if (LepCand_DecayMode[tau1_index]==0){ h_tauFR_QCD_dm0_M->Fill(my_tau1.Pt(),w_iso); h_tauFRnt_QCD_dm0_M->Fill(ntracks,w_iso); h_tauFRnt_QCD_dm0_M->Fill(-1,w_iso);}
                 else if (LepCand_DecayMode[tau1_index]==1){ h_tauFR_QCD_dm1_M->Fill(my_tau1.Pt(),w_iso); h_tauFRnt_QCD_dm1_M->Fill(ntracks,w_iso); h_tauFRnt_QCD_dm1_M->Fill(-1,w_iso);}
                 else if (LepCand_DecayMode[tau1_index]==10){ h_tauFR_QCD_dm10_M->Fill(my_tau1.Pt(),w_iso); h_tauFRnt_QCD_dm10_M->Fill(ntracks,w_iso); h_tauFRnt_QCD_dm10_M->Fill(-1,w_iso);}
@@ -1187,9 +1384,12 @@ cout<<"g2 branches"<<endl;
     TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();
 
-    h_vtxresolution_PV->Write();
-    h_vtxresolution_simpleditau->Write();
-    h_ntracks->Write();
+    tree2->Write();
+
+    h_dz_beforetrigger->Write();
+    h_dz_aftertrigger->Write();
+    h_logdz_beforetrigger->Write();
+    h_logdz_aftertrigger->Write();
 
     h_tauFR_QCD_dm0_M->Write();
     h_tauFR_QCD_dm1_M->Write();
@@ -1209,8 +1409,44 @@ cout<<"g2 branches"<<endl;
     h_tauFRnt_QCD_dm10_VVVL->Write();
     h_tauFRnt_QCD_dm11_VVVL->Write();
 
-    h_tauFR_QCD_xtrg_VVVL->Write();
-    h_tauFR_QCD_xtrg_M->Write();
+
+    h_tau1FR_QCD_dm0_M->Write();
+    h_tau1FR_QCD_dm1_M->Write();
+    h_tau1FR_QCD_dm10_M->Write();
+    h_tau1FR_QCD_dm11_M->Write();
+    h_tau1FR_QCD_dm0_VVVL->Write();
+    h_tau1FR_QCD_dm1_VVVL->Write();
+    h_tau1FR_QCD_dm10_VVVL->Write();
+    h_tau1FR_QCD_dm11_VVVL->Write();
+
+    h_tau1FRnt_QCD_dm0_M->Write();
+    h_tau1FRnt_QCD_dm1_M->Write();
+    h_tau1FRnt_QCD_dm10_M->Write();
+    h_tau1FRnt_QCD_dm11_M->Write();
+    h_tau1FRnt_QCD_dm0_VVVL->Write();
+    h_tau1FRnt_QCD_dm1_VVVL->Write();
+    h_tau1FRnt_QCD_dm10_VVVL->Write();
+    h_tau1FRnt_QCD_dm11_VVVL->Write();
+
+
+
+    h_tau2FR_QCD_dm0_M->Write();
+    h_tau2FR_QCD_dm1_M->Write();
+    h_tau2FR_QCD_dm10_M->Write();
+    h_tau2FR_QCD_dm11_M->Write();
+    h_tau2FR_QCD_dm0_VVVL->Write();
+    h_tau2FR_QCD_dm1_VVVL->Write();
+    h_tau2FR_QCD_dm10_VVVL->Write();
+    h_tau2FR_QCD_dm11_VVVL->Write();
+
+    h_tau2FRnt_QCD_dm0_M->Write();
+    h_tau2FRnt_QCD_dm1_M->Write();
+    h_tau2FRnt_QCD_dm10_M->Write();
+    h_tau2FRnt_QCD_dm11_M->Write();
+    h_tau2FRnt_QCD_dm0_VVVL->Write();
+    h_tau2FRnt_QCD_dm1_VVVL->Write();
+    h_tau2FRnt_QCD_dm10_VVVL->Write();
+    h_tau2FRnt_QCD_dm11_VVVL->Write();
 
 cout<<h0[0]->Integral()<<endl;
     bool isMC=(name!="data_obs");

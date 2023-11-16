@@ -48,6 +48,8 @@ keep LHE_Vpt*
 keep LHE_Njets*
 keep *LHEScale*
 keep *LHEPdf*
+keep nPSWeight
+keep PSWeight
 
 
 keep beamspot*

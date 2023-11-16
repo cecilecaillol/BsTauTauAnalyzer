@@ -3,6 +3,7 @@ if __name__ == "__main__":
     import ROOT
     import argparse
 
+    is_control=0 
     parser = argparse.ArgumentParser()
     parser.add_argument('--year', default="2016", choices=['2016', '2017', '2018'], help="Which TES?")
 
@@ -27,6 +28,16 @@ if __name__ == "__main__":
        hZTT2A=fDY.Get("tt_"+str(j)+"_anti/ZTT")
        hZTT1A=fDY.Get("ttR_"+str(j)+"_anti/ZTT").Clone()
        SF_ZTTA=hZTT2A.Integral()/hZTT1A.Integral()
+
+       print(SF_ZTT,SF_ZTTA)
+
+       if (is_control==0 and j==0):
+          SF_ZTT=0.0242
+          SF_ZTTA=0.0242
+
+       if (is_control==0 and j==1):
+          SF_ZTT=0.0501
+          SF_ZTTA=0.0501
 
        for k in range(0,nbhist):
           postfix=postfixName[k]

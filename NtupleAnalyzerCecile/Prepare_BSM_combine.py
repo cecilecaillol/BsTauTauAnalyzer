@@ -45,12 +45,13 @@ if __name__ == "__main__":
     options = parser.parse_args()
     postfixName=[""]
 
-
+    M=2000*2000/((2**0.5)*246*((1-0.2229)**0.5))
+    print "M=",M
     ceBR=[]
     at=[]
     for i in range(0,101):
       ceBR.append(-40.0+i*0.8)
-      at.append((-40.0+i*0.8)*2*1.777*100/(0.3*3266.4*4)) #multiplied by 100 for numerical precision in Combine
+      at.append((-40.0+i*0.8)*2*1.77686*100/(0.282*M)) #multiplied by 100 for numerical precision in Combine
       print ceBR[i],at[i]
     ceBRname=["m40p0","m39p2","m38p4","m37p6","m36p8","m36p0","m35p2","m34p4","m33p6","m32p8","m32p0","m31p2","m30p4","m29p6","m28p8","m28p0","m27p2","m26p4","m25p6","m24p8","m24p0","m23p2","m22p4","m21p6","m20p8","m20p0","m19p2","m18p4","m17p6","m16p8","m16p0","m15p2","m14p4","m13p6","m12p8","m12p0","m11p2","m10p4","m9p6","m8p8","m8p0","m7p2","m6p4","m5p6","m4p8","m4p0","m3p2","m2p4","m1p6","m0p8","0p0","0p8","1p6","2p4","3p2","4p0","4p8","5p6","6p4","7p2","8p0","8p8","9p6","10p4","11p2","12p0","12p8","13p6","14p4","15p2","16p0","16p8","17p6","18p4","19p2","20p0","20p8","21p6","22p4","23p2","24p0","24p8","25p6","26p4","27p2","28p0","28p8","29p6","30p4","31p2","32p0","32p8","33p6","34p4","35p2","36p0","36p8","37p6","38p4","39p2","40p0"]
 
@@ -61,10 +62,11 @@ if __name__ == "__main__":
     #canv.SetLogy()
 
     fin=ROOT.TFile("output_"+options.channel+"_"+options.year+"/signal.root","r")
+    print "output_"+options.channel+"_"+options.year+"/signal.root"
     fout=ROOT.TFile("output_"+options.channel+"_"+options.year+"/bsm.root","recreate")
     falt=ROOT.TFile("output_"+options.channel+"_"+options.year+"/signal.root","r")
-    if (options.channel=="mutau"): falt=ROOT.TFile("/afs/cern.ch/work/c/ccaillol/Combine/CMSSW_10_2_13/src/auxiliaries/shapes/Taug2_mutau_2018.root","r")
-    if (options.channel=="tautau"): falt=ROOT.TFile("/afs/cern.ch/work/c/ccaillol/Combine/CMSSW_10_2_13/src/auxiliaries/shapes/Taug2_tautau_2018.root","r")
+    #if (options.channel=="mutau"): falt=ROOT.TFile("/afs/cern.ch/work/c/ccaillol/Combine/CMSSW_10_2_13/src/auxiliaries/shapes/Taug2_mutau_2018.root","r")
+    #if (options.channel=="tautau"): falt=ROOT.TFile("/afs/cern.ch/work/c/ccaillol/Combine/CMSSW_10_2_13/src/auxiliaries/shapes/Taug2_tautau_2018.root","r")
 
     physics_model = open("physics_model_"+options.channel+"_"+options.year+".txt","w")
 
@@ -124,7 +126,7 @@ if __name__ == "__main__":
     for c in range(0,ncat):
 
        nominal=fin.Get(categories[c]).Get("GGTT_0p0")
-       if options.channel=="mutau" or options.channel=="tautau": nominal=falt.Get(categories[c]).Get("GGTT")
+       #if options.channel=="mutau" or options.channel=="tautau": nominal=falt.Get(categories[c]).Get("GGTT")
        mydir=fout.mkdir(categories[c])
        mydir.cd()
 
@@ -143,14 +145,14 @@ if __name__ == "__main__":
 	     myhist_up=myhist.Clone()
 	     print "GGTT_0p0_"+s+"Up"
 	     if nominal.GetBinContent(jj)>0:
-	        if options.channel=="mutau" or options.channel=="tautau": myhist_up.Scale(falt.Get(categories[c]).Get("GGTT_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
-	        else: myhist_up.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
+	        #if options.channel=="mutau" or options.channel=="tautau": myhist_up.Scale(falt.Get(categories[c]).Get("GGTT_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
+	        myhist_up.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
   	     myhist_up.SetName("TauG2_"+categories[c]+"_bin"+str(jj)+"_"+s+"Up")
 	     myhist_up.Write()
              myhist_down=myhist.Clone()
              if nominal.GetBinContent(jj)>0:
-	        if options.channel=="mutau" or options.channel=="tautau": myhist_down.Scale(falt.Get(categories[c]).Get("GGTT_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
-                else: myhist_down.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
+	        #if options.channel=="mutau" or options.channel=="tautau": myhist_down.Scale(falt.Get(categories[c]).Get("GGTT_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
+                myhist_down.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
              myhist_down.SetName("TauG2_"+categories[c]+"_bin"+str(jj)+"_"+s+"Down")
              myhist_down.Write()
 

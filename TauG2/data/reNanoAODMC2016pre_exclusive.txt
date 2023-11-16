@@ -1,0 +1,3 @@
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToTauTau_Ctb20_RunIISummer20UL16APV/RunIISummer20UL16APV_NanoAODv9_july/230724_123056/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToMuMu_RunIISummer20UL16APV/RunIISummer20UL16APV_NanoAODv9_july/230803_074000/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToWW_RunIISummer20UL16APV/RunIISummer20UL16APV_NanoAODv9_july/230803_074038/0000/

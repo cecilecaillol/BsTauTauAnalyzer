@@ -1,0 +1,2 @@
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/VVTo2L2Nu_MLL-1toInf_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL18_NanoAODv9/231018_130221/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/VVTo2L2Nu_MLL-1toInf_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL18_NanoAODv9/231018_130221/0001/

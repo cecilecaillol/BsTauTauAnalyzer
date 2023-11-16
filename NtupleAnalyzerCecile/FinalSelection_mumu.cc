@@ -78,7 +78,7 @@ cout<<ngen<<" "<<ngenu<<endl;
     else if (sample=="ZZ2L2Q"){ xs=3.22; weight=luminosity*xs/ngen;}
     else if (sample=="ZZ2Q2L"){ xs=3.22; weight=luminosity*xs/ngen;}
     else if (sample=="WZ3LNu"){ xs=4.42965; weight=luminosity*xs/ngen;}
-    else if (sample=="VV2L2Nu"){ xs=11.95; weight=luminosity*xs/ngen;}
+    else if (sample=="VV2L2Nu"){ xs=14.26; weight=luminosity*xs/ngen;}
     else if (sample=="WZ2L2Q"){ xs=5.595; weight=luminosity*xs/ngen;}
     else if (sample=="ZZ2L2Nu"){ xs=3.0; weight=luminosity*xs/ngen;}
     else if (sample=="WZ"){ xs=47.13; weight=luminosity*xs/ngen;}
@@ -90,6 +90,7 @@ cout<<ngen<<" "<<ngenu<<endl;
     else if (sample=="ST_t_top"){ xs=136.02; weight=luminosity*xs/ngen;}
     else if (sample=="ST_t_antitop"){ xs=80.95; weight=luminosity*xs/ngen;}
     else if (sample=="GGMM"){ xs=0.324; weight=luminosity*xs/ngen;} //was 0.37553
+    else if (sample=="GGWW"){ xs=0.00692 * 0.368; weight=luminosity*xs/ngen;}
     else if (name=="data_obs"){ weight=1.0;}
     else if (name=="test") { xs=1.0; weight=luminosity*xs/ngen;}
 
@@ -104,6 +105,7 @@ cout<<ngen<<" "<<ngenu<<endl;
       else if (sample=="ST_tW_top") weight*=0.273;
       else if (sample=="ST_tW_antitop") weight*=0.272;
       else if (sample=="WW2L2Nu") weight*=0.397;
+      else if (sample=="VV2L2Nu") weight*=0.392;
       else if (sample=="WW2L2Q") weight*=0.341;
       else if (sample=="WZ3LNu") weight*=0.341;
       else if (sample=="ZZ4L") weight*=0.304;
@@ -162,6 +164,9 @@ cout<<ngen<<" "<<ngenu<<endl;
     arbre->SetBranchAddress("puWeightUp", &puWeightUp);
     arbre->SetBranchAddress("puWeightDown", &puWeightDown);
     arbre->SetBranchAddress("genWeight", &genWeight);
+    arbre->SetBranchAddress("LHEPdfWeight", &LHEPdfWeight);
+    arbre->SetBranchAddress("LHEScaleWeight", &LHEScaleWeight);
+    arbre->SetBranchAddress("PSWeight", &PSWeight);
 
    auto b1_1=arbre->GetBranch("LepCand_pt");
    auto b1_2=arbre->GetBranch("LepCand_eta");
@@ -202,6 +207,9 @@ cout<<ngen<<" "<<ngenu<<endl;
    auto b4_6=arbre->GetBranch("GenCand_pt");
    auto b4_7=arbre->GetBranch("GenCand_eta");
    auto b4_8=arbre->GetBranch("GenCand_phi");
+   auto b4_9=arbre->GetBranch("LHEPdfWeight");
+   auto b4_10=arbre->GetBranch("LHEScaleWeight");
+   auto b4_11=arbre->GetBranch("PSWeight");
 
    /*arbre->AddBranchToCache(b4_1, true);
    arbre->AddBranchToCache(b4_2, true);*/
@@ -237,8 +245,30 @@ cout<<ngen<<" "<<ngenu<<endl;
 
    TH1F* h0 = new TH1F("h0","h0",20,0,200); h0->Sumw2();
    TH1F* h0SS = new TH1F("h0SS","h0SS",20,0,200); h0SS->Sumw2();
+   TH1F* h_dz = new TH1F("h_dz","h_dz",32,0,0.4); h_dz->Sumw2();
+   TH1F* h_dzSS = new TH1F("h_dzSS","h_dzSS",32,0,0.4); h_dzSS->Sumw2();
    TH1F* h1 = new TH1F("h1","h1",100,0,1); h1->Sumw2();
+   TH1F* h1_pdfu = new TH1F("h1_pdfu","h1_pdfu",100,0,1); h1_pdfu->Sumw2();
+   TH1F* h1_pdfd = new TH1F("h1_pdfd","h1_pdfd",100,0,1); h1_pdfd->Sumw2();
+   TH1F* h1_scale1 = new TH1F("h1_scale1","h1_scale1",100,0,1); h1_scale1->Sumw2();
+   TH1F* h1_scale2 = new TH1F("h1_scale2","h1_scale2",100,0,1); h1_scale2->Sumw2();
+   TH1F* h1_scale3 = new TH1F("h1_scale3","h1_scale3",100,0,1); h1_scale3->Sumw2();
+   TH1F* h1_scale4 = new TH1F("h1_scale4","h1_scale4",100,0,1); h1_scale4->Sumw2();
+   TH1F* h1_scale5 = new TH1F("h1_scale5","h1_scale5",100,0,1); h1_scale5->Sumw2();
+   TH1F* h1_scale6 = new TH1F("h1_scale6","h1_scale6",100,0,1); h1_scale6->Sumw2();
+   TH1F* h1_ps1 = new TH1F("h1_ps1","h1_ps1",100,0,1); h1_ps1->Sumw2();
+   TH1F* h1_ps2 = new TH1F("h1_ps2","h1_ps2",100,0,1); h1_ps2->Sumw2();
+   TH1F* h1_ps3 = new TH1F("h1_ps3","h1_ps3",100,0,1); h1_ps3->Sumw2();
+   TH1F* h1_ps4 = new TH1F("h1_ps4","h1_ps4",100,0,1); h1_ps4->Sumw2();
    TH1F* h1SS = new TH1F("h1SS","h1SS",100,0,1); h1SS->Sumw2();
+   TH1F* h1_pdfdSS = new TH1F("h1_pdfdSS","h1_pdfdSS",100,0,1); h1_pdfdSS->Sumw2();
+   TH1F* h1_pdfuSS = new TH1F("h1_pdfuSS","h1_pdfuSS",100,0,1); h1_pdfuSS->Sumw2();
+   TH1F* h1_scale1SS = new TH1F("h1_scale1SS","h1_scale1SS",100,0,1); h1_scale1SS->Sumw2();
+   TH1F* h1_scale2SS = new TH1F("h1_scale2SS","h1_scale2SS",100,0,1); h1_scale2SS->Sumw2();
+   TH1F* h1_scale3SS = new TH1F("h1_scale3SS","h1_scale3SS",100,0,1); h1_scale3SS->Sumw2();
+   TH1F* h1_scale4SS = new TH1F("h1_scale4SS","h1_scale4SS",100,0,1); h1_scale4SS->Sumw2();
+   TH1F* h1_scale5SS = new TH1F("h1_scale5SS","h1_scale5SS",100,0,1); h1_scale5SS->Sumw2();
+   TH1F* h1_scale6SS = new TH1F("h1_scale6SS","h1_scale6SS",100,0,1); h1_scale6SS->Sumw2();
    TH1F* h1_2030_2030 = new TH1F("h1_2030_2030","h1_2030_2030",100,0,1); h1_2030_2030->Sumw2();
    TH1F* h1_2030_2030SS = new TH1F("h1_2030_2030SS","h1_2030_2030SS",100,0,1); h1_2030_2030SS->Sumw2();
    TH1F* h1_3040_2030 = new TH1F("h1_3040_2030","h1_3040_2030",100,0,1); h1_3040_2030->Sumw2();
@@ -259,8 +289,140 @@ cout<<ngen<<" "<<ngenu<<endl;
    TH1F* h1_gt50_4050SS = new TH1F("h1_gt50_4050SS","h1_gt50_4050SS",100,0,1); h1_gt50_4050SS->Sumw2();
    TH1F* h1_gt50_gt50 = new TH1F("h1_gt50_gt50","h1_gt50_gt50",100,0,1); h1_gt50_gt50->Sumw2();
    TH1F* h1_gt50_gt50SS = new TH1F("h1_gt50_gt50SS","h1_gt50_gt50SS",100,0,1); h1_gt50_gt50SS->Sumw2();
+
+   TH1F* h1_2030_2030_scale1 = new TH1F("h1_2030_2030_scale1","h1_2030_2030_scale1",100,0,1); h1_2030_2030_scale1->Sumw2();
+   TH1F* h1_3040_2030_scale1 = new TH1F("h1_3040_2030_scale1","h1_3040_2030_scale1",100,0,1); h1_3040_2030_scale1->Sumw2();
+   TH1F* h1_4050_2030_scale1 = new TH1F("h1_4050_2030_scale1","h1_4050_2030_scale1",100,0,1); h1_4050_2030_scale1->Sumw2();
+   TH1F* h1_gt50_2030_scale1 = new TH1F("h1_gt50_2030_scale1","h1_gt50_2030_scale1",100,0,1); h1_gt50_2030_scale1->Sumw2();
+   TH1F* h1_3040_3040_scale1 = new TH1F("h1_3040_3040_scale1","h1_3040_3040_scale1",100,0,1); h1_3040_3040_scale1->Sumw2();
+   TH1F* h1_4050_3040_scale1 = new TH1F("h1_4050_3040_scale1","h1_4050_3040_scale1",100,0,1); h1_4050_3040_scale1->Sumw2();
+   TH1F* h1_gt50_3040_scale1 = new TH1F("h1_gt50_3040_scale1","h1_gt50_3040_scale1",100,0,1); h1_gt50_3040_scale1->Sumw2();
+   TH1F* h1_4050_4050_scale1 = new TH1F("h1_4050_4050_scale1","h1_4050_4050_scale1",100,0,1); h1_4050_4050_scale1->Sumw2();
+   TH1F* h1_gt50_4050_scale1 = new TH1F("h1_gt50_4050_scale1","h1_gt50_4050_scale1",100,0,1); h1_gt50_4050_scale1->Sumw2();
+   TH1F* h1_gt50_gt50_scale1 = new TH1F("h1_gt50_gt50_scale1","h1_gt50_gt50_scale1",100,0,1); h1_gt50_gt50_scale1->Sumw2();
+
+   TH1F* h1_2030_2030_scale2 = new TH1F("h1_2030_2030_scale2","h1_2030_2030_scale2",100,0,1); h1_2030_2030_scale2->Sumw2();
+   TH1F* h1_3040_2030_scale2 = new TH1F("h1_3040_2030_scale2","h1_3040_2030_scale2",100,0,1); h1_3040_2030_scale2->Sumw2();
+   TH1F* h1_4050_2030_scale2 = new TH1F("h1_4050_2030_scale2","h1_4050_2030_scale2",100,0,1); h1_4050_2030_scale2->Sumw2();
+   TH1F* h1_gt50_2030_scale2 = new TH1F("h1_gt50_2030_scale2","h1_gt50_2030_scale2",100,0,1); h1_gt50_2030_scale2->Sumw2();
+   TH1F* h1_3040_3040_scale2 = new TH1F("h1_3040_3040_scale2","h1_3040_3040_scale2",100,0,1); h1_3040_3040_scale2->Sumw2();
+   TH1F* h1_4050_3040_scale2 = new TH1F("h1_4050_3040_scale2","h1_4050_3040_scale2",100,0,1); h1_4050_3040_scale2->Sumw2();
+   TH1F* h1_gt50_3040_scale2 = new TH1F("h1_gt50_3040_scale2","h1_gt50_3040_scale2",100,0,1); h1_gt50_3040_scale2->Sumw2();
+   TH1F* h1_4050_4050_scale2 = new TH1F("h1_4050_4050_scale2","h1_4050_4050_scale2",100,0,1); h1_4050_4050_scale2->Sumw2();
+   TH1F* h1_gt50_4050_scale2 = new TH1F("h1_gt50_4050_scale2","h1_gt50_4050_scale2",100,0,1); h1_gt50_4050_scale2->Sumw2();
+   TH1F* h1_gt50_gt50_scale2 = new TH1F("h1_gt50_gt50_scale2","h1_gt50_gt50_scale2",100,0,1); h1_gt50_gt50_scale2->Sumw2();
+
+   TH1F* h1_2030_2030_scale3 = new TH1F("h1_2030_2030_scale3","h1_2030_2030_scale3",100,0,1); h1_2030_2030_scale3->Sumw2();
+   TH1F* h1_3040_2030_scale3 = new TH1F("h1_3040_2030_scale3","h1_3040_2030_scale3",100,0,1); h1_3040_2030_scale3->Sumw2();
+   TH1F* h1_4050_2030_scale3 = new TH1F("h1_4050_2030_scale3","h1_4050_2030_scale3",100,0,1); h1_4050_2030_scale3->Sumw2();
+   TH1F* h1_gt50_2030_scale3 = new TH1F("h1_gt50_2030_scale3","h1_gt50_2030_scale3",100,0,1); h1_gt50_2030_scale3->Sumw2();
+   TH1F* h1_3040_3040_scale3 = new TH1F("h1_3040_3040_scale3","h1_3040_3040_scale3",100,0,1); h1_3040_3040_scale3->Sumw2();
+   TH1F* h1_4050_3040_scale3 = new TH1F("h1_4050_3040_scale3","h1_4050_3040_scale3",100,0,1); h1_4050_3040_scale3->Sumw2();
+   TH1F* h1_gt50_3040_scale3 = new TH1F("h1_gt50_3040_scale3","h1_gt50_3040_scale3",100,0,1); h1_gt50_3040_scale3->Sumw2();
+   TH1F* h1_4050_4050_scale3 = new TH1F("h1_4050_4050_scale3","h1_4050_4050_scale3",100,0,1); h1_4050_4050_scale3->Sumw2();
+   TH1F* h1_gt50_4050_scale3 = new TH1F("h1_gt50_4050_scale3","h1_gt50_4050_scale3",100,0,1); h1_gt50_4050_scale3->Sumw2();
+   TH1F* h1_gt50_gt50_scale3 = new TH1F("h1_gt50_gt50_scale3","h1_gt50_gt50_scale3",100,0,1); h1_gt50_gt50_scale3->Sumw2();
+
+   TH1F* h1_2030_2030_scale4 = new TH1F("h1_2030_2030_scale4","h1_2030_2030_scale4",100,0,1); h1_2030_2030_scale4->Sumw2();
+   TH1F* h1_3040_2030_scale4 = new TH1F("h1_3040_2030_scale4","h1_3040_2030_scale4",100,0,1); h1_3040_2030_scale4->Sumw2();
+   TH1F* h1_4050_2030_scale4 = new TH1F("h1_4050_2030_scale4","h1_4050_2030_scale4",100,0,1); h1_4050_2030_scale4->Sumw2();
+   TH1F* h1_gt50_2030_scale4 = new TH1F("h1_gt50_2030_scale4","h1_gt50_2030_scale4",100,0,1); h1_gt50_2030_scale4->Sumw2();
+   TH1F* h1_3040_3040_scale4 = new TH1F("h1_3040_3040_scale4","h1_3040_3040_scale4",100,0,1); h1_3040_3040_scale4->Sumw2();
+   TH1F* h1_4050_3040_scale4 = new TH1F("h1_4050_3040_scale4","h1_4050_3040_scale4",100,0,1); h1_4050_3040_scale4->Sumw2();
+   TH1F* h1_gt50_3040_scale4 = new TH1F("h1_gt50_3040_scale4","h1_gt50_3040_scale4",100,0,1); h1_gt50_3040_scale4->Sumw2();
+   TH1F* h1_4050_4050_scale4 = new TH1F("h1_4050_4050_scale4","h1_4050_4050_scale4",100,0,1); h1_4050_4050_scale4->Sumw2();
+   TH1F* h1_gt50_4050_scale4 = new TH1F("h1_gt50_4050_scale4","h1_gt50_4050_scale4",100,0,1); h1_gt50_4050_scale4->Sumw2();
+   TH1F* h1_gt50_gt50_scale4 = new TH1F("h1_gt50_gt50_scale4","h1_gt50_gt50_scale4",100,0,1); h1_gt50_gt50_scale4->Sumw2();
+
+   TH1F* h1_2030_2030_scale5 = new TH1F("h1_2030_2030_scale5","h1_2030_2030_scale5",100,0,1); h1_2030_2030_scale5->Sumw2();
+   TH1F* h1_3040_2030_scale5 = new TH1F("h1_3040_2030_scale5","h1_3040_2030_scale5",100,0,1); h1_3040_2030_scale5->Sumw2();
+   TH1F* h1_4050_2030_scale5 = new TH1F("h1_4050_2030_scale5","h1_4050_2030_scale5",100,0,1); h1_4050_2030_scale5->Sumw2();
+   TH1F* h1_gt50_2030_scale5 = new TH1F("h1_gt50_2030_scale5","h1_gt50_2030_scale5",100,0,1); h1_gt50_2030_scale5->Sumw2();
+   TH1F* h1_3040_3040_scale5 = new TH1F("h1_3040_3040_scale5","h1_3040_3040_scale5",100,0,1); h1_3040_3040_scale5->Sumw2();
+   TH1F* h1_4050_3040_scale5 = new TH1F("h1_4050_3040_scale5","h1_4050_3040_scale5",100,0,1); h1_4050_3040_scale5->Sumw2();
+   TH1F* h1_gt50_3040_scale5 = new TH1F("h1_gt50_3040_scale5","h1_gt50_3040_scale5",100,0,1); h1_gt50_3040_scale5->Sumw2();
+   TH1F* h1_4050_4050_scale5 = new TH1F("h1_4050_4050_scale5","h1_4050_4050_scale5",100,0,1); h1_4050_4050_scale5->Sumw2();
+   TH1F* h1_gt50_4050_scale5 = new TH1F("h1_gt50_4050_scale5","h1_gt50_4050_scale5",100,0,1); h1_gt50_4050_scale5->Sumw2();
+   TH1F* h1_gt50_gt50_scale5 = new TH1F("h1_gt50_gt50_scale5","h1_gt50_gt50_scale5",100,0,1); h1_gt50_gt50_scale5->Sumw2();
+
+   TH1F* h1_2030_2030_scale6 = new TH1F("h1_2030_2030_scale6","h1_2030_2030_scale6",100,0,1); h1_2030_2030_scale6->Sumw2();
+   TH1F* h1_3040_2030_scale6 = new TH1F("h1_3040_2030_scale6","h1_3040_2030_scale6",100,0,1); h1_3040_2030_scale6->Sumw2();
+   TH1F* h1_4050_2030_scale6 = new TH1F("h1_4050_2030_scale6","h1_4050_2030_scale6",100,0,1); h1_4050_2030_scale6->Sumw2();
+   TH1F* h1_gt50_2030_scale6 = new TH1F("h1_gt50_2030_scale6","h1_gt50_2030_scale6",100,0,1); h1_gt50_2030_scale6->Sumw2();
+   TH1F* h1_3040_3040_scale6 = new TH1F("h1_3040_3040_scale6","h1_3040_3040_scale6",100,0,1); h1_3040_3040_scale6->Sumw2();
+   TH1F* h1_4050_3040_scale6 = new TH1F("h1_4050_3040_scale6","h1_4050_3040_scale6",100,0,1); h1_4050_3040_scale6->Sumw2();
+   TH1F* h1_gt50_3040_scale6 = new TH1F("h1_gt50_3040_scale6","h1_gt50_3040_scale6",100,0,1); h1_gt50_3040_scale6->Sumw2();
+   TH1F* h1_4050_4050_scale6 = new TH1F("h1_4050_4050_scale6","h1_4050_4050_scale6",100,0,1); h1_4050_4050_scale6->Sumw2();
+   TH1F* h1_gt50_4050_scale6 = new TH1F("h1_gt50_4050_scale6","h1_gt50_4050_scale6",100,0,1); h1_gt50_4050_scale6->Sumw2();
+   TH1F* h1_gt50_gt50_scale6 = new TH1F("h1_gt50_gt50_scale6","h1_gt50_gt50_scale6",100,0,1); h1_gt50_gt50_scale6->Sumw2();
+
+   TH1F* h1_2030_2030_ps1 = new TH1F("h1_2030_2030_ps1","h1_2030_2030_ps1",100,0,1); h1_2030_2030_ps1->Sumw2();
+   TH1F* h1_3040_2030_ps1 = new TH1F("h1_3040_2030_ps1","h1_3040_2030_ps1",100,0,1); h1_3040_2030_ps1->Sumw2();
+   TH1F* h1_4050_2030_ps1 = new TH1F("h1_4050_2030_ps1","h1_4050_2030_ps1",100,0,1); h1_4050_2030_ps1->Sumw2();
+   TH1F* h1_gt50_2030_ps1 = new TH1F("h1_gt50_2030_ps1","h1_gt50_2030_ps1",100,0,1); h1_gt50_2030_ps1->Sumw2();
+   TH1F* h1_3040_3040_ps1 = new TH1F("h1_3040_3040_ps1","h1_3040_3040_ps1",100,0,1); h1_3040_3040_ps1->Sumw2();
+   TH1F* h1_4050_3040_ps1 = new TH1F("h1_4050_3040_ps1","h1_4050_3040_ps1",100,0,1); h1_4050_3040_ps1->Sumw2();
+   TH1F* h1_gt50_3040_ps1 = new TH1F("h1_gt50_3040_ps1","h1_gt50_3040_ps1",100,0,1); h1_gt50_3040_ps1->Sumw2();
+   TH1F* h1_4050_4050_ps1 = new TH1F("h1_4050_4050_ps1","h1_4050_4050_ps1",100,0,1); h1_4050_4050_ps1->Sumw2();
+   TH1F* h1_gt50_4050_ps1 = new TH1F("h1_gt50_4050_ps1","h1_gt50_4050_ps1",100,0,1); h1_gt50_4050_ps1->Sumw2();
+   TH1F* h1_gt50_gt50_ps1 = new TH1F("h1_gt50_gt50_ps1","h1_gt50_gt50_ps1",100,0,1); h1_gt50_gt50_ps1->Sumw2();
+
+   TH1F* h1_2030_2030_ps2 = new TH1F("h1_2030_2030_ps2","h1_2030_2030_ps2",100,0,1); h1_2030_2030_ps2->Sumw2();
+   TH1F* h1_3040_2030_ps2 = new TH1F("h1_3040_2030_ps2","h1_3040_2030_ps2",100,0,1); h1_3040_2030_ps2->Sumw2();
+   TH1F* h1_4050_2030_ps2 = new TH1F("h1_4050_2030_ps2","h1_4050_2030_ps2",100,0,1); h1_4050_2030_ps2->Sumw2();
+   TH1F* h1_gt50_2030_ps2 = new TH1F("h1_gt50_2030_ps2","h1_gt50_2030_ps2",100,0,1); h1_gt50_2030_ps2->Sumw2();
+   TH1F* h1_3040_3040_ps2 = new TH1F("h1_3040_3040_ps2","h1_3040_3040_ps2",100,0,1); h1_3040_3040_ps2->Sumw2();
+   TH1F* h1_4050_3040_ps2 = new TH1F("h1_4050_3040_ps2","h1_4050_3040_ps2",100,0,1); h1_4050_3040_ps2->Sumw2();
+   TH1F* h1_gt50_3040_ps2 = new TH1F("h1_gt50_3040_ps2","h1_gt50_3040_ps2",100,0,1); h1_gt50_3040_ps2->Sumw2();
+   TH1F* h1_4050_4050_ps2 = new TH1F("h1_4050_4050_ps2","h1_4050_4050_ps2",100,0,1); h1_4050_4050_ps2->Sumw2();
+   TH1F* h1_gt50_4050_ps2 = new TH1F("h1_gt50_4050_ps2","h1_gt50_4050_ps2",100,0,1); h1_gt50_4050_ps2->Sumw2();
+   TH1F* h1_gt50_gt50_ps2 = new TH1F("h1_gt50_gt50_ps2","h1_gt50_gt50_ps2",100,0,1); h1_gt50_gt50_ps2->Sumw2();
+
+   TH1F* h1_2030_2030_ps3 = new TH1F("h1_2030_2030_ps3","h1_2030_2030_ps3",100,0,1); h1_2030_2030_ps3->Sumw2();
+   TH1F* h1_3040_2030_ps3 = new TH1F("h1_3040_2030_ps3","h1_3040_2030_ps3",100,0,1); h1_3040_2030_ps3->Sumw2();
+   TH1F* h1_4050_2030_ps3 = new TH1F("h1_4050_2030_ps3","h1_4050_2030_ps3",100,0,1); h1_4050_2030_ps3->Sumw2();
+   TH1F* h1_gt50_2030_ps3 = new TH1F("h1_gt50_2030_ps3","h1_gt50_2030_ps3",100,0,1); h1_gt50_2030_ps3->Sumw2();
+   TH1F* h1_3040_3040_ps3 = new TH1F("h1_3040_3040_ps3","h1_3040_3040_ps3",100,0,1); h1_3040_3040_ps3->Sumw2();
+   TH1F* h1_4050_3040_ps3 = new TH1F("h1_4050_3040_ps3","h1_4050_3040_ps3",100,0,1); h1_4050_3040_ps3->Sumw2();
+   TH1F* h1_gt50_3040_ps3 = new TH1F("h1_gt50_3040_ps3","h1_gt50_3040_ps3",100,0,1); h1_gt50_3040_ps3->Sumw2();
+   TH1F* h1_4050_4050_ps3 = new TH1F("h1_4050_4050_ps3","h1_4050_4050_ps3",100,0,1); h1_4050_4050_ps3->Sumw2();
+   TH1F* h1_gt50_4050_ps3 = new TH1F("h1_gt50_4050_ps3","h1_gt50_4050_ps3",100,0,1); h1_gt50_4050_ps3->Sumw2();
+   TH1F* h1_gt50_gt50_ps3 = new TH1F("h1_gt50_gt50_ps3","h1_gt50_gt50_ps3",100,0,1); h1_gt50_gt50_ps3->Sumw2();
+
+   TH1F* h1_2030_2030_ps4 = new TH1F("h1_2030_2030_ps4","h1_2030_2030_ps4",100,0,1); h1_2030_2030_ps4->Sumw2();
+   TH1F* h1_3040_2030_ps4 = new TH1F("h1_3040_2030_ps4","h1_3040_2030_ps4",100,0,1); h1_3040_2030_ps4->Sumw2();
+   TH1F* h1_4050_2030_ps4 = new TH1F("h1_4050_2030_ps4","h1_4050_2030_ps4",100,0,1); h1_4050_2030_ps4->Sumw2();
+   TH1F* h1_gt50_2030_ps4 = new TH1F("h1_gt50_2030_ps4","h1_gt50_2030_ps4",100,0,1); h1_gt50_2030_ps4->Sumw2();
+   TH1F* h1_3040_3040_ps4 = new TH1F("h1_3040_3040_ps4","h1_3040_3040_ps4",100,0,1); h1_3040_3040_ps4->Sumw2();
+   TH1F* h1_4050_3040_ps4 = new TH1F("h1_4050_3040_ps4","h1_4050_3040_ps4",100,0,1); h1_4050_3040_ps4->Sumw2();
+   TH1F* h1_gt50_3040_ps4 = new TH1F("h1_gt50_3040_ps4","h1_gt50_3040_ps4",100,0,1); h1_gt50_3040_ps4->Sumw2();
+   TH1F* h1_4050_4050_ps4 = new TH1F("h1_4050_4050_ps4","h1_4050_4050_ps4",100,0,1); h1_4050_4050_ps4->Sumw2();
+   TH1F* h1_gt50_4050_ps4 = new TH1F("h1_gt50_4050_ps4","h1_gt50_4050_ps4",100,0,1); h1_gt50_4050_ps4->Sumw2();
+   TH1F* h1_gt50_gt50_ps4 = new TH1F("h1_gt50_gt50_ps4","h1_gt50_gt50_ps4",100,0,1); h1_gt50_gt50_ps4->Sumw2();
+
+
    TH1F* h2 = new TH1F("h2","h2",20,0,200); h2->Sumw2();
+   TH1F* h2_pdfu = new TH1F("h2_pdfu","h2_pdfu",20,0,200); h2_pdfu->Sumw2();
+   TH1F* h2_pdfd = new TH1F("h2_pdfd","h2_pdfd",20,0,200); h2_pdfd->Sumw2();
+   TH1F* h2_scale1 = new TH1F("h2_scale1","h2_scale1",20,0,200); h2_scale1->Sumw2();
+   TH1F* h2_scale2 = new TH1F("h2_scale2","h2_scale2",20,0,200); h2_scale2->Sumw2();
+   TH1F* h2_scale3 = new TH1F("h2_scale3","h2_scale3",20,0,200); h2_scale3->Sumw2();
+   TH1F* h2_scale4 = new TH1F("h2_scale4","h2_scale4",20,0,200); h2_scale4->Sumw2();
+   TH1F* h2_scale5 = new TH1F("h2_scale5","h2_scale5",20,0,200); h2_scale5->Sumw2();
+   TH1F* h2_scale6 = new TH1F("h2_scale6","h2_scale6",20,0,200); h2_scale6->Sumw2();
+   TH1F* h2_ps1 = new TH1F("h2_ps1","h2_ps1",20,0,200); h2_ps1->Sumw2();
+   TH1F* h2_ps2 = new TH1F("h2_ps2","h2_ps2",20,0,200); h2_ps2->Sumw2();
+   TH1F* h2_ps3 = new TH1F("h2_ps3","h2_ps3",20,0,200); h2_ps3->Sumw2();
+   TH1F* h2_ps4 = new TH1F("h2_ps4","h2_ps4",20,0,200); h2_ps4->Sumw2();
    TH1F* h2SS = new TH1F("h2SS","h2SS",20,0,200); h2SS->Sumw2();
+   TH1F* h2_pdfdSS = new TH1F("h2_pdfdSS","h2_pdfdSS",20,0,200); h2_pdfdSS->Sumw2();
+   TH1F* h2_pdfuSS = new TH1F("h2_pdfuSS","h2_pdfuSS",20,0,200); h2_pdfuSS->Sumw2();
+   TH1F* h2_scale1SS = new TH1F("h2_scale1SS","h2_scale1SS",20,0,200); h2_scale1SS->Sumw2();
+   TH1F* h2_scale2SS = new TH1F("h2_scale2SS","h2_scale2SS",20,0,200); h2_scale2SS->Sumw2();
+   TH1F* h2_scale3SS = new TH1F("h2_scale3SS","h2_scale3SS",20,0,200); h2_scale3SS->Sumw2();
+   TH1F* h2_scale4SS = new TH1F("h2_scale4SS","h2_scale4SS",20,0,200); h2_scale4SS->Sumw2();
+   TH1F* h2_scale5SS = new TH1F("h2_scale5SS","h2_scale5SS",20,0,200); h2_scale5SS->Sumw2();
+   TH1F* h2_scale6SS = new TH1F("h2_scale6SS","h2_scale6SS",20,0,200); h2_scale6SS->Sumw2();
    TH1F* h3 = new TH1F("h3","h3",binnumNPVS,binsNPVS); h3->Sumw2();
    TH1F* h3SS = new TH1F("h3SS","h3SS",binnumNPVS,binsNPVS); h3SS->Sumw2();
    TH1F* h4 = new TH1F("h4","h4",binnumNPVS,binsNPVS); h4->Sumw2();
@@ -398,35 +560,65 @@ cout<<ngen<<" "<<ngenu<<endl;
    TF1* fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
    TF1* fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
 
-   //TFile *f_punt=new TFile("npu_correction_2018.root");
-   //TH2F* correction_map=(TH2F*) f_punt->Get("correction_map");
-   TFile *f_punt=new TFile("npu_correction_2018_Izaak.root");
-   TH2F* correction_map=(TH2F*) f_punt->Get("corr_raw");
+   float bs_z_mc=0.0;
+   float bs_zsigma_mc=3.5;
+
+   TFile* f_bs=new TFile("beamspot_UL2018_Data.root","read");
+   TH1F* h_bs_sigma = (TH1F*) f_bs->Get("bs_sigma");
+   TH1F* h_bs_z = (TH1F*) f_bs->Get("bs_z");
+   TFile* f_bs_mc=new TFile("beamspot_UL2018_MC.root","read");
+   TH1F* h_bs_sigma_mc = (TH1F*) f_bs_mc->Get("bs_sigma");
+   TH1F* h_bs_z_mc = (TH1F*) f_bs_mc->Get("bs_z");
+   bs_z_mc=h_bs_z_mc->GetMean();
+   bs_zsigma_mc=h_bs_sigma_mc->GetMean();
+   TFile *f_punt=new TFile("corrs_ntracks_pu_UL2018.root");
+   TH2F* correction_map=(TH2F*) f_punt->Get("corr");
+
+   if (year=="2017"){
+      TFile* f_bs=new TFile("beamspot_UL2017_Data.root","read");
+      h_bs_sigma = (TH1F*) f_bs->Get("bs_sigma");
+      h_bs_z = (TH1F*) f_bs->Get("bs_z");
+      TFile* f_bs_mc=new TFile("beamspot_UL2017_MC.root","read");
+      h_bs_sigma_mc = (TH1F*) f_bs_mc->Get("bs_sigma");
+      h_bs_z_mc = (TH1F*) f_bs_mc->Get("bs_z");
+      bs_z_mc=h_bs_z_mc->GetMean();
+      bs_zsigma_mc=h_bs_sigma_mc->GetMean();
+      TFile *f_punt=new TFile("corrs_ntracks_pu_UL2017.root");
+      correction_map=(TH2F*) f_punt->Get("corr");
+   }
+   else if (year=="2016post"){
+      TFile* f_bs=new TFile("beamspot_UL2016_postVFP_Data.root","read");
+      h_bs_sigma = (TH1F*) f_bs->Get("bs_sigma");
+      h_bs_z = (TH1F*) f_bs->Get("bs_z");
+      TFile* f_bs_mc=new TFile("beamspot_UL2016_postVFP_MC.root","read");
+      h_bs_sigma_mc = (TH1F*) f_bs_mc->Get("bs_sigma");
+      h_bs_z_mc = (TH1F*) f_bs_mc->Get("bs_z");
+      bs_z_mc=h_bs_z_mc->GetMean();
+      bs_zsigma_mc=h_bs_sigma_mc->GetMean();
+      TFile *f_punt=new TFile("corrs_ntracks_pu_UL2016_postVFP.root");
+      correction_map=(TH2F*) f_punt->Get("corr");
+   }
+   else if (year=="2016pre"){
+      TFile* f_bs=new TFile("beamspot_UL2016_preVFP_Data.root","read");
+      h_bs_sigma = (TH1F*) f_bs->Get("bs_sigma");
+      h_bs_z = (TH1F*) f_bs->Get("bs_z");
+      TFile* f_bs_mc=new TFile("beamspot_UL2016_preVFP_MC.root","read");
+      h_bs_sigma_mc = (TH1F*) f_bs_mc->Get("bs_sigma");
+      h_bs_z_mc = (TH1F*) f_bs_mc->Get("bs_z");
+      bs_z_mc=h_bs_z_mc->GetMean();
+      bs_zsigma_mc=h_bs_sigma_mc->GetMean();
+      TFile *f_punt=new TFile("corrs_ntracks_pu_UL2016_preVFP.root");
+      correction_map=(TH2F*) f_punt->Get("corr");
+   }
 
    TFile *f_hsnt=new TFile("nhs_correction_2018.root");
    TH2F* correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
 
-   TFile* f_npvs=new TFile("new_correction_npvs_2018.root","read");
-   TH1F* h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
-
-   TFile* f_bs=new TFile("beamspot_TF1_2018.root","read");
-   TF1* h_bs_width = (TF1*) f_bs->Get("f1");
-
-   TFile* f_bs_2=new TFile("beamspot_UL2018_Data.root","read");
-   TH1F* h_bs_sigma = (TH1F*) f_bs_2->Get("bs_sigma");
-   TH1F* h_bs_z = (TH1F*) f_bs_2->Get("bs_z");
-
    if (year=="2017"){
       TFile* f_aco=new TFile("correction_acoplanarity_2017.root","read");
       fit_aco = (TF1*) f_aco->Get("fit_acoplanarity");
-      TFile *f_punt=new TFile("npu_correction_2018.root");
-      correction_map=(TH2F*) f_punt->Get("correction_map");
       TFile *f_hsnt=new TFile("nhs_correction_2018.root");
       correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
-      TFile* f_npvs=new TFile("new_correction_npvs_2017.root","read");
-      h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
-      TFile* f_bs=new TFile("beamspot_TF1_2017.root","read");
-      h_bs_width = (TF1*) f_bs->Get("f1");
 
       TFile* f_aco_fine=new TFile("new_correction_acoplanarity_fine_2017.root","read");
       fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
@@ -443,14 +635,8 @@ cout<<ngen<<" "<<ngenu<<endl;
    else if (year=="2016pre"){
       TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
       fit_aco = (TF1*) f_aco->Get("fit_A");
-      TFile *f_punt=new TFile("npu_correction_2018.root");
-      correction_map=(TH2F*) f_punt->Get("correction_map");
       TFile *f_hsnt=new TFile("nhs_correction_2018.root");
       correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
-      TFile* f_npvs=new TFile("new_correction_npvs_2016pre.root","read");
-      h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
-      TFile* f_bs=new TFile("beamspot_TF1_2018.root","read");
-      h_bs_width = (TF1*) f_bs->Get("f1");
 
       TFile* f_aco_fine=new TFile("new_correction_acoplanarity_fine_2016pre.root","read");
       fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
@@ -467,14 +653,8 @@ cout<<ngen<<" "<<ngenu<<endl;
    else if (year=="2016post"){
       TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
       fit_aco = (TF1*) f_aco->Get("fit_A");
-      TFile *f_punt=new TFile("npu_correction_2018.root");
-      correction_map=(TH2F*) f_punt->Get("correction_map");
       TFile *f_hsnt=new TFile("nhs_correction_2018.root");
       correction_mapHS=(TH2F*) f_hsnt->Get("correction_map");
-      TFile* f_npvs=new TFile("correction_npvs_2018.root","read");
-      h_npvs_weight = (TH1F*) f_npvs->Get("correction_hist_npvs");
-      TFile* f_bs=new TFile("beamspot_TF1_2018.root","read");
-      h_bs_width = (TF1*) f_bs->Get("f1");
 
       TFile* f_aco_fine=new TFile("new_correction_acoplanarity_fine_2016post.root","read");
       fit_aco_2030_2030 = (TF1*) f_aco_fine->Get("fit_acoplanarity_2030_2030");
@@ -488,47 +668,6 @@ cout<<ngen<<" "<<ngenu<<endl;
       fit_aco_gt50_4050 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_4050");
       fit_aco_gt50_gt50 = (TF1*) f_aco_fine->Get("fit_acoplanarity_gt50_gt50");
    }
-
-   //TF1* fit_npvs = (TF1*) f_aco->Get("fit_npvs");
-
-   TF1* f_beamspot=new TF1("f_beamspot","gaus",2.5,4.5);
-   f_beamspot->SetParameter(0,1);
-   f_beamspot->SetParameter(1,3.35);
-   f_beamspot->SetParameter(2,0.15);
-
-   TF1* f_beamspotz=new TF1("f_beamspotz","gaus",-1.1,1.1);
-   f_beamspotz->SetParameter(0,1);
-   f_beamspotz->SetParameter(1,-0.138);
-   f_beamspotz->SetParameter(2,0.254);
-
-   if (year=="2017"){
-      f_beamspot->SetParameter(0,1);
-      f_beamspot->SetParameter(1,3.35);
-      f_beamspot->SetParameter(2,0.15);
-
-      f_beamspotz->SetParameter(0,1);
-      f_beamspotz->SetParameter(1,-0.138);
-      f_beamspotz->SetParameter(2,0.254);
-   }
-   else if (year=="2016pre"){
-      f_beamspot->SetParameter(0,1);
-      f_beamspot->SetParameter(1,3.35);
-      f_beamspot->SetParameter(2,0.15);
-
-      f_beamspotz->SetParameter(0,1);
-      f_beamspotz->SetParameter(1,-0.138);
-      f_beamspotz->SetParameter(2,0.254);
-   }
-   else if (year=="2016post"){
-      f_beamspot->SetParameter(0,1);
-      f_beamspot->SetParameter(1,3.35);
-      f_beamspot->SetParameter(2,0.15);
-
-      f_beamspotz->SetParameter(0,1);
-      f_beamspotz->SetParameter(1,-0.138);
-      f_beamspotz->SetParameter(2,0.254);
-   }
-
 
    TH1F *h_norm=new TH1F("h_norm","h_norm",10,0,10); h_norm->Sumw2();
 
@@ -555,8 +694,13 @@ cout<<ngen<<" "<<ngenu<<endl;
    TH1F* h_acoplanarity = new TH1F("h_acoplanarity","h_acoplanarity",30,0.0,0.003);
    TH1F* h_genacoplanarity = new TH1F("h_genacoplanarity","h_genacoplanarity",20,0.0,0.01);
 
+   TH1F* h_ntracks_beforeAco = new TH1F("h_ntracks_beforeAco","h_ntracks_beforeAco",10,0,10);
+   TH1F* h_ntracks_afterAco = new TH1F("h_ntracks_afterAco","h_ntracks_afterAco",10,0,10);
+
+   //TH1F* h_dz = new TH1F("h_dz","h_dz",32,0.0,0.4); h_dz->Sumw2();
+
    Int_t nentries_wtn = (Int_t) arbre->GetEntries();
-   for (Int_t i = 0; i < nentries_wtn; i++) {
+   for (Int_t i = 0; i < nentries_wtn; i++) { 
         //arbre->GetEntry(i);
         if (i % 10000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
         fflush(stdout);
@@ -579,7 +723,6 @@ cout<<ngen<<" "<<ngenu<<endl;
         if ((year=="2017") and my_mu1.Pt()<28 and my_mu2.Pt()<28) continue;
         if (my_mu1.Pt()<10 or my_mu2.Pt()<10) continue;
         if (LepCand_dxy[0]>0.2 or LepCand_dxy[1]>0.2) continue;
-        if (fabs(LepCand_dz[0]-LepCand_dz[1])>0.2) continue;
 
 	// Block trigger
         if (year=="2018") b2_1->GetEntry(i);
@@ -598,8 +741,18 @@ cout<<ngen<<" "<<ngenu<<endl;
 	if (LepCand_muonIso[0]>0.15 or LepCand_muonIso[1]>0.15) continue;
         bool is_OS=(LepCand_charge[0]*LepCand_charge[1]<0);
 
+        /*float mydz=fabs(LepCand_dz[0]-LepCand_dz[1]);
+        if (mydz>0.4) mydz=0.399;
+        if (is_OS) h_dz->Fill(mydz,weight);
+        if (fabs(LepCand_dz[0]-LepCand_dz[1])>0.1) continue; //FIXME was 0.2*/
+
+	bool pass_dz=(fabs(LepCand_dz[0]-LepCand_dz[1])<0.1);
+
 	// Block weights
-	if (name!="data_obs") {b4_1->GetEntry(i); b4_2->GetEntry(i); b4_4->GetEntry(i); b4_5->GetEntry(i); b4_6->GetEntry(i); b4_7->GetEntry(i); b4_8->GetEntry(i);b4_3->GetEntry(i); b4_3_1->GetEntry(i);b4_3_2->GetEntry(i);}
+	if (name!="data_obs") {b4_1->GetEntry(i); b4_2->GetEntry(i); b4_4->GetEntry(i); b4_5->GetEntry(i); b4_6->GetEntry(i); b4_7->GetEntry(i); b4_8->GetEntry(i);b4_3->GetEntry(i); b4_3_1->GetEntry(i);b4_3_2->GetEntry(i); b4_9->GetEntry(i); b4_10->GetEntry(i); }
+	if (sample=="DY") b4_11->GetEntry(i);
+
+        if (sample=="data_obs"){LHEScaleWeight[0]=1.0;LHEScaleWeight[1]=1.0;LHEScaleWeight[3]=1.0;LHEScaleWeight[5]=1.0;LHEScaleWeight[7]=1.0;LHEScaleWeight[8]=1.0; LHEScaleWeight[0]=1.0; PSWeight[0]=1.0; PSWeight[1]=1.0; PSWeight[2]=1.0;PSWeight[3]=1.0;}
 
 	TLorentzVector my_genmu1; my_genmu1.SetPtEtaPhiM(0,0,0,0);
         TLorentzVector my_genmu2; my_genmu2.SetPtEtaPhiM(0,0,0,0);
@@ -619,8 +772,7 @@ cout<<ngen<<" "<<ngenu<<endl;
 	float aco_weight=1.0;
         if (name!="data_obs"){
            aweight*=genWeight;
-           //aweight*=pu_weight;//FIXME
-           aweight*=puWeight; //FIXME
+           aweight*=puWeight; 
            float trgsf1=1.0;
            float recosf1=1.0;
            float idsf1=1.0;
@@ -645,9 +797,14 @@ cout<<ngen<<" "<<ngenu<<endl;
            muonIsoSF2 = h_muonIsoSF->GetBinContent(h_muonIsoSF->GetXaxis()->FindBin(fabs(my_mu2.Eta())),h_muonIsoSF->GetYaxis()->FindBin(mu2pt));
 
 	   float trgsf=1.0;
-	   if (my_mu1.Pt()>25 and my_mu2.Pt()<=25) trgsf=trgsf1;
-	   else if (my_mu1.Pt()<=25 and my_mu2.Pt()>25) trgsf=trgsf1;
-	   else if (my_mu1.Pt()>25 and my_mu2.Pt()>25) trgsf=(1-(1-trgsf1)*(1-trgsf2));
+	   if (my_mu1.Pt()>26 and my_mu2.Pt()<=26) trgsf=trgsf1;
+	   else if (my_mu1.Pt()<=26 and my_mu2.Pt()>26) trgsf=trgsf1;
+	   else if (my_mu1.Pt()>26 and my_mu2.Pt()>26) trgsf=(1-(1-trgsf1)*(1-trgsf2));
+	   if (year=="2017"){
+             if (my_mu1.Pt()>29 and my_mu2.Pt()<=29) trgsf=trgsf1;
+             else if (my_mu1.Pt()<=29 and my_mu2.Pt()>29) trgsf=trgsf1;
+             else if (my_mu1.Pt()>29 and my_mu2.Pt()>29) trgsf=(1-(1-trgsf1)*(1-trgsf2));
+	   }
 
 
 	   //if (sample=="DY" or sample=="DYcondor") aco_weight=fit_aco->Eval(gen_aco);
@@ -676,7 +833,7 @@ cout<<ngen<<" "<<ngenu<<endl;
               else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=50) aco_weight=fit_aco_gt50_gt50->Eval(TMath::Min(0.35,aco));
 //cout<<aco_weight<<" "<<aco<<" "<<my_mu1.Pt()<<" "<<my_mu2.Pt()<<endl;
            }
-           aweight=aweight*trgsf*recosf1*idsf1*muonIsoSF1*recosf2*idsf2*muonIsoSF2;
+           aweight=aweight*trgsf*idsf1*muonIsoSF1*idsf2*muonIsoSF2;
         }
 
 	// Block vertices
@@ -684,9 +841,7 @@ cout<<ngen<<" "<<ngenu<<endl;
 	if (name!="data_obs") b5_2->GetEntry(i);
 	float simple_dimu_z=0.5*(2*PV_z+LepCand_dz[0]+LepCand_dz[1]);
 
-        //if (sample=="DY" or sample=="DYcondor") aweight*=fit_npvs->Eval(TMath::Min(70,PV_npvs));
         float npvs_weight=1.0;
-        if (sample!="data_obs") npvs_weight=h_npvs_weight->GetBinContent(h_npvs_weight->GetXaxis()->FindBin(PV_npvs));
 	h_beamspot->Fill(beamspot_sigmaZ);
         h_beamspotz->Fill(beamspot_z0);
 
@@ -706,49 +861,231 @@ cout<<ngen<<" "<<ngenu<<endl;
 	if (sample=="data_obs") {puWeight=1; puWeightUp=1; puWeightDown=1;}
 aco_weight=1.0;//FIXME
 npvs_weight=1.0;//FIXME
-	if (is_OS){
+
+        if (is_OS){
+           h_dz->Fill(fabs(LepCand_dz[0]-LepCand_dz[1]),aweight*weight*aco_weight);
+	}
+
+	if (is_OS and pass_dz){
            h_acoplanarity->Fill(aco);
            h_genacoplanarity->Fill(gen_aco);
 
-	   h_dimumass->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight);
-	   h0->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight);
-           h1->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           if (my_mu1.Pt()>=20 and my_mu1.Pt()<30 and my_mu2.Pt()>=20 and my_mu2.Pt()<30) h1_2030_2030->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=30 and my_mu1.Pt()<40 and my_mu2.Pt()>=20 and my_mu2.Pt()<30) h1_3040_2030->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>20 and my_mu2.Pt()<30) h1_4050_2030->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=20 and my_mu2.Pt()<30) h1_gt50_2030->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=30 and my_mu1.Pt()<40 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) h1_3040_3040->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) h1_4050_3040->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) h1_gt50_3040->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>=40 and my_mu2.Pt()<50) h1_4050_4050->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=40 and my_mu2.Pt()<50) h1_gt50_4050->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=50) h1_gt50_gt50->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           h2->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*npvs_weight);
-           h3->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight);
-           h4->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight*puWeightDown/puWeight);
-           h5->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight*puWeightUp/puWeight);
+	   h_dimumass->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight);
+	   h0->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight);
+           h1->Fill(aco,aweight*weight*aco_weight);
+           if (my_mu1.Pt()>=20 and my_mu1.Pt()<30 and my_mu2.Pt()>=20 and my_mu2.Pt()<30){
+		h1_2030_2030->Fill(aco,aweight*weight*aco_weight);
+                h1_2030_2030_scale1->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+                h1_2030_2030_scale2->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+                h1_2030_2030_scale3->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+                h1_2030_2030_scale4->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+                h1_2030_2030_scale5->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+                h1_2030_2030_scale6->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+                h1_2030_2030_ps1->Fill(aco,aweight*weight*aco_weight*PSWeight[0]);
+                h1_2030_2030_ps2->Fill(aco,aweight*weight*aco_weight*PSWeight[1]);
+                h1_2030_2030_ps3->Fill(aco,aweight*weight*aco_weight*PSWeight[2]);
+                h1_2030_2030_ps4->Fill(aco,aweight*weight*aco_weight*PSWeight[3]);
+	   }
+           else if (my_mu1.Pt()>=30 and my_mu1.Pt()<40 and my_mu2.Pt()>=20 and my_mu2.Pt()<30){ 
+		h1_3040_2030->Fill(aco,aweight*weight*aco_weight);
+                h1_3040_2030_scale1->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+                h1_3040_2030_scale2->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+                h1_3040_2030_scale3->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+                h1_3040_2030_scale4->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+                h1_3040_2030_scale5->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+                h1_3040_2030_scale6->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+                h1_3040_2030_ps1->Fill(aco,aweight*weight*aco_weight*PSWeight[0]);
+                h1_3040_2030_ps2->Fill(aco,aweight*weight*aco_weight*PSWeight[1]);
+                h1_3040_2030_ps3->Fill(aco,aweight*weight*aco_weight*PSWeight[2]);
+                h1_3040_2030_ps4->Fill(aco,aweight*weight*aco_weight*PSWeight[3]);
+	   }
+           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>20 and my_mu2.Pt()<30){ 
+		h1_4050_2030->Fill(aco,aweight*weight*aco_weight);
+                h1_4050_2030_scale1->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+                h1_4050_2030_scale2->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+                h1_4050_2030_scale3->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+                h1_4050_2030_scale4->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+                h1_4050_2030_scale5->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+                h1_4050_2030_scale6->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+                h1_4050_2030_ps1->Fill(aco,aweight*weight*aco_weight*PSWeight[0]);
+                h1_4050_2030_ps2->Fill(aco,aweight*weight*aco_weight*PSWeight[1]);
+                h1_4050_2030_ps3->Fill(aco,aweight*weight*aco_weight*PSWeight[2]);
+                h1_4050_2030_ps4->Fill(aco,aweight*weight*aco_weight*PSWeight[3]);
+	   }
+           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=20 and my_mu2.Pt()<30){ 
+		h1_gt50_2030->Fill(aco,aweight*weight*aco_weight);
+                h1_gt50_2030_scale1->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+                h1_gt50_2030_scale2->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+                h1_gt50_2030_scale3->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+                h1_gt50_2030_scale4->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+                h1_gt50_2030_scale5->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+                h1_gt50_2030_scale6->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+                h1_gt50_2030_ps1->Fill(aco,aweight*weight*aco_weight*PSWeight[0]);
+                h1_gt50_2030_ps2->Fill(aco,aweight*weight*aco_weight*PSWeight[1]);
+                h1_gt50_2030_ps3->Fill(aco,aweight*weight*aco_weight*PSWeight[2]);
+                h1_gt50_2030_ps4->Fill(aco,aweight*weight*aco_weight*PSWeight[3]);
+	   }
+           else if (my_mu1.Pt()>=30 and my_mu1.Pt()<40 and my_mu2.Pt()>=30 and my_mu2.Pt()<40){ 
+		h1_3040_3040->Fill(aco,aweight*weight*aco_weight);
+                h1_3040_3040_scale1->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+                h1_3040_3040_scale2->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+                h1_3040_3040_scale3->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+                h1_3040_3040_scale4->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+                h1_3040_3040_scale5->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+                h1_3040_3040_scale6->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+                h1_3040_3040_ps1->Fill(aco,aweight*weight*aco_weight*PSWeight[0]);
+                h1_3040_3040_ps2->Fill(aco,aweight*weight*aco_weight*PSWeight[1]);
+                h1_3040_3040_ps3->Fill(aco,aweight*weight*aco_weight*PSWeight[2]);
+                h1_3040_3040_ps4->Fill(aco,aweight*weight*aco_weight*PSWeight[3]);
+	   }
+           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>=30 and my_mu2.Pt()<40){ 
+		h1_4050_3040->Fill(aco,aweight*weight*aco_weight);
+                h1_4050_3040_scale1->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+                h1_4050_3040_scale2->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+                h1_4050_3040_scale3->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+                h1_4050_3040_scale4->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+                h1_4050_3040_scale5->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+                h1_4050_3040_scale6->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+                h1_4050_3040_ps1->Fill(aco,aweight*weight*aco_weight*PSWeight[0]);
+                h1_4050_3040_ps2->Fill(aco,aweight*weight*aco_weight*PSWeight[1]);
+                h1_4050_3040_ps3->Fill(aco,aweight*weight*aco_weight*PSWeight[2]);
+                h1_4050_3040_ps4->Fill(aco,aweight*weight*aco_weight*PSWeight[3]);
+	   }
+           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=30 and my_mu2.Pt()<40){ 
+		h1_gt50_3040->Fill(aco,aweight*weight*aco_weight);
+                h1_gt50_3040_scale1->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+                h1_gt50_3040_scale2->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+                h1_gt50_3040_scale3->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+                h1_gt50_3040_scale4->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+                h1_gt50_3040_scale5->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+                h1_gt50_3040_scale6->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+                h1_gt50_3040_ps1->Fill(aco,aweight*weight*aco_weight*PSWeight[0]);
+                h1_gt50_3040_ps2->Fill(aco,aweight*weight*aco_weight*PSWeight[1]);
+                h1_gt50_3040_ps3->Fill(aco,aweight*weight*aco_weight*PSWeight[2]);
+                h1_gt50_3040_ps4->Fill(aco,aweight*weight*aco_weight*PSWeight[3]);
+	   }
+           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>=40 and my_mu2.Pt()<50){ 
+		h1_4050_4050->Fill(aco,aweight*weight*aco_weight);
+                h1_4050_4050_scale1->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+                h1_4050_4050_scale2->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+                h1_4050_4050_scale3->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+                h1_4050_4050_scale4->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+                h1_4050_4050_scale5->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+                h1_4050_4050_scale6->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+                h1_4050_4050_ps1->Fill(aco,aweight*weight*aco_weight*PSWeight[0]);
+                h1_4050_4050_ps2->Fill(aco,aweight*weight*aco_weight*PSWeight[1]);
+                h1_4050_4050_ps3->Fill(aco,aweight*weight*aco_weight*PSWeight[2]);
+                h1_4050_4050_ps4->Fill(aco,aweight*weight*aco_weight*PSWeight[3]);
+	   }
+           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=40 and my_mu2.Pt()<50){ 
+		h1_gt50_4050->Fill(aco,aweight*weight*aco_weight);
+                h1_gt50_4050_scale1->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+                h1_gt50_4050_scale2->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+                h1_gt50_4050_scale3->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+                h1_gt50_4050_scale4->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+                h1_gt50_4050_scale5->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+                h1_gt50_4050_scale6->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+                h1_gt50_4050_ps1->Fill(aco,aweight*weight*aco_weight*PSWeight[0]);
+                h1_gt50_4050_ps2->Fill(aco,aweight*weight*aco_weight*PSWeight[1]);
+                h1_gt50_4050_ps3->Fill(aco,aweight*weight*aco_weight*PSWeight[2]);
+                h1_gt50_4050_ps4->Fill(aco,aweight*weight*aco_weight*PSWeight[3]);
+	   }
+           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=50){ 
+		h1_gt50_gt50->Fill(aco,aweight*weight*aco_weight);
+                h1_gt50_gt50_scale1->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+                h1_gt50_gt50_scale2->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+                h1_gt50_gt50_scale3->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+                h1_gt50_gt50_scale4->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+                h1_gt50_gt50_scale5->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+                h1_gt50_gt50_scale6->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+                h1_gt50_gt50_ps1->Fill(aco,aweight*weight*aco_weight*PSWeight[0]);
+                h1_gt50_gt50_ps2->Fill(aco,aweight*weight*aco_weight*PSWeight[1]);
+                h1_gt50_gt50_ps3->Fill(aco,aweight*weight*aco_weight*PSWeight[2]);
+                h1_gt50_gt50_ps4->Fill(aco,aweight*weight*aco_weight*PSWeight[3]);
+	   }
+           h2->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight);
+
+           float average_sigma=0.0;
+           for (int jj=1; jj<101; ++jj) average_sigma+=0.01*LHEPdfWeight[jj];
+           float deltasigma=0.0;
+           for (int jj=1; jj<101; ++jj) deltasigma+=(1.0/(100-1))*pow((LHEPdfWeight[jj]-average_sigma),2);
+           deltasigma=pow(deltasigma,0.5);
+
+           h1_pdfu->Fill(aco,aweight*weight*aco_weight*(1.0+deltasigma));
+           h2_pdfu->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*(1.0+deltasigma));
+           h1_pdfd->Fill(aco,aweight*weight*aco_weight*(1.0-deltasigma));
+           h2_pdfd->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*(1.0-deltasigma));
+
+           h1_scale1->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+           h2_scale1->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[0]);
+           h1_scale2->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+           h2_scale2->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[1]);
+           h1_scale3->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+           h2_scale3->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[3]);
+           h1_scale4->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+           h2_scale4->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[5]);
+           h1_scale5->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+           h2_scale5->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[7]);
+           h1_scale6->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+           h2_scale6->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[8]);
+
+           h1_ps1->Fill(aco,aweight*weight*aco_weight*PSWeight[0]);
+           h2_ps1->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*PSWeight[0]);
+           h1_ps2->Fill(aco,aweight*weight*aco_weight*PSWeight[1]);
+           h2_ps2->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*PSWeight[1]);
+           h1_ps3->Fill(aco,aweight*weight*aco_weight*PSWeight[2]);
+           h2_ps3->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*PSWeight[2]);
+           h1_ps4->Fill(aco,aweight*weight*aco_weight*PSWeight[3]);
+           h2_ps4->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*PSWeight[3]);
+
+
+           h3->Fill(PV_npvs,aweight*weight*aco_weight);
+           h4->Fill(PV_npvs,aweight*weight*aco_weight*puWeightDown/puWeight);
+           h5->Fill(PV_npvs,aweight*weight*aco_weight*puWeightUp/puWeight);
 	}
 
         if (!is_OS){
-           h0SS->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight);
-           h1SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           if (my_mu1.Pt()>=20 and my_mu1.Pt()<30 and my_mu2.Pt()>=20 and my_mu2.Pt()<30) h1_2030_2030SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=30 and my_mu1.Pt()<40 and my_mu2.Pt()>=20 and my_mu2.Pt()<30) h1_3040_2030SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>20 and my_mu2.Pt()<30) h1_4050_2030SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=20 and my_mu2.Pt()<30) h1_gt50_2030SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=30 and my_mu1.Pt()<40 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) h1_3040_3040SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) h1_4050_3040SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) h1_gt50_3040SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>=40 and my_mu2.Pt()<50) h1_4050_4050SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=40 and my_mu2.Pt()<50) h1_gt50_4050SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=50) h1_gt50_gt50SS->Fill(aco,aweight*weight*aco_weight*npvs_weight);
-           h2SS->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*npvs_weight);
-           h3SS->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight);
-           h4SS->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight*puWeightDown/puWeight);
-           h5SS->Fill(PV_npvs,aweight*weight*aco_weight*npvs_weight*puWeightUp/puWeight);
+           h_dzSS->Fill(fabs(LepCand_dz[0]-LepCand_dz[1]),aweight*weight*aco_weight);
         }
 
-	b6_1->GetEntry(i); b6_2->GetEntry(i); b6_3->GetEntry(i); b6_4->GetEntry(i);
+        if (!is_OS and pass_dz){
+           h0SS->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight);
+           h1SS->Fill(aco,aweight*weight*aco_weight);
+           h1_pdfuSS->Fill(aco,aweight*weight*aco_weight);
+           h1_pdfdSS->Fill(aco,aweight*weight*aco_weight);
+           if (my_mu1.Pt()>=20 and my_mu1.Pt()<30 and my_mu2.Pt()>=20 and my_mu2.Pt()<30) h1_2030_2030SS->Fill(aco,aweight*weight*aco_weight);
+           else if (my_mu1.Pt()>=30 and my_mu1.Pt()<40 and my_mu2.Pt()>=20 and my_mu2.Pt()<30) h1_3040_2030SS->Fill(aco,aweight*weight*aco_weight);
+           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>20 and my_mu2.Pt()<30) h1_4050_2030SS->Fill(aco,aweight*weight*aco_weight);
+           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=20 and my_mu2.Pt()<30) h1_gt50_2030SS->Fill(aco,aweight*weight*aco_weight);
+           else if (my_mu1.Pt()>=30 and my_mu1.Pt()<40 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) h1_3040_3040SS->Fill(aco,aweight*weight*aco_weight);
+           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) h1_4050_3040SS->Fill(aco,aweight*weight*aco_weight);
+           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=30 and my_mu2.Pt()<40) h1_gt50_3040SS->Fill(aco,aweight*weight*aco_weight);
+           else if (my_mu1.Pt()>=40 and my_mu1.Pt()<50 and my_mu2.Pt()>=40 and my_mu2.Pt()<50) h1_4050_4050SS->Fill(aco,aweight*weight*aco_weight);
+           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=40 and my_mu2.Pt()<50) h1_gt50_4050SS->Fill(aco,aweight*weight*aco_weight);
+           else if (my_mu1.Pt()>=50 and my_mu2.Pt()>=50) h1_gt50_gt50SS->Fill(aco,aweight*weight*aco_weight);
+           h2SS->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight);
+           h2_pdfuSS->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight);
+           h2_pdfdSS->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight);
+
+           h1_scale1SS->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[0]);
+           h2_scale1SS->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[0]);
+           h1_scale2SS->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[1]);
+           h2_scale2SS->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[1]);
+           h1_scale3SS->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[3]);
+           h2_scale3SS->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[3]);
+           h1_scale4SS->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[5]);
+           h2_scale4SS->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[5]);
+           h1_scale5SS->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[7]);
+           h2_scale5SS->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[7]);
+           h1_scale6SS->Fill(aco,aweight*weight*aco_weight*LHEScaleWeight[8]);
+           h2_scale6SS->Fill((my_mu1+my_mu2).Pt(),aweight*weight*aco_weight*LHEScaleWeight[8]);
+
+           h3SS->Fill(PV_npvs,aweight*weight*aco_weight);
+           h4SS->Fill(PV_npvs,aweight*weight*aco_weight*puWeightDown/puWeight);
+           h5SS->Fill(PV_npvs,aweight*weight*aco_weight*puWeightUp/puWeight);
+        }
+
+	/*b6_1->GetEntry(i); b6_2->GetEntry(i); b6_3->GetEntry(i); b6_4->GetEntry(i);
 
 	 //0p2 window width
         int ntracks1=0;
@@ -766,7 +1103,7 @@ npvs_weight=1.0;//FIXME
 		   }
                 }
 		if (ntracks1>50) ntracks1=50;
-	        h_ntracks[j]->Fill(ntracks1,aweight*weight*aco_weight*npvs_weight);
+	        h_ntracks[j]->Fill(ntracks1,aweight*weight*aco_weight);
 	     }
 	   }
 	}
@@ -787,7 +1124,7 @@ npvs_weight=1.0;//FIXME
                       }
                    }
                 if (ntracks_corrected1>50) ntracks_corrected1=50;
-                   h_ntracks_corrected[j]->Fill(ntracks_corrected1,aweight*weight*aco_weight*npvs_weight);
+                   h_ntracks_corrected[j]->Fill(ntracks_corrected1,aweight*weight*aco_weight);
                 }
               }
            }
@@ -804,7 +1141,7 @@ npvs_weight=1.0;//FIXME
                    }
                 }
                 if (ntracks1>50) ntracks1=50;
-                h_ntracks0p1[j]->Fill(ntracks1,aweight*weight*aco_weight*npvs_weight);
+                h_ntracks0p1[j]->Fill(ntracks1,aweight*weight*aco_weight);
              }
            }
         }
@@ -825,7 +1162,7 @@ npvs_weight=1.0;//FIXME
                       }
                    }
                    if (ntracks_corrected1>50) ntracks_corrected1=50;
-                   h_ntracks0p1_corrected[j]->Fill(ntracks_corrected1,aweight*weight*aco_weight*npvs_weight);
+                   h_ntracks0p1_corrected[j]->Fill(ntracks_corrected1,aweight*weight*aco_weight);
                 }
               }
            }
@@ -845,6 +1182,10 @@ npvs_weight=1.0;//FIXME
         float rnd_beamspotz=h_bs_z->GetRandom();
 
         int matched=0;
+        float bs_zsigma_obs=h_bs_sigma->GetRandom();
+        float bs_z_obs=h_bs_z->GetRandom();
+        float corr_zsig= (bs_zsigma_obs / bs_zsigma_mc);
+        float corr_z= bs_z_obs - corr_zsig * bs_z_mc;
         for (int nt=0; nt<nChargedPFCandidates; ++nt){
            float is_matched=false;
            if (fabs(ChargedPFCandidates_dz[nt]-LepCand_dz[0])<0.1 and fabs(ChargedPFCandidates_pt[nt]-LepCand_pt[0])/LepCand_pt[0]<0.2) {is_matched=true; matched++;}
@@ -854,7 +1195,9 @@ npvs_weight=1.0;//FIXME
               if (ChargedPFCandidates_pt[nt]>0.5 and raw_dz<0.05) ntracksAll++;
               if (sample!="data_obs"){
                  //float BScorrected_dz=fabs(((PV_z+ChargedPFCandidates_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488))-PV_z-0.5*LepCand_dz[0]-0.5*LepCand_dz[1]);
-                 float BScorrected_dz=raw_dz;//FIXME removed BS corrections
+                 //float BScorrected_dz=raw_dz;//FIXME removed BS corrections
+                 float z_corr = corr_z + corr_zsig * (PV_z+ChargedPFCandidates_dz[nt]);
+                 float BScorrected_dz = fabs(z_corr - PV_z-0.5*LepCand_dz[0]-0.5*LepCand_dz[1]);
                  if (ChargedPFCandidates_isMatchedToGenHS[nt] and ChargedPFCandidates_pt[nt]>0.5 and raw_dz<0.05) ntracksHS++;
                  if (!ChargedPFCandidates_isMatchedToGenHS[nt] and ChargedPFCandidates_pt[nt]>0.5 and BScorrected_dz<0.05) ntracksPU++;
               }
@@ -872,40 +1215,40 @@ npvs_weight=1.0;//FIXME
 	//cout<<ntpu_weight<<endl;
 	if (fabs(91.2-(my_mu1+my_mu2).M())<10 and is_OS and aco<0.015){
 	  if (name!="data_obs"){
-             h_ntracksAll[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-	     if (ntracksHS==0) h_ntracksAll_genHS0[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-	     else if (ntracksHS==1) h_ntracksAll_genHS1[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS==2) h_ntracksAll_genHS2[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS==3) h_ntracksAll_genHS3[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS==4) h_ntracksAll_genHS4[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=5 and ntracksHS<10) h_ntracksAll_genHS5to10[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=10 and ntracksHS<15) h_ntracksAll_genHS10to15[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=15 and ntracksHS<20) h_ntracksAll_genHS15to20[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=20 and ntracksHS<25) h_ntracksAll_genHS20to25[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=25 and ntracksHS<30) h_ntracksAll_genHS25to30[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=30) h_ntracksAll_genHSgt30[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+             h_ntracksAll[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+	     if (ntracksHS==0) h_ntracksAll_genHS0[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+	     else if (ntracksHS==1) h_ntracksAll_genHS1[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS==2) h_ntracksAll_genHS2[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS==3) h_ntracksAll_genHS3[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS==4) h_ntracksAll_genHS4[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=5 and ntracksHS<10) h_ntracksAll_genHS5to10[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=10 and ntracksHS<15) h_ntracksAll_genHS10to15[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=15 and ntracksHS<20) h_ntracksAll_genHS15to20[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=20 and ntracksHS<25) h_ntracksAll_genHS20to25[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=25 and ntracksHS<30) h_ntracksAll_genHS25to30[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=30) h_ntracksAll_genHSgt30[0]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
 	  }
 	  else{
-             h_ntracksAll[0]->Fill(ntracksAll,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+             h_ntracksAll[0]->Fill(ntracksAll,aweight*weight*ntpu_weight*aco_weight);
 	  }
 	}
 	else if (fabs(91.2-(my_mu1+my_mu2).M())<10 and is_OS){
           if (name!="data_obs"){
-             h_ntracksAll[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             if (ntracksHS==0) h_ntracksAll_genHS0[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS==1) h_ntracksAll_genHS1[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS==2) h_ntracksAll_genHS2[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS==3) h_ntracksAll_genHS3[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS==4) h_ntracksAll_genHS4[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=5 and ntracksHS<10) h_ntracksAll_genHS5to10[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=10 and ntracksHS<15) h_ntracksAll_genHS10to15[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=15 and ntracksHS<20) h_ntracksAll_genHS15to20[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=20 and ntracksHS<25) h_ntracksAll_genHS20to25[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=25 and ntracksHS<30) h_ntracksAll_genHS25to30[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
-             else if (ntracksHS>=30) h_ntracksAll_genHSgt30[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+             h_ntracksAll[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             if (ntracksHS==0) h_ntracksAll_genHS0[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS==1) h_ntracksAll_genHS1[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS==2) h_ntracksAll_genHS2[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS==3) h_ntracksAll_genHS3[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS==4) h_ntracksAll_genHS4[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=5 and ntracksHS<10) h_ntracksAll_genHS5to10[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=10 and ntracksHS<15) h_ntracksAll_genHS10to15[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=15 and ntracksHS<20) h_ntracksAll_genHS15to20[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=20 and ntracksHS<25) h_ntracksAll_genHS20to25[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=25 and ntracksHS<30) h_ntracksAll_genHS25to30[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
+             else if (ntracksHS>=30) h_ntracksAll_genHSgt30[1]->Fill(sum_ntracks,aweight*weight*ntpu_weight*aco_weight);
           }
           else{
-             h_ntracksAll[1]->Fill(ntracksAll,aweight*weight*ntpu_weight*aco_weight*npvs_weight);
+             h_ntracksAll[1]->Fill(ntracksAll,aweight*weight*ntpu_weight*aco_weight);
           }
         }
 
@@ -914,29 +1257,37 @@ npvs_weight=1.0;//FIXME
 	if (fabs(91.2-(my_mu1+my_mu2).M())<10 and is_OS){
 	  h_norm->Fill(0.5,aweight);
           h_norm->Fill(1.5,aweight*aco_weight);
-          h_norm->Fill(2.5,aweight*npvs_weight);
+          h_norm->Fill(2.5,aweight);
           h_norm->Fill(3.5,aweight*ntpu_weight);
           h_norm->Fill(4.5,aweight*nths_weight);
-          h_norm->Fill(5.5,aweight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
+          h_norm->Fill(5.5,aweight*aco_weight*ntpu_weight*nths_weight);
         }
+
+	h_ntracks_beforeAco->Fill(TMath::Min(9,ntracksHS+ntracksPU),aweight);
+        h_ntracks_afterAco->Fill(TMath::Min(9,ntracksHS+ntracksPU),aweight*aco_weight);
 
 	if (is_OS){
-           if (aco<0.015 and ((name=="data_obs" and ntracksAll==0) or (name!="data_obs" and sum_ntracks==0))) h6->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
-           if (aco<0.015 and ((name=="data_obs" and ntracksAll==5) or (name!="data_obs" and sum_ntracks==5))) h7->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
+           if (aco<0.015 and ((name=="data_obs" and ntracksAll==0) or (name!="data_obs" and sum_ntracks==0))) h6->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*ntpu_weight*nths_weight);
+           if (aco<0.015 and ((name=="data_obs" and ntracksAll==5) or (name!="data_obs" and sum_ntracks==5))) h7->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*ntpu_weight*nths_weight);
 	}
 	else{
-           if (aco<0.015 and ((name=="data_obs" and ntracksAll==0) or (name!="data_obs" and sum_ntracks==0))) h6SS->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
-           if (aco<0.015 and ((name=="data_obs" and ntracksAll==5) or (name!="data_obs" and sum_ntracks==5))) h7SS->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*npvs_weight*ntpu_weight*nths_weight);
+           if (aco<0.015 and ((name=="data_obs" and ntracksAll==0) or (name!="data_obs" and sum_ntracks==0))) h6SS->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*ntpu_weight*nths_weight);
+           if (aco<0.015 and ((name=="data_obs" and ntracksAll==5) or (name!="data_obs" and sum_ntracks==5))) h7SS->Fill((my_mu1+my_mu2).M(),aweight*weight*aco_weight*ntpu_weight*nths_weight);
         }
 
-        if ((name=="data_obs" and ntracksAll<10) or (name!="data_obs" and sum_ntracks<10)) fillTreeRescaling(tree2,my_mu1.Pt(),my_mu1.Eta(),my_mu1.Phi(),my_mu2.Pt(),my_mu2.Eta(),my_mu2.Phi(),int(is_OS),aco,sum_ntracks,ntracksAll,aweight,weight,npvs_weight,ntpu_weight,nths_weight,aco_weight);
+        if ((name=="data_obs" and ntracksAll<10) or (name!="data_obs" and sum_ntracks<10)) fillTreeRescaling(tree2,my_mu1.Pt(),my_mu1.Eta(),my_mu1.Phi(),my_mu2.Pt(),my_mu2.Eta(),my_mu2.Phi(),int(is_OS),aco,sum_ntracks,ntracksAll,aweight,weight,npvs_weight,ntpu_weight,nths_weight,aco_weight);*/
 
     } // end of loop over events
     TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();
 
+    h_dz->Write();
+
     h_acoplanarity->Write();
     h_genacoplanarity->Write();
+
+    h_ntracks_beforeAco->Write();
+    h_ntracks_afterAco->Write();
 
     tree2->Write();
     h_norm->Write();
@@ -980,31 +1331,227 @@ npvs_weight=1.0;//FIXME
     dir0->cd();
     h0->SetName(name.c_str());
     h0->Write();
-
     TDirectory *dir0SS =fout->mkdir("mumu0_SS");
     dir0SS->cd();
     h0SS->SetName(name.c_str());
     h0SS->Write();
 
+    TDirectory *dirdz =fout->mkdir("mumudz");
+    dirdz->cd();
+    h_dz->SetName(name.c_str());
+    h_dz->Write();
+    TDirectory *dirdzSS =fout->mkdir("mumudz_SS");
+    dirdzSS->cd();
+    h_dzSS->SetName(name.c_str());
+    h_dzSS->Write();
+
     TDirectory *dir1 =fout->mkdir("mumu1");
     dir1->cd();
     h1->SetName(name.c_str());
     h1->Write();
-
+    if (sample=="DY"){
+       h1_scale1->SetName("DY_scale1");
+       h1_scale1->Write();
+       h1_scale2->SetName("DY_scale2");
+       h1_scale2->Write();
+       h1_scale3->SetName("DY_scale3");
+       h1_scale3->Write();
+       h1_scale4->SetName("DY_scale4");
+       h1_scale4->Write();
+       h1_scale5->SetName("DY_scale5");
+       h1_scale5->Write();
+       h1_scale6->SetName("DY_scale6");
+       h1_scale6->Write();
+       h1_ps1->SetName("DY_ps1");
+       h1_ps1->Write();
+       h1_ps2->SetName("DY_ps2");
+       h1_ps2->Write();
+       h1_ps3->SetName("DY_ps3");
+       h1_ps3->Write();
+       h1_ps4->SetName("DY_ps4");
+       h1_ps4->Write();
+    }
     TDirectory *dir1SS =fout->mkdir("mumu1_SS");
     dir1SS->cd();
     h1SS->SetName(name.c_str());
     h1SS->Write();
 
+    TDirectory *dir1_pdfu =fout->mkdir("mumu1_pdfu");
+    dir1_pdfu->cd();
+    h1_pdfu->SetName(name.c_str());
+    h1_pdfu->Write();
+    TDirectory *dir1_pdfuSS =fout->mkdir("mumu1_pdfu_SS");
+    dir1_pdfuSS->cd();
+    h1_pdfuSS->SetName(name.c_str());
+    h1_pdfuSS->Write();
+
+    TDirectory *dir1_pdfd =fout->mkdir("mumu1_pdfd");
+    dir1_pdfd->cd();
+    h1_pdfd->SetName(name.c_str());
+    h1_pdfd->Write();
+    TDirectory *dir1_pdfdSS =fout->mkdir("mumu1_pdfd_SS");
+    dir1_pdfdSS->cd();
+    h1_pdfdSS->SetName(name.c_str());
+    h1_pdfdSS->Write();
+
+    TDirectory *dir1_scale1 =fout->mkdir("mumu1_scale1");
+    dir1_scale1->cd();
+    h1_scale1->SetName(name.c_str());
+    h1_scale1->Write();
+    TDirectory *dir1_scale1SS =fout->mkdir("mumu1_scale1_SS");
+    dir1_scale1SS->cd();
+    h1_scale1SS->SetName(name.c_str());
+    h1_scale1SS->Write();
+
+    TDirectory *dir1_scale2 =fout->mkdir("mumu1_scale2");
+    dir1_scale2->cd();
+    h1_scale2->SetName(name.c_str());
+    h1_scale2->Write();
+    TDirectory *dir1_scale2SS =fout->mkdir("mumu1_scale2_SS");
+    dir1_scale2SS->cd();
+    h1_scale2SS->SetName(name.c_str());
+    h1_scale2SS->Write();
+
+    TDirectory *dir1_scale3 =fout->mkdir("mumu1_scale3");
+    dir1_scale3->cd();
+    h1_scale3->SetName(name.c_str());
+    h1_scale3->Write();
+    TDirectory *dir1_scale3SS =fout->mkdir("mumu1_scale3_SS");
+    dir1_scale3SS->cd();
+    h1_scale3SS->SetName(name.c_str());
+    h1_scale3SS->Write();
+
+    TDirectory *dir1_scale4 =fout->mkdir("mumu1_scale4");
+    dir1_scale4->cd();
+    h1_scale4->SetName(name.c_str());
+    h1_scale4->Write();
+    TDirectory *dir1_scale4SS =fout->mkdir("mumu1_scale4_SS");
+    dir1_scale4SS->cd();
+    h1_scale4SS->SetName(name.c_str());
+    h1_scale4SS->Write();
+
+    TDirectory *dir1_scale5 =fout->mkdir("mumu1_scale5");
+    dir1_scale5->cd();
+    h1_scale5->SetName(name.c_str());
+    h1_scale5->Write();
+    TDirectory *dir1_scale5SS =fout->mkdir("mumu1_scale5_SS");
+    dir1_scale5SS->cd();
+    h1_scale5SS->SetName(name.c_str());
+    h1_scale5SS->Write();
+
+    TDirectory *dir1_scale6 =fout->mkdir("mumu1_scale6");
+    dir1_scale6->cd();
+    h1_scale6->SetName(name.c_str());
+    h1_scale6->Write();
+    TDirectory *dir1_scale6SS =fout->mkdir("mumu1_scale6_SS");
+    dir1_scale6SS->cd();
+    h1_scale6SS->SetName(name.c_str());
+    h1_scale6SS->Write();
+
+
     TDirectory *dir2 =fout->mkdir("mumu2");
     dir2->cd();
     h2->SetName(name.c_str());
     h2->Write();
-
+    if (sample=="DY"){
+       h2_scale1->SetName("DY_scale1");
+       h2_scale1->Write();
+       h2_scale2->SetName("DY_scale2");
+       h2_scale2->Write();
+       h2_scale3->SetName("DY_scale3");
+       h2_scale3->Write();
+       h2_scale4->SetName("DY_scale4");
+       h2_scale4->Write();
+       h2_scale5->SetName("DY_scale5");
+       h2_scale5->Write();
+       h2_scale6->SetName("DY_scale6");
+       h2_scale6->Write();
+       h2_ps1->SetName("DY_ps1");
+       h2_ps1->Write();
+       h2_ps2->SetName("DY_ps2");
+       h2_ps2->Write();
+       h2_ps3->SetName("DY_ps3");
+       h2_ps3->Write();
+       h2_ps4->SetName("DY_ps4");
+       h2_ps4->Write();
+    }
     TDirectory *dir2SS =fout->mkdir("mumu2_SS");
     dir2SS->cd();
     h2SS->SetName(name.c_str());
     h2SS->Write();
+
+    TDirectory *dir2_pdfu =fout->mkdir("mumu2_pdfu");
+    dir2_pdfu->cd();
+    h2_pdfu->SetName(name.c_str());
+    h2_pdfu->Write();
+    TDirectory *dir2_pdfuSS =fout->mkdir("mumu2_pdfu_SS");
+    dir2_pdfuSS->cd();
+    h2_pdfuSS->SetName(name.c_str());
+    h2_pdfuSS->Write();
+
+    TDirectory *dir2_pdfd =fout->mkdir("mumu2_pdfd");
+    dir2_pdfd->cd();
+    h2_pdfd->SetName(name.c_str());
+    h2_pdfd->Write();
+    TDirectory *dir2_pdfdSS =fout->mkdir("mumu2_pdfd_SS");
+    dir2_pdfdSS->cd();
+    h2_pdfdSS->SetName(name.c_str());
+    h2_pdfdSS->Write();
+
+    TDirectory *dir2_scale1 =fout->mkdir("mumu2_scale1");
+    dir2_scale1->cd();
+    h2_scale1->SetName(name.c_str());
+    h2_scale1->Write();
+    TDirectory *dir2_scale1SS =fout->mkdir("mumu2_scale1_SS");
+    dir2_scale1SS->cd();
+    h2_scale1SS->SetName(name.c_str());
+    h2_scale1SS->Write();
+
+    TDirectory *dir2_scale2 =fout->mkdir("mumu2_scale2");
+    dir2_scale2->cd();
+    h2_scale2->SetName(name.c_str());
+    h2_scale2->Write();
+    TDirectory *dir2_scale2SS =fout->mkdir("mumu2_scale2_SS");
+    dir2_scale2SS->cd();
+    h2_scale2SS->SetName(name.c_str());
+    h2_scale2SS->Write();
+
+    TDirectory *dir2_scale3 =fout->mkdir("mumu2_scale3");
+    dir2_scale3->cd();
+    h2_scale3->SetName(name.c_str());
+    h2_scale3->Write();
+    TDirectory *dir2_scale3SS =fout->mkdir("mumu2_scale3_SS");
+    dir2_scale3SS->cd();
+    h2_scale3SS->SetName(name.c_str());
+    h2_scale3SS->Write();
+
+    TDirectory *dir2_scale4 =fout->mkdir("mumu2_scale4");
+    dir2_scale4->cd();
+    h2_scale4->SetName(name.c_str());
+    h2_scale4->Write();
+    TDirectory *dir2_scale4SS =fout->mkdir("mumu2_scale4_SS");
+    dir2_scale4SS->cd();
+    h2_scale4SS->SetName(name.c_str());
+    h2_scale4SS->Write();
+
+    TDirectory *dir2_scale5 =fout->mkdir("mumu2_scale5");
+    dir2_scale5->cd();
+    h2_scale5->SetName(name.c_str());
+    h2_scale5->Write();
+    TDirectory *dir2_scale5SS =fout->mkdir("mumu2_scale5_SS");
+    dir2_scale5SS->cd();
+    h2_scale5SS->SetName(name.c_str());
+    h2_scale5SS->Write();
+
+    TDirectory *dir2_scale6 =fout->mkdir("mumu2_scale6");
+    dir2_scale6->cd();
+    h2_scale6->SetName(name.c_str());
+    h2_scale6->Write();
+    TDirectory *dir2_scale6SS =fout->mkdir("mumu2_scale6_SS");
+    dir2_scale6SS->cd();
+    h2_scale6SS->SetName(name.c_str());
+    h2_scale6SS->Write();
+
 
     TDirectory *dir3 =fout->mkdir("mumu3");
     dir3->cd();
@@ -1041,6 +1588,28 @@ npvs_weight=1.0;//FIXME
     dir6->cd();
     h1_2030_2030->SetName(name.c_str());
     h1_2030_2030->Write();
+    if (sample=="DY"){
+       h1_2030_2030_scale1->SetName("DY_scale1");
+       h1_2030_2030_scale1->Write();
+       h1_2030_2030_scale2->SetName("DY_scale2");
+       h1_2030_2030_scale2->Write();
+       h1_2030_2030_scale3->SetName("DY_scale3");
+       h1_2030_2030_scale3->Write();
+       h1_2030_2030_scale4->SetName("DY_scale4");
+       h1_2030_2030_scale4->Write();
+       h1_2030_2030_scale5->SetName("DY_scale5");
+       h1_2030_2030_scale5->Write();
+       h1_2030_2030_scale6->SetName("DY_scale6");
+       h1_2030_2030_scale6->Write();
+       h1_2030_2030_ps1->SetName("DY_ps1");
+       h1_2030_2030_ps1->Write();
+       h1_2030_2030_ps2->SetName("DY_ps2");
+       h1_2030_2030_ps2->Write();
+       h1_2030_2030_ps3->SetName("DY_ps3");
+       h1_2030_2030_ps3->Write();
+       h1_2030_2030_ps4->SetName("DY_ps4");
+       h1_2030_2030_ps4->Write();
+    }
     TDirectory *dir6SS =fout->mkdir("mumu6_SS");
     dir6SS->cd();
     h1_2030_2030SS->SetName(name.c_str());
@@ -1050,6 +1619,28 @@ npvs_weight=1.0;//FIXME
     dir7->cd();
     h1_3040_2030->SetName(name.c_str());
     h1_3040_2030->Write();
+    if (sample=="DY"){
+       h1_3040_2030_scale1->SetName("DY_scale1");
+       h1_3040_2030_scale1->Write();
+       h1_3040_2030_scale2->SetName("DY_scale2");
+       h1_3040_2030_scale2->Write();
+       h1_3040_2030_scale3->SetName("DY_scale3");
+       h1_3040_2030_scale3->Write();
+       h1_3040_2030_scale4->SetName("DY_scale4");
+       h1_3040_2030_scale4->Write();
+       h1_3040_2030_scale5->SetName("DY_scale5");
+       h1_3040_2030_scale5->Write();
+       h1_3040_2030_scale6->SetName("DY_scale6");
+       h1_3040_2030_scale6->Write();
+       h1_3040_2030_ps1->SetName("DY_ps1");
+       h1_3040_2030_ps1->Write();
+       h1_3040_2030_ps2->SetName("DY_ps2");
+       h1_3040_2030_ps2->Write();
+       h1_3040_2030_ps3->SetName("DY_ps3");
+       h1_3040_2030_ps3->Write();
+       h1_3040_2030_ps4->SetName("DY_ps4");
+       h1_3040_2030_ps4->Write();
+    }
     TDirectory *dir7SS =fout->mkdir("mumu7_SS");
     dir7SS->cd();
     h1_3040_2030SS->SetName(name.c_str());
@@ -1059,6 +1650,28 @@ npvs_weight=1.0;//FIXME
     dir8->cd();
     h1_4050_2030->SetName(name.c_str());
     h1_4050_2030->Write();
+    if (sample=="DY"){
+       h1_4050_2030_scale1->SetName("DY_scale1");
+       h1_4050_2030_scale1->Write();
+       h1_4050_2030_scale2->SetName("DY_scale2");
+       h1_4050_2030_scale2->Write();
+       h1_4050_2030_scale3->SetName("DY_scale3");
+       h1_4050_2030_scale3->Write();
+       h1_4050_2030_scale4->SetName("DY_scale4");
+       h1_4050_2030_scale4->Write();
+       h1_4050_2030_scale5->SetName("DY_scale5");
+       h1_4050_2030_scale5->Write();
+       h1_4050_2030_scale6->SetName("DY_scale6");
+       h1_4050_2030_scale6->Write();
+       h1_4050_2030_ps1->SetName("DY_ps1");
+       h1_4050_2030_ps1->Write();
+       h1_4050_2030_ps2->SetName("DY_ps2");
+       h1_4050_2030_ps2->Write();
+       h1_4050_2030_ps3->SetName("DY_ps3");
+       h1_4050_2030_ps3->Write();
+       h1_4050_2030_ps4->SetName("DY_ps4");
+       h1_4050_2030_ps4->Write();
+    }
     TDirectory *dir8SS =fout->mkdir("mumu8_SS");
     dir8SS->cd();
     h1_4050_2030SS->SetName(name.c_str());
@@ -1068,6 +1681,28 @@ npvs_weight=1.0;//FIXME
     dir9->cd();
     h1_gt50_2030->SetName(name.c_str());
     h1_gt50_2030->Write();
+    if (sample=="DY"){
+       h1_gt50_2030_scale1->SetName("DY_scale1");
+       h1_gt50_2030_scale1->Write();
+       h1_gt50_2030_scale2->SetName("DY_scale2");
+       h1_gt50_2030_scale2->Write();
+       h1_gt50_2030_scale3->SetName("DY_scale3");
+       h1_gt50_2030_scale3->Write();
+       h1_gt50_2030_scale4->SetName("DY_scale4");
+       h1_gt50_2030_scale4->Write();
+       h1_gt50_2030_scale5->SetName("DY_scale5");
+       h1_gt50_2030_scale5->Write();
+       h1_gt50_2030_scale6->SetName("DY_scale6");
+       h1_gt50_2030_scale6->Write();
+       h1_gt50_2030_ps1->SetName("DY_ps1");
+       h1_gt50_2030_ps1->Write();
+       h1_gt50_2030_ps2->SetName("DY_ps2");
+       h1_gt50_2030_ps2->Write();
+       h1_gt50_2030_ps3->SetName("DY_ps3");
+       h1_gt50_2030_ps3->Write();
+       h1_gt50_2030_ps4->SetName("DY_ps4");
+       h1_gt50_2030_ps4->Write();
+    }
     TDirectory *dir9SS =fout->mkdir("mumu9_SS");
     dir9SS->cd();
     h1_gt50_2030SS->SetName(name.c_str());
@@ -1077,6 +1712,28 @@ npvs_weight=1.0;//FIXME
     dir10->cd();
     h1_3040_3040->SetName(name.c_str());
     h1_3040_3040->Write();
+    if (sample=="DY"){
+       h1_3040_3040_scale1->SetName("DY_scale1");
+       h1_3040_3040_scale1->Write();
+       h1_3040_3040_scale2->SetName("DY_scale2");
+       h1_3040_3040_scale2->Write();
+       h1_3040_3040_scale3->SetName("DY_scale3");
+       h1_3040_3040_scale3->Write();
+       h1_3040_3040_scale4->SetName("DY_scale4");
+       h1_3040_3040_scale4->Write();
+       h1_3040_3040_scale5->SetName("DY_scale5");
+       h1_3040_3040_scale5->Write();
+       h1_3040_3040_scale6->SetName("DY_scale6");
+       h1_3040_3040_scale6->Write();
+       h1_3040_3040_ps1->SetName("DY_ps1");
+       h1_3040_3040_ps1->Write();
+       h1_3040_3040_ps2->SetName("DY_ps2");
+       h1_3040_3040_ps2->Write();
+       h1_3040_3040_ps3->SetName("DY_ps3");
+       h1_3040_3040_ps3->Write();
+       h1_3040_3040_ps4->SetName("DY_ps4");
+       h1_3040_3040_ps4->Write();
+    }
     TDirectory *dir10SS =fout->mkdir("mumu10_SS");
     dir10SS->cd();
     h1_3040_3040SS->SetName(name.c_str());
@@ -1086,6 +1743,28 @@ npvs_weight=1.0;//FIXME
     dir11->cd();
     h1_4050_3040->SetName(name.c_str());
     h1_4050_3040->Write();
+    if (sample=="DY"){
+       h1_4050_3040_scale1->SetName("DY_scale1");
+       h1_4050_3040_scale1->Write();
+       h1_4050_3040_scale2->SetName("DY_scale2");
+       h1_4050_3040_scale2->Write();
+       h1_4050_3040_scale3->SetName("DY_scale3");
+       h1_4050_3040_scale3->Write();
+       h1_4050_3040_scale4->SetName("DY_scale4");
+       h1_4050_3040_scale4->Write();
+       h1_4050_3040_scale5->SetName("DY_scale5");
+       h1_4050_3040_scale5->Write();
+       h1_4050_3040_scale6->SetName("DY_scale6");
+       h1_4050_3040_scale6->Write();
+       h1_4050_3040_ps1->SetName("DY_ps1");
+       h1_4050_3040_ps1->Write();
+       h1_4050_3040_ps2->SetName("DY_ps2");
+       h1_4050_3040_ps2->Write();
+       h1_4050_3040_ps3->SetName("DY_ps3");
+       h1_4050_3040_ps3->Write();
+       h1_4050_3040_ps4->SetName("DY_ps4");
+       h1_4050_3040_ps4->Write();
+    }
     TDirectory *dir11SS =fout->mkdir("mumu11_SS");
     dir11SS->cd();
     h1_4050_3040SS->SetName(name.c_str());
@@ -1095,6 +1774,28 @@ npvs_weight=1.0;//FIXME
     dir12->cd();
     h1_gt50_3040->SetName(name.c_str());
     h1_gt50_3040->Write();
+    if (sample=="DY"){
+       h1_gt50_3040_scale1->SetName("DY_scale1");
+       h1_gt50_3040_scale1->Write();
+       h1_gt50_3040_scale2->SetName("DY_scale2");
+       h1_gt50_3040_scale2->Write();
+       h1_gt50_3040_scale3->SetName("DY_scale3");
+       h1_gt50_3040_scale3->Write();
+       h1_gt50_3040_scale4->SetName("DY_scale4");
+       h1_gt50_3040_scale4->Write();
+       h1_gt50_3040_scale5->SetName("DY_scale5");
+       h1_gt50_3040_scale5->Write();
+       h1_gt50_3040_scale6->SetName("DY_scale6");
+       h1_gt50_3040_scale6->Write();
+       h1_gt50_3040_ps1->SetName("DY_ps1");
+       h1_gt50_3040_ps1->Write();
+       h1_gt50_3040_ps2->SetName("DY_ps2");
+       h1_gt50_3040_ps2->Write();
+       h1_gt50_3040_ps3->SetName("DY_ps3");
+       h1_gt50_3040_ps3->Write();
+       h1_gt50_3040_ps4->SetName("DY_ps4");
+       h1_gt50_3040_ps4->Write();
+    }
     TDirectory *dir12SS =fout->mkdir("mumu12_SS");
     dir12SS->cd();
     h1_gt50_3040SS->SetName(name.c_str());
@@ -1104,6 +1805,28 @@ npvs_weight=1.0;//FIXME
     dir13->cd();
     h1_4050_4050->SetName(name.c_str());
     h1_4050_4050->Write();
+    if (sample=="DY"){
+       h1_4050_4050_scale1->SetName("DY_scale1");
+       h1_4050_4050_scale1->Write();
+       h1_4050_4050_scale2->SetName("DY_scale2");
+       h1_4050_4050_scale2->Write();
+       h1_4050_4050_scale3->SetName("DY_scale3");
+       h1_4050_4050_scale3->Write();
+       h1_4050_4050_scale4->SetName("DY_scale4");
+       h1_4050_4050_scale4->Write();
+       h1_4050_4050_scale5->SetName("DY_scale5");
+       h1_4050_4050_scale5->Write();
+       h1_4050_4050_scale6->SetName("DY_scale6");
+       h1_4050_4050_scale6->Write();
+       h1_4050_4050_ps1->SetName("DY_ps1");
+       h1_4050_4050_ps1->Write();
+       h1_4050_4050_ps2->SetName("DY_ps2");
+       h1_4050_4050_ps2->Write();
+       h1_4050_4050_ps3->SetName("DY_ps3");
+       h1_4050_4050_ps3->Write();
+       h1_4050_4050_ps4->SetName("DY_ps4");
+       h1_4050_4050_ps4->Write();
+    }
     TDirectory *dir13SS =fout->mkdir("mumu13_SS");
     dir13SS->cd();
     h1_4050_4050SS->SetName(name.c_str());
@@ -1113,6 +1836,28 @@ npvs_weight=1.0;//FIXME
     dir14->cd();
     h1_gt50_4050->SetName(name.c_str());
     h1_gt50_4050->Write();
+    if (sample=="DY"){
+       h1_gt50_4050_scale1->SetName("DY_scale1");
+       h1_gt50_4050_scale1->Write();
+       h1_gt50_4050_scale2->SetName("DY_scale2");
+       h1_gt50_4050_scale2->Write();
+       h1_gt50_4050_scale3->SetName("DY_scale3");
+       h1_gt50_4050_scale3->Write();
+       h1_gt50_4050_scale4->SetName("DY_scale4");
+       h1_gt50_4050_scale4->Write();
+       h1_gt50_4050_scale5->SetName("DY_scale5");
+       h1_gt50_4050_scale5->Write();
+       h1_gt50_4050_scale6->SetName("DY_scale6");
+       h1_gt50_4050_scale6->Write();
+       h1_gt50_4050_ps1->SetName("DY_ps1");
+       h1_gt50_4050_ps1->Write();
+       h1_gt50_4050_ps2->SetName("DY_ps2");
+       h1_gt50_4050_ps2->Write();
+       h1_gt50_4050_ps3->SetName("DY_ps3");
+       h1_gt50_4050_ps3->Write();
+       h1_gt50_4050_ps4->SetName("DY_ps4");
+       h1_gt50_4050_ps4->Write();
+    }
     TDirectory *dir14SS =fout->mkdir("mumu14_SS");
     dir14SS->cd();
     h1_gt50_4050SS->SetName(name.c_str());
@@ -1122,6 +1867,28 @@ npvs_weight=1.0;//FIXME
     dir15->cd();
     h1_gt50_gt50->SetName(name.c_str());
     h1_gt50_gt50->Write();
+    if (sample=="DY"){
+       h1_gt50_gt50_scale1->SetName("DY_scale1");
+       h1_gt50_gt50_scale1->Write();
+       h1_gt50_gt50_scale2->SetName("DY_scale2");
+       h1_gt50_gt50_scale2->Write();
+       h1_gt50_gt50_scale3->SetName("DY_scale3");
+       h1_gt50_gt50_scale3->Write();
+       h1_gt50_gt50_scale4->SetName("DY_scale4");
+       h1_gt50_gt50_scale4->Write();
+       h1_gt50_gt50_scale5->SetName("DY_scale5");
+       h1_gt50_gt50_scale5->Write();
+       h1_gt50_gt50_scale6->SetName("DY_scale6");
+       h1_gt50_gt50_scale6->Write();
+       h1_gt50_gt50_ps1->SetName("DY_ps1");
+       h1_gt50_gt50_ps1->Write();
+       h1_gt50_gt50_ps2->SetName("DY_ps2");
+       h1_gt50_gt50_ps2->Write();
+       h1_gt50_gt50_ps3->SetName("DY_ps3");
+       h1_gt50_gt50_ps3->Write();
+       h1_gt50_gt50_ps4->SetName("DY_ps4");
+       h1_gt50_gt50_ps4->Write();
+    }
     TDirectory *dir15SS =fout->mkdir("mumu15_SS");
     dir15SS->cd();
     h1_gt50_gt50SS->SetName(name.c_str());

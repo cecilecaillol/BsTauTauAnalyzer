@@ -11,6 +11,7 @@
 ./Add_track_friend_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/ST_tW_antitop.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_ST_tW_antitop.root ST_tW_antitop 
 ./Add_track_friend_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/ST_tW_top.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_ST_tW_top.root ST_tW_top 
 ./Add_track_friend_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/WW2L2Nu.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_WW2L2Nu.root WW2L2Nu 
+./Add_track_friend_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/VV2L2Nu.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_VV2L2Nu.root VV2L2Nu
 ./Add_track_friend_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/WZ2Q2L.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_WZ2Q2L.root WZ2Q2L 
 ./Add_track_friend_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/WZ3LNu.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_WZ3LNu.root WZ3LNu 
 ./Add_track_friend_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/ZZ2L2Nu.root /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/friend_ZZ2L2Nu.root ZZ2L2Nu 

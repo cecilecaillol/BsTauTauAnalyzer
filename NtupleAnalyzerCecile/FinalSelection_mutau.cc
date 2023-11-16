@@ -26,6 +26,7 @@
 #include "TTree.h"
 #include "tr_Tree.h"
 #include "myHelper.h"
+#include "dz_Tree.h"
 
 using namespace std;
 
@@ -89,7 +90,7 @@ int main(int argc, char** argv) {
     else if (sample=="ZZ2L2Q"){ xs=3.22; weight=luminosity*xs/ngen;}
     else if (sample=="ZZ2Q2L"){ xs=3.22; weight=luminosity*xs/ngen;}
     else if (sample=="WZ3LNu"){ xs=4.42965; weight=luminosity*xs/ngen;}
-    else if (sample=="VV2L2Nu"){ xs=11.95; weight=luminosity*xs/ngen;}
+    else if (sample=="VV2L2Nu"){ xs=14.26; weight=luminosity*xs/ngen;}
     else if (sample=="WW2L2Nu"){ xs=8.95; weight=luminosity*xs/ngen;}//FIXME
     else if (sample=="WZ2L2Q"){ xs=5.595; weight=luminosity*xs/ngen;}
     else if (sample=="WZ2Q2L"){ xs=5.595; weight=luminosity*xs/ngen;}
@@ -118,6 +119,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
       else if (sample=="ST_tW_top") weight*=0.273;
       else if (sample=="ST_tW_antitop") weight*=0.272;
       else if (sample=="WW2L2Nu") weight*=0.397;
+      else if (sample=="VV2L2Nu") weight*=0.392;
       else if (sample=="WW2L2Q") weight*=0.341;
       else if (sample=="WZ3LNu") weight*=0.341;
       else if (sample=="ZZ4L") weight*=0.304;
@@ -167,8 +169,6 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
     arbre->SetBranchAddress("LepCand_vsmu", &LepCand_vsmu);
     arbre->SetBranchAddress("LepCand_vsjet", &LepCand_vsjet);
     arbre->SetBranchAddress("LepCand_tauidMsf", &LepCand_tauidMsf);
-    arbre->SetBranchAddress("LepCand_tauidMsf_up", &LepCand_tauidMsf_up);
-    arbre->SetBranchAddress("LepCand_tauidMsf_down", &LepCand_tauidMsf_down);
     arbre->SetBranchAddress("LepCand_taues", &LepCand_taues);
     arbre->SetBranchAddress("LepCand_fes", &LepCand_fes);
     arbre->SetBranchAddress("LepCand_antimusf", &LepCand_antimusf);
@@ -211,7 +211,6 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
     arbre->SetBranchAddress("puWeightDown", &puWeightDown);
     arbre->SetBranchAddress("puWeightUp", &puWeightUp);
     arbre->SetBranchAddress("genWeight", &genWeight);
-    arbre->SetBranchAddress("nJets", &nJets);
 
     arbre->SetBranchAddress("MET_pt", &MET_pt);
     arbre->SetBranchAddress("MET_phi", &MET_phi);
@@ -471,6 +470,8 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    TH1F* h_vtxresolution_simpleditau = new TH1F("h_vtxresolution_simpleditau","h_vtxresolution_simpleditau",200,-1,1); h_vtxresolution_simpleditau->Sumw2();
    TH1F* h_ntracks = new TH1F("h_ntracks","h_ntracks",30,0,30); h_ntracks->Sumw2();
 
+   TH1F* h_dzvtx = new TH1F("h_dzvtx","h_dzvtx",20,0,0.2); h_dzvtx->Sumw2();
+
    Int_t nentries_wtn = (Int_t) arbre->GetEntries();
 
    /* arbre->SetCacheLearnEntries(1);
@@ -523,11 +524,9 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    auto b4_5=arbre->GetBranch("LepCand_antimusf");
    auto b4_6=arbre->GetBranch("LepCand_tautriggersf");
    auto b4_7=arbre->GetBranch("PV_npvs");
-   auto b4_8=arbre->GetBranch("LepCand_tauidMsf_up");
    auto b4_9=arbre->GetBranch("LepCand_antielesf_up");
    auto b4_10=arbre->GetBranch("LepCand_antimusf_up");
    auto b4_11=arbre->GetBranch("LepCand_tautriggersf_up");
-   auto b4_12=arbre->GetBranch("LepCand_tauidMsf_down");
    auto b4_13=arbre->GetBranch("LepCand_antielesf_down");
    auto b4_14=arbre->GetBranch("LepCand_antimusf_down");
    auto b4_15=arbre->GetBranch("LepCand_tautriggersf_down");
@@ -620,6 +619,20 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    TH2F* h_muonIDSF= (TH2F*) f_muonID->Get("NUM_MediumID_DEN_TrackerMuons_abseta_pt");
    TH2F* h_muonTrgSF= (TH2F*) f_muonTrg->Get("NUM_IsoMu24_DEN_CutBasedIdMedium_and_PFIsoMedium_abseta_pt");
 
+    TTree * tree2 = new TTree("dz_tree", "dz_tree");
+    tree2->SetDirectory(0);
+    tree2->Branch("mupt_", &mupt_, "mupt_/F");
+    tree2->Branch("taupt_", &taupt_, "taupt_/F");
+    tree2->Branch("mueta_", &mueta_, "mueta_/F");
+    tree2->Branch("taueta_", &taueta_, "taueta_/F");
+    tree2->Branch("muphi_", &muphi_, "muphi_/F");
+    tree2->Branch("tauphi_", &tauphi_, "tauphi_/F");
+    tree2->Branch("taudm_", &taudm_, "taudm_/F");
+    tree2->Branch("GenVtx_z_", &GenVtx_z_, "GenVtx_z_/F");
+    tree2->Branch("recoDitau_z_", &recoDitau_z_, "recoDitau_z_/F");
+    tree2->Branch("mudz_", &mudz_, "mudz_/F");
+    tree2->Branch("taudz_", &taudz_, "taudz_/F");
+    tree2->Branch("weight_", &weight_, "weight_/F");
 
    for (Int_t i = 0; i < nentries_wtn; i++) {
 	arbre->LoadTree(i);
@@ -668,7 +681,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 	b2_1->GetEntry(i); 
 	if (name=="data_obs") {b2_6->GetEntry(i);}
 	if (name=="data_obs" and run<317509) {b2_4->GetEntry(i); b2_5->GetEntry(i);}
-	if (name!="data_obs" or run>=317509) {b2_2->GetEntry(i); b2_3->GetEntry(i);}
+	//if (name!="data_obs" or run>=317509) {b2_2->GetEntry(i); b2_3->GetEntry(i);}//FIXME
 
 	bool is_mutrg=false;
 	bool is_mutautrg=false;
@@ -693,7 +706,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
 	// Block weights
 	if (name!="data_obs") {b4_1->GetEntry(i); b4_2->GetEntry(i); b4_3->GetEntry(i); b4_4->GetEntry(i); b4_5->GetEntry(i); b4_6->GetEntry(i); b4_16->GetEntry(i); b4_17->GetEntry(i); b4_18->GetEntry(i);}
-        if (name!="data_obs" and nbhist>1){ b4_8->GetEntry(i); b4_9->GetEntry(i); b4_10->GetEntry(i); b4_11->GetEntry(i); b4_12->GetEntry(i); b4_13->GetEntry(i); b4_14->GetEntry(i); b4_15->GetEntry(i);}
+        if (name!="data_obs" and nbhist>1){ b4_9->GetEntry(i); b4_10->GetEntry(i); b4_11->GetEntry(i); b4_13->GetEntry(i); b4_14->GetEntry(i); b4_15->GetEntry(i);}
         if (name!="data_obs"){ b4_19->GetEntry(i); b4_20->GetEntry(i); b4_21->GetEntry(i); b4_22->GetEntry(i); b4_23->GetEntry(i);}
 
 	b4_7->GetEntry(i);
@@ -777,7 +790,8 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 	// Block vertex
         b6_1->GetEntry(i); b6_3->GetEntry(i);
         if (name!="data_obs") b6_2->GetEntry(i);
-	if (fabs(LepCand_dz[tau_index]-LepCand_dz[mu_index])>0.1) continue;
+	float mutaudz=fabs(LepCand_dz[tau_index]-LepCand_dz[mu_index]);
+	//if (mutaudz>0.1) continue; //FIXME
         float simple_ditau_z=0.5*(2*PV_z+LepCand_dz[tau_index]+LepCand_dz[mu_index]);
 
 	b8_1->GetEntry(i); b8_2->GetEntry(i); b8_3->GetEntry(i); b8_4->GetEntry(i);
@@ -807,7 +821,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 	   my_met=save_met;
 	   float weight2=1.0;
 
-	   if (name!="data_obs"){
+	   /*if (name!="data_obs"){
 	      if (k==1 and my_tau.Pt()>=30 and my_tau.Pt()<35 and LepCand_gen[tau_index]==5){ weight2 = LepCand_tauidMsf_down[tau_index] / LepCand_tauidMsf[tau_index];}
               else if (k==2 and my_tau.Pt()>=30 and my_tau.Pt()<35 and LepCand_gen[tau_index]==5){ weight2 = LepCand_tauidMsf_up[tau_index] / LepCand_tauidMsf[tau_index];}
               else if (k==3 and my_tau.Pt()>=35 and my_tau.Pt()<40 and LepCand_gen[tau_index]==5){ weight2 = LepCand_tauidMsf_down[tau_index] / LepCand_tauidMsf[tau_index];}
@@ -834,7 +848,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
               else if (k==24 and (is_mutautrg or is_mutauHPStrg)){ weight2=0.99*LepCand_tautriggersf_up[tau_index]/LepCand_tautriggersf[tau_index];}
               else if (k==25 and is_mutrg){ weight2=0.98;}
               else if (k==26 and is_mutrg){ weight2=1.02;}
-	   }
+	   }*/
 
 	   float mvis=(my_mu+my_tau).M();
 	   if (mvis<40) continue;
@@ -938,6 +952,8 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 	
 	   if (is_OS and is_isolated and is_real){
 	     float w_iso=weight*aweight*weight2*tauidSF;
+             if (k==0) h_dzvtx->Fill(fabs(GenVtx_z-simple_ditau_z),w_iso);
+	     if (k==0) fillTreeDz(tree2,my_mu.Pt(),my_tau.Pt(),my_mu.Eta(),my_tau.Eta(),my_mu.Phi(),my_tau.Phi(),LepCand_DecayMode[tau_index],GenVtx_z,simple_ditau_z,LepCand_dz[mu_index],LepCand_dz[tau_index],w_iso);
 	     if (is_cat0) h0[k]->Fill(var0,w_iso);
              if (is_cat1) h1[k]->Fill(var1,w_iso);
              if (is_cat2) h2[k]->Fill(var2,w_iso);
@@ -1081,6 +1097,9 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
     } // end of loop over events
     TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();
+
+    tree2->Write();
+    h_dzvtx->Write();
 
     h_mvis_nt0->Write();
     h_mvis_nt1->Write();

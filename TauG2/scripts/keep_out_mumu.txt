@@ -20,12 +20,15 @@ keep LHE_Vpt*
 keep LHE_Njets*
 keep *LHEScale*
 keep *LHEPdf*
+keep nPSWeight
+keep PSWeight
 
 keep Pileup_nTrueInt
 keep beamspot*
 keep nChargedPFCandidates
 keep ChargedPFCandidates_dz
 keep ChargedPFCandidates_pt
+keep ChargedPFCandidates_eta
 keep ChargedPFCandidates_is*
 keep nLostTracks
 keep LostTracks_dz

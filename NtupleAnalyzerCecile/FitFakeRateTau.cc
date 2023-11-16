@@ -359,6 +359,8 @@ void FitFakeRateTau(int year) {
     TF1* m108 = M_FR(8, "Exp3Par", datafile, "h_tauFR_W_dm11_M","h_tauFR_W_dm11_VVVL", Fit_Value_tau, fMin, fMax, year, 1, err);
     TF1* m109 = M_FR(9, "Flat", datafile, "h_tauFR_QCD_xtrg_M","h_tauFR_QCD_xtrg_VVVL", Fit_Value_tau, 35, fMax, year, 1, err);
     TF1* m110 = M_FR(10, "Flat", datafile, "h_tauFR_W_xtrg_M","h_tauFR_W_xtrg_VVVL", Fit_Value_tau, 35, fMax, year, 1, err);
+    TF1* m0 = M_FR(11111, "Flat", datafile, "h_tauFRpt_QCD_xtrg_M","h_tauFRpt_QCD_xtrg_VVVL", Fit_Value_tau, 35, fMax, year, 1, err);
+    TF1* m1 = M_FR(11112, "Flat", datafile, "h_tauFRpt_QCD_etrg_M","h_tauFRpt_QCD_etrg_VVVL", Fit_Value_tau, 35, fMax, year, 1, err);
 
     TF1* m111 = M_FR(11, "Exp3Par", datafile, "h_tauFRnt_QCD_dm0_M","h_tauFRnt_QCD_dm0_VVVL", Fit_Value_tau, 25, 100, year, 1, err);
     TF1* m112 = M_FR(12, "Exp3Par", datafile, "h_tauFRnt_QCD_dm1_M","h_tauFRnt_QCD_dm1_VVVL", Fit_Value_tau, 25, 100, year, 1, err);

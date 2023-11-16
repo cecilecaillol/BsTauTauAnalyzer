@@ -26,7 +26,7 @@ if __name__ == "__main__":
     fout=ROOT.TFile("output_etau_"+options.year+"/Fake.root","recreate")
 
     ncat=9
-    if is_control==0: ncat=2
+    if is_control==0: ncat=3
 
     for j in range(0,ncat):
 
@@ -37,13 +37,20 @@ if __name__ == "__main__":
           postfix=postfixName[k]
           h0=fData.Get("et_"+str(j)+"_anti/data_obs"+postfix).Clone()
 	  hinitial=fData.Get("et_"+str(j)+"_anti/data_obs"+postfix).Clone()
+	  for i in range(1,h0.GetSize()-1):
+	     if h0.GetBinContent(i)<0.01:
+		h0.SetBinError(i,1.8*0.15*2) # error on 0 count times average FR
+             elif h0.GetBinContent(i)==h0.GetBinError(i): # 1 count
+                h0.SetBinError(i,2.3*h0.GetBinContent(i)) # error on 0 count times average FR
+             elif h0.GetBinContent(i)<0.8 and h0.GetBinContent(i)>h0.GetBinError(i): # 2 count
+                h0.SetBinError(i,1.35*h0.GetBinContent(i))
           h0.Add(fVV.Get("et_"+str(j)+"_anti/VV"+postfix),-1)
 	  print("et_"+str(j)+"_anti/ZLL"+postfix)
 	  print(fDY.Get("et_"+str(j)+"_anti/ZLL"+postfix).Integral())
           h0.Add(fDY.Get("et_"+str(j)+"_anti/ZLL"+postfix),-1)
           h0.Add(fDY.Get("et_"+str(j)+"_anti/ZTT"+postfix),-1)
           h0.Add(fTop.Get("et_"+str(j)+"_anti/top"+postfix),-1)
-          for i in range(0,h0.GetSize()-2):
+          for i in range(1,h0.GetSize()-1):
               if h0.GetBinContent(i)<0:
 	          #h0.SetBinError(i,h0.GetBinContent(i)+h0.GetBinError(i))
                   h0.SetBinContent(i,0)

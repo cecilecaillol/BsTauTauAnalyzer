@@ -396,6 +396,7 @@ class Analysis(Module):
         event.V_genpt=-1.0;
 
 
+        index=0
         if self.isMC:
             for genp in event.selectedGenParticles:
                 if abs(genp.pdgId)==15 and (abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==23 or abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==22):
@@ -409,10 +410,31 @@ class Analysis(Module):
                 if (abs(genp.pdgId)==24 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==22): # for GGWWW
                     event.genCand.append(genp)
 
+        if len(event.genCand)==0: # get back the taus that dont have a Z mother
+           if self.isMC:
+              for genp in event.selectedGenParticles:
+                 if abs(genp.pdgId)==15 and genp.genPartIdxMother==0:
+                     event.genCand.append(genp)
+
+        if len(event.genCand)==0: # get the two vector bosons in VVTo2L2Nu
+           if self.isMC:
+              for genp in event.selectedGenParticles:
+                 if (abs(genp.pdgId)==23 or abs(genp.pdgId)==24) and genp.genPartIdxMother==0:
+                     event.genCand.append(genp)
+
+	#if len(event.genCand)==0:
+        #    for genp in event.selectedGenParticles:
+        #		print index,genp.pdgId,event.selectedGenParticles[genp.genPartIdxMother].pdgId,genp.genPartIdxMother
+        #	index=index+1
+	#print "end of event"
+
         if self.isMC:
             for genp in event.selectedGenParticles:
               if (abs(genp.pdgId)==23 or abs(genp.pdgId)==24) and event.V_genpt<0:
                 event.V_genpt=genp.pt
+
+	#print len(event.genCand)
+        #if (len(event.genCand)==2): print event.genCand[0].pt,event.genCand[1].pt
 
         ######################################################
         ##### HIGH LEVEL VARIABLES FOR SELECTED EVENTS   #####
@@ -557,7 +579,9 @@ class Analysis(Module):
                    top4.SetPtEtaPhiM(to.pt,to.eta,to.phi,0)
                    if self.channel=="mutau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&256)): is_matched=1
                    elif self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&128)): is_matched=1
-                   elif self.channel=="tautau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&64)): is_matched=1
+                   #elif self.channel=="tautau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&64)): is_matched=1
+                   elif self.year=="2017" and self.channel=="tautau" and lep.p4().DeltaR(top4)<0.4 and (to.id == 15 and (bool(to.filterBits&64)) and ((bool(to.filterBits&4) and bool(to.filterBits&8)!=0 ) or (to.pt > 40 and (bool(to.filterBits&2) and bool(to.filterBits&8) ) or bool(to.filterBits&4) ) )): is_matched=1
+                   elif (self.year=="2016" or self.year=="2016pre" or self.year=="2016post") and self.channel=="tautau" and lep.p4().DeltaR(top4)<0.4 and (to.id==15 and (bool(to.filterBits&2)) and bool(to.filterBits&256)): is_matched=1
                 lep_trgmatch.append(is_matched)
                 
                 if self.isMC and lep.genPartFlav==5:
@@ -839,7 +863,8 @@ class Analysis(Module):
         self.out.fillBranch("Track_isMatchedToHS",     track_isMatchedToHS)
         self.out.fillBranch("Track_charge",            track_charge)
 
-        if self.isMC and len(event.genCand)>0: 
+        #if self.isMC and len(event.genCand)>0: 
+        if self.isMC:
             self.out.fillBranch("nGenCand",           len(event.genCand))
             self.out.fillBranch("GenCand_id" ,        gen_id)
             self.out.fillBranch("GenCand_pt" ,        gen_pt)

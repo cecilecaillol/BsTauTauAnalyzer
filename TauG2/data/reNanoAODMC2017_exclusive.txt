@@ -1,3 +1,3 @@
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL17_GGToTauTau_Ctb20/RunIISummer20UL17_NanoAODv9/230619_120627/0000/
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL17_GGToMuMu/RunIISummer20UL17_NanoAODv9/230619_120555/0000/
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL17_GGToWW/RunIISummer20UL17_NanoAODv9/230619_120704/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToTauTau_Ctb20_RunIISummer20UL17/RunIISummer20UL17_NanoAODv9_july/230724_123010/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToMuMu_RunIISummer20UL17/RunIISummer20UL17_NanoAODv9_july/230724_122907/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToWW_RunIISummer20UL17/RunIISummer20UL17_NanoAODv9_july/230724_122937/0000/

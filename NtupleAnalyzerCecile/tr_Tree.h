@@ -1,3 +1,7 @@
+   Float_t         LHEPdfWeight[103];
+   Float_t         LHEScaleWeight[9];
+   Float_t         PSWeight[4];
+
    Float_t         TauG2Weights_ceBRe33_m40p0;
    Float_t         TauG2Weights_ceBRe33_m39p2;
    Float_t         TauG2Weights_ceBRe33_m38p4;

@@ -21,19 +21,21 @@ hadd -f output_etau_2016post/W.root output_etau_2016post/Wincl.root output_etau_
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/WZ2Q2L.root output_etau_2016post/WZ2Q2L.root WZ2Q2L VV
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/WZ3LNu.root output_etau_2016post/WZ3LNu.root WZ3LNu VV
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ZZ2L2Nu.root output_etau_2016post/ZZ2L2Nu.root ZZ2L2Nu VV
+#./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/VV2L2Nu.root output_etau_2016post/VV2L2Nu.root VV2L2Nu VV
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/ZZ4L.root output_etau_2016post/ZZ4L.root ZZ4L VV
-hadd -f output_etau_2016post/VV.root output_etau_2016post/WW2L2Nu.root output_etau_2016post/WZ2Q2L.root output_etau_2016post/ZZ2L2Nu.root output_etau_2016post/ZZ4L.root #output_etau_2016post/WZ3LNu.root
+#hadd -f output_etau_2016post/VV.root output_etau_2016post/VV2L2Nu.root output_etau_2016post/WZ2Q2L.root output_etau_2016post/ZZ4L.root output_etau_2016post/WZ3LNu.root #output_etau_2016post/WW2L2Nu.root output_etau_2016post/ZZ2L2Nu.root
+hadd -f output_etau_2016post/VV.root output_etau_2016post/WZ2Q2L.root output_etau_2016post/ZZ4L.root output_etau_2016post/WZ3LNu.root output_etau_2016post/WW2L2Nu.root output_etau_2016post/ZZ2L2Nu.root
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/TTToHadronic.root output_etau_2016post/TTToHadronic.root TTToHadronic top
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/TTToSemiLeptonic.root output_etau_2016post/TTToSemiLeptonic.root TTToSemiLeptonic top
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/TTTo2L2Nu.root output_etau_2016post/TTTo2L2Nu.root TTTo2L2Nu top
 hadd -f output_etau_2016post/top.root output_etau_2016post/TTToHadronic.root output_etau_2016post/TTToSemiLeptonic.root output_etau_2016post/TTTo2L2Nu.root output_etau_2016post/ST_t_antitop.root output_etau_2016post/ST_t_top.root output_etau_2016post/ST_tW_antitop.root output_etau_2016post/ST_tW_top.root
 hadd -f output_etau_2016post/MC.root output_etau_2016post/DYrescaled.root output_etau_2016post/VV.root output_etau_2016post/top.root
 ./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/GGToTauTau_Ctb20.root output_etau_2016post/GGTT.root GGTT_Ctb20 GGTT
-#./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/GGToWW.root output_etau_2016post/GGWW.root GGWW GGWW
+./FinalSelection_etau.exe 2016post /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2016post/GGToWW.root output_etau_2016post/GGWW.root GGWW GGWW
 
 #cp output_etau_2016post/GGTT.root output_etau_2016post/signal.root
 #sh do_etau_BSM_2016post.sh
 #python Prepare_BSM_combine.py --year="2016post" --channel="etau"
 
 python Create_fake.py --year=2016post
-hadd -f datacard_etau_2016post.root output_etau_2016post/Fake.root output_etau_2016post/MC.root  output_etau_2016post/SingleElectron.root output_etau_2016post/W.root output_etau_2016post/GGTT.root #output_etau_2016post/GGWW.root #output_etau_2016post/bsm.root
+hadd -f datacard_etau_2016post.root output_etau_2016post/Fake.root output_etau_2016post/MC.root  output_etau_2016post/SingleElectron.root output_etau_2016post/W.root output_etau_2016post/GGTT.root output_etau_2016post/GGWW.root #output_etau_2016post/bsm.root

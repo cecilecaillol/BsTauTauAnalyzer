@@ -1,0 +1,3 @@
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2016postF-RunIISummer20UL16_NanoAODv9/230421_134450/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2016postG-RunIISummer20UL16_NanoAODv9/230421_134510/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2016postH-RunIISummer20UL16_NanoAODv9/230421_134526/0000/

@@ -22,8 +22,10 @@ hadd -f output_etau_2018/W.root output_etau_2018/Wincl.root output_etau_2018/W1.
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/WZ2Q2L.root output_etau_2018/WZ2Q2L.root WZ2Q2L VV
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/WZ3LNu.root output_etau_2018/WZ3LNu.root WZ3LNu VV
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/ZZ2L2Nu.root output_etau_2018/ZZ2L2Nu.root ZZ2L2Nu VV
+#./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/VV2L2Nu.root output_etau_2018/VV2L2Nu.root VV2L2Nu VV
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/ZZ4L.root output_etau_2018/ZZ4L.root ZZ4L VV
-hadd -f output_etau_2018/VV.root output_etau_2018/WW2L2Nu.root output_etau_2018/WZ2Q2L.root output_etau_2018/WZ3LNu.root output_etau_2018/ZZ2L2Nu.root output_etau_2018/ZZ4L.root
+#hadd -f output_etau_2018/VV.root output_etau_2018/VV2L2Nu.root output_etau_2018/WZ2Q2L.root output_etau_2018/WZ3LNu.root output_etau_2018/ZZ4L.root #output_etau_2018/WW2L2Nu.root output_etau_2018/ZZ2L2Nu.root
+hadd -f output_etau_2018/VV.root output_etau_2018/WZ2Q2L.root output_etau_2018/WZ3LNu.root output_etau_2018/ZZ4L.root output_etau_2018/WW2L2Nu.root output_etau_2018/ZZ2L2Nu.root
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTToHadronic.root output_etau_2018/TTToHadronic.root TTToHadronic top
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTToSemiLeptonic.root output_etau_2018/TTToSemiLeptonic.root TTToSemiLeptonic top
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTTo2L2Nu.root output_etau_2018/TTTo2L2Nu.root TTTo2L2Nu top

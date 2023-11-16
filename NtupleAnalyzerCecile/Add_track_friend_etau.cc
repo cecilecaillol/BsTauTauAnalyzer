@@ -196,13 +196,6 @@ int nb_PU0=0;
         if (i % 10000 == 0) fprintf(stdout, "\r  Processed events: %8d of %8d ", i, nentries_wtn);
         fflush(stdout);
 
-      if (input=="/eoaaaaas/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/EGammaA.root" and i>=464459 and i<475000){
-        ntracks_friend=9999;
-        ntracksPU_friend=9999;
-        ntracksHS_friend=9999;
-        ntracksAll_friend=9999;
-      }
-      else{
         b1_6->GetEntry(i); b1_1->GetEntry(i); b1_3->GetEntry(i); b1_4->GetEntry(i); b1_2->GetEntry(i); b1_9->GetEntry(i); b1_10->GetEntry(i); b1_11->GetEntry(i);
 	b1_12->GetEntry(i);b1_13->GetEntry(i);b1_14->GetEntry(i);b1_15->GetEntry(i);b1_16->GetEntry(i);b1_17->GetEntry(i);b1_18->GetEntry(i);b1_19->GetEntry(i);b1_20->GetEntry(i);b1_21->GetEntry(i);b1_22->GetEntry(i);
         if (sample!="data_obs") {b1_5->GetEntry(i); b1_7->GetEntry(i); b1_8->GetEntry(i);}
@@ -363,7 +356,7 @@ cout<<endl;
         ntracksPU_friend=ntracksPU;
         ntracksHS_friend=ntracksHS;
         ntracksAll_friend=ntracksAll;
-      }
+
       tree_friend->Fill();
     } // end of loop over events
 cout<<"All, HS0, HS0PU0, PU0: "<<nb_all<<" "<<nb_HS0<<" "<<nb_HS0_PU0<<" "<<nb_PU0<<endl;

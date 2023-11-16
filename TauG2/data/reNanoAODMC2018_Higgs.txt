@@ -1,0 +1,1 @@
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GluGluHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18_NanoAODv9/230706_131405/0000

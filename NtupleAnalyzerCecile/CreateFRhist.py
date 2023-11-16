@@ -18,6 +18,8 @@ hist=[
 "h_tauFR_W_dm10_VVVL","h_tauFR_W_dm10_M",
 "h_tauFR_W_dm11_VVVL","h_tauFR_W_dm11_M",
 "h_tauFR_QCD_xtrg_VVVL","h_tauFR_QCD_xtrg_M",
+"h_tauFRpt_QCD_xtrg_VVVL","h_tauFRpt_QCD_xtrg_M",
+"h_tauFRpt_QCD_etrg_VVVL","h_tauFRpt_QCD_etrg_M",
 "h_tauFR_W_xtrg_VVVL","h_tauFR_W_xtrg_M",
 "h_tauFRnt_QCD_dm0_VVVL","h_tauFRnt_QCD_dm0_M",
 "h_tauFRnt_QCD_dm1_VVVL","h_tauFRnt_QCD_dm1_M",
@@ -34,7 +36,7 @@ if options.year!="2018": fileData=ROOT.TFile("output_etau_"+options.year+"/Singl
 fileMC=ROOT.TFile("output_etau_"+options.year+"/MC.root","r")
 fileDataSub=ROOT.TFile("output_etau_"+options.year+"/DataSub.root","recreate")
 
-ncat=20+16
+ncat=20+16+4
 
 for i in range (0,ncat):
    Data=fileData.Get(hist[i])

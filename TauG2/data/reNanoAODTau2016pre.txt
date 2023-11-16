@@ -1,0 +1,5 @@
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2016preB-RunIISummer20UL16APV_NanoAODv9/230420_083408/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2016preC-RunIISummer20UL16APV_NanoAODv9/230420_083421/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2016preD-RunIISummer20UL16APV_NanoAODv9/230420_083434/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2016preE-RunIISummer20UL16APV_NanoAODv9/230420_083447/0000/
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2016preF-RunIISummer20UL16APV_NanoAODv9/230420_083500/0000/
