@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     ncat=9
     if is_control==0: 
-       ncat=3
+       ncat=6
        nbhist=1+22+12
        nbhist_anti=1+22+30+12
 

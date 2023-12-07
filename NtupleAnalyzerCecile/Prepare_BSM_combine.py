@@ -41,6 +41,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--year', default="2016", choices=['Run2','2016', '2016pre', '2016post', '2017', '2018'], help="Which TES?")
     parser.add_argument('--channel', default="etau", choices=['etau', 'emu', 'mutau', 'tautau'], help="Which TES?")
+    parser.add_argument('--observable', default="dtau", choices=['dtau', 'atau'], help="atau or dtau?")
 
     options = parser.parse_args()
     postfixName=[""]
@@ -49,10 +50,12 @@ if __name__ == "__main__":
     print "M=",M
     ceBR=[]
     at=[]
+    dt=[]
     for i in range(0,101):
       ceBR.append(-40.0+i*0.8)
       at.append((-40.0+i*0.8)*2*1.77686*100/(0.282*M)) #multiplied by 100 for numerical precision in Combine
-      print ceBR[i],at[i]
+      dt.append((-40.0+i*0.8)*2*1.77686/(0.282*M*1.77686*51*0.00001*2))
+      print ceBR[i],at[i],dt[i]
     ceBRname=["m40p0","m39p2","m38p4","m37p6","m36p8","m36p0","m35p2","m34p4","m33p6","m32p8","m32p0","m31p2","m30p4","m29p6","m28p8","m28p0","m27p2","m26p4","m25p6","m24p8","m24p0","m23p2","m22p4","m21p6","m20p8","m20p0","m19p2","m18p4","m17p6","m16p8","m16p0","m15p2","m14p4","m13p6","m12p8","m12p0","m11p2","m10p4","m9p6","m8p8","m8p0","m7p2","m6p4","m5p6","m4p8","m4p0","m3p2","m2p4","m1p6","m0p8","0p0","0p8","1p6","2p4","3p2","4p0","4p8","5p6","6p4","7p2","8p0","8p8","9p6","10p4","11p2","12p0","12p8","13p6","14p4","15p2","16p0","16p8","17p6","18p4","19p2","20p0","20p8","21p6","22p4","23p2","24p0","24p8","25p6","26p4","27p2","28p0","28p8","29p6","30p4","31p2","32p0","32p8","33p6","34p4","35p2","36p0","36p8","37p6","38p4","39p2","40p0"]
 
 
@@ -63,12 +66,15 @@ if __name__ == "__main__":
 
     fin=ROOT.TFile("output_"+options.channel+"_"+options.year+"/signal.root","r")
     print "output_"+options.channel+"_"+options.year+"/signal.root"
-    fout=ROOT.TFile("output_"+options.channel+"_"+options.year+"/bsm.root","recreate")
+    fout=ROOT.TFile("output_"+options.channel+"_"+options.year+"/"+options.observable+".root","recreate")
     falt=ROOT.TFile("output_"+options.channel+"_"+options.year+"/signal.root","r")
+    if options.observable=="dtau": 
+       falt=ROOT.TFile("output_"+options.channel+"_"+options.year+"/edm.root","r")
+       fin=ROOT.TFile("output_"+options.channel+"_"+options.year+"/edm.root","r")
     #if (options.channel=="mutau"): falt=ROOT.TFile("/afs/cern.ch/work/c/ccaillol/Combine/CMSSW_10_2_13/src/auxiliaries/shapes/Taug2_mutau_2018.root","r")
     #if (options.channel=="tautau"): falt=ROOT.TFile("/afs/cern.ch/work/c/ccaillol/Combine/CMSSW_10_2_13/src/auxiliaries/shapes/Taug2_tautau_2018.root","r")
 
-    physics_model = open("physics_model_"+options.channel+"_"+options.year+".txt","w")
+    physics_model = open("physics_model_"+options.observable+"_"+options.channel+"_"+options.year+".txt","w")
 
     short_channel="et"
     if options.channel=="emu": short_channel="em"
@@ -123,9 +129,13 @@ if __name__ == "__main__":
               "CMS_tauid_stat1_dm0_2018","CMS_tauid_stat1_dm1_2018","CMS_tauid_stat1_dm10_2018","CMS_tauid_stat1_dm11_2018","CMS_tauid_stat2_dm0_2018","CMS_tauid_stat2_dm1_2018","CMS_tauid_stat2_dm10_2018","CMS_tauid_stat2_dm11_2018","CMS_tauid_syst_2018","CMS_tauid_syst_dm0_2018","CMS_tauid_syst_dm1_2018","CMS_tauid_syst_dm10_2018","CMS_tauid_syst_dm11_2018","CMS_taues_dm0_2018","CMS_taues_dm1_2018","CMS_taues_3prong_2018","CMS_pileup_2018","CMS_ditautrg_dm0_2018","CMS_ditautrg_dm1_2018","CMS_ditautrg_3prong_2018",
               "CMS_tauid_syst_alleras","CMS_elasticRescaling"]
 
+
+    name="GGTT"
+    if options.observable=="dtau": name="GGTT_Im"
+
     for c in range(0,ncat):
 
-       nominal=fin.Get(categories[c]).Get("GGTT_0p0")
+       nominal=fin.Get(categories[c]).Get(name+"_0p0")
        #if options.channel=="mutau" or options.channel=="tautau": nominal=falt.Get(categories[c]).Get("GGTT")
        mydir=fout.mkdir(categories[c])
        mydir.cd()
@@ -143,16 +153,16 @@ if __name__ == "__main__":
           myhist.Write()
 	  for s in shapes:
 	     myhist_up=myhist.Clone()
-	     print "GGTT_0p0_"+s+"Up"
+	     #print name+"_0p0_"+s+"Up"
 	     if nominal.GetBinContent(jj)>0:
 	        #if options.channel=="mutau" or options.channel=="tautau": myhist_up.Scale(falt.Get(categories[c]).Get("GGTT_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
-	        myhist_up.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
+	        myhist_up.Scale(fin.Get(categories[c]).Get(name+"_0p0_"+s+"Up").GetBinContent(jj)/nominal.GetBinContent(jj))
   	     myhist_up.SetName("TauG2_"+categories[c]+"_bin"+str(jj)+"_"+s+"Up")
 	     myhist_up.Write()
              myhist_down=myhist.Clone()
              if nominal.GetBinContent(jj)>0:
 	        #if options.channel=="mutau" or options.channel=="tautau": myhist_down.Scale(falt.Get(categories[c]).Get("GGTT_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
-                myhist_down.Scale(fin.Get(categories[c]).Get("GGTT_0p0_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
+                myhist_down.Scale(fin.Get(categories[c]).Get(name+"_0p0_"+s+"Down").GetBinContent(jj)/nominal.GetBinContent(jj))
              myhist_down.SetName("TauG2_"+categories[c]+"_bin"+str(jj)+"_"+s+"Down")
              myhist_down.Write()
 
@@ -160,11 +170,12 @@ if __name__ == "__main__":
           n = len(ceBR)
           x, y, exl, exh, eyl, eyh = array( 'd' ), array( 'd' ), array( 'd' ), array( 'd' ), array( 'd' ), array( 'd' )
           for k in range(0,len(ceBR)):
-             hist=fin.Get(categories[c]+"/GGTT_"+ceBRname[k])
+             hist=fin.Get(categories[c]+"/"+name+"_"+ceBRname[k])
              #print "et_1/GGTT_"+ceBRname[k]
              exl.append(0.0)
              exh.append(0.0)
-             x.append(at[k])
+             if options.observable=="atau": x.append(at[k])
+	     else: x.append(dt[k])
              y.append(hist.GetBinContent(jj))
              eyl.append(hist.GetBinError(jj))
              eyh.append(hist.GetBinError(jj))
@@ -177,6 +188,7 @@ if __name__ == "__main__":
           gr.SetMarkerStyle( 21 )
           gr.SetTitle( '' )
           gr.GetXaxis().SetTitle( 'a_{#tau} x 100' )
+          if options.observable=="dtau": gr.GetXaxis().SetTitle( 'd_{#tau} x 10^{-17} e cm' )
           gr.GetYaxis().SetTitle( 'Signal count' )
           gr.GetXaxis().SetTitleSize(0.06)
           gr.GetYaxis().SetTitleSize(0.06)
@@ -184,6 +196,7 @@ if __name__ == "__main__":
           #gr.Draw( 'ACP' )
 
           total = ROOT.TF1( 'total', "pol5", -4, 4, 0)
+          if options.observable=="dtau": total = ROOT.TF1( 'total', "pol5", -21.3, 21.3, 0)
           total.SetLineColor( ROOT.TColor.GetColor("#12cadd") )
           total.SetLineWidth(4)
           gr.Fit(total,"R")
@@ -213,16 +226,21 @@ if __name__ == "__main__":
           physics_model.write("_bin")
           physics_model.write(str(jj))
           physics_model.write('("(')
-          physics_model.write(str(total.GetParameter(0))+"+"+str(total.GetParameter(1))+"*@0+"+str(total.GetParameter(2))+"*@0*@0+"+str(total.GetParameter(3))+"*@0*@0*@0+"+str(total.GetParameter(4))+"*@0*@0*@0*@0+"+str(total.GetParameter(5))+"*@0*@0*@0*@0*@0)*@1")
+	  physics_model.write(str(total.GetParameter(0))+"+"+str(total.GetParameter(1))+"*@0+"+str(total.GetParameter(2))+"*@0*@0+"+str(total.GetParameter(3))+"*@0*@0*@0+"+str(total.GetParameter(4))+"*@0*@0*@0*@0+"+str(total.GetParameter(5))+"*@0*@0*@0*@0*@0)*@1")
           physics_model.write('"')
-          physics_model.write(",atau,mu)')\n")
+          if options.observable=="atau": physics_model.write(",atau,mu)')\n")
+          else: physics_model.write(",dtau,mu)')\n")
 
 
           canv.cd()
           ROOT.gPad.Draw()
           ROOT.gPad.RedrawAxis()
           canv.Modified()
-          canv.SaveAs("plots_"+short_channel+"_"+options.year+"/bsm_extrap_"+categories[c]+"_bin"+str(jj)+".png")
-          canv.SaveAs("plots_"+short_channel+"_"+options.year+"/bsm_extrap_"+categories[c]+"_bin"+str(jj)+".pdf")
+          if options.observable=="atau":
+            canv.SaveAs("plots_"+short_channel+"_"+options.year+"/bsm_extrap_"+categories[c]+"_bin"+str(jj)+".png")
+            canv.SaveAs("plots_"+short_channel+"_"+options.year+"/bsm_extrap_"+categories[c]+"_bin"+str(jj)+".pdf")
+          else:
+            canv.SaveAs("plots_"+short_channel+"_"+options.year+"/edm_extrap_"+categories[c]+"_bin"+str(jj)+".png")
+            canv.SaveAs("plots_"+short_channel+"_"+options.year+"/edm_extrap_"+categories[c]+"_bin"+str(jj)+".pdf")
 
     physics_model.close()

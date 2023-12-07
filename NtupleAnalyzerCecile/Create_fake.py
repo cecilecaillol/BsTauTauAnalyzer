@@ -20,13 +20,14 @@ if __name__ == "__main__":
 
     fVV=ROOT.TFile("output_etau_"+options.year+"/VV.root","r")
     fTop=ROOT.TFile("output_etau_"+options.year+"/top.root","r")
+    fGGEE=ROOT.TFile("output_etau_"+options.year+"/GGEE.root","r")
     fDY=ROOT.TFile("output_etau_"+options.year+"/DYrescaled.root","r")
     fData=ROOT.TFile("output_etau_2018/EGamma.root","r")
     if options.year=="2017" or options.year=="2016pre" or options.year=="2016post": fData=ROOT.TFile("output_etau_"+options.year+"/SingleElectron.root","r")
     fout=ROOT.TFile("output_etau_"+options.year+"/Fake.root","recreate")
 
     ncat=9
-    if is_control==0: ncat=3
+    if is_control==0: ncat=6
 
     for j in range(0,ncat):
 
@@ -50,6 +51,7 @@ if __name__ == "__main__":
           h0.Add(fDY.Get("et_"+str(j)+"_anti/ZLL"+postfix),-1)
           h0.Add(fDY.Get("et_"+str(j)+"_anti/ZTT"+postfix),-1)
           h0.Add(fTop.Get("et_"+str(j)+"_anti/top"+postfix),-1)
+          h0.Add(fGGEE.Get("et_"+str(j)+"_anti/GGEE"+postfix),-1)
           for i in range(1,h0.GetSize()-1):
               if h0.GetBinContent(i)<0:
 	          #h0.SetBinError(i,h0.GetBinContent(i)+h0.GetBinError(i))

@@ -7,4 +7,4 @@ python AddPerYearUncertainties.py --inputFile output_emu_2017/signal.root --outp
 python AddPerYearUncertainties.py --inputFile output_emu_2016pre/signal.root --outputFile output_emu_Run2/emu_2016pre.root
 python AddPerYearUncertainties.py --inputFile output_emu_2016post/signal.root --outputFile output_emu_Run2/emu_2016post.root
 hadd -f output_emu_Run2/signal.root output_emu_Run2/emu_201*.root
-python Prepare_BSM_combine.py --year="Run2" --channel="emu"
+python Prepare_BSM_combine.py --year="Run2" --channel="emu" --observable="atau"

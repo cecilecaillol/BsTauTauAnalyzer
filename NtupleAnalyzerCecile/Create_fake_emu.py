@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     ncat=9
     if is_control==0: 
-	ncat=3
+	ncat=6
         nbhist=1+30
 
     for j in range(0,ncat):

@@ -18,27 +18,28 @@ hadd -f output_etau_2018/W.root output_etau_2018/Wincl.root output_etau_2018/W1.
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/ST_t_top.root output_etau_2018/ST_t_top.root ST_t_top top
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/ST_tW_antitop.root output_etau_2018/ST_tW_antitop.root ST_tW_antitop top
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/ST_tW_top.root output_etau_2018/ST_tW_top.root ST_tW_top top
-./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/WW2L2Nu.root output_etau_2018/WW2L2Nu.root WW2L2Nu VV
+#./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/WW2L2Nu.root output_etau_2018/WW2L2Nu.root WW2L2Nu VV
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/WZ2Q2L.root output_etau_2018/WZ2Q2L.root WZ2Q2L VV
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/WZ3LNu.root output_etau_2018/WZ3LNu.root WZ3LNu VV
-./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/ZZ2L2Nu.root output_etau_2018/ZZ2L2Nu.root ZZ2L2Nu VV
-#./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/VV2L2Nu.root output_etau_2018/VV2L2Nu.root VV2L2Nu VV
+#./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/ZZ2L2Nu.root output_etau_2018/ZZ2L2Nu.root ZZ2L2Nu VV
+./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/VV2L2Nu.root output_etau_2018/VV2L2Nu.root VV2L2Nu VV
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/ZZ4L.root output_etau_2018/ZZ4L.root ZZ4L VV
-#hadd -f output_etau_2018/VV.root output_etau_2018/VV2L2Nu.root output_etau_2018/WZ2Q2L.root output_etau_2018/WZ3LNu.root output_etau_2018/ZZ4L.root #output_etau_2018/WW2L2Nu.root output_etau_2018/ZZ2L2Nu.root
-hadd -f output_etau_2018/VV.root output_etau_2018/WZ2Q2L.root output_etau_2018/WZ3LNu.root output_etau_2018/ZZ4L.root output_etau_2018/WW2L2Nu.root output_etau_2018/ZZ2L2Nu.root
+hadd -f output_etau_2018/VV.root output_etau_2018/VV2L2Nu.root output_etau_2018/WZ2Q2L.root output_etau_2018/WZ3LNu.root output_etau_2018/ZZ4L.root #output_etau_2018/WW2L2Nu.root output_etau_2018/ZZ2L2Nu.root
+#hadd -f output_etau_2018/VV.root output_etau_2018/WZ2Q2L.root output_etau_2018/WZ3LNu.root output_etau_2018/ZZ4L.root output_etau_2018/WW2L2Nu.root output_etau_2018/ZZ2L2Nu.root
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTToHadronic.root output_etau_2018/TTToHadronic.root TTToHadronic top
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTToSemiLeptonic.root output_etau_2018/TTToSemiLeptonic.root TTToSemiLeptonic top
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/TTTo2L2Nu.root output_etau_2018/TTTo2L2Nu.root TTTo2L2Nu top
 hadd -f output_etau_2018/top.root output_etau_2018/TTToHadronic.root output_etau_2018/TTToSemiLeptonic.root output_etau_2018/TTTo2L2Nu.root output_etau_2018/ST_t_antitop.root output_etau_2018/ST_t_top.root output_etau_2018/ST_tW_antitop.root output_etau_2018/ST_tW_top.root
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGHTT.root output_etau_2018/GGHTT.root GGHTT GGHTT
-hadd -f output_etau_2018/MC.root output_etau_2018/DYrescaled.root output_etau_2018/VV.root output_etau_2018/top.root
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToTauTau_Ctb20.root output_etau_2018/GGTT.root GGTT_Ctb20 GGTT
 ./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToWW.root output_etau_2018/GGWW.root GGWW GGWW
+./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToElEl.root output_etau_2018/GGEE.root GGEE GGEE
+hadd -f output_etau_2018/MC.root output_etau_2018/DYrescaled.root output_etau_2018/VV.root output_etau_2018/top.root output_etau_2018/GGWW.root output_etau_2018/GGEE.root 
 
 cp output_etau_2018/GGTT.root output_etau_2018/signal.root
 #sh do_BSM_etau_2018.sh
 #python Prepare_BSM_combine.py --year="2018" --channel="etau"
 
 python Create_fake.py --year=2018
-hadd -f datacard_etau_2018.root output_etau_2018/Fake.root output_etau_2018/MC.root  output_etau_2018/EGamma.root output_etau_2018/GGTT.root output_etau_2018/GGWW.root output_etau_2018/W.root #output_etau_2018/bsm.root
+hadd -f datacard_etau_2018.root output_etau_2018/Fake.root output_etau_2018/MC.root  output_etau_2018/EGamma.root output_etau_2018/GGTT.root output_etau_2018/W.root #output_etau_2018/bsm.root
 #hadd -f bsm_datacard_etau_2018.root output_etau_2018/Fake.root output_etau_2018/MC.root  output_etau_2018/EGamma.root output_etau_2018/GGTT.root output_etau_2018/GGWW.root output_etau_2018/bsm.root
