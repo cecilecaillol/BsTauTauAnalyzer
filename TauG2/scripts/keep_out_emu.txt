@@ -73,3 +73,10 @@ keep V_ge*
 keep pu_weight
 keep L1PreFiringWeight*
 keep TauG2Weights*
+
+keep GenMET*
+keep fid*
+keep is_emu
+keep is_etau
+keep is_mutau
+keep is_tautau

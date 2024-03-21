@@ -9,7 +9,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collect
 
 ### Proton selector be replaced by preprocessing module
 from MyNanoAnalyzer.TauG2.objectSelector import ElectronSelector, MuonSelector, TauSelector
-from MyNanoAnalyzer.TauG2.objectSelector import GenParticleSelector
+from MyNanoAnalyzer.TauG2.objectSelector import GenParticleSelector, GenDressedLeptonSelector, GenVisTauSelector, ChargedGenSelector
 
 from TauPOG.TauIDSFs.TauIDSFTool import TauIDSFTool, TauESTool, campaigns
 from TauPOG.TauIDSFs.TauIDSFTool import TauFESTool
@@ -18,9 +18,10 @@ from TauAnalysisTools.TauTriggerSFs.SFProvider import SFProvider
 
 
 class Analysis(Module):
-    def __init__(self, channel, isMC, year):
+    def __init__(self, channel, isMC, isSignal, year):
         self.channel       = channel
         self.isMC          = isMC
+        self.isSignal      = isSignal
         self.year          = year
 
         self.tauSFsM_vseVVL = TauIDSFTool(year='UL2018',id='DeepTau2017v2p1VSjet',wp='Medium',wp_vsele='VVLoose',ptdm=True)
@@ -200,6 +201,21 @@ class Analysis(Module):
 
         self.out.branch("V_genpt",           "F");
         self.out.branch("pu_weight",         "F");
+
+        self.out.branch("is_emu",              "I");
+        self.out.branch("is_etau",              "I");
+        self.out.branch("is_mutau",              "I");
+        self.out.branch("is_tautau",              "I");
+        self.out.branch("fidpt_1",              "F");
+        self.out.branch("fideta_1",              "F");
+        self.out.branch("fidphi_1",              "F");
+        self.out.branch("fidm_1",              "F");
+        self.out.branch("fidpt_2",              "F");
+        self.out.branch("fideta_2",              "F");
+        self.out.branch("fidphi_2",              "F");
+        self.out.branch("fidm_2",              "F");
+        self.out.branch("fidgen_mtt",              "F");
+        self.out.branch("fidntracks",              "I");
         
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
@@ -210,6 +226,28 @@ class Analysis(Module):
         genparticles = Collection(event, "GenPart")
         for genp in genparticles:
             event.selectedGenParticles.append(genp)
+
+    def selectGenDressedLeptons(self, event):
+
+        event.selectedGenDressedLeptons = []
+        gendressed = Collection(event, "GenDressedLepton")
+        for gend in gendressed:
+            event.selectedGenDressedLeptons.append(gend)
+
+    def selectGenVisTaus(self, event):
+
+        event.selectedGenVisTaus = []
+        genvis = Collection(event, "GenVisTau")
+        for gent in genvis:
+            event.selectedGenVisTaus.append(gent)
+
+
+    def selectChargedGens(self, event):
+
+        event.selectedChargedGens = []
+        chargedgen = Collection(event, "ChargedGenCandidates")
+        for genc in chargedgen:
+            event.selectedChargedGens.append(genc)
 
 
     def selectElectrons(self, event, elSel):
@@ -353,6 +391,11 @@ class Analysis(Module):
 
         if self.isMC:
             self.selectGenParticles(event)
+
+        if self.isSignal:
+            self.selectGenDressedLeptons(event)
+            self.selectGenVisTaus(event)
+            self.selectChargedGens(event)
         
         #apply preliminary loose pt cuts based on trigger:
         if self.channel=="mutau":
@@ -435,6 +478,181 @@ class Analysis(Module):
 
 	#print len(event.genCand)
         #if (len(event.genCand)==2): print event.genCand[0].pt,event.genCand[1].pt
+
+
+        ######################################################
+        ############ FIDUCIAL LEVEL ANALYSIS #################
+        ######################################################
+
+        if self.isSignal:
+           event.gentaup=event.selectedGenParticles[0]
+           event.gentaum=event.selectedGenParticles[0]
+           event.gennup=event.selectedGenParticles[0]
+           event.gennum=event.selectedGenParticles[0]
+           event.el=event.selectedGenParticles[0]
+           event.mu=event.selectedGenParticles[0]
+        is_taup_tauh=1
+        is_taum_tauh=1
+        event.dressedCand=[]
+        event.visCand=[]
+        event.chargedfromtaus=[]
+        ne=0
+        nm=0
+        event.fidgen_mtt=0
+        event.fidntracks=0
+
+        index=0
+        #print "Gen particle collection:"
+        if self.isSignal:
+            for genp in event.selectedGenParticles:
+                #print genp.pdgId,event.selectedGenParticles[genp.genPartIdxMother].pdgId,genp.pt,genp.eta,genp.phi,genp.status
+                if genp.pdgId==15 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: event.gentaup=genp
+                if genp.pdgId==-15 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: event.gentaum=genp
+                if genp.pdgId==16 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: event.gennup=genp
+                if genp.pdgId==-16 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: event.gennum=genp
+                if (genp.pdgId==11 or  genp.pdgId==13) and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: is_taup_tauh=0
+                if (genp.pdgId==-11 or  genp.pdgId==-13) and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: is_taum_tauh=0
+                if genp.pdgId==11 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: ne=ne+1
+                if genp.pdgId==13 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: nm=nm+1
+                if genp.pdgId==-11 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: ne=ne+1
+                if genp.pdgId==-13 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: nm=nm+1
+                if abs(genp.pdgId)==11 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: event.el=genp
+                if abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: event.mu=genp
+                if abs(genp.pdgId)!=12 and abs(genp.pdgId)!=14 and abs(genp.pdgId)!=16 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: event.chargedfromtaus.append(genp)
+                #print genp.pdgId,event.selectedGenParticles[genp.genPartIdxMother].pdgId,genp.pt
+
+            for gend in event.selectedGenDressedLeptons:
+                event.dressedCand.append(gend)
+
+            for gent in event.selectedGenVisTaus:
+                event.visCand.append(gent)
+
+
+        is_emu=0
+        is_etau=0
+        is_mutau=0
+        is_tautau=0
+        if (ne==1 and nm==1): is_emu=1
+        if (ne==1 and nm==0): is_etau=1
+        if (ne==0 and nm==1): is_mutau=1
+        if (ne==0 and nm==0): is_tautau=1
+        fidpt_1=0
+        fideta_1=0
+        fidphi_1=0
+        fidm_1=0
+        fidpt_2=0
+        fideta_2=0
+        fidphi_2=0
+        fidm_2=0
+
+        mytaup=ROOT.TLorentzVector()
+        mytaum=ROOT.TLorentzVector()
+        mynup=ROOT.TLorentzVector()
+        mynum=ROOT.TLorentzVector()
+        if self.isSignal:
+            mytaup.SetPtEtaPhiM(event.gentaup.pt,event.gentaup.eta,event.gentaup.phi,event.gentaup.mass)
+            mytaum.SetPtEtaPhiM(event.gentaum.pt,event.gentaum.eta,event.gentaum.phi,event.gentaum.mass)
+            event.fidgen_mtt=(mytaup+mytaum).M();
+            mynup.SetPtEtaPhiM(event.gennup.pt,event.gennup.eta,event.gennup.phi,event.gennup.mass)
+            vistaup=mytaup-mynup # build gen vis tau from the gen particle collection
+            mynum.SetPtEtaPhiM(event.gennum.pt,event.gennum.eta,event.gennum.phi,event.gennum.mass)
+            vistaum=mytaum-mynum
+
+            if is_etau or is_mutau:
+               if (len(event.dressedCand)==1): # if there is a dressed lepton, use it for the electron or the muon
+                  fidpt_1=event.dressedCand[0].pt
+                  fideta_1=event.dressedCand[0].eta
+                  fidphi_1=event.dressedCand[0].phi
+                  fidm_1=event.dressedCand[0].mass
+               elif is_etau: # otherwise use the electron or muon from the gen particle collection
+                  fidpt_1=event.el.pt
+                  fideta_1=event.el.eta
+                  fidphi_1=event.el.phi
+                  fidm_1=event.el.mass
+               elif is_mutau:
+                  fidpt_1=event.mu.pt
+                  fideta_1=event.mu.eta
+                  fidphi_1=event.mu.phi
+                  fidm_1=event.mu.mass
+
+               if len(event.visCand)==1 and event.visCand[0].pt>0: #if there is a gen vis tau use it
+                  fidpt_2=event.visCand[0].pt
+                  fideta_2=event.visCand[0].eta
+                  fidphi_2=event.visCand[0].phi
+                  fidm_2=event.visCand[0].mass
+               else: # otherwise use the visible tauh built from the gen particle collection
+                  if is_taup_tauh:
+                     fidpt_2=vistaup.Pt()
+                     fideta_2=vistaup.Eta()
+                     fidphi_2=vistaup.Phi()
+                     fidm_2=vistaup.M()
+                  if is_taum_tauh:
+                     fidpt_2=vistaum.Pt()
+                     fideta_2=vistaum.Eta()
+                     fidphi_2=vistaum.Phi()
+                     fidm_2=vistaum.M()
+
+            if is_tautau:
+                if len(event.visCand)>0 and event.visCand[0].pt>0: #take the gen vis taus if they exist
+                    fidpt_1=event.visCand[0].pt
+                    fideta_1=event.visCand[0].eta
+                    fidphi_1=event.visCand[0].phi
+                    fidm_1=event.visCand[0].mass
+                if len(event.visCand)>1 and event.visCand[1].pt>0:
+                    fidpt_2=event.visCand[1].pt
+                    fideta_2=event.visCand[1].eta
+                    fidphi_2=event.visCand[1].phi
+                    fidm_2=event.visCand[1].mass
+                if len(event.visCand)<2: # otherwise take the vis taus built from the gen collection
+                    fidpt_1=vistaup.Pt()
+                    fideta_1=vistaup.Eta()
+                    fidphi_1=vistaup.Phi()
+                    fidm_1=vistaup.M()
+                    fidpt_2=vistaum.Pt()
+                    fideta_2=vistaum.Eta()
+                    fidphi_2=vistaum.Phi()
+                    fidm_2=vistaum.M()
+
+            if is_emu:
+                if len(event.dressedCand)==2 and abs(event.dressedCand[0].pdgId)==11: #2 dressed leptons, the first one is an electron
+                    fidpt_1=event.dressedCand[0].pt
+                    fideta_1=event.dressedCand[0].eta
+                    fidphi_1=event.dressedCand[0].phi
+                    fidm_1=event.dressedCand[0].mass
+                    fidpt_2=event.dressedCand[1].pt
+                    fideta_2=event.dressedCand[1].eta
+                    fidphi_2=event.dressedCand[1].phi
+                    fidm_2=event.dressedCand[1].mass
+                elif len(event.dressedCand)==2: #2 dressed leptons, the first one is a muon
+                     fidpt_1=event.dressedCand[1].pt
+                     fideta_1=event.dressedCand[1].eta
+                     fidphi_1=event.dressedCand[1].phi
+                     fidm_1=event.dressedCand[1].mass
+                     fidpt_2=event.dressedCand[0].pt
+                     fideta_2=event.dressedCand[0].eta
+                     fidphi_2=event.dressedCand[0].phi
+                     fidm_2=event.dressedCand[0].mass
+                else: #not enough dressed leptons, take the generated electron and muon
+                     fidpt_1=event.el.pt
+                     fideta_1=event.el.eta
+                     fidphi_1=event.el.phi
+                     fidm_1=event.el.mass
+                     fidpt_2=event.mu.pt
+                     fideta_2=event.mu.eta
+                     fidphi_2=event.mu.phi
+                     fidm_2=event.mu.mass
+
+        if self.isSignal:
+            event.fidntracks=0
+            for genc in event.selectedChargedGens:
+                mygenc=ROOT.TLorentzVector()
+                mygenc.SetPtEtaPhiM(genc.pt,genc.eta,genc.phi,genc.mass)
+                is_matched=False
+                for track in event.chargedfromtaus:
+                    mytrack=ROOT.TLorentzVector()
+                    mytrack.SetPtEtaPhiM(track.pt,track.eta,track.phi,track.mass)
+                    if mygenc.DeltaR(mytrack)<0.02: is_matched=True
+                if not is_matched: event.fidntracks=event.fidntracks+1
 
         ######################################################
         ##### HIGH LEVEL VARIABLES FOR SELECTED EVENTS   #####
@@ -871,57 +1089,110 @@ class Analysis(Module):
             self.out.fillBranch("GenCand_eta" ,       gen_eta)
             self.out.fillBranch("GenCand_phi" ,       gen_phi)
 
+        if self.isSignal:
+            self.out.fillBranch("is_emu" ,      is_emu)
+            self.out.fillBranch("is_etau" ,     is_etau)
+            self.out.fillBranch("is_mutau" ,    is_mutau)
+            self.out.fillBranch("is_tautau" ,   is_tautau)
+
+            self.out.fillBranch("fidpt_1" ,        fidpt_1)
+            self.out.fillBranch("fideta_1" ,       fideta_1)
+            self.out.fillBranch("fidphi_1" ,       fidphi_1)
+            self.out.fillBranch("fidm_1" ,         fidm_1)
+            self.out.fillBranch("fidpt_2" ,        fidpt_2)
+            self.out.fillBranch("fideta_2" ,       fideta_2)
+            self.out.fillBranch("fidphi_2" ,       fidphi_2)
+            self.out.fillBranch("fidm_2" ,         fidm_2)
+            self.out.fillBranch("fidgen_mtt" ,     event.fidgen_mtt)
+            self.out.fillBranch("fidntracks" ,     event.fidntracks)
+
         return True
 
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
-analysis_eemc2018    = lambda : Analysis(channel="ee", isMC=True, year="2018")
-analysis_emumc2018    = lambda : Analysis(channel="emu", isMC=True, year="2018")
-analysis_etaumc2018    = lambda : Analysis(channel="etau", isMC=True, year="2018")
-analysis_mumumc2018    = lambda : Analysis(channel="mumu", isMC=True, year="2018")
-analysis_mutaumc2018    = lambda : Analysis(channel="mutau", isMC=True, year="2018")
-analysis_tautaumc2018    = lambda : Analysis(channel="tautau", isMC=True, year="2018")
+analysis_eemc2018    = lambda : Analysis(channel="ee", isMC=True, isSignal=False, year="2018")
+analysis_emumc2018    = lambda : Analysis(channel="emu", isMC=True, isSignal=False, year="2018")
+analysis_etaumc2018    = lambda : Analysis(channel="etau", isMC=True, isSignal=False, year="2018")
+analysis_mumumc2018    = lambda : Analysis(channel="mumu", isMC=True, isSignal=False, year="2018")
+analysis_mutaumc2018    = lambda : Analysis(channel="mutau", isMC=True, isSignal=False, year="2018")
+analysis_tautaumc2018    = lambda : Analysis(channel="tautau", isMC=True, isSignal=False, year="2018")
 
-analysis_eemc2017    = lambda : Analysis(channel="ee", isMC=True, year="2017")
-analysis_emumc2017    = lambda : Analysis(channel="emu", isMC=True, year="2017")
-analysis_etaumc2017    = lambda : Analysis(channel="etau", isMC=True, year="2017")
-analysis_mumumc2017    = lambda : Analysis(channel="mumu", isMC=True, year="2017")
-analysis_mutaumc2017    = lambda : Analysis(channel="mutau", isMC=True, year="2017")
-analysis_tautaumc2017    = lambda : Analysis(channel="tautau", isMC=True, year="2017")
+analysis_eemc2017    = lambda : Analysis(channel="ee", isMC=True, isSignal=False, year="2017")
+analysis_emumc2017    = lambda : Analysis(channel="emu", isMC=True, isSignal=False, year="2017")
+analysis_etaumc2017    = lambda : Analysis(channel="etau", isMC=True, isSignal=False, year="2017")
+analysis_mumumc2017    = lambda : Analysis(channel="mumu", isMC=True, isSignal=False, year="2017")
+analysis_mutaumc2017    = lambda : Analysis(channel="mutau", isMC=True, isSignal=False, year="2017")
+analysis_tautaumc2017    = lambda : Analysis(channel="tautau", isMC=True, isSignal=False, year="2017")
 
-analysis_eemc2016post    = lambda : Analysis(channel="ee", isMC=True, year="2016post")
-analysis_emumc2016post    = lambda : Analysis(channel="emu", isMC=True, year="2016post")
-analysis_etaumc2016post    = lambda : Analysis(channel="etau", isMC=True, year="2016post")
-analysis_mumumc2016post    = lambda : Analysis(channel="mumu", isMC=True, year="2016post")
-analysis_mutaumc2016post    = lambda : Analysis(channel="mutau", isMC=True, year="2016post")
-analysis_tautaumc2016post    = lambda : Analysis(channel="tautau", isMC=True, year="2016post")
+analysis_eemc2016post    = lambda : Analysis(channel="ee", isMC=True, isSignal=False, year="2016post")
+analysis_emumc2016post    = lambda : Analysis(channel="emu", isMC=True, isSignal=False, year="2016post")
+analysis_etaumc2016post    = lambda : Analysis(channel="etau", isMC=True, isSignal=False, year="2016post")
+analysis_mumumc2016post    = lambda : Analysis(channel="mumu", isMC=True, isSignal=False, year="2016post")
+analysis_mutaumc2016post    = lambda : Analysis(channel="mutau", isMC=True, isSignal=False, year="2016post")
+analysis_tautaumc2016post    = lambda : Analysis(channel="tautau", isMC=True, isSignal=False, year="2016post")
 
-analysis_eemc2016pre    = lambda : Analysis(channel="ee", isMC=True, year="2016pre")
-analysis_emumc2016pre    = lambda : Analysis(channel="emu", isMC=True, year="2016pre")
-analysis_etaumc2016pre    = lambda : Analysis(channel="etau", isMC=True, year="2016pre")
-analysis_mumumc2016pre    = lambda : Analysis(channel="mumu", isMC=True, year="2016pre")
-analysis_mutaumc2016pre    = lambda : Analysis(channel="mutau", isMC=True, year="2016pre")
-analysis_tautaumc2016pre    = lambda : Analysis(channel="tautau", isMC=True, year="2016pre")
+analysis_eemc2016pre    = lambda : Analysis(channel="ee", isMC=True, isSignal=False, year="2016pre")
+analysis_emumc2016pre    = lambda : Analysis(channel="emu", isMC=True, isSignal=False, year="2016pre")
+analysis_etaumc2016pre    = lambda : Analysis(channel="etau", isMC=True, isSignal=False, year="2016pre")
+analysis_mumumc2016pre    = lambda : Analysis(channel="mumu", isMC=True, isSignal=False, year="2016pre")
+analysis_mutaumc2016pre    = lambda : Analysis(channel="mutau", isMC=True, isSignal=False, year="2016pre")
+analysis_tautaumc2016pre    = lambda : Analysis(channel="tautau", isMC=True, isSignal=False, year="2016pre")
 
-analysis_eedata2018  = lambda : Analysis(channel="ee", isMC=False, year="2018")
-analysis_emudata2018  = lambda : Analysis(channel="emu", isMC=False, year="2018")
-analysis_etaudata2018  = lambda : Analysis(channel="etau", isMC=False, year="2018")
-analysis_mumudata2018  = lambda : Analysis(channel="mumu", isMC=False, year="2018")
-analysis_mutaudata2018  = lambda : Analysis(channel="mutau", isMC=False, year="2018")
-analysis_tautaudata2018  = lambda : Analysis(channel="tautau", isMC=False, year="2018")
 
-analysis_eedata2017  = lambda : Analysis(channel="ee", isMC=False, year="2017")
-analysis_emudata2017  = lambda : Analysis(channel="emu", isMC=False, year="2017")
-analysis_etaudata2017  = lambda : Analysis(channel="etau", isMC=False, year="2017")
-analysis_mumudata2017  = lambda : Analysis(channel="mumu", isMC=False, year="2017")
-analysis_mutaudata2017  = lambda : Analysis(channel="mutau", isMC=False, year="2017")
-analysis_tautaudata2017  = lambda : Analysis(channel="tautau", isMC=False, year="2017")
 
-analysis_eedata2016  = lambda : Analysis(channel="ee", isMC=False, year="2016")
-analysis_emudata2016  = lambda : Analysis(channel="emu", isMC=False, year="2016")
-analysis_etaudata2016  = lambda : Analysis(channel="etau", isMC=False, year="2016")
-analysis_mumudata2016  = lambda : Analysis(channel="mumu", isMC=False, year="2016")
-analysis_mutaudata2016  = lambda : Analysis(channel="mutau", isMC=False, year="2016")
-analysis_tautaudata2016  = lambda : Analysis(channel="tautau", isMC=False, year="2016")
+
+
+analysis_eesig2018    = lambda : Analysis(channel="ee", isMC=True, isSignal=True, year="2018")
+analysis_emusig2018    = lambda : Analysis(channel="emu", isMC=True, isSignal=True, year="2018")
+analysis_etausig2018    = lambda : Analysis(channel="etau", isMC=True, isSignal=True, year="2018")
+analysis_mumusig2018    = lambda : Analysis(channel="mumu", isMC=True, isSignal=True, year="2018")
+analysis_mutausig2018    = lambda : Analysis(channel="mutau", isMC=True, isSignal=True, year="2018")
+analysis_tautausig2018    = lambda : Analysis(channel="tautau", isMC=True, isSignal=True, year="2018")
+
+analysis_eesig2017    = lambda : Analysis(channel="ee", isMC=True, isSignal=True, year="2017")
+analysis_emusig2017    = lambda : Analysis(channel="emu", isMC=True, isSignal=True, year="2017")
+analysis_etausig2017    = lambda : Analysis(channel="etau", isMC=True, isSignal=True, year="2017")
+analysis_mumusig2017    = lambda : Analysis(channel="mumu", isMC=True, isSignal=True, year="2017")
+analysis_mutausig2017    = lambda : Analysis(channel="mutau", isMC=True, isSignal=True, year="2017")
+analysis_tautausig2017    = lambda : Analysis(channel="tautau", isMC=True, isSignal=True, year="2017")
+
+analysis_eesig2016post    = lambda : Analysis(channel="ee", isMC=True, isSignal=True, year="2016post")
+analysis_emusig2016post    = lambda : Analysis(channel="emu", isMC=True, isSignal=True, year="2016post")
+analysis_etausig2016post    = lambda : Analysis(channel="etau", isMC=True, isSignal=True, year="2016post")
+analysis_mumusig2016post    = lambda : Analysis(channel="mumu", isMC=True, isSignal=True, year="2016post")
+analysis_mutausig2016post    = lambda : Analysis(channel="mutau", isMC=True, isSignal=True, year="2016post")
+analysis_tautausig2016post    = lambda : Analysis(channel="tautau", isMC=True, isSignal=True, year="2016post")
+
+analysis_eesig2016pre    = lambda : Analysis(channel="ee", isMC=True, isSignal=True, year="2016pre")
+analysis_emusig2016pre    = lambda : Analysis(channel="emu", isMC=True, isSignal=True, year="2016pre")
+analysis_etausig2016pre    = lambda : Analysis(channel="etau", isMC=True, isSignal=True, year="2016pre")
+analysis_mumusig2016pre    = lambda : Analysis(channel="mumu", isMC=True, isSignal=True, year="2016pre")
+analysis_mutausig2016pre    = lambda : Analysis(channel="mutau", isMC=True, isSignal=True, year="2016pre")
+analysis_tautausig2016pre    = lambda : Analysis(channel="tautau", isMC=True, isSignal=True, year="2016pre")
+
+
+
+
+
+analysis_eedata2018  = lambda : Analysis(channel="ee", isMC=False, isSignal=False, year="2018")
+analysis_emudata2018  = lambda : Analysis(channel="emu", isMC=False, isSignal=False, year="2018")
+analysis_etaudata2018  = lambda : Analysis(channel="etau", isMC=False, isSignal=False, year="2018")
+analysis_mumudata2018  = lambda : Analysis(channel="mumu", isMC=False, isSignal=False, year="2018")
+analysis_mutaudata2018  = lambda : Analysis(channel="mutau", isMC=False, isSignal=False, year="2018")
+analysis_tautaudata2018  = lambda : Analysis(channel="tautau", isMC=False, isSignal=False, year="2018")
+
+analysis_eedata2017  = lambda : Analysis(channel="ee", isMC=False, isSignal=False, year="2017")
+analysis_emudata2017  = lambda : Analysis(channel="emu", isMC=False, isSignal=False, year="2017")
+analysis_etaudata2017  = lambda : Analysis(channel="etau", isMC=False, isSignal=False, year="2017")
+analysis_mumudata2017  = lambda : Analysis(channel="mumu", isMC=False, isSignal=False, year="2017")
+analysis_mutaudata2017  = lambda : Analysis(channel="mutau", isMC=False, isSignal=False, year="2017")
+analysis_tautaudata2017  = lambda : Analysis(channel="tautau", isMC=False, isSignal=False, year="2017")
+
+analysis_eedata2016  = lambda : Analysis(channel="ee", isMC=False, isSignal=False, year="2016")
+analysis_emudata2016  = lambda : Analysis(channel="emu", isMC=False, isSignal=False, year="2016")
+analysis_etaudata2016  = lambda : Analysis(channel="etau", isMC=False, isSignal=False, year="2016")
+analysis_mumudata2016  = lambda : Analysis(channel="mumu", isMC=False, isSignal=False, year="2016")
+analysis_mutaudata2016  = lambda : Analysis(channel="mutau", isMC=False, isSignal=False, year="2016")
+analysis_tautaudata2016  = lambda : Analysis(channel="tautau", isMC=False, isSignal=False, year="2016")
 
 

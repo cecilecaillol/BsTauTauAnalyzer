@@ -66,6 +66,10 @@ keep Muon*
 keep Electron*
 keep Tau*
 keep GenPart*
+keep GenDressed*
+keep GenMET*
+keep GenVisTau*
+keep ChargedGen*
 keep Jet*
 keep PV_*
 keep TrigObj*
