@@ -108,11 +108,18 @@ int main(int argc, char** argv) {
     else if (sample=="ST_t_top"){ xs=136.02; weight=luminosity*xs/ngen;}
     else if (sample=="ST_t_antitop"){ xs=80.95; weight=luminosity*xs/ngen;}
     //else if (sample=="GGWW"){ xs=0.00692 * 0.368; weight=luminosity*xs/ngen;}
-    else if (sample=="GGWW"){ xs=0.00692; weight=luminosity*xs/ngen;}
-    else if (sample=="GGEE"){ xs=0.324; weight=luminosity*xs/ngen;}
+    //else if (sample=="GGWW"){ xs=0.00692; weight=luminosity*xs/ngen;} // old 1/128
+    //else if (sample=="GGEE"){ xs=0.324; weight=luminosity*xs/ngen;} // old 1/128
+    else if (sample=="GGWW"){ xs=0.00656; weight=luminosity*xs/ngen;} // new 1/137
+    else if (sample=="GGEE"){ xs=0.303; weight=luminosity*xs/ngen;} // new 1/137
     else if (sample=="GGTT"){ xs=1.161*0.008735; weight=luminosity*xs/ngen;}
+    else if (sample=="GGTT_Elastic_superchic"){ xs=0.288*0.02357; weight=luminosity*xs/ngen;}
+    else if (sample=="GGTT_ElInel_superchic"){ xs=(0.831/2)*0.02576; weight=luminosity*xs/ngen;}
+    else if (sample=="GGTT_InelEl_superchic"){ xs=(0.831/2)*0.02571; weight=luminosity*xs/ngen;}
+    else if (sample=="GGTT_Inelastic_superchic"){ xs=0.161*0.03029; weight=luminosity*xs/ngen;}
     //else if (sample=="GGTT_Ctb20"){ xs=1.118*0.0226; weight=luminosity*xs/ngen;}
-    else if (sample=="GGTT_Ctb20"){ xs=1.118*0.03915; weight=luminosity*xs/ngen;}
+    //else if (sample=="GGTT_Ctb20"){ xs=1.118*0.03915; weight=luminosity*xs/ngen;} // old 1/128
+    else if (sample=="GGTT_Ctb20"){ xs=1.048*0.0403; weight=luminosity*xs/ngen;} // new 1/137
     else if (sample=="CEPDijets"){ xs=0.1468; weight=luminosity*xs/ngen;}
     else if (sample=="QCDpomflux"){ xs=2285000.0; weight=luminosity*xs/ngen;}
     else if (sample=="GGHTT"){ xs=48.30*0.06208; weight=luminosity*xs/ngen;}
@@ -271,6 +278,23 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
     arbre->SetBranchAddress("HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1", &HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1);
     arbre->SetBranchAddress("HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20", &HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20);
     arbre->SetBranchAddress("HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau30", &HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau30);
+
+   arbre->SetBranchAddress("is_emu", &is_emu);
+   arbre->SetBranchAddress("is_etau", &is_etau);
+   arbre->SetBranchAddress("is_mutau", &is_mutau);
+   arbre->SetBranchAddress("is_tautau", &is_tautau);
+   arbre->SetBranchAddress("fidpt_1", &fidpt_1);
+   arbre->SetBranchAddress("fideta_1", &fideta_1);
+   arbre->SetBranchAddress("fidphi_1", &fidphi_1);
+   arbre->SetBranchAddress("fidm_1", &fidm_1);
+   arbre->SetBranchAddress("fidpt_2", &fidpt_2);
+   arbre->SetBranchAddress("fideta_2", &fideta_2);
+   arbre->SetBranchAddress("fidphi_2", &fidphi_2);
+   arbre->SetBranchAddress("fidm_2", &fidm_2);
+   arbre->SetBranchAddress("fidgen_mtt", &fidgen_mtt);
+   arbre->SetBranchAddress("fidntracks", &fidntracks);
+   arbre->SetBranchAddress("GenMET_phi", &GenMET_phi);
+   arbre->SetBranchAddress("GenMET_pt", &GenMET_pt);
 
     arbre->SetBranchAddress("TauG2Weights_ceBRe_40p0", &TauG2Weights_ceBRe_40p0);
     arbre->SetBranchAddress("TauG2Weights_ceBRe_39p2", &TauG2Weights_ceBRe_39p2);
@@ -573,8 +597,10 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    float bins8[] = {0,0.015,0.03,0.045,0.06,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity*/
 
    // Signal region
-   float bins0[] = {55,70,85,100,150,200};//mvis
-   float bins1[] = {55,70,85,100,150,200};//mvis
+   float bins0[] = {55,70,85,100,150,200};//mvis//FIXME original binning
+   float bins1[] = {55,70,85,100,150,200};//mvis//FIXME original binning
+   //float bins0[] = {55,70,85,100,125,150,175,200,250};//mvis//FIXME Marcos binning
+   //float bins1[] = {55,70,85,100,125,150,175,200,250};//mvis//FIXME Marcos binning
    //float bins0[] = {55,70,85,100,115,130,160,190,220};//mvis
    //float bins1[] = {55,70,85,100,115,130,160,190,220};//mvis
    float bins2[] = {40,55,70,85,100,125,150,200,350,500};//mvis
@@ -741,7 +767,7 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    }
 
 
-   TString fake_uncertainties[42]={"_CMS_jetfake_w_invertMTDown","_CMS_jetfake_w_invertMTUp","_CMS_jetfake_qcd_invertOSDown","_CMS_jetfake_qcd_invertOSUp","_CMS_jetfake_tauptextrap_w_et_dm0_yearDown","_CMS_jetfake_tauptextrap_w_et_dm0_yearUp","_CMS_jetfake_tauptextrap_w_et_dm1_yearDown","_CMS_jetfake_tauptextrap_w_et_dm1_yearUp","_CMS_jetfake_tauptextrap_w_et_dm10_yearDown","_CMS_jetfake_tauptextrap_w_et_dm10_yearUp","_CMS_jetfake_tauptextrap_w_et_dm11_yearDown","_CMS_jetfake_tauptextrap_w_et_dm11_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm0_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm0_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm1_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm1_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm10_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm10_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm11_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm11_yearUp","_CMS_jetfake_wfractionDown","_CMS_jetfake_wfractionUp","_CMS_jetfake_ntracksextrap_w_et_dm0_yearDown","_CMS_jetfake_ntracksextrap_w_et_dm0_yearUp","_CMS_jetfake_ntracksextrap_w_et_dm1_yearDown","_CMS_jetfake_ntracksextrap_w_et_dm1_yearUp","_CMS_jetfake_ntracksextrap_w_et_dm10_yearDown","_CMS_jetfake_ntracksextrap_w_et_dm10_yearUp","_CMS_jetfake_ntracksextrap_w_et_dm11_yearDown","_CMS_jetfake_ntracksextrap_w_et_dm11_yearUp","_CMS_jetfake_ntracksextrap_qcd_et_dm0_yearDown","_CMS_jetfake_ntracksextrap_qcd_et_dm0_yearUp","_CMS_jetfake_ntracksextrap_qcd_et_dm1_yearDown","_CMS_jetfake_ntracksextrap_qcd_et_dm1_yearUp","_CMS_jetfake_ntracksextrap_qcd_et_dm10_yearDown","_CMS_jetfake_ntracksextrap_qcd_et_dm10_yearUp","_CMS_jetfake_ntracksextrap_qcd_et_dm11_yearDown","_CMS_jetfake_ntracksextrap_qcd_et_dm11_yearUp","_CMS_jetfake_ntracksextrap_w_et_yearDown","_CMS_jetfake_ntracksextrap_w_et_yearUp","_CMS_jetfake_ntracksextrap_qcd_et_yearDown","_CMS_jetfake_ntracksextrap_qcd_et_yearUp"};
+   TString fake_uncertainties[42]={"_CMS_jetfake_w_invertMTDown","_CMS_jetfake_w_invertMTUp","_CMS_jetfake_qcd_invertOSDown","_CMS_jetfake_qcd_invertOSUp","_CMS_jetfake_tauptextrap_w_et_dm0_yearDown","_CMS_jetfake_tauptextrap_w_et_dm0_yearUp","_CMS_jetfake_tauptextrap_w_et_dm1_yearDown","_CMS_jetfake_tauptextrap_w_et_dm1_yearUp","_CMS_jetfake_tauptextrap_w_et_dm10_yearDown","_CMS_jetfake_tauptextrap_w_et_dm10_yearUp","_CMS_jetfake_tauptextrap_w_et_dm11_yearDown","_CMS_jetfake_tauptextrap_w_et_dm11_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm0_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm0_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm1_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm1_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm10_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm10_yearUp","_CMS_jetfake_tauptextrap_qcd_et_dm11_yearDown","_CMS_jetfake_tauptextrap_qcd_et_dm11_yearUp","_CMS_jetfake_wfractionDown","_CMS_jetfake_wfractionUp","_CMS_jetfake_ntracksextrap_w_et_dm0Down","_CMS_jetfake_ntracksextrap_w_et_dm0Up","_CMS_jetfake_ntracksextrap_w_et_dm1Down","_CMS_jetfake_ntracksextrap_w_et_dm1Up","_CMS_jetfake_ntracksextrap_w_et_dm10Down","_CMS_jetfake_ntracksextrap_w_et_dm10Up","_CMS_jetfake_ntracksextrap_w_et_dm11Down","_CMS_jetfake_ntracksextrap_w_et_dm11Up","_CMS_jetfake_ntracksextrap_qcd_et_dm0Down","_CMS_jetfake_ntracksextrap_qcd_et_dm0Up","_CMS_jetfake_ntracksextrap_qcd_et_dm1Down","_CMS_jetfake_ntracksextrap_qcd_et_dm1Up","_CMS_jetfake_ntracksextrap_qcd_et_dm10Down","_CMS_jetfake_ntracksextrap_qcd_et_dm10Up","_CMS_jetfake_ntracksextrap_qcd_et_dm11Down","_CMS_jetfake_ntracksextrap_qcd_et_dm11Up","_CMS_jetfake_ntracksextrap_w_etDown","_CMS_jetfake_ntracksextrap_w_etUp","_CMS_jetfake_ntracksextrap_qcd_etDown","_CMS_jetfake_ntracksextrap_qcd_etUp"};
 
    for (int k = 0; k < 42; ++k){
       if (year=="2016pre") fake_uncertainties[k]=fake_uncertainties[k].ReplaceAll("year","2016preVFP");
@@ -956,6 +982,9 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
 
    TH1F* h_ptll = new TH1F("h_ptll","h_ptll",50,0.0,100.0); h_ptll->Sumw2();
    TH1F* h_dz = new TH1F("h_dz","h_dz",32,0.0,0.4); h_dz->Sumw2();
+   TH1F* h_z = new TH1F("h_z","h_z",40,-10,10); h_z->Sumw2();
+
+   TH1F* h_suppl = new TH1F("h_suppl","h_suppl",18,50,500); h_suppl->Sumw2();
 
    Int_t nentries_wtn = (Int_t) arbre->GetEntries();
 
@@ -1271,6 +1300,23 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    auto b10_100=arbre->GetBranch("TauG2Weights_ceBIm_m39p2");
    auto b10_101=arbre->GetBranch("TauG2Weights_ceBIm_m40p0");
 
+   auto b11_1=arbre->GetBranch("is_emu");
+   auto b11_2=arbre->GetBranch("is_etau");
+   auto b11_3=arbre->GetBranch("is_mutau");
+   auto b11_4=arbre->GetBranch("is_tautau");
+   auto b11_5=arbre->GetBranch("fidpt_1");
+   auto b11_6=arbre->GetBranch("fideta_1");
+   auto b11_7=arbre->GetBranch("fidphi_1");
+   auto b11_8=arbre->GetBranch("fidm_1");
+   auto b11_9=arbre->GetBranch("fidpt_2");
+   auto b11_10=arbre->GetBranch("fideta_2");
+   auto b11_11=arbre->GetBranch("fidphi_2");
+   auto b11_12=arbre->GetBranch("fidm_2");
+   auto b11_13=arbre->GetBranch("fidgen_mtt");
+   auto b11_14=arbre->GetBranch("fidntracks");
+   auto b11_15=arbre->GetBranch("GenMET_pt");
+   auto b11_16=arbre->GetBranch("GenMET_phi");
+
 cout<<"g2 branches"<<endl;
    TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
    TF1* fit_aco = (TF1*) f_aco->Get("fit_A");
@@ -1550,26 +1596,8 @@ cout<<"g2 branches"<<endl;
 	   aweight=aweight*L1PreFiringWeight_Nom;
 	   if (name!="W") aweight*=genWeight;
 	   if (LepCand_gen[tau_index]==5) tauidSF=LepCand_tauidMsf[tau_index];
-           if (LepCand_gen[tau_index]==1 or LepCand_gen[tau_index]==3) aweight=aweight*LepCand_antielesf[tau_index];
-           if (LepCand_gen[tau_index]==2 or LepCand_gen[tau_index]==4) aweight=aweight*LepCand_antimusf[tau_index];
-
-	   // low ntracks custom SF
-	   if (year=="2016pre"){
-              if (LepCand_gen[tau_index]==5) aweight=aweight*1.036;
-              if (LepCand_gen[tau_index]==1 or LepCand_gen[tau_index]==3) aweight=aweight*1.42;
-	   }
-           else if (year=="2016post"){
-              if (LepCand_gen[tau_index]==5) aweight=aweight*1.063;
-              if (LepCand_gen[tau_index]==1 or LepCand_gen[tau_index]==3) aweight=aweight*1.10;
-           }
-           else if (year=="2017"){
-              if (LepCand_gen[tau_index]==5) aweight=aweight*1.055;
-              if (LepCand_gen[tau_index]==1 or LepCand_gen[tau_index]==3) aweight=aweight*1.49;
-           }
-           else if (year=="2018"){
-              if (LepCand_gen[tau_index]==5) aweight=aweight*1.043;
-              if (LepCand_gen[tau_index]==1 or LepCand_gen[tau_index]==3) aweight=aweight*0.74;
-           }
+           if (LepCand_gen[tau_index]==1 or LepCand_gen[tau_index]==3) tauidSF=LepCand_antielesf[tau_index];
+           if (LepCand_gen[tau_index]==2 or LepCand_gen[tau_index]==4) tauidSF=LepCand_antimusf[tau_index];
 
 	   /*if (is_etautrg or is_etauHPStrg){ 
 	      aweight=aweight*LepCand_tautriggersf[tau_index];
@@ -1665,7 +1693,29 @@ cout<<"g2 branches"<<endl;
 	//   cout<<endl;
 	//}*/
 	b8_1->GetEntry(i); b8_2->GetEntry(i); b8_3->GetEntry(i); b8_4->GetEntry(i);
+	//cout<<ntracks_friend<<" "<<ntracksPU_friend<<" "<<ntracksHS_friend<<endl;
 	int ntracks=ntracks_friend;
+
+	if (name!="data_obs" and ntracks<10){
+           if (year=="2016pre"){
+              if (LepCand_gen[tau_index]==5) tauidSF*=1.036;
+              if (LepCand_gen[tau_index]==1 or LepCand_gen[tau_index]==3) tauidSF*=1.42;
+           }
+           else if (year=="2016post"){
+              if (LepCand_gen[tau_index]==5) tauidSF*=1.063;
+              if (LepCand_gen[tau_index]==1 or LepCand_gen[tau_index]==3) tauidSF*=1.10;
+           }
+           else if (year=="2017"){
+              if (LepCand_gen[tau_index]==5) tauidSF*=1.055;
+              if (LepCand_gen[tau_index]==1 or LepCand_gen[tau_index]==3) tauidSF*=1.49;
+           }
+           else if (year=="2018"){
+              if (LepCand_gen[tau_index]==5) tauidSF*=1.043;
+              if (LepCand_gen[tau_index]==1 or LepCand_gen[tau_index]==3) tauidSF*=0.74;
+           }
+	}
+
+
 	h_ntracks->Fill(TMath::Min(29,ntracks));
 	if (acoplanarity>0.3) h_aco->Fill(0.299);
 	else h_aco->Fill(acoplanarity);
@@ -1675,9 +1725,11 @@ cout<<"g2 branches"<<endl;
         else if (zpos>10) zpos=9.99;
         int ntpu=ntracksPU_friend;
         if (ntpu>49) ntpu=49;
-        if (sample!="data_obs") {aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));} //FIXME Ben
+        if (sample!="data_obs") {
+		aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));
+	} 
 
-        if (sample=="DY" or sample=="VV2L2Nu"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); } //FIXME Ben
+        if (sample=="DY" or sample=="VV2L2Nu"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); } 
 
 	TLorentzVector save_tau=my_tau;
         TLorentzVector save_ele=my_ele;
@@ -1691,8 +1743,10 @@ cout<<"g2 branches"<<endl;
 	//if (!is_lowA or ntracks>10) continue;
 
         if (sample=="GGWW" or sample=="GGEE"){ // rescaling from mumu region
-           if (ntracks==0) aweight*=(2.433+0.00152*gen_mtt);
-           else if (ntracks==1) aweight*=(2.52+0.0011*gen_mtt);
+           /*if (ntracks==0) aweight*=(2.433+0.00152*gen_mtt);
+           else if (ntracks==1) aweight*=(2.52+0.0011*gen_mtt);*/ //old 1/128
+	   if (ntracks==0) aweight*=(2.359+0.003404*gen_mtt);
+           else if (ntracks==1) aweight*=(2.377+0.003163*gen_mtt); // new 1/137
 	}
 
 	/*if (sample=="DYemu" or sample=="DY"){//EFT reweighting //FIXME
@@ -1704,8 +1758,10 @@ cout<<"g2 branches"<<endl;
 
 	if (sample=="GGTT" or sample=="GGTT_Ctb20"){ // rescaling from mumu region
            ////if (ntracks==0) cout<<gen_mtt<<endl;
-	   if (ntracks==0) aweight*=(2.433+0.00152*gen_mtt); //FIXME Ben
-           else if (ntracks==1) aweight*=(2.52+0.0011*gen_mtt); //FIXME Ben
+	   /*if (ntracks==0) aweight*=(2.433+0.00152*gen_mtt);
+           else if (ntracks==1) aweight*=(2.52+0.0011*gen_mtt); */ //old 1/128
+	   if (ntracks==0) aweight*=(2.359+0.003404*gen_mtt); 
+           else if (ntracks==1) aweight*=(2.377+0.003163*gen_mtt); // new 1/137
 	   b9_1->GetEntry(i); b9_2->GetEntry(i); b9_3->GetEntry(i);b9_4->GetEntry(i); b9_5->GetEntry(i); b9_6->GetEntry(i);b9_7->GetEntry(i); b9_8->GetEntry(i); b9_9->GetEntry(i);
            b9_10->GetEntry(i); b9_11->GetEntry(i); b9_12->GetEntry(i); b9_13->GetEntry(i);b9_14->GetEntry(i); b9_15->GetEntry(i); b9_16->GetEntry(i);b9_17->GetEntry(i); b9_18->GetEntry(i); b9_19->GetEntry(i);
            b9_20->GetEntry(i); b9_21->GetEntry(i); b9_22->GetEntry(i); b9_23->GetEntry(i);b9_24->GetEntry(i); b9_25->GetEntry(i); b9_26->GetEntry(i);b9_27->GetEntry(i); b9_28->GetEntry(i); b9_29->GetEntry(i);
@@ -1732,6 +1788,8 @@ cout<<"g2 branches"<<endl;
 
 	   if (name=="GGTT_0p0") aweight*=TauG2Weights_ceBRe_0p0;
            else if (name=="GGTT") aweight*=TauG2Weights_ceBRe_0p0;
+	   else if (name=="GGTT_nonfid") aweight*=TauG2Weights_ceBRe_0p0;
+	   else if (name=="GGTT_fid") aweight*=TauG2Weights_ceBRe_0p0;
            else if (name=="GGTT_0p8") aweight*=TauG2Weights_ceBRe_0p8;
            else if (name=="GGTT_1p6") aweight*=TauG2Weights_ceBRe_1p6;
            else if (name=="GGTT_2p4") aweight*=TauG2Weights_ceBRe_2p4;
@@ -1936,6 +1994,46 @@ cout<<"g2 branches"<<endl;
            else if (name=="GGTT_Im_m40p0") aweight*=TauG2Weights_ceBIm_m40p0;
 
 	}
+	
+	if (name=="GGTT_fid" or name=="GGTT_nonfid"){
+	   b11_1->GetEntry(i); b11_2->GetEntry(i);b11_3->GetEntry(i);b11_4->GetEntry(i);b11_5->GetEntry(i);b11_6->GetEntry(i);b11_7->GetEntry(i);b11_8->GetEntry(i);b11_9->GetEntry(i);b11_10->GetEntry(i);b11_11->GetEntry(i);b11_12->GetEntry(i);b11_13->GetEntry(i);b11_14->GetEntry(i);b11_15->GetEntry(i);b11_16->GetEntry(i);
+	   TLorentzVector fid_lep1;
+           TLorentzVector fid_lep2;
+           TLorentzVector fid_met;
+           fid_lep1.SetPtEtaPhiM(fidpt_1,fideta_1,fidphi_1,fidm_1);
+           fid_lep2.SetPtEtaPhiM(fidpt_2,fideta_2,fidphi_2,fidm_2);
+           fid_met.SetPtEtaPhiM(GenMET_pt, 0, GenMET_phi, 0);
+
+           float fidacoplanarity = (1.0 -fabs(fid_lep2.DeltaPhi(fid_lep1))/3.14159);
+           float fidmt = TMass_F(fid_lep1.Pt(), fid_lep1.Px(), fid_lep1.Py(), fid_met.Pt(), fid_met.Phi());
+
+	   bool is_fiducial=true;
+           if (fidacoplanarity>0.015) is_fiducial=false;
+           if (fid_lep1.DeltaR(fid_lep2)<0.5) is_fiducial=false;
+           if ((fid_lep1+fid_lep2).M()>500) is_fiducial=false;
+           if (is_emu==0 and is_etau==0 and is_mutau==0 and is_tautau==0) is_fiducial=false;
+
+           if (is_emu){
+              if (fid_lep1.Pt()<15 or fid_lep2.Pt()<15 or fabs(fid_lep1.Eta())>2.5 or fabs(fid_lep2.Eta())>2.4) is_fiducial=false;
+              if (fid_lep1.Pt()<24 and fid_lep2.Pt()<24) is_fiducial=false;
+           }
+           if (is_etau){
+              if (fid_lep1.Pt()<25 or fid_lep2.Pt()<30 or fabs(fid_lep1.Eta())>2.5 or fabs(fid_lep2.Eta())>2.3) is_fiducial=false;
+              if (fidmt>75) is_fiducial=false;
+           }
+           if (is_mutau){
+              if (fid_lep1.Pt()<21 or fid_lep2.Pt()<30 or fabs(fid_lep1.Eta())>2.4 or fabs(fid_lep2.Eta())>2.3) is_fiducial=false;
+              if (fidmt>75) is_fiducial=false;
+           }
+           if (is_tautau){
+              if (fid_lep1.Pt()<40 or fid_lep2.Pt()<40 or fabs(fid_lep1.Eta())>2.3 or fabs(fid_lep2.Eta())>2.3) is_fiducial=false;
+           }
+           if (fidntracks>0) is_fiducial=false;
+
+	   if (name=="GGTT_fid" and !is_fiducial) continue;
+	   if (name=="GGTT_nonfid" and is_fiducial) continue;
+	}
+
 
         for (int k=0; k<nbhist; ++k){
            my_tau=save_tau;
@@ -1995,12 +2093,16 @@ cout<<"g2 branches"<<endl;
               else if (k==47 and is_eletrg){ weight2=0.98;}
               else if (k==48 and is_eletrg){ weight2=1.02;}
 	      else if (k==49){ 
-		if (ntracks==0) weight2=2.59/(2.433+0.00152*gen_mtt);
-                if (ntracks==1) weight2=2.63/(2.52+0.0011*gen_mtt);
+		/*if (ntracks==0) weight2=2.59/(2.433+0.00152*gen_mtt);
+                if (ntracks==1) weight2=2.63/(2.52+0.0011*gen_mtt);*/ // old 1/128
+		if (ntracks==0) weight2=2.703/(2.359+0.003404*gen_mtt);
+                if (ntracks==1) weight2=2.711/(2.377+0.003163*gen_mtt); // new 1/137
 	      }
               else if (k==50){ 
-                if (ntracks==0) weight2=1.0+(1.0-2.59/(2.433+0.00152*gen_mtt));
-                if (ntracks==1) weight2=1.0+(1.0-2.63/(2.52+0.0011*gen_mtt));
+                /*if (ntracks==0) weight2=1.0+(1.0-2.59/(2.433+0.00152*gen_mtt));
+                if (ntracks==1) weight2=1.0+(1.0-2.63/(2.52+0.0011*gen_mtt));*/ //old 1/128
+		if (ntracks==0) weight2=1.0+(1.0-2.703/(2.359+0.003404*gen_mtt));
+                if (ntracks==1) weight2=1.0+(1.0-2.711/(2.377+0.003163*gen_mtt)); // new 1/137
               }
               else if (k==51) weight2=L1PreFiringWeight_Dn/L1PreFiringWeight_Nom;
               else if (k==52) weight2=L1PreFiringWeight_Up/L1PreFiringWeight_Nom;
@@ -2182,7 +2284,10 @@ cout<<"g2 branches"<<endl;
 
 	   }
 	   if (is_OS and is_isolated and is_real){
+
+	     if (k==0 and is_cat0) h_z->Fill(simple_ditau_z);
 	     float w_iso=weight*aweight*weight2*tauidSF;
+	     if (k==0 and is_cat0) h_suppl->Fill(mvis,w_iso);
 	     if (is_cat0) h0[k]->Fill(var0,w_iso);
              if (is_cat1) h1[k]->Fill(var1,w_iso);
              if (is_cat2) h2[k]->Fill(var2,w_iso);
@@ -2402,7 +2507,9 @@ cout<<"g2 branches"<<endl;
     } // end of loop over events
     TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();
+    h_suppl->Write();
     h_dz->Write();
+    h_z->Write();
 
     h_DY_mvis_waco->Write();
     h_DY_ptZ_waco->Write();
@@ -2549,7 +2656,6 @@ cout<<h0[0]->Integral()<<endl;
           WriteHistToFileETau(fout, h8R_anti, name, "etR_8_anti", uncertainties, fake_uncertainties, isMC, nbhist, nbhist_offset,nbhistMC, true);
        }
     }
-
 
     fout->Close();
 } 
