@@ -402,3 +402,20 @@
    Float_t         beamspot_y0;
    Float_t         beamspot_z0;
 
+   Int_t           is_emu;
+   Int_t           is_etau;
+   Int_t           is_mutau;
+   Int_t           is_tautau;
+   Float_t         fidpt_1;
+   Float_t         fideta_1;
+   Float_t         fidphi_1;
+   Float_t         fidm_1;
+   Float_t         fidpt_2;
+   Float_t         fideta_2;
+   Float_t         fidphi_2;
+   Float_t         fidm_2;
+   Float_t         fidgen_mtt;
+   Int_t           fidntracks;
+   Float_t         GenMET_pt;
+   Float_t         GenMET_phi;
+
