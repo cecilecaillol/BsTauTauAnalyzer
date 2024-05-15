@@ -53,9 +53,11 @@ if __name__ == "__main__":
     dt=[]
     for i in range(0,101):
       ceBR.append(-40.0+i*0.8)
-      at.append((-40.0+i*0.8)*2*1.77686*100/(0.282*M)) #multiplied by 100 for numerical precision in Combine
-      dt.append((-40.0+i*0.8)*2*1.77686/(0.282*M*1.77686*51*0.00001*2))
+      at.append((-40.0+i*0.8)*2*1.77686*100/(0.303*M)) #multiplied by 100 for numerical precision in Combine
+      print "atau = ", 2*1.77686*100/(0.303*M), "ctaub"
+      dt.append((-40.0+i*0.8)*2*1.77686/(0.303*M*1.77686*51*0.00001*2))
       print ceBR[i],at[i],dt[i]
+      print 1.0/(2*1.77686/(0.303*1.77686*51*0.00001*2))
     ceBRname=["m40p0","m39p2","m38p4","m37p6","m36p8","m36p0","m35p2","m34p4","m33p6","m32p8","m32p0","m31p2","m30p4","m29p6","m28p8","m28p0","m27p2","m26p4","m25p6","m24p8","m24p0","m23p2","m22p4","m21p6","m20p8","m20p0","m19p2","m18p4","m17p6","m16p8","m16p0","m15p2","m14p4","m13p6","m12p8","m12p0","m11p2","m10p4","m9p6","m8p8","m8p0","m7p2","m6p4","m5p6","m4p8","m4p0","m3p2","m2p4","m1p6","m0p8","0p0","0p8","1p6","2p4","3p2","4p0","4p8","5p6","6p4","7p2","8p0","8p8","9p6","10p4","11p2","12p0","12p8","13p6","14p4","15p2","16p0","16p8","17p6","18p4","19p2","20p0","20p8","21p6","22p4","23p2","24p0","24p8","25p6","26p4","27p2","28p0","28p8","29p6","30p4","31p2","32p0","32p8","33p6","34p4","35p2","36p0","36p8","37p6","38p4","39p2","40p0"]
 
 
@@ -226,10 +228,10 @@ if __name__ == "__main__":
           physics_model.write("_bin")
           physics_model.write(str(jj))
           physics_model.write('("(')
-	  physics_model.write(str(total.GetParameter(0))+"+"+str(total.GetParameter(1))+"*@0+"+str(total.GetParameter(2))+"*@0*@0+"+str(total.GetParameter(3))+"*@0*@0*@0+"+str(total.GetParameter(4))+"*@0*@0*@0*@0+"+str(total.GetParameter(5))+"*@0*@0*@0*@0*@0)*@1")
+	  physics_model.write(str(total.GetParameter(0))+"+"+str(total.GetParameter(1))+"*@0+"+str(total.GetParameter(2))+"*@0*@0+"+str(total.GetParameter(3))+"*@0*@0*@0+"+str(total.GetParameter(4))+"*@0*@0*@0*@0+"+str(total.GetParameter(5))+"*@0*@0*@0*@0*@0)")
           physics_model.write('"')
-          if options.observable=="atau": physics_model.write(",atau,mu)')\n")
-          else: physics_model.write(",dtau,mu)')\n")
+          if options.observable=="atau": physics_model.write(",atau)')\n")
+          else: physics_model.write(",dtau)')\n")
 
 
           canv.cd()

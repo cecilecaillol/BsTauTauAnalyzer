@@ -1,5 +1,5 @@
 def add_lumi(year):
-    lowX=0.35
+    lowX=0.55
     lowY=0.835
     lumi  = ROOT.TPaveText(lowX, lowY+0.06, lowX+0.30, lowY+0.16, "NDC")
     lumi.SetBorderSize(   0 )
@@ -15,10 +15,27 @@ def add_lumi(year):
     if (year=="2016post"): lumi.AddText("2016 postVFP, 16 fb^{-1} (13 TeV)")
     return lumi
 
+def add_lumi2(year):
+    lowX=0.5
+    lowY=0.835
+    lumi  = ROOT.TPaveText(lowX, lowY+0.06, lowX+0.30, lowY+0.16, "NDC")
+    lumi.SetBorderSize(   0 )
+    lumi.SetFillStyle(    0 )
+    lumi.SetTextAlign(   12 )
+    lumi.SetTextColor(    1 )
+    lumi.SetTextSize(0.04)
+    lumi.SetTextFont (   42 )
+    if (year=="2018"): lumi.AddText("2018, 60 fb^{-1} (13 TeV)")
+    if (year=="2017"): lumi.AddText("2017, 41 fb^{-1} (13 TeV)")
+    if (year=="2016"): lumi.AddText("2016, 36 fb^{-1} (13 TeV)")
+    if (year=="2016pre"): lumi.AddText("2016 preVFP, 20 fb^{-1} (13 TeV)")
+    if (year=="2016post"): lumi.AddText("2016 postVFP, 16 fb^{-1} (13 TeV)")
+    return lumi
+
 def add_CMS():
     lowX=0.16
     lowY=0.835
-    lumi  = ROOT.TPaveText(lowX, lowY+0.06, lowX+0.15, lowY+0.16, "NDC")
+    lumi  = ROOT.TPaveText(0.1, lowY+0.06, 0.2, lowY+0.16, "NDC")
     lumi.SetTextFont(61)
     lumi.SetTextSize(0.065)
     lumi.SetBorderSize(   0 )
@@ -28,6 +45,31 @@ def add_CMS():
     lumi.AddText("CMS")
     return lumi
 
+def add_Supplementary():
+    lowX=0.32
+    lowY=0.825
+    lumi  = ROOT.TPaveText(0.2, lowY+0.06, 0.45, lowY+0.16, "NDC")
+    lumi.SetTextFont(42)
+    lumi.SetTextSize(0.05)
+    lumi.SetBorderSize(   0 )
+    lumi.SetFillStyle(    0 )
+    lumi.SetTextAlign(   12 )
+    lumi.SetTextColor(    1 )
+    lumi.AddText("Preliminary")
+    return lumi
+
+def add_Supplementary2():
+    lowX=0.4
+    lowY=0.825
+    lumi  = ROOT.TPaveText(0.24, lowY+0.06, 0.45, lowY+0.16, "NDC")
+    lumi.SetTextFont(42)
+    lumi.SetTextSize(0.04)
+    lumi.SetBorderSize(   0 )
+    lumi.SetFillStyle(    0 )
+    lumi.SetTextAlign(   12 )
+    lumi.SetTextColor(    1 )
+    lumi.AddText("Preliminary")
+    return lumi
 
 if __name__ == "__main__":
 
@@ -101,15 +143,20 @@ if __name__ == "__main__":
     h1iso.SetName("FRNT")
     h1iso.Write()
 
-    c=ROOT.TCanvas("canvas","",0,0,800,800)
-    c.SetRightMargin(0.15)
-    c.cd()
+    c1=ROOT.TCanvas("canvas","",0,0,800,600)
+    c1.cd()
     h1iso.SetTitle("")
     h1iso.SetMarkerStyle(20)
     h1iso.SetMarkerColor(1)
     h1iso.SetLineColor(1)
-    h1iso.GetXaxis().SetTitle("N_{tracks}")
-    h1iso.GetYaxis().SetTitle("OS-to-SS ratio / average")
+    h1iso.GetXaxis().SetTitle("N_{#lower[-0.25]{tracks}}")
+    h1iso.GetYaxis().SetTitle("OS-to-SS weight correction ")
+    h1iso.GetXaxis().SetTitleSize(0.06)
+    h1iso.GetYaxis().SetTitleSize(0.06)
+    h1iso.GetXaxis().SetLabelSize(0.04)
+    h1iso.GetYaxis().SetLabelSize(0.04)
+    h1iso.GetYaxis().SetTitleOffset(0.8)
+    h1iso.GetXaxis().SetTitleOffset(0.7)
     h1iso.Draw("e0p")
     h1iso.GetXaxis().SetRangeUser(0,100)
     h1iso.SetMinimum(0.5)
@@ -117,8 +164,10 @@ if __name__ == "__main__":
     lumi.Draw("same")
     cms=add_CMS()
     cms.Draw("same")
+    sup=add_Supplementary()
+    sup.Draw("same")
     total = ROOT.TF1( 'total', 'pol5', 0, 100 )
-    total.SetLineColor( 2 )
+    total.SetLineColor( ROOT.kMagenta )
     h1iso.Fit(total,'R')
     total.SetName("fit_frnt")
 
@@ -130,30 +179,59 @@ if __name__ == "__main__":
     hint.Draw("e3 same");
     print hint.GetBinError(1)/hint.GetBinContent(1);
 
+    total.Draw("SAME")
+    h1iso.Draw("PSAME")
+
+    leg  = ROOT.TLegend(0.13, 0.15, 0.8, 0.3, "", "brNDC");
+    leg.SetNColumns(2);
+    leg.SetLineWidth(0);
+    leg.SetLineStyle(0);
+    leg.SetFillStyle(0);
+    leg.SetBorderSize(0);
+    leg.SetTextFont(42);
+    leg.AddEntry(total, "Polynomial fit", "l");
+    leg.AddEntry(hint, "Fit uncertainty", "f");
+    leg.Draw("same");
+
+
     fout.cd()
     total.Write()
-    c.cd()
-    c.Modified()
-    c.SaveAs("plots_emu_"+options.year+"/frnt.pdf")
-    c.SaveAs("plots_emu_"+options.year+"/frnt.png")
+    c1.cd()
+    c1.Modified()
+    c1.SaveAs("plots_emu_"+options.year+"/frnt.pdf")
+    c1.SaveAs("plots_emu_"+options.year+"/frnt.png")
+    c1.SaveAs("plots_emu_"+options.year+"/frnt.root")
 
+    c=ROOT.TCanvas("canvas","",0,0,800,800)
+    c.SetRightMargin(0.15)
+    c.cd()
     h0iso.SetTitle("")
     h0iso.SetMarkerStyle(20)
     h0iso.SetMarkerColor(1)
     h0iso.SetLineColor(1)
     h0iso.GetXaxis().SetTitle("p_{T}(e) (GeV)")
     h0iso.GetYaxis().SetTitle("p_{T}(#mu) (GeV)")
-    h0iso.GetZaxis().SetTitle("OS/SS ratio")
-    h0iso.GetZaxis().SetRangeUser(1.2,2.2)
+    h0iso.GetZaxis().SetTitle("OS-to-SS weight")
+    h0iso.GetXaxis().SetTitleSize(0.05)
+    h0iso.GetYaxis().SetTitleSize(0.05)
+    h0iso.GetZaxis().SetTitleSize(0.05)
+    h0iso.GetXaxis().SetTitleOffset(0.81)
+    h0iso.GetYaxis().SetTitleOffset(0.85)
+    h0iso.GetZaxis().SetTitleOffset(0.9)
+    h0iso.GetZaxis().SetRangeUser(1.4,2.3)
+    h0iso.SetMarkerSize(2)
     h0iso.Draw("COLZH ERROR TEXT45")
-    lumi=add_lumi(options.year)
+    lumi=add_lumi2(options.year)
     lumi.Draw("same")
     cms=add_CMS()
     cms.Draw("same")
+    sup=add_Supplementary2()
+    sup.Draw("same")
     c.cd()
     c.Modified()
     c.SaveAs("plots_emu_"+options.year+"/fr2D.pdf")
     c.SaveAs("plots_emu_"+options.year+"/fr2D.png")
+    c.SaveAs("plots_emu_"+options.year+"/fr2D.root")
 
     h0highiso.SetTitle("")
     h0highiso.SetMarkerStyle(20)
@@ -164,9 +242,9 @@ if __name__ == "__main__":
     h0highiso.GetZaxis().SetTitle("OS/SS ratio")
     h0highiso.GetZaxis().SetRangeUser(1.2,2.2)
     h0highiso.Draw("COLZH ERROR TEXT45")
-    lumi=add_lumi(options.year)
+    #lumi=add_lumi(options.year)
     lumi.Draw("same")
-    cms=add_CMS()
+    #cms=add_CMS()
     cms.Draw("same")
     c.cd()
     c.Modified()
@@ -182,9 +260,9 @@ if __name__ == "__main__":
     h0lowiso.GetZaxis().SetTitle("OS/SS ratio")
     h0lowiso.GetZaxis().SetRangeUser(1.2,2.2)
     h0lowiso.Draw("COLZH ERROR TEXT45")
-    lumi=add_lumi(options.year)
+    #lumi=add_lumi(options.year)
     lumi.Draw("same")
-    cms=add_CMS()
+    #cms=add_CMS()
     cms.Draw("same")
     c.cd()
     c.Modified()
@@ -223,14 +301,23 @@ if __name__ == "__main__":
     h2iso.SetLineColor(1)
     h2iso.GetXaxis().SetTitle("p_{T}(e) (GeV)")
     h2iso.GetYaxis().SetTitle("p_{T}(#mu) (GeV)")
-    h2iso.GetZaxis().SetTitle("anti-#mu correction")
-    h2iso.GetZaxis().SetRangeUser(0.9,2.0)
+    h2iso.GetZaxis().SetTitle("OS-to-SS weight correction")
+    h2iso.GetXaxis().SetTitleSize(0.05)
+    h2iso.GetYaxis().SetTitleSize(0.05)
+    h2iso.GetZaxis().SetTitleSize(0.05)
+    h2iso.GetXaxis().SetTitleOffset(0.81)
+    h2iso.GetYaxis().SetTitleOffset(0.85)
+    h2iso.GetZaxis().SetTitleOffset(0.9)
+    h2iso.GetZaxis().SetRangeUser(1.0,2.4)
+    h2iso.SetMarkerSize(2)
     h2iso.Draw("COLZH ERROR TEXT45")
     lumi.Draw("same")
     cms.Draw("same")
+    sup.Draw("same")
     c.cd()
     c.Modified()
     c.SaveAs("plots_emu_"+options.year+"/frantimu.pdf")
     c.SaveAs("plots_emu_"+options.year+"/frantimu.png")
+    c.SaveAs("plots_emu_"+options.year+"/frantimu.root")
 
 

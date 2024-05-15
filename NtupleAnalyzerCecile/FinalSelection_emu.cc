@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
     start_pos = input.find("2016post/");
     if(start_pos != std::string::npos)  input_friend.replace(start_pos, 9, "2016post/friend_");
     cout<<input<<" "<<input_friend<<endl;
-    TFile *f_Friend = new TFile(input_friend.c_str());//FIXME
+    TFile *f_Friend = new TFile(input_friend.c_str());
     TTree *ami = (TTree*) f_Friend->Get("friend_tree");
 
 
@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
     if (year=="2016pre") luminosity=19520.0;
     if (year=="2016post") luminosity=16810.0;
     if (sample=="Z" or sample=="DY" or sample=="ZL" or sample=="ZTT" or sample=="ZJ" or sample=="ZLL"){ xs=6077.2; weight=luminosity*xs/ngen;}
-    else if (sample=="DYemu"){ xs=2025.7*(0.178+0.174)*(0.178+0.174); weight=luminosity*xs/ngen;}//FIXME
+    else if (sample=="DYemu"){ xs=2025.7*(0.178+0.174)*(0.178+0.174); weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt100to250"){ xs=689.75; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt250to400"){ xs=24.51; weight=luminosity*xs/ngen;}
     else if (sample=="W_Pt400to600"){cout<<"trouve"<<endl; xs=3.110; weight=luminosity*xs/ngen;}
@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
     else if (sample=="ZZ2Q2L"){ xs=3.22; weight=luminosity*xs/ngen;}
     else if (sample=="WZ3LNu"){ xs=5.213; weight=luminosity*xs/ngen;}
     else if (sample=="VV2L2Nu"){ xs=11.09+0.9738; weight=luminosity*xs/ngen;}
-    else if (sample=="WW2L2Nu"){ xs=11.09; weight=luminosity*xs/ngen;}//FIXME
+    else if (sample=="WW2L2Nu"){ xs=11.09; weight=luminosity*xs/ngen;}
     else if (sample=="WZ2L2Q"){ xs=6.419; weight=luminosity*xs/ngen;}
     else if (sample=="WZ2Q2L"){ xs=6.419; weight=luminosity*xs/ngen;}
     else if (sample=="ZZ2L2Nu"){ xs=0.9738; weight=luminosity*xs/ngen;}
@@ -111,11 +111,13 @@ int main(int argc, char** argv) {
     //else if (sample=="GGTT"){ xs=0.669*0.0172; weight=luminosity*xs/ngen;}
     else if (sample=="GGTT"){ xs=1.161*0.008735; weight=luminosity*xs/ngen;}
     //else if (sample=="GGWW"){ xs=0.00692 * 0.368; weight=luminosity*xs/ngen;}
-    else if (sample=="GGWW"){ xs=0.00692; weight=luminosity*xs/ngen;}
+    //else if (sample=="GGWW"){ xs=0.00692; weight=luminosity*xs/ngen;} // old 1/128
+    else if (sample=="GGWW"){ xs=0.00656; weight=luminosity*xs/ngen;} // new 1/137
     else if (name=="data_obs"){ weight=1.0;}
     else if (name=="test") { xs=1.0; weight=luminosity*xs/ngen;}
     //else if (sample=="GGTT_Ctb20"){ xs=1.118*0.0226; weight=luminosity*xs/ngen;}
-    else if (sample=="GGTT_Ctb20"){ xs=1.118*0.03915; weight=luminosity*xs/ngen;}
+    //else if (sample=="GGTT_Ctb20"){ xs=1.118*0.03915; weight=luminosity*xs/ngen;} // old 1/128
+    else if (sample=="GGTT_Ctb20"){ xs=1.048*0.0403; weight=luminosity*xs/ngen;} // new 1/137
     else if (sample=="GGHTT"){ xs=48.30*0.06208; weight=luminosity*xs/ngen;}
     else if (sample=="GGHWW") {xs=48.30*0.2203*0.3258*0.3258; weight=luminosity*xs/ngen;}
 
@@ -126,7 +128,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
     //if (output.find("renano") < 140){
       if (sample=="DY") weight*=0.318;
-      else if (sample=="DYemu") weight*=0.10687;
+      else if (sample=="DYemu") weight*=0.10687*0.988;
       else if (sample=="TTTo2L2Nu") weight*=0.657;
       else if (sample=="VV2L2Nu") weight*=0.392;
       else if (sample=="TTToSemiLeptonic") weight*=0.401;
@@ -204,6 +206,23 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
     arbre->SetBranchAddress("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", &HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ);
     arbre->SetBranchAddress("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL", &HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL);
     arbre->SetBranchAddress("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL", &HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL);
+
+    arbre->SetBranchAddress("is_emu", &is_emu);
+    arbre->SetBranchAddress("is_etau", &is_etau);
+    arbre->SetBranchAddress("is_mutau", &is_mutau);
+    arbre->SetBranchAddress("is_tautau", &is_tautau);
+    arbre->SetBranchAddress("fidpt_1", &fidpt_1);
+    arbre->SetBranchAddress("fideta_1", &fideta_1);
+    arbre->SetBranchAddress("fidphi_1", &fidphi_1);
+    arbre->SetBranchAddress("fidm_1", &fidm_1);
+    arbre->SetBranchAddress("fidpt_2", &fidpt_2);
+    arbre->SetBranchAddress("fideta_2", &fideta_2);
+    arbre->SetBranchAddress("fidphi_2", &fidphi_2);
+    arbre->SetBranchAddress("fidm_2", &fidm_2);
+    arbre->SetBranchAddress("fidgen_mtt", &fidgen_mtt);
+    arbre->SetBranchAddress("fidntracks", &fidntracks);
+    arbre->SetBranchAddress("GenMET_phi", &GenMET_phi);
+    arbre->SetBranchAddress("GenMET_pt", &GenMET_pt);
 
     arbre->SetBranchAddress("TauG2Weights_ceBIm_40p0", &TauG2Weights_ceBIm_40p0);
     arbre->SetBranchAddress("TauG2Weights_ceBIm_39p2", &TauG2Weights_ceBIm_39p2);
@@ -501,8 +520,10 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    float bins8[] = {0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity*/
 
    // Signal region
-   float bins0[] = {40,55,70,85,100,150,200};//mvis
-   float bins1[] = {40,55,70,85,100,150,200};//mvis
+   float bins0[] = {40,55,70,85,100,150,200};//mvis//FIXME original binning!!!!!!!!!!!!!!!!!
+   float bins1[] = {40,55,70,85,100,150,200};//mvis//FIXME original binning!!!!!!!!!!!!!!!!
+   //float bins0[] = {40,55,70,85,100,125,150,175,200,250};//mvis//FIXME
+   //float bins1[] = {40,55,70,85,100,125,150,175,200,250};//mvis//FIXME
    //float bins0[] = {30,45,60,75,90,105,120,150,180,210};
    //float bins1[] = {30,45,60,75,90,105,120,150,180,210};
    float bins2[] = {20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200};//mvis
@@ -800,6 +821,8 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
    TH1F* h_nHS=new TH1F("h_nHS","h_nHS",70,0,70);
 
+   TH1F* h_z=new TH1F("h_z","h_z",40,-10,10);
+
    auto b1_1=arbre->GetBranch("LepCand_pt");
    auto b1_2=arbre->GetBranch("LepCand_eta");
    auto b1_3=arbre->GetBranch("LepCand_phi");
@@ -1065,6 +1088,23 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
    auto b10_99=arbre->GetBranch("TauG2Weights_ceBIm_m38p4");
    auto b10_100=arbre->GetBranch("TauG2Weights_ceBIm_m39p2");
    auto b10_101=arbre->GetBranch("TauG2Weights_ceBIm_m40p0");
+
+   auto b11_1=arbre->GetBranch("is_emu");
+   auto b11_2=arbre->GetBranch("is_etau");
+   auto b11_3=arbre->GetBranch("is_mutau");
+   auto b11_4=arbre->GetBranch("is_tautau");
+   auto b11_5=arbre->GetBranch("fidpt_1");
+   auto b11_6=arbre->GetBranch("fideta_1");
+   auto b11_7=arbre->GetBranch("fidphi_1");
+   auto b11_8=arbre->GetBranch("fidm_1");
+   auto b11_9=arbre->GetBranch("fidpt_2");
+   auto b11_10=arbre->GetBranch("fideta_2");
+   auto b11_11=arbre->GetBranch("fidphi_2");
+   auto b11_12=arbre->GetBranch("fidm_2");
+   auto b11_13=arbre->GetBranch("fidgen_mtt");
+   auto b11_14=arbre->GetBranch("fidntracks");
+   auto b11_15=arbre->GetBranch("GenMET_pt");
+   auto b11_16=arbre->GetBranch("GenMET_phi");
 
    TFile* f_aco=new TFile("correction_acoplanarity_2018.root","read");
    TF1* fit_aco = (TF1*) f_aco->Get("fit_A");
@@ -1423,6 +1463,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 	//}*/
 	//
         b8_1->GetEntry(i); b8_3->GetEntry(i); b8_4->GetEntry(i); 
+	//cout<<ntracks_friend<<" "<<ntracksPU_friend<<" "<<ntracksHS_friend<<endl;
         int ntracks=ntracks_friend;
         h_ntracks->Fill(ntracks);
 
@@ -1431,9 +1472,13 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
         else if (zpos>10) zpos=9.99;
         int ntpu=ntracksPU_friend;
         if (ntpu>49) ntpu=49;
-        if (sample!="data_obs") {aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));}  //FIXME Ben
+        if (sample!="data_obs") {
+		aweight*=correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos));
+	        //if (ntracks==0) cout<<correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos))<<" "<<ntpu<<" "<<zpos<<endl;
+	}  //FIXME
 
-        if (sample=="DYemu" or sample=="DY" or sample=="DYcondor" or sample=="VV2L2Nu"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); } //FIXME Ben
+
+        if (sample=="DYemu" or sample=="DY" or sample=="DYcondor" or sample=="VV2L2Nu"){ aweight*=correction_mapHS->GetBinContent(correction_mapHS->GetXaxis()->FindBin(TMath::Min(30,ntracksHS_friend)),correction_mapHS->GetYaxis()->FindBin(gen_aco)); } 
 
 
         h_acoreso->Fill(fabs(gen_aco-acoplanarity));
@@ -1445,16 +1490,20 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
         TLorentzVector save_met=my_met;
 
 	bool is_lowA=true;
-	if (is_control==0) is_lowA=(acoplanarity<0.015); 
+	if (is_control==0) is_lowA=(acoplanarity<100000.015); 
 
         if (sample=="GGWW"){ // rescaling from mumu region
-           if (ntracks==0) aweight*=(2.433+0.00152*gen_mtt);
-           else if (ntracks==1) aweight*=(2.52+0.0011*gen_mtt);
+           /*if (ntracks==0) aweight*=(2.433+0.00152*gen_mtt);
+           else if (ntracks==1) aweight*=(2.52+0.0011*gen_mtt);*/ // old 1/128
+	   if (ntracks==0) aweight*=(2.359+0.003404*gen_mtt);
+           else if (ntracks==1) aweight*=(2.377+0.003163*gen_mtt); // new 1/137
 	}
 
         if (sample=="GGTT" or sample=="GGTT_Ctb20"){ // rescaling from mumu region
-           if (ntracks==0) aweight*=(2.433+0.00152*gen_mtt);
-           else if (ntracks==1) aweight*=(2.52+0.0011*gen_mtt);
+           /*if (ntracks==0) aweight*=(2.433+0.00152*gen_mtt);
+           else if (ntracks==1) aweight*=(2.52+0.0011*gen_mtt);*/ // old 1/128
+	   if (ntracks==0) aweight*=(2.359+0.003404*gen_mtt);
+           else if (ntracks==1) aweight*=(2.377+0.003163*gen_mtt); // new 1/137
            b9_1->GetEntry(i); b9_2->GetEntry(i); b9_3->GetEntry(i);b9_4->GetEntry(i); b9_5->GetEntry(i); b9_6->GetEntry(i);b9_7->GetEntry(i); b9_8->GetEntry(i); b9_9->GetEntry(i);
            b9_10->GetEntry(i); b9_11->GetEntry(i); b9_12->GetEntry(i); b9_13->GetEntry(i);b9_14->GetEntry(i); b9_15->GetEntry(i); b9_16->GetEntry(i);b9_17->GetEntry(i); b9_18->GetEntry(i); b9_19->GetEntry(i);
            b9_20->GetEntry(i); b9_21->GetEntry(i); b9_22->GetEntry(i); b9_23->GetEntry(i);b9_24->GetEntry(i); b9_25->GetEntry(i); b9_26->GetEntry(i);b9_27->GetEntry(i); b9_28->GetEntry(i); b9_29->GetEntry(i);
@@ -1481,6 +1530,8 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
            if (name=="GGTT_0p0") {aweight*=TauG2Weights_ceBRe_0p0;}
            else if (name=="GGTT") aweight*=TauG2Weights_ceBRe_0p0;
+           else if (name=="GGTT_nonfid") aweight*=TauG2Weights_ceBRe_0p0;
+           else if (name=="GGTT_fid") aweight*=TauG2Weights_ceBRe_0p0;
            else if (name=="GGTT_0p8") aweight*=TauG2Weights_ceBRe_0p8;
            else if (name=="GGTT_1p6") aweight*=TauG2Weights_ceBRe_1p6;
            else if (name=="GGTT_2p4") aweight*=TauG2Weights_ceBRe_2p4;
@@ -1685,6 +1736,45 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
            else if (name=="GGTT_Im_40p0") aweight*=TauG2Weights_ceBIm_40p0;
         }
 
+        if (name=="GGTT_fid" or name=="GGTT_nonfid"){
+           b11_1->GetEntry(i); b11_2->GetEntry(i);b11_3->GetEntry(i);b11_4->GetEntry(i);b11_5->GetEntry(i);b11_6->GetEntry(i);b11_7->GetEntry(i);b11_8->GetEntry(i);b11_9->GetEntry(i);b11_10->GetEntry(i);b11_11->GetEntry(i);b11_12->GetEntry(i);b11_13->GetEntry(i);b11_14->GetEntry(i);b11_15->GetEntry(i);b11_16->GetEntry(i);
+           TLorentzVector fid_lep1;
+           TLorentzVector fid_lep2;
+           TLorentzVector fid_met;
+           fid_lep1.SetPtEtaPhiM(fidpt_1,fideta_1,fidphi_1,fidm_1);
+           fid_lep2.SetPtEtaPhiM(fidpt_2,fideta_2,fidphi_2,fidm_2);
+           fid_met.SetPtEtaPhiM(GenMET_pt, 0, GenMET_phi, 0);
+
+           float fidacoplanarity = (1.0 -fabs(fid_lep2.DeltaPhi(fid_lep1))/3.14159);
+           float fidmt = TMass_F(fid_lep1.Pt(), fid_lep1.Px(), fid_lep1.Py(), fid_met.Pt(), fid_met.Phi());
+
+           bool is_fiducial=true;
+           if (fidacoplanarity>0.015) is_fiducial=false;
+           if (fid_lep1.DeltaR(fid_lep2)<0.5) is_fiducial=false;
+           if ((fid_lep1+fid_lep2).M()>500) is_fiducial=false;
+           if (is_emu==0 and is_etau==0 and is_mutau==0 and is_tautau==0) is_fiducial=false;
+
+           if (is_emu){
+              if (fid_lep1.Pt()<15 or fid_lep2.Pt()<15 or fabs(fid_lep1.Eta())>2.5 or fabs(fid_lep2.Eta())>2.4) is_fiducial=false;
+              if (fid_lep1.Pt()<24 and fid_lep2.Pt()<24) is_fiducial=false;
+           }
+           if (is_etau){
+              if (fid_lep1.Pt()<25 or fid_lep2.Pt()<30 or fabs(fid_lep1.Eta())>2.5 or fabs(fid_lep2.Eta())>2.3) is_fiducial=false;
+              if (fidmt>75) is_fiducial=false;
+           }
+           if (is_mutau){
+              if (fid_lep1.Pt()<21 or fid_lep2.Pt()<30 or fabs(fid_lep1.Eta())>2.4 or fabs(fid_lep2.Eta())>2.3) is_fiducial=false;
+              if (fidmt>75) is_fiducial=false;
+           }
+           if (is_tautau){
+              if (fid_lep1.Pt()<40 or fid_lep2.Pt()<40 or fabs(fid_lep1.Eta())>2.3 or fabs(fid_lep2.Eta())>2.3) is_fiducial=false;
+           }
+           if (fidntracks>0) is_fiducial=false;
+
+           if (name=="GGTT_fid" and !is_fiducial) continue;
+           if (name=="GGTT_nonfid" and is_fiducial) continue;
+        }
+
         float central=1.0;
         float correction=1.0;
         float err_central=0.0;
@@ -1710,12 +1800,16 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
               else if (k==7 and my_mu.Pt()>=24 and my_ele.Pt()>=24){ weight2=0.96;}
               else if (k==8 and my_mu.Pt()>=24 and my_ele.Pt()>=24){ weight2=1.04;}
               else if (k==9){ 
-                if (ntracks==0) weight2=2.59/(2.433+0.00152*gen_mtt);
-                if (ntracks==1) weight2=2.63/(2.52+0.0011*gen_mtt);
+                /*if (ntracks==0) weight2=2.59/(2.433+0.00152*gen_mtt);
+                if (ntracks==1) weight2=2.63/(2.52+0.0011*gen_mtt);*/ //old 1/128
+		if (ntracks==0) weight2=2.703/(2.359+0.003404*gen_mtt);
+                if (ntracks==1) weight2=2.711/(2.377+0.003163*gen_mtt); // new 1/137
               }
               else if (k==10){
-                if (ntracks==0) weight2=1.0+(1.0-2.59/(2.433+0.00152*gen_mtt));
-                if (ntracks==1) weight2=1.0+(1.0-2.63/(2.52+0.0011*gen_mtt));
+                /*if (ntracks==0) weight2=1.0+(1.0-2.59/(2.433+0.00152*gen_mtt));
+                if (ntracks==1) weight2=1.0+(1.0-2.63/(2.52+0.0011*gen_mtt));*/ // old 1/128
+		if (ntracks==0) weight2=1.0+(1.0-2.703/(2.359+0.003404*gen_mtt));
+                if (ntracks==1) weight2=1.0+(1.0-2.711/(2.377+0.003163*gen_mtt)); // new 1/137
               }
               else if (k==11) weight2=L1PreFiringWeight_Dn/L1PreFiringWeight_Nom;
               else if (k==12) weight2=L1PreFiringWeight_Up/L1PreFiringWeight_Nom;
@@ -1755,7 +1849,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
 
 	   float mvis=(my_ele+my_mu).M();
 	   if (mvis<20) continue;
-	   if (mvis>500) continue; //FIXME
+	   if (mvis>500) continue; 
 
 	   if (my_ele.Pt()<15) continue;
            if (my_mu.Pt()<15) continue;
@@ -1850,6 +1944,9 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
            }
 
 	   if (is_OS and is_isolated and is_real){
+
+	     if (k==0 and is_cat0) h_z->Fill(simple_ditau_z);
+
 	     if (is_cat0) h0[k]->Fill(var0,weight*aweight*weight2);
              if (is_cat1) h1[k]->Fill(var1,weight*aweight*weight2);
              if (is_cat2) h2[k]->Fill(var2,weight*aweight*weight2);
@@ -1970,6 +2067,7 @@ cout<<xs<<" "<<ngen<<" "<<weight<<endl;
     TFile *fout = TFile::Open(output.c_str(), "RECREATE");
     fout->cd();
 
+    h_z->Write();
     h_dz->Write();
     h_nHS->Write();
 

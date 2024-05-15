@@ -48,6 +48,8 @@ int main(int argc, char** argv) {
     TBranch *bntracksHS_friend=tree_friend->Branch("ntracksHS_friend",&ntracksHS_friend,"ntracksHS_friend/I");
     int ntracksPU_friend;
     TBranch *bntracksPU_friend=tree_friend->Branch("ntracksPU_friend",&ntracksPU_friend,"ntracksPU_friend/I");
+    int ntracksAll_friend;
+    TBranch *bntracksAll_friend=tree_friend->Branch("ntracksAll_friend",&ntracksAll_friend,"ntracksAll_friend/I");
 
 
     cout.setf(ios::fixed, ios::floatfield);
@@ -172,6 +174,7 @@ int main(int argc, char** argv) {
 	b7_1->GetEntry(i); b7_2->GetEntry(i); b7_3->GetEntry(i); b7_4->GetEntry(i); b7_5->GetEntry(i);
 	if (sample!="data_obs") b7_6->GetEntry(i);
 	int ntracks=0;
+	int ntracksAll=0;
         int ntracksPU=0;
         int ntracksHS=0;
         float bs_zsigma_obs=h_bs_sigma->GetRandom();
@@ -191,7 +194,7 @@ int main(int argc, char** argv) {
            if (fabs(Track_pt[nt]-LepCand_pt[ele_index])/LepCand_pt[ele_index]<0.1 and my_ele.DeltaR(my_track)<0.002) {is_matched=true; matched++;}
 	   if (!is_matched){
 	      float raw_dz=fabs(Track_dz[nt]-0.5*LepCand_dz[mu_index]-0.5*LepCand_dz[ele_index]);
-	      if (Track_pt[nt]>0.5 and raw_dz<0.05 and fabs(Track_eta[nt])<2.5) ntracks++;
+	      if (Track_pt[nt]>0.5 and raw_dz<0.05 and fabs(Track_eta[nt])<2.5) ntracksAll++;
 	      if (sample!="data_obs"){
                  //float BScorrected_dz=fabs(((PV_z+Track_dz[nt])*rnd_beamspot/3.5 + (rnd_beamspotz-0.02488))-PV_z-0.5*LepCand_dz[mu_index]-0.5*LepCand_dz[ele_index]);
                  //float BScorrected_dz=raw_dz;//FIXME dont correct BS
@@ -217,9 +220,13 @@ int main(int argc, char** argv) {
 	   cout<<endl;
 	}*/
 
+	if (sample=="data_obs") ntracks=ntracksAll;
+        else ntracks=ntracksPU+ntracksHS;
+
         ntracks_friend=ntracks;
         ntracksHS_friend=ntracksHS;
         ntracksPU_friend=ntracksPU;
+	ntracksAll_friend=ntracksAll;
         tree_friend->Fill();
     } // end of loop over events
     f_friend->cd();

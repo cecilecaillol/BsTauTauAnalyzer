@@ -13,7 +13,7 @@ if __name__ == "__main__":
     if options.year=="2016pre": year4="2016preVFP"
     if options.year=="2016post": year4="2016postVFP"
 
-    postfixName=["","_CMS_jetfake_w_invertMTDown","_CMS_jetfake_w_invertMTUp","_CMS_jetfake_qcd_invertOSDown","_CMS_jetfake_qcd_invertOSUp","_CMS_jetfake_tauptextrap_w_et_dm0_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm0_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm1_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm1_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm10_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm10_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm11_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm11_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm0_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm0_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm1_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm1_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm10_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm10_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm11_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm11_"+year4+"Up","_CMS_jetfake_wfractionDown","_CMS_jetfake_wfractionUp","_CMS_jetfake_ntracksextrap_w_et_dm0_"+year4+"Down","_CMS_jetfake_ntracksextrap_w_et_dm0_"+year4+"Up","_CMS_jetfake_ntracksextrap_w_et_dm1_"+year4+"Down","_CMS_jetfake_ntracksextrap_w_et_dm1_"+year4+"Up","_CMS_jetfake_ntracksextrap_w_et_dm10_"+year4+"Down","_CMS_jetfake_ntracksextrap_w_et_dm10_"+year4+"Up","_CMS_jetfake_ntracksextrap_w_et_dm11_"+year4+"Down","_CMS_jetfake_ntracksextrap_w_et_dm11_"+year4+"Up","_CMS_jetfake_ntracksextrap_qcd_et_dm0_"+year4+"Down","_CMS_jetfake_ntracksextrap_qcd_et_dm0_"+year4+"Up","_CMS_jetfake_ntracksextrap_qcd_et_dm1_"+year4+"Down","_CMS_jetfake_ntracksextrap_qcd_et_dm1_"+year4+"Up","_CMS_jetfake_ntracksextrap_qcd_et_dm10_"+year4+"Down","_CMS_jetfake_ntracksextrap_qcd_et_dm10_"+year4+"Up","_CMS_jetfake_ntracksextrap_qcd_et_dm11_"+year4+"Down","_CMS_jetfake_ntracksextrap_qcd_et_dm11_"+year4+"Up","_CMS_jetfake_ntracksextrap_w_et_"+year4+"Down","_CMS_jetfake_ntracksextrap_w_et_"+year4+"Up","_CMS_jetfake_ntracksextrap_qcd_et_"+year4+"Down","_CMS_jetfake_ntracksextrap_qcd_et_"+year4+"Up"]
+    postfixName=["","_CMS_jetfake_w_invertMTDown","_CMS_jetfake_w_invertMTUp","_CMS_jetfake_qcd_invertOSDown","_CMS_jetfake_qcd_invertOSUp","_CMS_jetfake_tauptextrap_w_et_dm0_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm0_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm1_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm1_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm10_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm10_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm11_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm11_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm0_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm0_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm1_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm1_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm10_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm10_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm11_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm11_"+year4+"Up","_CMS_jetfake_wfractionDown","_CMS_jetfake_wfractionUp","_CMS_jetfake_ntracksextrap_w_et_dm0Down","_CMS_jetfake_ntracksextrap_w_et_dm0Up","_CMS_jetfake_ntracksextrap_w_et_dm1Down","_CMS_jetfake_ntracksextrap_w_et_dm1Up","_CMS_jetfake_ntracksextrap_w_et_dm10Down","_CMS_jetfake_ntracksextrap_w_et_dm10Up","_CMS_jetfake_ntracksextrap_w_et_dm11Down","_CMS_jetfake_ntracksextrap_w_et_dm11Up","_CMS_jetfake_ntracksextrap_qcd_et_dm0Down","_CMS_jetfake_ntracksextrap_qcd_et_dm0Up","_CMS_jetfake_ntracksextrap_qcd_et_dm1Down","_CMS_jetfake_ntracksextrap_qcd_et_dm1Up","_CMS_jetfake_ntracksextrap_qcd_et_dm10Down","_CMS_jetfake_ntracksextrap_qcd_et_dm10Up","_CMS_jetfake_ntracksextrap_qcd_et_dm11Down","_CMS_jetfake_ntracksextrap_qcd_et_dm11Up","_CMS_jetfake_ntracksextrap_w_etDown","_CMS_jetfake_ntracksextrap_w_etUp","_CMS_jetfake_ntracksextrap_qcd_etDown","_CMS_jetfake_ntracksextrap_qcd_etUp"]
 
     nbhist=1
     if is_control==0: nbhist=1+42 
@@ -45,13 +45,13 @@ if __name__ == "__main__":
                 h0.SetBinError(i,2.3*h0.GetBinContent(i)) # error on 0 count times average FR
              elif h0.GetBinContent(i)<0.8 and h0.GetBinContent(i)>h0.GetBinError(i): # 2 count
                 h0.SetBinError(i,1.35*h0.GetBinContent(i))
-          h0.Add(fVV.Get("et_"+str(j)+"_anti/VV"+postfix),-1)
-	  print("et_"+str(j)+"_anti/ZLL"+postfix)
-	  print(fDY.Get("et_"+str(j)+"_anti/ZLL"+postfix).Integral())
-          h0.Add(fDY.Get("et_"+str(j)+"_anti/ZLL"+postfix),-1)
-          h0.Add(fDY.Get("et_"+str(j)+"_anti/ZTT"+postfix),-1)
-          h0.Add(fTop.Get("et_"+str(j)+"_anti/top"+postfix),-1)
-          h0.Add(fGGEE.Get("et_"+str(j)+"_anti/GGEE"+postfix),-1)
+          h0.Add(fVV.Get("et_"+str(j)+"_anti/VV"),-1)
+	  print("et_"+str(j)+"_anti/ZLL")
+	  print(fDY.Get("et_"+str(j)+"_anti/ZLL").Integral())
+          h0.Add(fDY.Get("et_"+str(j)+"_anti/ZLL"),-1)
+          h0.Add(fDY.Get("et_"+str(j)+"_anti/ZTT"),-1)
+          h0.Add(fTop.Get("et_"+str(j)+"_anti/top"),-1)
+          h0.Add(fGGEE.Get("et_"+str(j)+"_anti/GGEE"),-1)
           for i in range(1,h0.GetSize()-1):
               if h0.GetBinContent(i)<0:
 	          #h0.SetBinError(i,h0.GetBinContent(i)+h0.GetBinError(i))

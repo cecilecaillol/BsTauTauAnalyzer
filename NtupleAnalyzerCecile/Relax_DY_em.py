@@ -51,7 +51,7 @@ if __name__ == "__main__":
           hZTT2A=fDY.Get("em_"+str(j)+"_anti/ZTT"+postfix)
 	  print("emR_"+str(j)+"_anti/ZTT"+postfix)
           hZTT1A=fDY.Get("emR_"+str(j)+"_anti/ZTT"+postfix).Clone()
-          hZTT1A.Scale(hZTT2A.Integral()/hZTT1A.Integral())
+          if hZTT1A.Integral()>0: hZTT1A.Scale(hZTT2A.Integral()/hZTT1A.Integral())
 
           fout.cd()
           dir0A.cd()

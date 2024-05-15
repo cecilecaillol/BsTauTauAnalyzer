@@ -34,20 +34,22 @@ if __name__ == "__main__":
 
        for k in range(0,nbhist):
           postfix=postfixName[k]
-          print postfix
+          #print postfix
           h0=fData.Get("em_"+str(j)+"_anti/data_obs"+postfix)
-          h0.Add(fVV.Get("em_"+str(j)+"_anti/VV"+postfix),-1)
-          h0.Add(fDY.Get("em_"+str(j)+"_anti/ZTT"+postfix),-1)
-          h0.Add(fTop.Get("em_"+str(j)+"_anti/top"+postfix),-1)
+          h0.Add(fVV.Get("em_"+str(j)+"_anti/VV"),-1)
+          h0.Add(fDY.Get("em_"+str(j)+"_anti/ZTT"),-1)
+          h0.Add(fTop.Get("em_"+str(j)+"_anti/top"),-1)
+          #if j==0: print fVV.Get("em_"+str(j)+"_anti/VV"+postfix).Integral()
           for i in range(0,h0.GetSize()-2):
               if h0.GetBinContent(i)<0:
                   h0.SetBinError(i,max(0,h0.GetBinError(i)+h0.GetBinError(i)))
                   h0.SetBinContent(i,0)
+          if j==0: print h0.Integral(),postfix
 
           h0R=fData.Get("emR_"+str(j)+"_anti/data_obs"+postfix)
-          h0R.Add(fVV.Get("emR_"+str(j)+"_anti/VV"+postfix),-1)
-          h0R.Add(fDY.Get("emR_"+str(j)+"_anti/ZTT"+postfix),-1)
-          h0R.Add(fTop.Get("emR_"+str(j)+"_anti/top"+postfix),-1)
+          h0R.Add(fVV.Get("emR_"+str(j)+"_anti/VV"),-1)
+          h0R.Add(fDY.Get("emR_"+str(j)+"_anti/ZTT"),-1)
+          h0R.Add(fTop.Get("emR_"+str(j)+"_anti/top"),-1)
           for i in range(0,h0R.GetSize()-2):
               if h0R.GetBinContent(i)<0:
                   h0R.SetBinError(i,max(0,h0R.GetBinError(i)+h0R.GetBinError(i)))
@@ -58,8 +60,8 @@ if __name__ == "__main__":
           dir0.cd()
           h0.SetName("rawFake"+postfix)
           h0.Write()
-	  print j, h0.Integral(), h0R.Integral()
-  	  h0R.Scale(h0.Integral()/h0R.Integral())
+	      #print j, h0.Integral(), h0R.Integral()
+          h0R.Scale(h0.Integral()/h0R.Integral())
           h0R.SetName("Fake"+postfix)
           h0R.Write()
 

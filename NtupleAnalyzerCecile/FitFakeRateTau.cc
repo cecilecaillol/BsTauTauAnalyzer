@@ -30,6 +30,7 @@
 #include "TVirtualFitter.h"
 #include "TRandom.h"
 //#include "HttStyles.h"
+#include "TPad.h"
 
 double square(double x)
 {
@@ -119,7 +120,7 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
 
     TF1 * theFit = new TF1("theFit", fitFunc_Exp3Par, fMin, fMax, nPar);
     TF1 * theFit2 = new TF1("theFit2", fitFunc_Exp3Par2, 0, 15, nPar); //FIXME default 25
-    if ((num.find("tauFRnt_W"))!=std::string::npos) theFit2 = new TF1("theFit2", fitFunc_Exp3Par2, 0, 10, nPar);
+    if ((num.find("tauFRnt_W"))!=std::string::npos) theFit2 = new TF1("theFit2", fitFunc_Exp3Par2, 0, 15, nPar);
     if ((num.find("tauFRnt_W_dm11"))!=std::string::npos) theFit2 = new TF1("theFit2", fitFunc_Exp3Par2, 0, 15, nPar);
 
     if (type=="Flat"){
@@ -176,6 +177,22 @@ TF1 *M_FR(int WP, std::string type, std::string files, std::string num, std::str
       theFit->SetParameter(3, 1630);
     }
 
+    if (num.find("QCD_dm11_")!=std::string::npos and year==20161){
+      std::cout<<"found"<<std::endl;
+      theFit->SetParameter(0, 0.04);
+      theFit->SetParameter(1, 5.4);
+      theFit->SetParameter(2, 0.02);
+      theFit->SetParameter(3, 1.5);
+    }
+
+    if (num.find("W_dm10_")!=std::string::npos and year==20162){
+      std::cout<<"found"<<std::endl;
+      theFit->SetParameter(0, 0.04);
+      theFit->SetParameter(1, 5.4);
+      theFit->SetParameter(2, 0.02);
+      theFit->SetParameter(3, 1.5);
+    }
+
     if (num.find("tauFRnt_")!=std::string::npos){
       /*theFit->SetParameter(0, 0.54);
       theFit->SetParameter(1, 12.6);
@@ -228,6 +245,11 @@ std::cout<<"found"<<std::endl;
     TGraph_FR->Fit("theFit", "R0");
 
     TCanvas* canvas = new TCanvas("canvas", "", 800, 600);
+    canvas->SetRightMargin(0.05);
+    canvas->SetBottomMargin(0.12);
+    canvas->SetLeftMargin(0.12);
+    canvas->SetTickx(1);
+    canvas->SetTicky(1);
     canvas->SetTitle("");
     //canvas->SetGrid();
     TGraph_FR->GetYaxis()->SetRangeUser(0.00, 1.00);
@@ -237,23 +259,36 @@ std::cout<<"found"<<std::endl;
 
 
     if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, 5.00);
-    if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(0.00, TMath::Max(yg[1],yg[2])*1.3);
+    float mymax=TMath::Max(yg[1],yg[2])*1.3;
+    if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetYaxis()->SetRangeUser(1.00, TMath::Max(yg[1],yg[2])*1.3);
 
     TGraph_FR->GetYaxis()->SetTitle("f_{#tau}");
-    TGraph_FR->GetXaxis()->SetRangeUser(0, 100);
-    TGraph_FR->GetXaxis()->SetTitle("#tau_{h} p_{T} [GeV]");
-    if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetXaxis()->SetTitle("N_{tracks}");
+    TGraph_FR->GetXaxis()->SetRangeUser(0, 300);
+    if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetXaxis()->SetRangeUser(1., 15.); //FIXME was 100
+    TGraph_FR->GetXaxis()->SetTitle("#tau_{h} p_{T} (GeV)");
+    if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetXaxis()->SetTitle("#it{N}_{#lower[-0.25]{tracks}}");
     if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->GetYaxis()->SetTitle("MF correction factor");
+
+    auto frame = canvas->DrawFrame(0, 0.9, 15, mymax);
+    frame->GetXaxis()->SetTitle("#it{N}_{#lower[-0.25]{tracks}}");
+    frame->GetYaxis()->SetTitle("MF correction factor");
+    frame->GetXaxis()->SetTitleSize(0.08);
+    frame->GetYaxis()->SetTitleSize(0.08);
+    frame->GetXaxis()->SetLabelSize(0.05);
+    frame->GetYaxis()->SetLabelSize(0.05);
+    frame->GetXaxis()->SetTitleOffset(0.65);
+    frame->GetYaxis()->SetTitleOffset(0.75);
+
     TGraph_FR->SetTitle("");
-    TGraph_FR->Draw("PAE0");
+    TGraph_FR->Draw("PE0");
     TGraph_FR->SetLineWidth(1);
     TGraph_FR->SetMarkerStyle(20);
-    TGraph_FR->GetXaxis()->SetTitleSize(0.06);
-    TGraph_FR->GetYaxis()->SetTitleSize(0.06);
+    TGraph_FR->GetXaxis()->SetTitleSize(0.08);
+    TGraph_FR->GetYaxis()->SetTitleSize(0.08);
     TGraph_FR->GetXaxis()->SetLabelSize(0.05);
     TGraph_FR->GetYaxis()->SetLabelSize(0.05);
-    TGraph_FR->GetXaxis()->SetTitleOffset(0.7);
-    TGraph_FR->GetYaxis()->SetTitleOffset(0.8);
+    TGraph_FR->GetXaxis()->SetTitleOffset(0.5);
+    TGraph_FR->GetYaxis()->SetTitleOffset(0.6);
     std::string outNaming = "plots/fit" + num + "_" + denum + ".pdf";
     if (year==2016) outNaming = "plots_tau_2016/fit" + num + "_" + denum + ".pdf";
     if (year==20161) outNaming = "plots_tau_2016pre/fit" + num + "_" + denum + ".pdf";
@@ -266,6 +301,12 @@ std::cout<<"found"<<std::endl;
     if (year==20162) outNamingPng = "plots_tau_2016post/fit" + num + "_" + denum + ".png";
     if (year==2017) outNamingPng = "plots_tau_2017/fit" + num + "_" + denum + ".png";
     if (year==2018) outNamingPng = "plots_2018/fit" + num + "_" + denum + ".png";
+    std::string outNamingRoot = "plots/fit" + num + "_" + denum + ".root";
+    if (year==2016) outNamingRoot = "plots_tau_2016/fit" + num + "_" + denum + ".root";
+    if (year==20161) outNamingRoot = "plots_tau_2016pre/fit" + num + "_" + denum + ".root";
+    if (year==20162) outNamingRoot = "plots_tau_2016post/fit" + num + "_" + denum + ".root";
+    if (year==2017) outNamingRoot = "plots_tau_2017/fit" + num + "_" + denum + ".root";
+    if (year==2018) outNamingRoot = "plots_2018/fit" + num + "_" + denum + ".root";
     TLatex t = TLatex();
     t.SetNDC();
     t.SetTextFont(42);
@@ -276,14 +317,22 @@ std::cout<<"found"<<std::endl;
     if (year==20162) t.DrawLatex(0.5, .95, "16 fb^{-1} (2016 postVFP, 13 TeV)");
     if (year==2017) t.DrawLatex(0.55, .95, "41 fb^{-1} (2017, 13 TeV)");
     if (year==2018) t.DrawLatex(0.55, .95, "60 fb^{-1} (2018, 13 TeV)");
-    if (year==0) t.DrawLatex(0.59, .95, "138 fb^{-1} (13 TeV)");
+    if (year==0) t.DrawLatex(0.64, .95, "138 fb^{#minus1} (13 TeV)");
 
     TLatex t2 = TLatex();
     t2.SetNDC();
     t2.SetTextFont(61);
     t2.SetTextAlign(12);
     t2.SetTextSize(0.08);
-    t2.DrawLatex(0.15, .95, "CMS");
+    t2.DrawLatex(0.12, .95, "CMS");
+
+    TLatex t22 = TLatex();
+    t22.SetNDC();
+    t22.SetTextFont(52);
+    t22.SetTextAlign(12);
+    t22.SetTextSize(0.06);
+    //t22.DrawLatex(0.24, .94, "Preliminary");
+    //t22.DrawLatex(0.24, .94, "Supplementary");
 
     if ((num.find("tauFRnt_")!=std::string::npos)){
        TLatex t3 = TLatex();
@@ -291,14 +340,14 @@ std::cout<<"found"<<std::endl;
        t3.SetTextFont(42);
        t3.SetTextAlign(12);
        t3.SetTextSize(0.06);
-       if ((num.find("tauFRnt_QCD_dm0_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "SS CR, e#tau_{h}, 1-prong");
-       if ((num.find("tauFRnt_QCD_dm1_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "SS CR, e#tau_{h}, 1-prong+#pi^{0}");
-       if ((num.find("tauFRnt_QCD_dm10_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "SS CR, e#tau_{h}, 3-prong");
-       if ((num.find("tauFRnt_QCD_dm11_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "SS CR, e#tau_{h}, 3-prong+#pi^{0}");
-       if ((num.find("tauFRnt_W_dm0_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "High-m_{T} CR, e#tau_{h}, 1-prong");
-       if ((num.find("tauFRnt_W_dm1_")!=std::string::npos)) t3.DrawLatex(0.38, .55, "High-m_{T} CR, e#tau_{h}, 1-prong+#pi^{0}");
-       if ((num.find("tauFRnt_W_dm10_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "High-m_{T} CR, e#tau_{h}, 3-prong");
-       if ((num.find("tauFRnt_W_dm11_")!=std::string::npos)) t3.DrawLatex(0.38, .55, "High-m_{T} CR, e#tau_{h}, 3-prong+#pi^{0}");
+       if ((num.find("tauFRnt_QCD_dm0_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "SS CR, e#tau_{h}, h^{#pm}");
+       if ((num.find("tauFRnt_QCD_dm1_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "SS CR, e#tau_{h}, h^{#pm} + #pi^{0}(s)");
+       if ((num.find("tauFRnt_QCD_dm10_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "SS CR, e#tau_{h}, h^{#pm}h^{#mp}h^{#pm}");
+       if ((num.find("tauFRnt_QCD_dm11_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "SS CR, e#tau_{h}, h^{#pm}h^{#mp}h^{#pm} + #pi^{0}(s)");
+       if ((num.find("tauFRnt_W_dm0_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "High-m_{T} CR, e#tau_{h}, h^{#pm}");
+       if ((num.find("tauFRnt_W_dm1_")!=std::string::npos)) t3.DrawLatex(0.38, .55, "High-m_{T} CR, e#tau_{h}, h^{#pm} + #pi^{0}(s)");
+       if ((num.find("tauFRnt_W_dm10_")!=std::string::npos)) t3.DrawLatex(0.4, .55, "High-m_{T} CR, e#tau_{h}, h^{#pm}h^{#mp}h^{#pm}");
+       if ((num.find("tauFRnt_W_dm11_")!=std::string::npos)) t3.DrawLatex(0.38, .55, "High-m_{T} CR, e#tau_{h}, h^{#pm}h^{#mp}h^{#pm} + #pi^{0}(s)");
     }
 
     //theFit->Draw("SAME");
@@ -317,22 +366,35 @@ std::cout<<"found"<<std::endl;
     if (num.find("tauFRnt")!=std::string::npos) TGraph_FR->Fit("theFit2", "R0");
     //theFit->Draw("SAME");
     if (num.find("tauFRnt")!=std::string::npos) theFit2->Draw("SAME");
-    if (num.find("tauFRnt")!=std::string::npos) theFit2->SetLineColor(kMagenta);
+    if (num.find("tauFRnt")!=std::string::npos) theFit2->SetLineColor(kOrange+8);
 
     if (num.find("tauFRnt")!=std::string::npos){
       TH1D *hint = new TH1D("hint",
-         "Fitted Gaussian with .68 conf.band", 100, 0, 15);
-      if (num.find("tauFRnt_W")!=std::string::npos) hint = new TH1D("hint", "Fitted Gaussian with .68 conf.band", 100, 0, 10);
-      if (num.find("tauFRnt_W_dm11")!=std::string::npos) hint = new TH1D("hint", "Fitted Gaussian with .68 conf.band", 100, 0, 15);
+         "Fitted Gaussian with .68 conf.band", 100, -0.5, 15.5);
+      if (num.find("tauFRnt_W")!=std::string::npos) hint = new TH1D("hint", "Fitted Gaussian with .68 conf.band", 100, -0.5, 15.5);
+      if (num.find("tauFRnt_W_dm11")!=std::string::npos) hint = new TH1D("hint", "Fitted Gaussian with .68 conf.band", 100, -0.5, 15.5);
       (TVirtualFitter::GetFitter())->GetConfidenceIntervals(hint,0.68);
       hint->SetStats(false);
-      hint->SetFillColor(kCyan);
-      hint->SetFillStyle(3001);
+      hint->SetFillColor(kBlue-10);
+      hint->SetLineColor(kBlue-10);
+      //hint->SetFillStyle(3001);
       hint->Draw("e3 same");
       cout<<hint->GetBinContent(1)<<" "<<hint->GetBinError(1)<<endl;
       *err=hint->GetBinError(1)/hint->GetBinContent(1);
+
+        TLegend *leg  = new TLegend(0.23, 0.75, 0.9, 0.9, "", "brNDC");
+        leg->SetNColumns(2);
+        leg->SetLineWidth(0);
+        leg->SetLineStyle(0);
+        leg->SetFillStyle(0);
+        leg->SetBorderSize(0);
+        leg->SetTextFont(42);
+	leg->AddEntry(theFit2, "Exponential fit", "l");
+	leg->AddEntry(hint, "Fit uncertainty", "f");
+	leg->Draw("same");
+
     }
-    //theFit->Draw("SAME");
+    if (num.find("tauFRnt")==std::string::npos) theFit->Draw("SAME");
     theFit2->Draw("SAME");
 
     TGraph_FR->Draw("P");
@@ -352,9 +414,12 @@ std::cout<<"found"<<std::endl;
        gdown->SetLineColor(2);
        gdown->Draw("CSAME");
     }
+
+    gPad->RedrawAxis();
    
     canvas->SaveAs(outNaming.c_str());
     canvas->SaveAs(outNamingPng.c_str());
+    canvas->SaveAs(outNamingRoot.c_str());
 
     TFile *FR_H = new TFile("FitHistograms_FR.root", "UPDATE");
     if (year==2016) FR_H = new TFile("FitHistograms_tauFR_2016.root", "UPDATE");

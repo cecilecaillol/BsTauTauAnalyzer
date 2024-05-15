@@ -31,7 +31,10 @@ hadd -f output_etau_2017/VV.root output_etau_2017/VV2L2Nu.root output_etau_2017/
 ./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/TTToSemiLeptonic.root output_etau_2017/TTToSemiLeptonic.root TTToSemiLeptonic top
 ./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/TTTo2L2Nu.root output_etau_2017/TTTo2L2Nu.root TTTo2L2Nu top
 hadd -f output_etau_2017/top.root output_etau_2017/TTToHadronic.root output_etau_2017/TTToSemiLeptonic.root output_etau_2017/TTTo2L2Nu.root output_etau_2017/ST_t_antitop.root output_etau_2017/ST_t_top.root output_etau_2017/ST_tW_antitop.root output_etau_2017/ST_tW_top.root
-./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/GGToTauTau_Ctb20.root output_etau_2017/GGTT.root GGTT_Ctb20 GGTT
+#./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/GGToTauTau_Ctb20.root output_etau_2017/GGTT.root GGTT_Ctb20 GGTT
+./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/GGToTauTau_Ctb20_fid.root output_etau_2017/GGTT.root GGTT_Ctb20 GGTT
+./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/GGToTauTau_Ctb20_fid.root output_etau_2017/GGTT_nonfid.root GGTT_Ctb20 GGTT_nonfid
+./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/GGToTauTau_Ctb20_fid.root output_etau_2017/GGTT_fid.root GGTT_Ctb20 GGTT_fid
 ./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/GGToWW.root output_etau_2017/GGWW.root GGWW GGWW
 ./FinalSelection_etau.exe 2017 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2017/GGToElEl.root output_etau_2017/GGEE.root GGEE GGEE
 hadd -f output_etau_2017/MC.root output_etau_2017/DYrescaled.root output_etau_2017/VV.root output_etau_2017/top.root output_etau_2017/GGWW.root output_etau_2017/GGEE.root 
@@ -41,5 +44,5 @@ hadd -f output_etau_2017/MC.root output_etau_2017/DYrescaled.root output_etau_20
 #python Prepare_BSM_combine.py --year="2017" --channel="etau"
 
 python Create_fake.py --year=2017
-hadd -f datacard_etau_2017.root output_etau_2017/Fake.root output_etau_2017/MC.root  output_etau_2017/SingleElectron.root output_etau_2017/GGTT.root output_etau_2017/W.root #output_etau_2017/bsm.root
+hadd -f datacard_etau_2017.root output_etau_2017/Fake.root output_etau_2017/MC.root  output_etau_2017/SingleElectron.root output_etau_2017/GGTT.root output_etau_2017/GGTT_nonfid.root output_etau_2017/GGTT_fid.root output_etau_2017/W.root #output_etau_2017/bsm.root
 #hadd -f datacard_etau_2017.root output_etau_2017/Fake.root output_etau_2017/MC.root  output_etau_2017/SingleElectron.root output_etau_2017/W.root 

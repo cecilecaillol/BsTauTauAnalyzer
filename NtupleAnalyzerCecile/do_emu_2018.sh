@@ -26,14 +26,17 @@ hadd -f output_emu_2018/VV.root output_emu_2018/VV2L2Nu.root output_emu_2018/WZ2
 hadd -f output_emu_2018/top.root output_emu_2018/TTToHadronic.root output_emu_2018/TTToSemiLeptonic.root output_emu_2018/TTTo2L2Nu.root output_emu_2018/ST_t_antitop.root output_emu_2018/ST_t_top.root output_emu_2018/ST_tW_antitop.root output_emu_2018/ST_tW_top.root
 hadd -f output_emu_2018/MC.root output_emu_2018/DYrescaled.root output_emu_2018/VV.root output_emu_2018/top.root
 ###./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/GGToTauTau.root output_emu_2018/GGTT.root GGTT GGTT
-./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/GGToTauTau_Ctb20.root output_emu_2018/GGTT.root GGTT_Ctb20 GGTT
+#./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/GGToTauTau_Ctb20.root output_emu_2018/GGTT.root GGTT_Ctb20 GGTT
+./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/GGToTauTau_Ctb20_fid.root output_emu_2018/GGTT.root GGTT_Ctb20 GGTT
+./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/GGToTauTau_Ctb20_fid.root output_emu_2018/GGTT_fid.root GGTT_Ctb20 GGTT_fid
+./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/GGToTauTau_Ctb20_fid.root output_emu_2018/GGTT_nonfid.root GGTT_Ctb20 GGTT_nonfid
 ./FinalSelection_emu.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018/GGToWW.root output_emu_2018/GGWW.root GGWW GGWW
 
 python Create_fake_emu.py --year=2018
 
 
 
-hadd -f datacard_emu_2018.root output_emu_2018/Fake.root output_emu_2018/MC.root output_emu_2018/MuonEG.root output_emu_2018/GGTT.root output_emu_2018/GGWW.root 
+hadd -f datacard_emu_2018.root output_emu_2018/Fake.root output_emu_2018/MC.root output_emu_2018/MuonEG.root output_emu_2018/GGTT.root output_emu_2018/GGTT_fid.root output_emu_2018/GGTT_nonfid.root output_emu_2018/GGWW.root 
 
 #sh do_emu_BSM_2018.sh
 #python Prepare_BSM_combine.py --year="2018" --channel="emu"

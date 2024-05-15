@@ -32,7 +32,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-    int is_control=0;
+    int is_control=1;
 
     std::string year = *(argv + 1);
     std::string input = *(argv + 2);
@@ -243,108 +243,108 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
     arbre->SetBranchAddress("HLT_DoubleTightChargedIsoPFTau40_Trk1_eta2p1_Reg", &HLT_DoubleTightChargedIsoPFTau40_Trk1_eta2p1_Reg);
 
 
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_40p0", &TauG2Weights_ceBRe33_40p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_39p2", &TauG2Weights_ceBRe33_39p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_38p4", &TauG2Weights_ceBRe33_38p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_37p6", &TauG2Weights_ceBRe33_37p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_36p8", &TauG2Weights_ceBRe33_36p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_36p0", &TauG2Weights_ceBRe33_36p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_35p2", &TauG2Weights_ceBRe33_35p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_34p4", &TauG2Weights_ceBRe33_34p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_33p6", &TauG2Weights_ceBRe33_33p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_32p8", &TauG2Weights_ceBRe33_32p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_32p0", &TauG2Weights_ceBRe33_32p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_31p2", &TauG2Weights_ceBRe33_31p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_30p4", &TauG2Weights_ceBRe33_30p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_29p6", &TauG2Weights_ceBRe33_29p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_28p8", &TauG2Weights_ceBRe33_28p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_28p0", &TauG2Weights_ceBRe33_28p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_27p2", &TauG2Weights_ceBRe33_27p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_26p4", &TauG2Weights_ceBRe33_26p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_25p6", &TauG2Weights_ceBRe33_25p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_24p8", &TauG2Weights_ceBRe33_24p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_24p0", &TauG2Weights_ceBRe33_24p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_23p2", &TauG2Weights_ceBRe33_23p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_22p4", &TauG2Weights_ceBRe33_22p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_21p6", &TauG2Weights_ceBRe33_21p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_20p8", &TauG2Weights_ceBRe33_20p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_20p0", &TauG2Weights_ceBRe33_20p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_19p2", &TauG2Weights_ceBRe33_19p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_18p4", &TauG2Weights_ceBRe33_18p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_17p6", &TauG2Weights_ceBRe33_17p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_16p8", &TauG2Weights_ceBRe33_16p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_16p0", &TauG2Weights_ceBRe33_16p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_15p2", &TauG2Weights_ceBRe33_15p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_14p4", &TauG2Weights_ceBRe33_14p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_13p6", &TauG2Weights_ceBRe33_13p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_12p8", &TauG2Weights_ceBRe33_12p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_12p0", &TauG2Weights_ceBRe33_12p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_11p2", &TauG2Weights_ceBRe33_11p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_10p4", &TauG2Weights_ceBRe33_10p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_9p6", &TauG2Weights_ceBRe33_9p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_8p8", &TauG2Weights_ceBRe33_8p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_8p0", &TauG2Weights_ceBRe33_8p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_7p2", &TauG2Weights_ceBRe33_7p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_6p4", &TauG2Weights_ceBRe33_6p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_5p6", &TauG2Weights_ceBRe33_5p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_4p8", &TauG2Weights_ceBRe33_4p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_4p0", &TauG2Weights_ceBRe33_4p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_3p2", &TauG2Weights_ceBRe33_3p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_2p4", &TauG2Weights_ceBRe33_2p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_1p6", &TauG2Weights_ceBRe33_1p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_0p8", &TauG2Weights_ceBRe33_0p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_0p0", &TauG2Weights_ceBRe33_0p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_40p0", &TauG2Weights_ceBRe_40p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_39p2", &TauG2Weights_ceBRe_39p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_38p4", &TauG2Weights_ceBRe_38p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_37p6", &TauG2Weights_ceBRe_37p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_36p8", &TauG2Weights_ceBRe_36p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_36p0", &TauG2Weights_ceBRe_36p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_35p2", &TauG2Weights_ceBRe_35p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_34p4", &TauG2Weights_ceBRe_34p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_33p6", &TauG2Weights_ceBRe_33p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_32p8", &TauG2Weights_ceBRe_32p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_32p0", &TauG2Weights_ceBRe_32p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_31p2", &TauG2Weights_ceBRe_31p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_30p4", &TauG2Weights_ceBRe_30p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_29p6", &TauG2Weights_ceBRe_29p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_28p8", &TauG2Weights_ceBRe_28p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_28p0", &TauG2Weights_ceBRe_28p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_27p2", &TauG2Weights_ceBRe_27p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_26p4", &TauG2Weights_ceBRe_26p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_25p6", &TauG2Weights_ceBRe_25p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_24p8", &TauG2Weights_ceBRe_24p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_24p0", &TauG2Weights_ceBRe_24p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_23p2", &TauG2Weights_ceBRe_23p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_22p4", &TauG2Weights_ceBRe_22p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_21p6", &TauG2Weights_ceBRe_21p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_20p8", &TauG2Weights_ceBRe_20p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_20p0", &TauG2Weights_ceBRe_20p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_19p2", &TauG2Weights_ceBRe_19p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_18p4", &TauG2Weights_ceBRe_18p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_17p6", &TauG2Weights_ceBRe_17p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_16p8", &TauG2Weights_ceBRe_16p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_16p0", &TauG2Weights_ceBRe_16p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_15p2", &TauG2Weights_ceBRe_15p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_14p4", &TauG2Weights_ceBRe_14p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_13p6", &TauG2Weights_ceBRe_13p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_12p8", &TauG2Weights_ceBRe_12p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_12p0", &TauG2Weights_ceBRe_12p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_11p2", &TauG2Weights_ceBRe_11p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_10p4", &TauG2Weights_ceBRe_10p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_9p6", &TauG2Weights_ceBRe_9p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_8p8", &TauG2Weights_ceBRe_8p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_8p0", &TauG2Weights_ceBRe_8p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_7p2", &TauG2Weights_ceBRe_7p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_6p4", &TauG2Weights_ceBRe_6p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_5p6", &TauG2Weights_ceBRe_5p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_4p8", &TauG2Weights_ceBRe_4p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_4p0", &TauG2Weights_ceBRe_4p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_3p2", &TauG2Weights_ceBRe_3p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_2p4", &TauG2Weights_ceBRe_2p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_1p6", &TauG2Weights_ceBRe_1p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_0p8", &TauG2Weights_ceBRe_0p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_0p0", &TauG2Weights_ceBRe_0p0);
 
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m40p0", &TauG2Weights_ceBRe33_m40p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m39p2", &TauG2Weights_ceBRe33_m39p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m38p4", &TauG2Weights_ceBRe33_m38p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m37p6", &TauG2Weights_ceBRe33_m37p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m36p8", &TauG2Weights_ceBRe33_m36p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m36p0", &TauG2Weights_ceBRe33_m36p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m35p2", &TauG2Weights_ceBRe33_m35p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m34p4", &TauG2Weights_ceBRe33_m34p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m33p6", &TauG2Weights_ceBRe33_m33p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m32p8", &TauG2Weights_ceBRe33_m32p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m32p0", &TauG2Weights_ceBRe33_m32p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m31p2", &TauG2Weights_ceBRe33_m31p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m30p4", &TauG2Weights_ceBRe33_m30p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m29p6", &TauG2Weights_ceBRe33_m29p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m28p8", &TauG2Weights_ceBRe33_m28p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m28p0", &TauG2Weights_ceBRe33_m28p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m27p2", &TauG2Weights_ceBRe33_m27p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m26p4", &TauG2Weights_ceBRe33_m26p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m25p6", &TauG2Weights_ceBRe33_m25p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m24p8", &TauG2Weights_ceBRe33_m24p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m24p0", &TauG2Weights_ceBRe33_m24p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m23p2", &TauG2Weights_ceBRe33_m23p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m22p4", &TauG2Weights_ceBRe33_m22p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m21p6", &TauG2Weights_ceBRe33_m21p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m20p8", &TauG2Weights_ceBRe33_m20p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m20p0", &TauG2Weights_ceBRe33_m20p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m19p2", &TauG2Weights_ceBRe33_m19p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m18p4", &TauG2Weights_ceBRe33_m18p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m17p6", &TauG2Weights_ceBRe33_m17p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m16p8", &TauG2Weights_ceBRe33_m16p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m16p0", &TauG2Weights_ceBRe33_m16p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m15p2", &TauG2Weights_ceBRe33_m15p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m14p4", &TauG2Weights_ceBRe33_m14p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m13p6", &TauG2Weights_ceBRe33_m13p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m12p8", &TauG2Weights_ceBRe33_m12p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m12p0", &TauG2Weights_ceBRe33_m12p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m11p2", &TauG2Weights_ceBRe33_m11p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m10p4", &TauG2Weights_ceBRe33_m10p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m9p6", &TauG2Weights_ceBRe33_m9p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m8p8", &TauG2Weights_ceBRe33_m8p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m8p0", &TauG2Weights_ceBRe33_m8p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m7p2", &TauG2Weights_ceBRe33_m7p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m6p4", &TauG2Weights_ceBRe33_m6p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m5p6", &TauG2Weights_ceBRe33_m5p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m4p8", &TauG2Weights_ceBRe33_m4p8);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m4p0", &TauG2Weights_ceBRe33_m4p0);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m3p2", &TauG2Weights_ceBRe33_m3p2);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m2p4", &TauG2Weights_ceBRe33_m2p4);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m1p6", &TauG2Weights_ceBRe33_m1p6);
-    arbre->SetBranchAddress("TauG2Weights_ceBRe33_m0p8", &TauG2Weights_ceBRe33_m0p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m40p0", &TauG2Weights_ceBRe_m40p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m39p2", &TauG2Weights_ceBRe_m39p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m38p4", &TauG2Weights_ceBRe_m38p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m37p6", &TauG2Weights_ceBRe_m37p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m36p8", &TauG2Weights_ceBRe_m36p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m36p0", &TauG2Weights_ceBRe_m36p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m35p2", &TauG2Weights_ceBRe_m35p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m34p4", &TauG2Weights_ceBRe_m34p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m33p6", &TauG2Weights_ceBRe_m33p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m32p8", &TauG2Weights_ceBRe_m32p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m32p0", &TauG2Weights_ceBRe_m32p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m31p2", &TauG2Weights_ceBRe_m31p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m30p4", &TauG2Weights_ceBRe_m30p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m29p6", &TauG2Weights_ceBRe_m29p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m28p8", &TauG2Weights_ceBRe_m28p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m28p0", &TauG2Weights_ceBRe_m28p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m27p2", &TauG2Weights_ceBRe_m27p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m26p4", &TauG2Weights_ceBRe_m26p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m25p6", &TauG2Weights_ceBRe_m25p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m24p8", &TauG2Weights_ceBRe_m24p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m24p0", &TauG2Weights_ceBRe_m24p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m23p2", &TauG2Weights_ceBRe_m23p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m22p4", &TauG2Weights_ceBRe_m22p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m21p6", &TauG2Weights_ceBRe_m21p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m20p8", &TauG2Weights_ceBRe_m20p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m20p0", &TauG2Weights_ceBRe_m20p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m19p2", &TauG2Weights_ceBRe_m19p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m18p4", &TauG2Weights_ceBRe_m18p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m17p6", &TauG2Weights_ceBRe_m17p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m16p8", &TauG2Weights_ceBRe_m16p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m16p0", &TauG2Weights_ceBRe_m16p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m15p2", &TauG2Weights_ceBRe_m15p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m14p4", &TauG2Weights_ceBRe_m14p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m13p6", &TauG2Weights_ceBRe_m13p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m12p8", &TauG2Weights_ceBRe_m12p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m12p0", &TauG2Weights_ceBRe_m12p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m11p2", &TauG2Weights_ceBRe_m11p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m10p4", &TauG2Weights_ceBRe_m10p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m9p6", &TauG2Weights_ceBRe_m9p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m8p8", &TauG2Weights_ceBRe_m8p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m8p0", &TauG2Weights_ceBRe_m8p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m7p2", &TauG2Weights_ceBRe_m7p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m6p4", &TauG2Weights_ceBRe_m6p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m5p6", &TauG2Weights_ceBRe_m5p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m4p8", &TauG2Weights_ceBRe_m4p8);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m4p0", &TauG2Weights_ceBRe_m4p0);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m3p2", &TauG2Weights_ceBRe_m3p2);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m2p4", &TauG2Weights_ceBRe_m2p4);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m1p6", &TauG2Weights_ceBRe_m1p6);
+    arbre->SetBranchAddress("TauG2Weights_ceBRe_m0p8", &TauG2Weights_ceBRe_m0p8);
 
 
     ami->SetBranchAddress("ntracks_friend", &ntracks_friend);
@@ -398,7 +398,7 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
 
 
    // Control 1
-   /*float bins0[] = {0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,400,500};//mvis
+   float bins0[] = {0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,400,500};//mvis
    float bins1[] = {25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71,73,75,77,79,81,83,85,87,89,91,93,95,97,99,110,120};//e pt
    float bins2[] = {20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120};//tau pt
    float bins3[] = {-2.5,-2.3,-2.1,-1.9,-1.7,-1.5,-1.3,-1.1,-0.9,-0.7,-0.5,-0.3,-0.1,0.1,0.3,0.5,0.7,0.9,1.1,1.3,1.5,1.7,1.9,2.1,2.3,2.5};//e eta
@@ -407,10 +407,10 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    float bins6[] = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180};//mt
    //float bins7[] = {0,1,2,3,4,5,6,7,8,9,10,11};//njets
    float bins7[] = {0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3.0,3.1,3.2,3.3,3.4,3.5,3.6,3.7,3.8,3.9,4.0,4.1,4.2,4.3,4.4,4.5,4.6,4.7,4.8,4.9,5.0};
-   float bins8[] = {0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity*/
+   float bins8[] = {0,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2,0.225,0.25,0.275,0.3,0.325,0.35,0.375,0.4,0.425,0.45,0.475,0.5,0.525,0.55,0.575,0.6,0.625,0.65,0.675,0.7,0.725,0.75,0.775,0.8,0.825,0.85,0.875,0.9,0.925,0.95,0.975,1.0};//acoplanarity
 
    // Signal region
-   float bins0[] = {70,85,100,150,200,250};//mvis
+   /*float bins0[] = {70,85,100,150,200,250};//mvis
    float bins1[] = {70,85,100,150,200,250};//mvis
    float bins2[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins3[] = {40,55,70,85,100,125,150,200,350,500};//mvis
@@ -418,7 +418,7 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    float bins5[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins6[] = {40,55,70,85,100,125,150,200,350,500};//mvis
    float bins7[] = {40,55,70,85,100,125,150,200,350,500};//mvis
-   float bins8[] = {40,55,70,85,100,125,150,200,350,500};//mvis
+   float bins8[] = {40,55,70,85,100,125,150,200,350,500};//mvis*/
 
    int  binnum0 = sizeof(bins0)/sizeof(Float_t) - 1;
    int  binnum1 = sizeof(bins1)/sizeof(Float_t) - 1;
@@ -586,6 +586,8 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
       if (year=="2018") uncertainties[k]=uncertainties[k].ReplaceAll("year","2018");
    }
 
+   TFile* f_zpt= new TFile("zptm_weights_2018_kit.root");
+   TH2F* h_zpt= (TH2F*) f_zpt->Get("zptmass_histo");
 
    TString fake_uncertainties[1]={""};
 
@@ -696,108 +698,108 @@ cout<<xs<<" "<<ngen<<" "<<ngenu<<" "<<weight<<endl;
    auto b8_3=ami->GetBranch("ntracksHS_friend");
    auto b8_4=ami->GetBranch("ntracksPU_friend");
 
-   auto b9_1=arbre->GetBranch("TauG2Weights_ceBRe33_0p0");
-   auto b9_2=arbre->GetBranch("TauG2Weights_ceBRe33_0p8");
-   auto b9_3=arbre->GetBranch("TauG2Weights_ceBRe33_1p6");
-   auto b9_4=arbre->GetBranch("TauG2Weights_ceBRe33_2p4");
-   auto b9_5=arbre->GetBranch("TauG2Weights_ceBRe33_3p2");
-   auto b9_6=arbre->GetBranch("TauG2Weights_ceBRe33_4p0");
-   auto b9_7=arbre->GetBranch("TauG2Weights_ceBRe33_4p8");
-   auto b9_8=arbre->GetBranch("TauG2Weights_ceBRe33_5p6");
-   auto b9_9=arbre->GetBranch("TauG2Weights_ceBRe33_6p4");
-   auto b9_10=arbre->GetBranch("TauG2Weights_ceBRe33_7p2");
-   auto b9_11=arbre->GetBranch("TauG2Weights_ceBRe33_8p0");
-   auto b9_12=arbre->GetBranch("TauG2Weights_ceBRe33_8p8");
-   auto b9_13=arbre->GetBranch("TauG2Weights_ceBRe33_9p6");
-   auto b9_14=arbre->GetBranch("TauG2Weights_ceBRe33_10p4");
-   auto b9_15=arbre->GetBranch("TauG2Weights_ceBRe33_11p2");
-   auto b9_16=arbre->GetBranch("TauG2Weights_ceBRe33_12p0");
-   auto b9_17=arbre->GetBranch("TauG2Weights_ceBRe33_12p8");
-   auto b9_18=arbre->GetBranch("TauG2Weights_ceBRe33_13p6");
-   auto b9_19=arbre->GetBranch("TauG2Weights_ceBRe33_14p4");
-   auto b9_20=arbre->GetBranch("TauG2Weights_ceBRe33_15p2");
-   auto b9_21=arbre->GetBranch("TauG2Weights_ceBRe33_16p0");
-   auto b9_22=arbre->GetBranch("TauG2Weights_ceBRe33_16p8");
-   auto b9_23=arbre->GetBranch("TauG2Weights_ceBRe33_17p6");
-   auto b9_24=arbre->GetBranch("TauG2Weights_ceBRe33_18p4");
-   auto b9_25=arbre->GetBranch("TauG2Weights_ceBRe33_19p2");
-   auto b9_26=arbre->GetBranch("TauG2Weights_ceBRe33_20p0");
-   auto b9_27=arbre->GetBranch("TauG2Weights_ceBRe33_20p8");
-   auto b9_28=arbre->GetBranch("TauG2Weights_ceBRe33_21p6");
-   auto b9_29=arbre->GetBranch("TauG2Weights_ceBRe33_22p4");
-   auto b9_30=arbre->GetBranch("TauG2Weights_ceBRe33_23p2");
-   auto b9_31=arbre->GetBranch("TauG2Weights_ceBRe33_24p0");
-   auto b9_32=arbre->GetBranch("TauG2Weights_ceBRe33_24p8");
-   auto b9_33=arbre->GetBranch("TauG2Weights_ceBRe33_25p6");
-   auto b9_34=arbre->GetBranch("TauG2Weights_ceBRe33_26p4");
-   auto b9_35=arbre->GetBranch("TauG2Weights_ceBRe33_27p2");
-   auto b9_36=arbre->GetBranch("TauG2Weights_ceBRe33_28p0");
-   auto b9_37=arbre->GetBranch("TauG2Weights_ceBRe33_28p8");
-   auto b9_38=arbre->GetBranch("TauG2Weights_ceBRe33_29p6");
-   auto b9_39=arbre->GetBranch("TauG2Weights_ceBRe33_30p4");
-   auto b9_40=arbre->GetBranch("TauG2Weights_ceBRe33_31p2");
-   auto b9_41=arbre->GetBranch("TauG2Weights_ceBRe33_32p0");
-   auto b9_42=arbre->GetBranch("TauG2Weights_ceBRe33_32p8");
-   auto b9_43=arbre->GetBranch("TauG2Weights_ceBRe33_33p6");
-   auto b9_44=arbre->GetBranch("TauG2Weights_ceBRe33_34p4");
-   auto b9_45=arbre->GetBranch("TauG2Weights_ceBRe33_35p2");
-   auto b9_46=arbre->GetBranch("TauG2Weights_ceBRe33_36p0");
-   auto b9_47=arbre->GetBranch("TauG2Weights_ceBRe33_36p8");
-   auto b9_48=arbre->GetBranch("TauG2Weights_ceBRe33_37p6");
-   auto b9_49=arbre->GetBranch("TauG2Weights_ceBRe33_38p4");
-   auto b9_50=arbre->GetBranch("TauG2Weights_ceBRe33_39p2");
-   auto b9_51=arbre->GetBranch("TauG2Weights_ceBRe33_40p0");
+   auto b9_1=arbre->GetBranch("TauG2Weights_ceBRe_0p0");
+   auto b9_2=arbre->GetBranch("TauG2Weights_ceBRe_0p8");
+   auto b9_3=arbre->GetBranch("TauG2Weights_ceBRe_1p6");
+   auto b9_4=arbre->GetBranch("TauG2Weights_ceBRe_2p4");
+   auto b9_5=arbre->GetBranch("TauG2Weights_ceBRe_3p2");
+   auto b9_6=arbre->GetBranch("TauG2Weights_ceBRe_4p0");
+   auto b9_7=arbre->GetBranch("TauG2Weights_ceBRe_4p8");
+   auto b9_8=arbre->GetBranch("TauG2Weights_ceBRe_5p6");
+   auto b9_9=arbre->GetBranch("TauG2Weights_ceBRe_6p4");
+   auto b9_10=arbre->GetBranch("TauG2Weights_ceBRe_7p2");
+   auto b9_11=arbre->GetBranch("TauG2Weights_ceBRe_8p0");
+   auto b9_12=arbre->GetBranch("TauG2Weights_ceBRe_8p8");
+   auto b9_13=arbre->GetBranch("TauG2Weights_ceBRe_9p6");
+   auto b9_14=arbre->GetBranch("TauG2Weights_ceBRe_10p4");
+   auto b9_15=arbre->GetBranch("TauG2Weights_ceBRe_11p2");
+   auto b9_16=arbre->GetBranch("TauG2Weights_ceBRe_12p0");
+   auto b9_17=arbre->GetBranch("TauG2Weights_ceBRe_12p8");
+   auto b9_18=arbre->GetBranch("TauG2Weights_ceBRe_13p6");
+   auto b9_19=arbre->GetBranch("TauG2Weights_ceBRe_14p4");
+   auto b9_20=arbre->GetBranch("TauG2Weights_ceBRe_15p2");
+   auto b9_21=arbre->GetBranch("TauG2Weights_ceBRe_16p0");
+   auto b9_22=arbre->GetBranch("TauG2Weights_ceBRe_16p8");
+   auto b9_23=arbre->GetBranch("TauG2Weights_ceBRe_17p6");
+   auto b9_24=arbre->GetBranch("TauG2Weights_ceBRe_18p4");
+   auto b9_25=arbre->GetBranch("TauG2Weights_ceBRe_19p2");
+   auto b9_26=arbre->GetBranch("TauG2Weights_ceBRe_20p0");
+   auto b9_27=arbre->GetBranch("TauG2Weights_ceBRe_20p8");
+   auto b9_28=arbre->GetBranch("TauG2Weights_ceBRe_21p6");
+   auto b9_29=arbre->GetBranch("TauG2Weights_ceBRe_22p4");
+   auto b9_30=arbre->GetBranch("TauG2Weights_ceBRe_23p2");
+   auto b9_31=arbre->GetBranch("TauG2Weights_ceBRe_24p0");
+   auto b9_32=arbre->GetBranch("TauG2Weights_ceBRe_24p8");
+   auto b9_33=arbre->GetBranch("TauG2Weights_ceBRe_25p6");
+   auto b9_34=arbre->GetBranch("TauG2Weights_ceBRe_26p4");
+   auto b9_35=arbre->GetBranch("TauG2Weights_ceBRe_27p2");
+   auto b9_36=arbre->GetBranch("TauG2Weights_ceBRe_28p0");
+   auto b9_37=arbre->GetBranch("TauG2Weights_ceBRe_28p8");
+   auto b9_38=arbre->GetBranch("TauG2Weights_ceBRe_29p6");
+   auto b9_39=arbre->GetBranch("TauG2Weights_ceBRe_30p4");
+   auto b9_40=arbre->GetBranch("TauG2Weights_ceBRe_31p2");
+   auto b9_41=arbre->GetBranch("TauG2Weights_ceBRe_32p0");
+   auto b9_42=arbre->GetBranch("TauG2Weights_ceBRe_32p8");
+   auto b9_43=arbre->GetBranch("TauG2Weights_ceBRe_33p6");
+   auto b9_44=arbre->GetBranch("TauG2Weights_ceBRe_34p4");
+   auto b9_45=arbre->GetBranch("TauG2Weights_ceBRe_35p2");
+   auto b9_46=arbre->GetBranch("TauG2Weights_ceBRe_36p0");
+   auto b9_47=arbre->GetBranch("TauG2Weights_ceBRe_36p8");
+   auto b9_48=arbre->GetBranch("TauG2Weights_ceBRe_37p6");
+   auto b9_49=arbre->GetBranch("TauG2Weights_ceBRe_38p4");
+   auto b9_50=arbre->GetBranch("TauG2Weights_ceBRe_39p2");
+   auto b9_51=arbre->GetBranch("TauG2Weights_ceBRe_40p0");
 
-   auto b9_52=arbre->GetBranch("TauG2Weights_ceBRe33_m0p8");
-   auto b9_53=arbre->GetBranch("TauG2Weights_ceBRe33_m1p6");
-   auto b9_54=arbre->GetBranch("TauG2Weights_ceBRe33_m2p4");
-   auto b9_55=arbre->GetBranch("TauG2Weights_ceBRe33_m3p2");
-   auto b9_56=arbre->GetBranch("TauG2Weights_ceBRe33_m4p0");
-   auto b9_57=arbre->GetBranch("TauG2Weights_ceBRe33_m4p8");
-   auto b9_58=arbre->GetBranch("TauG2Weights_ceBRe33_m5p6");
-   auto b9_59=arbre->GetBranch("TauG2Weights_ceBRe33_m6p4");
-   auto b9_60=arbre->GetBranch("TauG2Weights_ceBRe33_m7p2");
-   auto b9_61=arbre->GetBranch("TauG2Weights_ceBRe33_m8p0");
-   auto b9_62=arbre->GetBranch("TauG2Weights_ceBRe33_m8p8");
-   auto b9_63=arbre->GetBranch("TauG2Weights_ceBRe33_m9p6");
-   auto b9_64=arbre->GetBranch("TauG2Weights_ceBRe33_m10p4");
-   auto b9_65=arbre->GetBranch("TauG2Weights_ceBRe33_m11p2");
-   auto b9_66=arbre->GetBranch("TauG2Weights_ceBRe33_m12p0");
-   auto b9_67=arbre->GetBranch("TauG2Weights_ceBRe33_m12p8");
-   auto b9_68=arbre->GetBranch("TauG2Weights_ceBRe33_m13p6");
-   auto b9_69=arbre->GetBranch("TauG2Weights_ceBRe33_m14p4");
-   auto b9_70=arbre->GetBranch("TauG2Weights_ceBRe33_m15p2");
-   auto b9_71=arbre->GetBranch("TauG2Weights_ceBRe33_m16p0");
-   auto b9_72=arbre->GetBranch("TauG2Weights_ceBRe33_m16p8");
-   auto b9_73=arbre->GetBranch("TauG2Weights_ceBRe33_m17p6");
-   auto b9_74=arbre->GetBranch("TauG2Weights_ceBRe33_m18p4");
-   auto b9_75=arbre->GetBranch("TauG2Weights_ceBRe33_m19p2");
-   auto b9_76=arbre->GetBranch("TauG2Weights_ceBRe33_m20p0");
-   auto b9_77=arbre->GetBranch("TauG2Weights_ceBRe33_m20p8");
-   auto b9_78=arbre->GetBranch("TauG2Weights_ceBRe33_m21p6");
-   auto b9_79=arbre->GetBranch("TauG2Weights_ceBRe33_m22p4");
-   auto b9_80=arbre->GetBranch("TauG2Weights_ceBRe33_m23p2");
-   auto b9_81=arbre->GetBranch("TauG2Weights_ceBRe33_m24p0");
-   auto b9_82=arbre->GetBranch("TauG2Weights_ceBRe33_m24p8");
-   auto b9_83=arbre->GetBranch("TauG2Weights_ceBRe33_m25p6");
-   auto b9_84=arbre->GetBranch("TauG2Weights_ceBRe33_m26p4");
-   auto b9_85=arbre->GetBranch("TauG2Weights_ceBRe33_m27p2");
-   auto b9_86=arbre->GetBranch("TauG2Weights_ceBRe33_m28p0");
-   auto b9_87=arbre->GetBranch("TauG2Weights_ceBRe33_m28p8");
-   auto b9_88=arbre->GetBranch("TauG2Weights_ceBRe33_m29p6");
-   auto b9_89=arbre->GetBranch("TauG2Weights_ceBRe33_m30p4");
-   auto b9_90=arbre->GetBranch("TauG2Weights_ceBRe33_m31p2");
-   auto b9_91=arbre->GetBranch("TauG2Weights_ceBRe33_m32p0");
-   auto b9_92=arbre->GetBranch("TauG2Weights_ceBRe33_m32p8");
-   auto b9_93=arbre->GetBranch("TauG2Weights_ceBRe33_m33p6");
-   auto b9_94=arbre->GetBranch("TauG2Weights_ceBRe33_m34p4");
-   auto b9_95=arbre->GetBranch("TauG2Weights_ceBRe33_m35p2");
-   auto b9_96=arbre->GetBranch("TauG2Weights_ceBRe33_m36p0");
-   auto b9_97=arbre->GetBranch("TauG2Weights_ceBRe33_m36p8");
-   auto b9_98=arbre->GetBranch("TauG2Weights_ceBRe33_m37p6");
-   auto b9_99=arbre->GetBranch("TauG2Weights_ceBRe33_m38p4");
-   auto b9_100=arbre->GetBranch("TauG2Weights_ceBRe33_m39p2");
-   auto b9_101=arbre->GetBranch("TauG2Weights_ceBRe33_m40p0");
+   auto b9_52=arbre->GetBranch("TauG2Weights_ceBRe_m0p8");
+   auto b9_53=arbre->GetBranch("TauG2Weights_ceBRe_m1p6");
+   auto b9_54=arbre->GetBranch("TauG2Weights_ceBRe_m2p4");
+   auto b9_55=arbre->GetBranch("TauG2Weights_ceBRe_m3p2");
+   auto b9_56=arbre->GetBranch("TauG2Weights_ceBRe_m4p0");
+   auto b9_57=arbre->GetBranch("TauG2Weights_ceBRe_m4p8");
+   auto b9_58=arbre->GetBranch("TauG2Weights_ceBRe_m5p6");
+   auto b9_59=arbre->GetBranch("TauG2Weights_ceBRe_m6p4");
+   auto b9_60=arbre->GetBranch("TauG2Weights_ceBRe_m7p2");
+   auto b9_61=arbre->GetBranch("TauG2Weights_ceBRe_m8p0");
+   auto b9_62=arbre->GetBranch("TauG2Weights_ceBRe_m8p8");
+   auto b9_63=arbre->GetBranch("TauG2Weights_ceBRe_m9p6");
+   auto b9_64=arbre->GetBranch("TauG2Weights_ceBRe_m10p4");
+   auto b9_65=arbre->GetBranch("TauG2Weights_ceBRe_m11p2");
+   auto b9_66=arbre->GetBranch("TauG2Weights_ceBRe_m12p0");
+   auto b9_67=arbre->GetBranch("TauG2Weights_ceBRe_m12p8");
+   auto b9_68=arbre->GetBranch("TauG2Weights_ceBRe_m13p6");
+   auto b9_69=arbre->GetBranch("TauG2Weights_ceBRe_m14p4");
+   auto b9_70=arbre->GetBranch("TauG2Weights_ceBRe_m15p2");
+   auto b9_71=arbre->GetBranch("TauG2Weights_ceBRe_m16p0");
+   auto b9_72=arbre->GetBranch("TauG2Weights_ceBRe_m16p8");
+   auto b9_73=arbre->GetBranch("TauG2Weights_ceBRe_m17p6");
+   auto b9_74=arbre->GetBranch("TauG2Weights_ceBRe_m18p4");
+   auto b9_75=arbre->GetBranch("TauG2Weights_ceBRe_m19p2");
+   auto b9_76=arbre->GetBranch("TauG2Weights_ceBRe_m20p0");
+   auto b9_77=arbre->GetBranch("TauG2Weights_ceBRe_m20p8");
+   auto b9_78=arbre->GetBranch("TauG2Weights_ceBRe_m21p6");
+   auto b9_79=arbre->GetBranch("TauG2Weights_ceBRe_m22p4");
+   auto b9_80=arbre->GetBranch("TauG2Weights_ceBRe_m23p2");
+   auto b9_81=arbre->GetBranch("TauG2Weights_ceBRe_m24p0");
+   auto b9_82=arbre->GetBranch("TauG2Weights_ceBRe_m24p8");
+   auto b9_83=arbre->GetBranch("TauG2Weights_ceBRe_m25p6");
+   auto b9_84=arbre->GetBranch("TauG2Weights_ceBRe_m26p4");
+   auto b9_85=arbre->GetBranch("TauG2Weights_ceBRe_m27p2");
+   auto b9_86=arbre->GetBranch("TauG2Weights_ceBRe_m28p0");
+   auto b9_87=arbre->GetBranch("TauG2Weights_ceBRe_m28p8");
+   auto b9_88=arbre->GetBranch("TauG2Weights_ceBRe_m29p6");
+   auto b9_89=arbre->GetBranch("TauG2Weights_ceBRe_m30p4");
+   auto b9_90=arbre->GetBranch("TauG2Weights_ceBRe_m31p2");
+   auto b9_91=arbre->GetBranch("TauG2Weights_ceBRe_m32p0");
+   auto b9_92=arbre->GetBranch("TauG2Weights_ceBRe_m32p8");
+   auto b9_93=arbre->GetBranch("TauG2Weights_ceBRe_m33p6");
+   auto b9_94=arbre->GetBranch("TauG2Weights_ceBRe_m34p4");
+   auto b9_95=arbre->GetBranch("TauG2Weights_ceBRe_m35p2");
+   auto b9_96=arbre->GetBranch("TauG2Weights_ceBRe_m36p0");
+   auto b9_97=arbre->GetBranch("TauG2Weights_ceBRe_m36p8");
+   auto b9_98=arbre->GetBranch("TauG2Weights_ceBRe_m37p6");
+   auto b9_99=arbre->GetBranch("TauG2Weights_ceBRe_m38p4");
+   auto b9_100=arbre->GetBranch("TauG2Weights_ceBRe_m39p2");
+   auto b9_101=arbre->GetBranch("TauG2Weights_ceBRe_m40p0");
 
    auto b10_1=arbre->GetBranch("run");
    auto b10_2=arbre->GetBranch("event");
@@ -1048,6 +1050,8 @@ if (is_found) cout<<event<<" passed loose iso"<<endl;
 	   }
            aweight=aweight*weight_aco;
 	}
+	aweight=aweight*h_zpt->GetBinContent(h_zpt->GetXaxis()->FindBin((my_gen1+my_gen2).M()),h_zpt->GetYaxis()->FindBin((my_gen1+my_gen2).Pt())); //FIXME z pt Bisnupriya
+	//cout<<h_zpt->GetBinContent(h_zpt->GetXaxis()->FindBin((my_gen1+my_gen2).M()),h_zpt->GetXaxis()->FindBin((my_gen1+my_gen2).Pt()))<<" "<<(my_gen1+my_gen2).M()<<" "<<(my_gen1+my_gen2).Pt()<<endl;
 
 
 	// Block MET
@@ -1088,7 +1092,7 @@ if (is_found) cout<<event<<" passed dz"<<endl;
            if (ntracks==0) aweight*=(2.22+0.00572*gen_mtt);
            else if (ntracks==1) aweight*=(1.93+0.00218*gen_mtt);
            b9_1->GetEntry(i);
-           if (name=="GGTT_0p0" or name=="GGTT") aweight*=TauG2Weights_ceBRe33_0p0;
+           if (name=="GGTT_0p0" or name=="GGTT") aweight*=TauG2Weights_ceBRe_0p0;
         }
 
 	bool is_lowNT=true;//FIXME
@@ -1179,7 +1183,7 @@ if (is_found) cout<<event<<" passed OS iso real"<<endl;
 if (is_found) cout<<acoplanarity<<" "<<ntracks<<endl;
 if (is_found and is_cat0) cout<<event<<" passed ntracks and aco"<<endl;
 
-//if (is_cat0) cout<<event<<" "<<my_tau1.Pt()<<" "<<my_tau2.Pt()<<" "<<var0<<" "<<weight*genWeight<<" "<<puWeight<<" "<<TauG2Weights_ceBRe33_0p0<<" "<<(LepCand_tautriggersf[tau1_index]*LepCand_tautriggersf[tau2_index])<<" "<<tauidSF<<" "<<correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos))<<" "<<(2.22+0.00572*gen_mtt)<<endl;
+//if (is_cat0) cout<<event<<" "<<my_tau1.Pt()<<" "<<my_tau2.Pt()<<" "<<var0<<" "<<weight*genWeight<<" "<<puWeight<<" "<<TauG2Weights_ceBRe_0p0<<" "<<(LepCand_tautriggersf[tau1_index]*LepCand_tautriggersf[tau2_index])<<" "<<tauidSF<<" "<<correction_map->GetBinContent(correction_map->GetXaxis()->FindBin(ntpu),correction_map->GetYaxis()->FindBin(zpos))<<" "<<(2.22+0.00572*gen_mtt)<<endl;
 //
              if (k==0) fillTreeDzTautau(tree2,my_tau1.Pt(),my_tau2.Pt(),my_tau1.Eta(),my_tau2.Eta(),my_tau1.Phi(),my_tau2.Phi(),LepCand_DecayMode[tau1_index],LepCand_DecayMode[tau2_index],GenVtx_z,simple_ditau_z,LepCand_dz[tau1_index],LepCand_dz[tau2_index],w_iso);
 

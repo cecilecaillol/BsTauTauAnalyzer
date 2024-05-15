@@ -18,7 +18,7 @@ if __name__ == "__main__":
     postfixName=[
 "","_CMS_tauid_stat1_dm0_"+year4+"Down","_CMS_tauid_stat1_dm0_"+year4+"Up","_CMS_tauid_stat1_dm1_"+year4+"Down","_CMS_tauid_stat1_dm1_"+year4+"Up","_CMS_tauid_stat1_dm10_"+year4+"Down","_CMS_tauid_stat1_dm10_"+year4+"Up","_CMS_tauid_stat1_dm11_"+year4+"Down","_CMS_tauid_stat1_dm11_"+year4+"Up","_CMS_tauid_stat2_dm0_"+year4+"Down","_CMS_tauid_stat2_dm0_"+year4+"Up","_CMS_tauid_stat2_dm1_"+year4+"Down","_CMS_tauid_stat2_dm1_"+year4+"Up","_CMS_tauid_stat2_dm10_"+year4+"Down","_CMS_tauid_stat2_dm10_"+year4+"Up","_CMS_tauid_stat2_dm11_"+year4+"Down","_CMS_tauid_stat2_dm11_"+year4+"Up","_CMS_tauid_syst_allerasDown","_CMS_tauid_syst_allerasUp","_CMS_tauid_syst_"+year4+"Down","_CMS_tauid_syst_"+year4+"Up","_CMS_tauid_syst_dm0_"+year4+"Down","_CMS_tauid_syst_dm0_"+year4+"Up","_CMS_tauid_syst_dm1_"+year4+"Down","_CMS_tauid_syst_dm1_"+year4+"Up","_CMS_tauid_syst_dm10_"+year4+"Down","_CMS_tauid_syst_dm10_"+year4+"Up","_CMS_tauid_syst_dm11_"+year4+"Down","_CMS_tauid_syst_dm11_"+year4+"Up","_CMS_taues_dm0_"+year4+"Down","_CMS_taues_dm0_"+year4+"Up","_CMS_taues_dm1_"+year4+"Down","_CMS_taues_dm1_"+year4+"Up","_CMS_taues_3prong_"+year4+"Down","_CMS_taues_3prong_"+year4+"Up","_CMS_etauFR_barrel_"+year4+"Down","_CMS_etauFR_barrel_"+year4+"Up","_CMS_etauFR_endcap_"+year4+"Down","_CMS_etauFR_endcap_"+year4+"Up","_CMS_etauFES_dm0_"+year4+"Down","_CMS_etauFES_dm0_"+year4+"Up","_CMS_etauFES_dm1_"+year4+"Down","_CMS_etauFES_dm1_"+year4+"Up","_CMS_pileup_"+year4+"Down","_CMS_pileup_"+year4+"Up","_CMS_etautrg_"+year4+"Down","_CMS_etautrg_"+year4+"Up","_CMS_etrg_"+year4+"Down","_CMS_etrg_"+year4+"Up","_CMS_elasticRescalingDown","_CMS_elasticRescalingUp","_CMS_L1PrefiringDown","_CMS_L1PrefiringUp","_CMS_elId_systDown","_CMS_elId_systUp",
 "_CMS_ISRDown","_CMS_ISRUp","_CMS_FSRDown","_CMS_FSRUp","_CMS_PDFDown","_CMS_PDFUp","_CMS_muR0p5_muF0p5","_CMS_muRDown","_CMS_muFDown","_CMS_muFUp","_CMS_muRUp","_CMS_muR2p0_muF2p0",
-"_CMS_jetfake_w_invertMTDown","_CMS_jetfake_w_invertMTUp","_CMS_jetfake_qcd_invertOSDown","_CMS_jetfake_qcd_invertOSUp","_CMS_jetfake_tauptextrap_w_et_dm0_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm0_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm1_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm1_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm10_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm10_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm11_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm11_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm0_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm0_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm1_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm1_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm10_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm10_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm11_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm11_"+year4+"Up","_CMS_jetfake_wfractionDown","_CMS_jetfake_wfractionUp","_CMS_jetfake_ntracksextrap_w_et_dm0_"+year4+"Down","_CMS_jetfake_ntracksextrap_w_et_dm0_"+year4+"Up","_CMS_jetfake_ntracksextrap_w_et_dm1_"+year4+"Down","_CMS_jetfake_ntracksextrap_w_et_dm1_"+year4+"Up","_CMS_jetfake_ntracksextrap_w_et_dm10_"+year4+"Down","_CMS_jetfake_ntracksextrap_w_et_dm10_"+year4+"Up","_CMS_jetfake_ntracksextrap_w_et_dm11_"+year4+"Down","_CMS_jetfake_ntracksextrap_w_et_dm11_"+year4+"Up","_CMS_jetfake_ntracksextrap_qcd_et_dm0_"+year4+"Down","_CMS_jetfake_ntracksextrap_qcd_et_dm0_"+year4+"Up","_CMS_jetfake_ntracksextrap_qcd_et_dm1_"+year4+"Down","_CMS_jetfake_ntracksextrap_qcd_et_dm1_"+year4+"Up","_CMS_jetfake_ntracksextrap_qcd_et_dm10_"+year4+"Down","_CMS_jetfake_ntracksextrap_qcd_et_dm10_"+year4+"Up","_CMS_jetfake_ntracksextrap_qcd_et_dm11_"+year4+"Down","_CMS_jetfake_ntracksextrap_qcd_et_dm11_"+year4+"Up","_CMS_jetfake_ntracksextrap_w_et_"+year4+"Down","_CMS_jetfake_ntracksextrap_w_et_"+year4+"Up","_CMS_jetfake_ntracksextrap_qcd_et_"+year4+"Down","_CMS_jetfake_ntracksextrap_qcd_et_"+year4+"Up"]
+"_CMS_jetfake_w_invertMTDown","_CMS_jetfake_w_invertMTUp","_CMS_jetfake_qcd_invertOSDown","_CMS_jetfake_qcd_invertOSUp","_CMS_jetfake_tauptextrap_w_et_dm0_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm0_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm1_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm1_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm10_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm10_"+year4+"Up","_CMS_jetfake_tauptextrap_w_et_dm11_"+year4+"Down","_CMS_jetfake_tauptextrap_w_et_dm11_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm0_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm0_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm1_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm1_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm10_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm10_"+year4+"Up","_CMS_jetfake_tauptextrap_qcd_et_dm11_"+year4+"Down","_CMS_jetfake_tauptextrap_qcd_et_dm11_"+year4+"Up","_CMS_jetfake_wfractionDown","_CMS_jetfake_wfractionUp","_CMS_jetfake_ntracksextrap_w_et_dm0Down","_CMS_jetfake_ntracksextrap_w_et_dm0Up","_CMS_jetfake_ntracksextrap_w_et_dm1Down","_CMS_jetfake_ntracksextrap_w_et_dm1Up","_CMS_jetfake_ntracksextrap_w_et_dm10Down","_CMS_jetfake_ntracksextrap_w_et_dm10Up","_CMS_jetfake_ntracksextrap_w_et_dm11Down","_CMS_jetfake_ntracksextrap_w_et_dm11Up","_CMS_jetfake_ntracksextrap_qcd_et_dm0Down","_CMS_jetfake_ntracksextrap_qcd_et_dm0Up","_CMS_jetfake_ntracksextrap_qcd_et_dm1Down","_CMS_jetfake_ntracksextrap_qcd_et_dm1Up","_CMS_jetfake_ntracksextrap_qcd_et_dm10Down","_CMS_jetfake_ntracksextrap_qcd_et_dm10Up","_CMS_jetfake_ntracksextrap_qcd_et_dm11Down","_CMS_jetfake_ntracksextrap_qcd_et_dm11Up","_CMS_jetfake_ntracksextrap_w_etDown","_CMS_jetfake_ntracksextrap_w_etUp","_CMS_jetfake_ntracksextrap_qcd_etDown","_CMS_jetfake_ntracksextrap_qcd_etUp"]
 
     nbhist=1 
     nbhist_anti=1
@@ -55,28 +55,28 @@ if __name__ == "__main__":
        SF_ZTTA=hZTT2A.Integral()/(hZTT1A.Integral()+0.001)
 
        if (is_control==0 and j==0):
-	  SF_ZLL=0.0242
-          SF_ZLLA=0.0242
-          SF_ZTT=0.0242
-          SF_ZTTA=0.0242
+	  SF_ZLL=0.0248 # was 0.0242
+          SF_ZLLA=0.0248
+          SF_ZTT=0.0248
+          SF_ZTTA=0.0248
 
        if (is_control==0 and j==1):
-          SF_ZLL=0.0501
-          SF_ZLLA=0.0501
-          SF_ZTT=0.0501
-          SF_ZTTA=0.0501
+          SF_ZLL=0.0512 # was 0.0501
+          SF_ZLLA=0.0512
+          SF_ZTT=0.0512
+          SF_ZTTA=0.0512
 
        if (is_control==0 and j==2):
-          SF_ZLL=0.194
-          SF_ZLLA=0.194
-          SF_ZTT=0.194
-          SF_ZTTA=0.194
+          SF_ZLL=0.204
+          SF_ZLLA=0.204
+          SF_ZTT=0.204
+          SF_ZTTA=0.204
 
        if (is_control==0 and j==3):
-          SF_ZLL=0.0501+0.0242
-          SF_ZLLA=0.0501+0.0242
-          SF_ZTT=0.0501+0.0242
-          SF_ZTTA=0.0501+0.0242
+          SF_ZLL=0.0512+0.0248
+          SF_ZLLA=0.0512+0.0248
+          SF_ZTT=0.0512+0.0248
+          SF_ZTTA=0.0512+0.0248
 
        if (is_control==0 and (j==4 or j==5)):
           SF_ZLL=1.0
@@ -87,17 +87,17 @@ if __name__ == "__main__":
        print SF_ZLL, SF_ZLLA, SF_ZTT, SF_ZTTA
 
        for k in range(0,nbhist):
-	  #print k,postfixName[k]
+	   #print k,postfixName[k]
           postfix=postfixName[k]
           hZLL1=fDY.Get("etR_"+str(j)+"/ZLL"+postfix).Clone()
-	  hZLL1.Scale(SF_ZLL)
+          hZLL1.Scale(SF_ZLL)
           if (is_control==0 and (j==4 or j==5)):
             error = ROOT.Double(1.)
             total = hZLL1.IntegralAndError(0, hZLL1.GetNbinsX() + 1, error)
-	    hZLL1.SetBinContent(1,0.0242*total)
-            hZLL1.SetBinError(1,0.0242*error) 
-            hZLL1.SetBinContent(2,0.0501*total)
-            hZLL1.SetBinError(2,0.0501*error) 
+            hZLL1.SetBinContent(1,0.0248*total)
+            hZLL1.SetBinError(1,0.0248*error) 
+            hZLL1.SetBinContent(2,0.0512*total)
+            hZLL1.SetBinError(2,0.0512*error) 
             hZLL1.SetBinContent(3,0.072*total)
             hZLL1.SetBinError(3,0.072*error)
             hZLL1.SetBinContent(4,0.091*total)
@@ -120,10 +120,10 @@ if __name__ == "__main__":
           if (is_control==0 and (j==4 or j==5)):
             error = ROOT.Double(1.)
             total = hZTT1.IntegralAndError(0, hZTT1.GetNbinsX() + 1, error)
-            hZTT1.SetBinContent(1,0.0242*total)
-            hZTT1.SetBinError(1,0.0242*error) 
-            hZTT1.SetBinContent(2,0.0501*total)
-            hZTT1.SetBinError(2,0.0501*error) 
+            hZTT1.SetBinContent(1,0.0248*total)
+            hZTT1.SetBinError(1,0.0248*error) 
+            hZTT1.SetBinContent(2,0.0512*total)
+            hZTT1.SetBinError(2,0.0512*error) 
             hZTT1.SetBinContent(3,0.072*total)
             hZTT1.SetBinError(3,0.072*error)
             hZTT1.SetBinContent(4,0.091*total)
@@ -147,7 +147,7 @@ if __name__ == "__main__":
           hZLL2.SetName("ZLL"+postfix)
           if (j==3): 
              hZLL2.Write()
-	  else: 
+          else:
              hZLL1.Write()
           hZTT1.SetName("ZTT"+postfix)
           hZTT2.SetName("ZTT"+postfix)
@@ -162,10 +162,10 @@ if __name__ == "__main__":
           if (is_control==0 and (j==4 or j==5)):
             error = ROOT.Double(1.)
             total = hZLL1A.IntegralAndError(0, hZLL1A.GetNbinsX() + 1, error)
-            hZLL1A.SetBinContent(1,0.0242*total)
-            hZLL1A.SetBinError(1,0.0242*error)
-            hZLL1A.SetBinContent(2,0.0501*total)
-            hZLL1A.SetBinError(2,0.0501*error)
+            hZLL1A.SetBinContent(1,0.0248*total)
+            hZLL1A.SetBinError(1,0.0248*error)
+            hZLL1A.SetBinContent(2,0.0512*total)
+            hZLL1A.SetBinError(2,0.0512*error)
             hZLL1A.SetBinContent(3,0.072*total)
             hZLL1A.SetBinError(3,0.072*error)
             hZLL1A.SetBinContent(4,0.091*total)
@@ -188,10 +188,10 @@ if __name__ == "__main__":
           if (is_control==0 and (j==4 or j==5)):
             error = ROOT.Double(1.)
             total = hZTT1A.IntegralAndError(0, hZTT1A.GetNbinsX() + 1, error)
-            hZTT1A.SetBinContent(1,0.0242*total)
-            hZTT1A.SetBinError(1,0.0242*error)
-            hZTT1A.SetBinContent(2,0.0501*total)
-            hZTT1A.SetBinError(2,0.0501*error)
+            hZTT1A.SetBinContent(1,0.0248*total)
+            hZTT1A.SetBinError(1,0.0248*error)
+            hZTT1A.SetBinContent(2,0.0512*total)
+            hZTT1A.SetBinError(2,0.0512*error)
             hZTT1A.SetBinContent(3,0.072*total)
             hZTT1A.SetBinError(3,0.072*error)
             hZTT1A.SetBinContent(4,0.091*total)
