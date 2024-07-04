@@ -1,0 +1,4 @@
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToTauTau_Inelastic_superchic_RunIISummer20UL18/RunIISummer20UL18_NanoAODv9_nofilter/231218_090809/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToTauTau_Elastic_superchic_RunIISummer20UL18/RunIISummer20UL18_NanoAODv9_nofilter/231218_090751/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToTauTau_ElInel_superchic_RunIISummer20UL18/RunIISummer20UL18_NanoAODv9_nofilter/231218_090726/0000
+/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToTauTau_InelEl_superchic_RunIISummer20UL18/RunIISummer20UL18_NanoAODv9_nofilter/231218_090425/0000

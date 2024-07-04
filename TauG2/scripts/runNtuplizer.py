@@ -33,6 +33,8 @@ def buildCondorFile(opt,FarmDirectory):
         else:
             OpSysAndVer = "CentOS7"
         condor.write('requirements = (OpSysAndVer =?= "{0}")\n\n'.format(OpSysAndVer))
+        #condor.write('MY.WantOS = "el7"\n')
+        condor.write('MY.SingularityImage = "/cvmfs/unpacked.cern.ch/gitlab-registry.cern.ch/cms-cat/cmssw-lxplus/cmssw-el7-lxplus:latest/"\n')
         condor.write('should_transfer_files = YES\n')
         condor.write('transfer_input_files = %s\n\n'%os.environ['X509_USER_PROXY'])
         for dataset in datasets:
@@ -57,7 +59,8 @@ def buildCondorFile(opt,FarmDirectory):
             print dataset_name
             prefix='root://cms-xrd-global.cern.ch/'
           elif 'eos' in dataset.split('/'):
-            sufix='mc'
+            #sufix='mc' #FIXME
+            sufix='sig'#FIXME
             #dataset_name = dataset.split('/')[-1]
 	    dataset_name = dataset.split('/')[9]+"_"+dataset.split('/')[12]
 	    if "RunII" in dataset.split('/')[9] and "GGTo" not in dataset.split('/')[9]:
@@ -74,18 +77,20 @@ def buildCondorFile(opt,FarmDirectory):
             print('ERROR: found invalid dataset = ',dataset,'stop the code')
             sys.exit(1)
           if 'Tau' not in dataset and "SingleMuon" not in dataset and "EGamma" not in dataset and "MuonEG" not in dataset and "DoubleMuon" not in dataset and "SingleElectron" not in dataset:
-	          sufix='mc'
+	          #sufix='mc'#FIXME
+              sufix='sig'#FIXME
 	  elif 'TauTau' in dataset:
-                  sufix='mc'
+                  #sufix='mc'#FIXME
+                  sufix='sig'#FIXME
 	  else:
                   sufix='data'
           channels=['emu'] #EDIT THIS (could be ee,emu,etau,mumu,mutau,tautau)
           print ('sufix = ', sufix)
 
           yearmodified=year
-          if "preVFP" in dataset and year=="2016" and sufix=="mc":
+          if "preVFP" in dataset and year=="2016" and (sufix=="mc" or sufix=="sig"):
              yearmodified="2016pre"
-          if "preVFP" not in dataset and year=="2016" and sufix=="mc":
+          if "preVFP" not in dataset and year=="2016" and (sufix=="mc" or sufix=="sig"):
              yearmodified="2016post"
 
             
@@ -174,7 +179,7 @@ def main():
     parser = optparse.OptionParser(usage)
     parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesMC2018.txt', type='string')
     #parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/ccaillol/TauG2/ntuples_mumu_2018', type='string') #EDIT THIS
-    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_emu_2018', type='string') #EDIT THIS
+    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/group/cmst3/group/taug2/AnalysisCecileGGWW/ntuples_emu_2018', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
     (opt, args) = parser.parse_args()
