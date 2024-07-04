@@ -80,26 +80,26 @@ c=ROOT.TCanvas("canvas","",0,0,800,800)
 c.cd()
 c.SetLogy()
 
-file=ROOT.TFile("datacard_mutau_2018.root","r")
+file=ROOT.TFile("datacard_tautau_2018.root","r")
 if args.year=="2017":
-   file=ROOT.TFile("datacard_mutau_2017.root","r")
+   file=ROOT.TFile("datacard_tautau_2017.root","r")
 
 if args.year=="2016":
-   file=ROOT.TFile("datacard_mutau_2016.root","r")
+   file=ROOT.TFile("datacard_tautau_2016.root","r")
 
 if args.year=="2016post":
-   file=ROOT.TFile("datacard_mutau_2016post.root","r")
+   file=ROOT.TFile("datacard_tautau_2016post.root","r")
 
 if args.year=="2016pre":
-   file=ROOT.TFile("datacard_mutau_2016pre.root","r")
+   file=ROOT.TFile("datacard_tautau_2016pre.root","r")
 
 adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
-#categories=["et_0","et_1","et_2","et_3","et_4","et_5","et_6","et_7","et_8"]
-#name=["mvis","e_pt","tau_pt","e_eta","tau_eta","met","mt","ntracks","acoplanarity"]
-#title=["m_{vis} (GeV)","e p_{T} (GeV)","tau_{h} p_{T} (GeV)","e #eta","#tau_{h} #eta","MET (GeV)","m_{T}(e,MET) (GeV)","N_{tracks}","acoplanarity"]
+categories=["tt_0","tt_1","tt_2","tt_3","tt_4","tt_5","tt_6","tt_7","tt_8"]
+#name=["mvis","tau1_pt","tau2_pt","e_eta","tau_eta","met","pth","dr","acoplanarity"]
+#title=["m_{vis} (GeV)","Leading #tau_{h} p_{T} (GeV)","Subleading tau_{h} p_{T} (GeV)","Leading #tau_{h} #eta","Subleading #tau_{h} #eta","MET (GeV)","Higgs p_{T} (GeV)","#Delta R","acoplanarity"]
 
 #name=["mvis_nt0_dm0","mvis_nt0_dm1","mvis_nt0_dm10","mvis_nt0_dm11","mvis_nt1_dm0","mvis_nt1_dm1","mvis_nt1_dm10","mvis_nt1_dm11","mvis_all",
 #"mvis_nt0_dm0_lNlA","mvis_nt0_dm1_lNlA","mvis_nt0_dm10_lNlA","mvis_nt0_dm11_lNlA","mvis_nt1_dm0_lNlA","mvis_nt1_dm1_lNlA","mvis_nt1_dm10_lNlA","mvis_nt1_dm11_lNlA","mvis_all_lNlA"]
@@ -107,9 +107,9 @@ trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",
 #"m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)"]
 #ncat=9
 
-categories=["mt_0","mt_1"]
-name=["mvis_nt0","mvis_nt1"]
-title=["m_{vis} (GeV)","m_{vis} (GeV)"]
+categories=["tt_0","tt_1","et_2","et_3","et_4","et_5"]
+name=["mvis_nt0","mvis_nt1","mvis_nt0_dm0","mvis_nt0_dm1","mvis_nt0_dm10","mvis_nt0_dm11"]
+title=["m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)"]
 ncat=2
 
 for i in range (0,ncat):
@@ -118,22 +118,18 @@ for i in range (0,ncat):
    TT=file.Get(categories[i]).Get("TT")
    VV=file.Get(categories[i]).Get("VV")
    ZTT=file.Get(categories[i]).Get("ZTT")
-   ZLL=file.Get(categories[i]).Get("ZLL")
    ST=file.Get(categories[i]).Get("ST")
    GGTT=file.Get(categories[i]).Get("GGTT")
-   GGWW=file.Get(categories[i]).Get("GGWW")
-   GGMM=file.Get(categories[i]).Get("GGMM")
-   GGWW.Add(GGMM)
+   if args.year=="2018": GGWW=file.Get(categories[i]).Get("GGWW")
    VV.Add(ST.Clone())
    #VV.Add(W.Clone())
    Fake=file.Get(categories[i]).Get("Fake")
-   #Fake.Scale(0.95)
+   #Fake.Scale(1.3)
    #ZTT.Scale(0.9)   
 
-   #ZLL.Scale(0.9)
-
-   #if "nt0" in name[i]: GGTT.Scale(2.6)
-   #if "nt1" in name[i]: GGTT.Scale(5.0)
+   #if args.year=="2018": 
+   #  if "nt0" in name[i]: GGTT.Scale(3.5)
+   #  if "nt1" in name[i]: GGTT.Scale(3.5)
 
    Data.GetXaxis().SetTitle("")
    Data.GetXaxis().SetTitleSize(0)
@@ -157,22 +153,20 @@ for i in range (0,ncat):
    #      Data.SetBinContent(k,0.0)
 
    TT.SetFillColor(ROOT.TColor.GetColor("#4a4e4d"))
-   ZLL.SetFillColor(ROOT.TColor.GetColor("#fe8a71"))
    ZTT.SetFillColor(ROOT.TColor.GetColor("#f6cd61"))
    VV.SetFillColor(ROOT.TColor.GetColor("#ff8c94"))
    Fake.SetFillColor(ROOT.TColor.GetColor("#3da4ab"))
-   GGWW.SetFillColor(ROOT.kGreen+1)
+   if args.year=="2018": GGWW.SetFillColor(ROOT.kGreen+1)
 
    Data.SetMarkerStyle(20)
    Data.SetMarkerSize(1)
-   ZLL.SetLineColor(1)
    TT.SetLineColor(1)
    ZTT.SetLineColor(1)
    VV.SetLineColor(1)
    Fake.SetLineColor(1)
    Data.SetLineColor(1)
    Data.SetLineWidth(2)
-   GGWW.SetLineColor(1)
+   if args.year=="2018": GGWW.SetLineColor(1)
 
    GGTT.SetLineColor(2)
    GGTT.SetLineWidth(3)
@@ -186,16 +180,14 @@ for i in range (0,ncat):
    stack.Add(TT)
    stack.Add(Fake)
    stack.Add(VV)
-   stack.Add(GGWW)
-   stack.Add(ZLL)
+   if args.year=="2018": stack.Add(GGWW)
    stack.Add(ZTT)
    stack.Add(GGTTfull)
 
-   errorBand = ZLL.Clone()
-   errorBand.Add(TT)
+   errorBand = TT.Clone()
    errorBand.Add(ZTT)
    errorBand.Add(VV)
-   errorBand.Add(GGWW)
+   if args.year=="2018": errorBand.Add(GGWW)
    errorBand.Add(Fake)
    errorBand.Add(GGTTfull)
 
@@ -230,19 +222,18 @@ for i in range (0,ncat):
    errorBand.Draw("e2same")
    Data.Draw("esame")
 
-   #GGTT.Draw("histsame")
+   #if args.year=="2018": GGTT.Draw("histsame")
 
    legende=make_legend()
    if "inverted" in name[i]:
       legende=make_legend2()
    legende.AddEntry(Data,"Observed","elp")
    legende.AddEntry(ZTT,"Z#rightarrow #tau#tau","f")
-   legende.AddEntry(ZLL,"Z#rightarrow #mu#mu","f")
    legende.AddEntry(TT,"t#bar{t}","f")
    legende.AddEntry(VV,"VV,single-t, W","f")
-   legende.AddEntry(GGWW,"#gamma#gamma#rightarrow WW/#mu#mu","f")
+   if args.year=="2018": legende.AddEntry(GGWW,"#gamma#gamma#rightarrow WW","f")
    legende.AddEntry(Fake,"Fake","f")
-   legende.AddEntry(GGTTfull,"Signal","f")
+   if args.year=="2018": legende.AddEntry(GGTTfull,"Signal","f")
    legende.AddEntry(errorBand,"Uncertainty","f")
    legende.Draw()
 
@@ -255,22 +246,23 @@ for i in range (0,ncat):
  
    pad1.RedrawAxis()
 
-   S = GGTT.Integral()#/3
-   B =  Fake.Integral()
-   SoB = S/(B+0.00001)
-   SosB = S/(B+0.00001)**0.5
+   if args.year=="2018": 
+      S = GGTT.Integral()#/3
+      B =  Fake.Integral()
+      SoB = S/(B+0.00001)
+      SosB = S/(B+0.00001)**0.5
 
-   categ  = ROOT.TPaveText(0.35, 0.5+0.013, 0.83, 0.50+0.155, "NDC")
-   categ.SetBorderSize(   0 )
-   categ.SetFillStyle(    0 )
-   categ.SetTextAlign(   12 )
-   categ.SetTextSize ( 0.04 )
-   categ.SetTextColor(    1 )
-   categ.SetTextFont (   42 )
-   categ.AddText("S = %.2f" %(S))
-   #categ.AddText("S = %.2f, B = %.1f, S/B = %.2f, S/sqrt(B) = %.2f" %(S,B,SoB,SosB))
-   #categ.AddText("S = %.2f, B = %.1f"%(GGTT.Integral()/30, Fake.Integral()))
-   if (B<1000): categ.Draw("same")
+      categ  = ROOT.TPaveText(0.35, 0.5+0.013, 0.83, 0.50+0.155, "NDC")
+      categ.SetBorderSize(   0 )
+      categ.SetFillStyle(    0 )
+      categ.SetTextAlign(   12 )
+      categ.SetTextSize ( 0.04 )
+      categ.SetTextColor(    1 )
+      categ.SetTextFont (   42 )
+      #categ.AddText("S = %.2f, B = %.1f, S/B = %.2f, S/sqrt(B) = %.2f" %(S,B,SoB,SosB))
+      categ.AddText("S = %.2f" %(S))
+      #categ.AddText("S = %.2f, B = %.1f"%(GGTT.Integral()/30, Fake.Integral()))
+      if (B<1000): categ.Draw("same")
 
    c.cd()
    pad2 = ROOT.TPad("pad2","pad2",0,0,1,0.35);
@@ -322,6 +314,6 @@ for i in range (0,ncat):
    ROOT.gPad.RedrawAxis()
 
    c.Modified()
-   c.SaveAs("plots_mutau_"+args.year+"/control_"+name[i]+".pdf")
-   c.SaveAs("plots_mutau_"+args.year+"/control_"+name[i]+".png")
+   c.SaveAs("plots_tautau_"+args.year+"/control_"+name[i]+".pdf")
+   c.SaveAs("plots_tautau_"+args.year+"/control_"+name[i]+".png")
 

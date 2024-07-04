@@ -6,7 +6,7 @@ from array import array
 
 is_datadriven=1
 
-def add_lumi(year):
+def add_lumi():
     lowX=0.55
     lowY=0.835
     lumi  = ROOT.TPaveText(lowX, lowY+0.06, lowX+0.30, lowY+0.16, "NDC")
@@ -16,11 +16,12 @@ def add_lumi(year):
     lumi.SetTextColor(    1 )
     lumi.SetTextSize(0.06)
     lumi.SetTextFont (   42 )
-    if (year=="2018"): lumi.AddText("2018, 60 fb^{-1} (13 TeV)")
-    if (year=="2017"): lumi.AddText("2017, 41 fb^{-1} (13 TeV)")
-    if (year=="2016"): lumi.AddText("2016, 36 fb^{-1} (13 TeV)")
-    if (year=="2016pre"): lumi.AddText("2016 preVFP, 19 fb^{-1} (13 TeV)")
-    if (year=="2016post"): lumi.AddText("2016 postVFP, 16 fb^{-1} (13 TeV)")
+    lumi.AddText("137 fb^{-1} (13 TeV)")
+    #if (year=="2018"): lumi.AddText("2018, 60 fb^{-1} (13 TeV)")
+    #if (year=="2017"): lumi.AddText("2017, 41 fb^{-1} (13 TeV)")
+    #if (year=="2016"): lumi.AddText("2016, 36 fb^{-1} (13 TeV)")
+    #if (year=="2016pre"): lumi.AddText("2016 preVFP, 19 fb^{-1} (13 TeV)")
+    #if (year=="2016post"): lumi.AddText("2016 postVFP, 16 fb^{-1} (13 TeV)")
     return lumi
 
 def add_CMS():
@@ -72,25 +73,15 @@ def make_legend2():
 ROOT.gStyle.SetOptStat(0)
 ROOT.gStyle.SetPaintTextFormat("1.3f");
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--year', '-y', default=None, help='Output name')
-args = parser.parse_args()
-
-
 c=ROOT.TCanvas("canvas","",0,0,800,800)
 c.cd()
 c.SetLogy()
 c.SetLogx()
 
-file=ROOT.TFile("rescaling_mumu_2018.root","r")
-if args.year=="2017":
-   file=ROOT.TFile("rescaling_mumu_2017.root","r")
-
-if args.year=="2016pre":
-   file=ROOT.TFile("rescaling_mumu_2016pre.root","r")
-
-if args.year=="2016post":
-   file=ROOT.TFile("rescaling_mumu_2016post.root","r")
+file18=ROOT.TFile("rescaling_mumu_2018.root","r")
+file17=ROOT.TFile("rescaling_mumu_2017.root","r")
+file16pre=ROOT.TFile("rescaling_mumu_2016pre.root","r")
+file16post=ROOT.TFile("rescaling_mumu_2016post.root","r")
 
 adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
@@ -109,17 +100,40 @@ for i in range (0,ncat):
    c.SetLogy()
    c.SetLogx()
 
-   Data=file.Get("data_obs_low"+categories[i]).Clone()
-   Bkg=file.Get("data_obs_high").Clone()
-   Sig=file.Get("GGMM_low"+categories[i]).Clone()
-   print("ratio 2.3 GGMM: ",2.3*(Sig.GetBinContent(4)+Sig.GetBinContent(5)+Sig.GetBinContent(6)+Sig.GetBinContent(7)+Sig.GetBinContent(8)+Sig.GetBinContent(9))/(Data.GetBinContent(4)+Data.GetBinContent(5)+Data.GetBinContent(6)+Data.GetBinContent(7)+Data.GetBinContent(8)+Data.GetBinContent(9)))
-   print("ratio 3.1 GGMM: ",3.1*(Sig.GetBinContent(4)+Sig.GetBinContent(5)+Sig.GetBinContent(6)+Sig.GetBinContent(7)+Sig.GetBinContent(8)+Sig.GetBinContent(9))/(Data.GetBinContent(4)+Data.GetBinContent(5)+Data.GetBinContent(6)+Data.GetBinContent(7)+Data.GetBinContent(8)+Data.GetBinContent(9)))
-   print(3.1*(Sig.GetBinContent(4)+Sig.GetBinContent(5)+Sig.GetBinContent(6)+Sig.GetBinContent(7)+Sig.GetBinContent(8)+Sig.GetBinContent(9)),(Data.GetBinContent(4)+Data.GetBinContent(5)+Data.GetBinContent(6)+Data.GetBinContent(7)+Data.GetBinContent(8)+Data.GetBinContent(9)))
-   print(Data.GetBinContent(6),Data.GetBinContent(7),Data.GetBinContent(8),Data.GetBinContent(9))
-   #Bkg.Scale((Data.GetBinContent(8)+Data.GetBinContent(9)+Data.GetBinContent(7))/(2.6*(Sig.GetBinContent(8)+Sig.GetBinContent(9)+Sig.GetBinContent(7))+Bkg.GetBinContent(8)+Bkg.GetBinContent(9)+Bkg.GetBinContent(7)))
-   Bkg.Scale((Data.GetBinContent(6)+Data.GetBinContent(7)+Data.GetBinContent(8)-3.1*(Sig.GetBinContent(6)+Sig.GetBinContent(7)+Sig.GetBinContent(8)))/(Bkg.GetBinContent(6)+Bkg.GetBinContent(7)+Bkg.GetBinContent(8)))
+   Data16pre=file16pre.Get("data_obs_low"+categories[i]).Clone()
+   Bkg16pre=file16pre.Get("data_obs_high").Clone()
+   Sig16pre=file16pre.Get("GGMM_low"+categories[i]).Clone()
+   Bkg16pre.Scale((Data16pre.GetBinContent(6)+Data16pre.GetBinContent(7)+Data16pre.GetBinContent(8)-2.5*(Sig16pre.GetBinContent(6)+Sig16pre.GetBinContent(7)+Sig16pre.GetBinContent(8)))/(Bkg16pre.GetBinContent(6)+Bkg16pre.GetBinContent(7)+Bkg16pre.GetBinContent(8)))
+
+   Data16post=file16post.Get("data_obs_low"+categories[i]).Clone()
+   Bkg16post=file16post.Get("data_obs_high").Clone()
+   Sig16post=file16post.Get("GGMM_low"+categories[i]).Clone()
+   Bkg16post.Scale((Data16post.GetBinContent(6)+Data16post.GetBinContent(7)+Data16post.GetBinContent(8)-2.5*(Sig16post.GetBinContent(6)+Sig16post.GetBinContent(7)+Sig16post.GetBinContent(8)))/(Bkg16post.GetBinContent(6)+Bkg16post.GetBinContent(7)+Bkg16post.GetBinContent(8)))
+
+   Data17=file17.Get("data_obs_low"+categories[i]).Clone()
+   Bkg17=file17.Get("data_obs_high").Clone()
+   Sig17=file17.Get("GGMM_low"+categories[i]).Clone()
+   Bkg17.Scale((Data17.GetBinContent(6)+Data17.GetBinContent(7)+Data17.GetBinContent(8)-2.5*(Sig17.GetBinContent(6)+Sig17.GetBinContent(7)+Sig17.GetBinContent(8)))/(Bkg17.GetBinContent(6)+Bkg17.GetBinContent(7)+Bkg17.GetBinContent(8)))
+
+   Data18=file18.Get("data_obs_low"+categories[i]).Clone()
+   Bkg18=file18.Get("data_obs_high").Clone()
+   Sig18=file18.Get("GGMM_low"+categories[i]).Clone()
+   Bkg18.Scale((Data18.GetBinContent(6)+Data18.GetBinContent(7)+Data18.GetBinContent(8)-2.5*(Sig18.GetBinContent(6)+Sig18.GetBinContent(7)+Sig18.GetBinContent(8)))/(Bkg18.GetBinContent(6)+Bkg18.GetBinContent(7)+Bkg18.GetBinContent(8)))
+
+   Data=Data16pre.Clone()
+   Bkg=Bkg16pre.Clone()
+   Sig=Sig16pre.Clone()
+   Data.Add(Data16post)
+   Data.Add(Data17)
+   Data.Add(Data18)
+   Bkg.Add(Bkg16post)
+   Bkg.Add(Bkg17)
+   Bkg.Add(Bkg18)
+   Sig.Add(Sig16post)
+   Sig.Add(Sig17)
+   Sig.Add(Sig18)
    ScaledSig=Sig.Clone()
-   ScaledSig.Scale(2.63)
+   ScaledSig.Scale(1.5)
 
    for k in range(1,Data.GetSize()-1):
      Data.SetBinContent(k,Data.GetBinContent(k)/Data.GetBinWidth(k))
@@ -206,7 +220,7 @@ for i in range (0,ncat):
    legende.AddEntry(errorBand,"Uncertainty","f")
    legende.Draw()
 
-   l1=add_lumi(args.year)
+   l1=add_lumi()
    l1.Draw("same")
    l2=add_CMS()
    l2.Draw("same")
@@ -271,14 +285,21 @@ for i in range (0,ncat):
 
 
    #total = ROOT.TF1( 'total', 'pol1', 60, 600 )
-   total = ROOT.TF1( 'total', 'pol0', 100, 600 )
+   total = ROOT.TF1( 'total', 'pol0', 60, 800 )
    total.SetLineColor( 2 )
    h1.Fit(total,'R')
 
-   total2 = ROOT.TF1( 'total', 'pol1', 100, 600 )
+   total2 = ROOT.TF1( 'total', 'pol1', 60, 800 )
    total2.SetLineColor( 3 )
    h1.Fit(total2,'R')
    total.Draw("lsame")
+
+   total3 = ROOT.TF1( 'total', 'pol2', 60, 800 )
+   total3.SetLineColor( 4 )
+   h1.Fit(total3,'R')
+   total.Draw("lsame")
+   total2.Draw("lsame")
+   total3.Draw("lsame")
 
    c.cd()
 
@@ -299,5 +320,5 @@ for i in range (0,ncat):
    ROOT.gPad.RedrawAxis()
 
    c.Modified()
-   c.SaveAs("plots_mumu_"+args.year+"/rescaling_"+name[i]+".png")
+   c.SaveAs("rescaling_"+name[i]+".png")
 

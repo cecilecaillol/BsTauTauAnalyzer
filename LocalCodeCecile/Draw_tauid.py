@@ -80,18 +80,18 @@ c=ROOT.TCanvas("canvas","",0,0,800,800)
 c.cd()
 c.SetLogy()
 
-file=ROOT.TFile("datacard_mutau_2018.root","r")
+file=ROOT.TFile("datacard_tauid_2018.root","r")
 if args.year=="2017":
-   file=ROOT.TFile("datacard_mutau_2017.root","r")
+   file=ROOT.TFile("datacard_tauid_2017.root","r")
 
 if args.year=="2016":
-   file=ROOT.TFile("datacard_mutau_2016.root","r")
+   file=ROOT.TFile("datacard_tauid_2016.root","r")
 
 if args.year=="2016post":
-   file=ROOT.TFile("datacard_mutau_2016post.root","r")
+   file=ROOT.TFile("datacard_tauid_2016post.root","r")
 
 if args.year=="2016pre":
-   file=ROOT.TFile("datacard_mutau_2016pre.root","r")
+   file=ROOT.TFile("datacard_tauid_2016pre.root","r")
 
 adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
@@ -107,26 +107,22 @@ trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",
 #"m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)","m_{vis} (GeV)"]
 #ncat=9
 
-categories=["mt_0","mt_1"]
-name=["mvis_nt0","mvis_nt1"]
-title=["m_{vis} (GeV)","m_{vis} (GeV)"]
-ncat=2
+categories=["tauid_0","tauid_1","tauid_2","tauid_3","tauid_4","tauid_5","tauid_6","tauid_7"]
+name=["mvis_ntrackslt10","tauid_allntracks","mt_ntrackslt10","mt_allntracks","mvis_fakemu_ntrackslt10","mt_fakemu_ntrackslt10","mvis_fakemu_ntracksall","mt_fakemu_ntracksall"]
+title=["m_{vis} (GeV)","m_{vis} (GeV)","m_{T} (GeV)","m_{T} (GeV)","m_{vis} (GeV)","m_{T} (GeV)","m_{vis} (GeV)","m_{T} (GeV)"]
+ncat=8
 
 for i in range (0,ncat):
    Data=file.Get(categories[i]).Get("data_obs")
-   #W=file.Get(categories[i]).Get("W")
+   W=file.Get(categories[i]).Get("Wrescaled")
    TT=file.Get(categories[i]).Get("TT")
    VV=file.Get(categories[i]).Get("VV")
    ZTT=file.Get(categories[i]).Get("ZTT")
    ZLL=file.Get(categories[i]).Get("ZLL")
    ST=file.Get(categories[i]).Get("ST")
-   GGTT=file.Get(categories[i]).Get("GGTT")
-   GGWW=file.Get(categories[i]).Get("GGWW")
-   GGMM=file.Get(categories[i]).Get("GGMM")
-   GGWW.Add(GGMM)
    VV.Add(ST.Clone())
    #VV.Add(W.Clone())
-   Fake=file.Get(categories[i]).Get("Fake")
+   Fake=file.Get(categories[i]).Get("QCD")
    #Fake.Scale(0.95)
    #ZTT.Scale(0.9)   
 
@@ -148,20 +144,12 @@ for i in range (0,ncat):
    Data.SetMinimum(0.1)
 
 
-   #if "mvis" in name[i]: # blind
-   #   for k in range(1,Data.GetSize()):
-   #      Data.SetBinContent(k,0.0)
-
-   #if "ntracks" in name[i]: # blind
-   #   for k in range(1,2):
-   #      Data.SetBinContent(k,0.0)
-
    TT.SetFillColor(ROOT.TColor.GetColor("#4a4e4d"))
    ZLL.SetFillColor(ROOT.TColor.GetColor("#fe8a71"))
    ZTT.SetFillColor(ROOT.TColor.GetColor("#f6cd61"))
    VV.SetFillColor(ROOT.TColor.GetColor("#ff8c94"))
    Fake.SetFillColor(ROOT.TColor.GetColor("#3da4ab"))
-   GGWW.SetFillColor(ROOT.kGreen+1)
+   W.SetFillColor(ROOT.kGreen+1)
 
    Data.SetMarkerStyle(20)
    Data.SetMarkerSize(1)
@@ -172,32 +160,22 @@ for i in range (0,ncat):
    Fake.SetLineColor(1)
    Data.SetLineColor(1)
    Data.SetLineWidth(2)
-   GGWW.SetLineColor(1)
-
-   GGTT.SetLineColor(2)
-   GGTT.SetLineWidth(3)
-
-   GGTTfull=GGTT.Clone()
-   GGTTfull.SetFillColor(2)
-   GGTTfull.SetLineColor(1)
-   GGTTfull.SetLineWidth(1)
+   W.SetLineColor(1)
 
    stack=ROOT.THStack("stack","stack")
    stack.Add(TT)
    stack.Add(Fake)
    stack.Add(VV)
-   stack.Add(GGWW)
+   stack.Add(W)
    stack.Add(ZLL)
    stack.Add(ZTT)
-   stack.Add(GGTTfull)
 
    errorBand = ZLL.Clone()
    errorBand.Add(TT)
    errorBand.Add(ZTT)
    errorBand.Add(VV)
-   errorBand.Add(GGWW)
+   errorBand.Add(W)
    errorBand.Add(Fake)
-   errorBand.Add(GGTTfull)
 
    errorBand.SetMarkerSize(0)
    errorBand.SetFillColor(new_idx)
@@ -237,12 +215,11 @@ for i in range (0,ncat):
       legende=make_legend2()
    legende.AddEntry(Data,"Observed","elp")
    legende.AddEntry(ZTT,"Z#rightarrow #tau#tau","f")
-   legende.AddEntry(ZLL,"Z#rightarrow #mu#mu","f")
+   legende.AddEntry(ZLL,"Z#rightarrow ee","f")
    legende.AddEntry(TT,"t#bar{t}","f")
-   legende.AddEntry(VV,"VV,single-t, W","f")
-   legende.AddEntry(GGWW,"#gamma#gamma#rightarrow WW/#mu#mu","f")
-   legende.AddEntry(Fake,"Fake","f")
-   legende.AddEntry(GGTTfull,"Signal","f")
+   legende.AddEntry(VV,"VV,single-t","f")
+   legende.AddEntry(W,"W+jets","f")
+   legende.AddEntry(Fake,"QCD","f")
    legende.AddEntry(errorBand,"Uncertainty","f")
    legende.Draw()
 
@@ -254,23 +231,6 @@ for i in range (0,ncat):
    l3.Draw("same")
  
    pad1.RedrawAxis()
-
-   S = GGTT.Integral()#/3
-   B =  Fake.Integral()
-   SoB = S/(B+0.00001)
-   SosB = S/(B+0.00001)**0.5
-
-   categ  = ROOT.TPaveText(0.35, 0.5+0.013, 0.83, 0.50+0.155, "NDC")
-   categ.SetBorderSize(   0 )
-   categ.SetFillStyle(    0 )
-   categ.SetTextAlign(   12 )
-   categ.SetTextSize ( 0.04 )
-   categ.SetTextColor(    1 )
-   categ.SetTextFont (   42 )
-   categ.AddText("S = %.2f" %(S))
-   #categ.AddText("S = %.2f, B = %.1f, S/B = %.2f, S/sqrt(B) = %.2f" %(S,B,SoB,SosB))
-   #categ.AddText("S = %.2f, B = %.1f"%(GGTT.Integral()/30, Fake.Integral()))
-   if (B<1000): categ.Draw("same")
 
    c.cd()
    pad2 = ROOT.TPad("pad2","pad2",0,0,1,0.35);
@@ -322,6 +282,6 @@ for i in range (0,ncat):
    ROOT.gPad.RedrawAxis()
 
    c.Modified()
-   c.SaveAs("plots_mutau_"+args.year+"/control_"+name[i]+".pdf")
-   c.SaveAs("plots_mutau_"+args.year+"/control_"+name[i]+".png")
+   c.SaveAs("plots_tauid_"+args.year+"/control_"+name[i]+".pdf")
+   c.SaveAs("plots_tauid_"+args.year+"/control_"+name[i]+".png")
 
