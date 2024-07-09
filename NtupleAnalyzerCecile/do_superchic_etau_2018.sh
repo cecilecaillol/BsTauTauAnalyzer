@@ -1,4 +1,0 @@
-./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToTauTau_Elastic_superchic.root output_etau_2018/GGTT_Elastic_superchic.root GGTT_Elastic_superchic GGTT_Elastic_superchic
-./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToTauTau_InelEl_superchic.root output_etau_2018/GGTT_InelEl_superchic.root GGTT_InelEl_superchic GGTT_InelEl_superchic
-./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToTauTau_ElInel_superchic.root output_etau_2018/GGTT_ElInel_superchic.root GGTT_ElInel_superchic GGTT_ElInel_superchic
-./FinalSelection_etau.exe 2018 /eos/cms/store/group/cmst3/group/taug2/AnalysisCecile/ntuples_etau_2018/GGToTauTau_Inelastic_superchic.root output_etau_2018/GGTT_Inelastic_superchic.root GGTT_Inelastic_superchic GGTT_Inelastic_superchic

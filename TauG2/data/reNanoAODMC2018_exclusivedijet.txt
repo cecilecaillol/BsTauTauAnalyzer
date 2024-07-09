@@ -1,2 +1,0 @@
-/eos/cms/store/cmst3/group/taug2/reNanoAOD/CEPDijets_M-250_13TeV-superchic/RunIISummer20UL18_NanoAODv9/230630_075457/0000/
-/eos/cms/store/cmst3/group/taug2/reNanoAOD/QCD_pomflux_Pt-30_TuneCP5_13TeV-pythia8/RunIISummer20UL18_NanoAODv9/230630_075657/0000/
