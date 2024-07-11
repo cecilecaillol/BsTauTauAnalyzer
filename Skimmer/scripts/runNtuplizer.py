@@ -5,7 +5,7 @@ import optparse
 import shutil
 import random
 import glob
-from MyNanoAnalyzer.TauG2.EraConfig import *
+from GGWWAnalyzer.Skimmer.EraConfig import *
 
 
 def buildCondorFile(opt,FarmDirectory):
@@ -139,24 +139,24 @@ def buildCondorFile(opt,FarmDirectory):
         worker.write('echo "INFO: Run ntuplizer"\n')
         worker.write('echo "python $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\\"\n')
         worker.write('echo "$filename ${input}  \\\\"\n')
-        worker.write('echo "--bi $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_in.txt   \\\\"\n')
-	if channels[0]=="mumu": worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_mumu.txt  \\\\"\n')
-	elif channels[0]=="etau": worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_etau.txt  \\\\"\n')
-        elif channels[0]=="mutau": worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_mutau.txt  \\\\"\n')
-        elif channels[0]=="emu": worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_emu.txt  \\\\"\n')
-        elif channels[0]=="tautau": worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_tautau.txt  \\\\"\n')
-        else: worker.write('echo "--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out.txt  \\\\"\n')
-        worker.write('echo "${filter} -I MyNanoAnalyzer.TauG2.TauG2_analysis ${channel} "\n')
+        worker.write('echo "--bi $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_in.txt   \\\\"\n')
+	if channels[0]=="mumu": worker.write('echo "--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out_mumu.txt  \\\\"\n')
+	elif channels[0]=="etau": worker.write('echo "--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out_etau.txt  \\\\"\n')
+        elif channels[0]=="mutau": worker.write('echo "--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out_mutau.txt  \\\\"\n')
+        elif channels[0]=="emu": worker.write('echo "--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out_emu.txt  \\\\"\n')
+        elif channels[0]=="tautau": worker.write('echo "--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out_tautau.txt  \\\\"\n')
+        else: worker.write('echo "--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out.txt  \\\\"\n')
+        worker.write('echo "${filter} -I GGWWAnalyzer.Skimmer.Skimmer_analysis ${channel} "\n')
         worker.write('python $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\n')
         worker.write('$filename ${input}  \\\n')
-        worker.write('--bi $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_in.txt   \\\n')
-	if channels[0]=="mumu": worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_mumu.txt  \\\n')
-	elif channels[0]=="etau": worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_etau.txt  \\\n')
-        elif channels[0]=="mutau": worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_mutau.txt  \\\n')
-        elif channels[0]=="emu": worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_emu.txt  \\\n')
-        elif channels[0]=="tautau": worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out_tautau.txt  \\\n')
-        else: worker.write('--bo $CMSSW_BASE/src/MyNanoAnalyzer/TauG2/scripts/keep_out.txt  \\\n')
-        worker.write('${filter} -I MyNanoAnalyzer.TauG2.TauG2_analysis ${channel} \n')
+        worker.write('--bi $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_in.txt   \\\n')
+	if channels[0]=="mumu": worker.write('--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out_mumu.txt  \\\n')
+	elif channels[0]=="etau": worker.write('--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out_etau.txt  \\\n')
+        elif channels[0]=="mutau": worker.write('--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out_mutau.txt  \\\n')
+        elif channels[0]=="emu": worker.write('--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out_emu.txt  \\\n')
+        elif channels[0]=="tautau": worker.write('--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out_tautau.txt  \\\n')
+        else: worker.write('--bo $CMSSW_BASE/src/GGWWAnalyzer/Skimmer/scripts/keep_out.txt  \\\n')
+        worker.write('${filter} -I GGWWAnalyzer.Skimmer.Skimmer_analysis ${channel} \n')
         worker.write('echo cp ${filename}/${filename}_Skim.root ${output}/${filename}_Skim.root\n')
         worker.write('cp ${filename}/${filename}_Skim.root ${output}/\n')
         worker.write('\necho clean output\ncd ../\nrm -rf ${WORKDIR}\n')
@@ -179,7 +179,7 @@ def main():
     usage = 'usage: %prog [options]'
     parser = optparse.OptionParser(usage)
     parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesMC2018.txt', type='string')
-    #parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/ccaillol/TauG2/ntuples_mumu_2018', type='string') #EDIT THIS
+    #parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/ccaillol/Skimmer/ntuples_mumu_2018', type='string') #EDIT THIS
     parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/group/cmst3/group/ggww/AnalysisCecileGGWW/ntuples_emu_2018', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
