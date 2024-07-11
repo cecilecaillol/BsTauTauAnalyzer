@@ -8,8 +8,8 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection
 
 ### Proton selector be replaced by preprocessing module
-from MyNanoAnalyzer.TauG2.objectSelector import ElectronSelector, MuonSelector, TauSelector
-from MyNanoAnalyzer.TauG2.objectSelector import GenParticleSelector
+from GGWWAnalyzer.Skimmer.objectSelector import ElectronSelector, MuonSelector, TauSelector
+from GGWWAnalyzer.Skimmer.objectSelector import GenParticleSelector, GenDressedLeptonSelector, GenVisTauSelector, ChargedGenSelector
 
 from TauPOG.TauIDSFs.TauIDSFTool import TauIDSFTool, TauESTool, campaigns
 from TauPOG.TauIDSFs.TauIDSFTool import TauFESTool
@@ -18,9 +18,10 @@ from TauAnalysisTools.TauTriggerSFs.SFProvider import SFProvider
 
 
 class Analysis(Module):
-    def __init__(self, channel, isMC, year):
+    def __init__(self, channel, isMC, isSignal, year):
         self.channel       = channel
         self.isMC          = isMC
+        self.isSignal      = isSignal
         self.year          = year
 
         self.tauSFsM_vseVVL = TauIDSFTool(year='UL2018',id='DeepTau2017v2p1VSjet',wp='Medium',wp_vsele='VVLoose',ptdm=True)
@@ -31,9 +32,9 @@ class Analysis(Module):
         self.antiEleSFTTool = TauIDSFTool('UL2018','DeepTau2017v2p1VSe','Tight')
         self.antiMuSFTTool  = TauIDSFTool('UL2018','DeepTau2017v2p1VSmu','Tight')
         self.festool       = TauFESTool('UL2018')
-        self.ditautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
-        self.etautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "etau", "Medium") #FOR etau channel
-        self.mutautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "mutau", "Medium") #FOR mutau channel
+        self.ditautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
+        self.etautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "etau", "Medium") #FOR etau channel
+        self.mutautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2018UL_tauTriggerEff_DeepTau2017v2p1.root", "mutau", "Medium") #FOR mutau channel
         self.tauDMSF       = TauIDSFTool('UL2018','DeepTau2017v2p1VSjet','Medium',dm=True)
 
 	if self.year=="2017":
@@ -45,9 +46,9 @@ class Analysis(Module):
            self.antiEleSFTTool = TauIDSFTool('UL2017','DeepTau2017v2p1VSe','Tight')
            self.antiMuSFTTool  = TauIDSFTool('UL2017','DeepTau2017v2p1VSmu','Tight')
            self.festool       = TauFESTool('UL2017')
-           self.ditautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2017UL_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
-           self.etautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2017UL_tauTriggerEff_DeepTau2017v2p1.root", "etau", "Medium") #FOR etau channel
-           self.mutautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2017UL_tauTriggerEff_DeepTau2017v2p1.root", "mutau", "Medium") #FOR mutau channel
+           self.ditautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2017UL_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
+           self.etautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2017UL_tauTriggerEff_DeepTau2017v2p1.root", "etau", "Medium") #FOR etau channel
+           self.mutautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2017UL_tauTriggerEff_DeepTau2017v2p1.root", "mutau", "Medium") #FOR mutau channel
            self.tauDMSF       = TauIDSFTool('UL2017','DeepTau2017v2p1VSjet','Medium',dm=True)
 
         if self.year=="2016post":
@@ -59,9 +60,9 @@ class Analysis(Module):
            self.antiEleSFTTool = TauIDSFTool('UL2016_postVFP','DeepTau2017v2p1VSe','Tight')
            self.antiMuSFTTool  = TauIDSFTool('UL2016_postVFP','DeepTau2017v2p1VSmu','Tight')
            self.festool       = TauFESTool('UL2016_postVFP')
-           self.ditautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpostVFP_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
-           self.etautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpostVFP_tauTriggerEff_DeepTau2017v2p1.root", "etau", "Medium") #FOR etau channel
-           self.mutautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpostVFP_tauTriggerEff_DeepTau2017v2p1.root", "mutau", "Medium") #FOR mutau channel
+           self.ditautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpostVFP_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
+           self.etautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpostVFP_tauTriggerEff_DeepTau2017v2p1.root", "etau", "Medium") #FOR etau channel
+           self.mutautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpostVFP_tauTriggerEff_DeepTau2017v2p1.root", "mutau", "Medium") #FOR mutau channel
            self.tauDMSF       = TauIDSFTool('UL2016_postVFP','DeepTau2017v2p1VSjet','Medium',dm=True)
 
         if self.year=="2016pre":
@@ -73,28 +74,28 @@ class Analysis(Module):
            self.antiEleSFTTool = TauIDSFTool('UL2016_preVFP','DeepTau2017v2p1VSe','Tight')
            self.antiMuSFTTool  = TauIDSFTool('UL2016_preVFP','DeepTau2017v2p1VSmu','Tight')
            self.festool       = TauFESTool('UL2016_preVFP')
-           self.ditautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpreVFP_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
-           self.etautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpreVFP_tauTriggerEff_DeepTau2017v2p1.root", "etau", "Medium") #FOR etau channel
-           self.mutautriggerSFTool = SFProvider("/afs/cern.ch/user/x/xuqin/work/taug-2/taug-2wkdir/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpreVFP_tauTriggerEff_DeepTau2017v2p1.root", "mutau", "Medium") #FOR mutau channel
+           self.ditautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpreVFP_tauTriggerEff_DeepTau2017v2p1.root", "ditau", "Medium") #FOR ditau channel
+           self.etautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpreVFP_tauTriggerEff_DeepTau2017v2p1.root", "etau", "Medium") #FOR etau channel
+           self.mutautriggerSFTool = SFProvider("/afs/cern.ch/work/c/ccaillol/G2analysis/CMSSW_10_6_27/src/TauAnalysisTools/TauTriggerSFs/data/2016ULpreVFP_tauTriggerEff_DeepTau2017v2p1.root", "mutau", "Medium") #FOR mutau channel
            self.tauDMSF       = TauIDSFTool('UL2016_preVFP','DeepTau2017v2p1VSjet','Medium',dm=True)
 
 
 
         cmssw=os.environ['CMSSW_BASE']
-        datafilename = os.path.join(cmssw+"/src/MyNanoAnalyzer/TauG2/data/","Data_PileUp_UL2018_69p2.root")
-        mcfilename   = os.path.join(cmssw+"/src/MyNanoAnalyzer/TauG2/data/","MC_PileUp_UL2018.root")
+        datafilename = os.path.join(cmssw+"/src/GGWWAnalyzer/Skimmer/data/","Data_PileUp_UL2018_69p2.root")
+        mcfilename   = os.path.join(cmssw+"/src/GGWWAnalyzer/Skimmer/data/","MC_PileUp_UL2018.root")
 
         if self.year=="2017":
-            datafilename = os.path.join(cmssw+"/src/MyNanoAnalyzer/TauG2/data/","Data_PileUp_UL2017_69p2.root")
-            mcfilename   = os.path.join(cmssw+"/src/MyNanoAnalyzer/TauG2/data/","MC_PileUp_UL2017.root")
+            datafilename = os.path.join(cmssw+"/src/GGWWAnalyzer/Skimmer/data/","Data_PileUp_UL2017_69p2.root")
+            mcfilename   = os.path.join(cmssw+"/src/GGWWAnalyzer/Skimmer/data/","MC_PileUp_UL2017.root")
 
         if self.year=="2016pre":
-            datafilename = os.path.join(cmssw+"/src/MyNanoAnalyzer/TauG2/data/","Data_PileUp_UL2016_69p2.root")
-            mcfilename   = os.path.join(cmssw+"/src/MyNanoAnalyzer/TauG2/data/","MC_PileUp_UL2016_preVFP.root")
+            datafilename = os.path.join(cmssw+"/src/GGWWAnalyzer/Skimmer/data/","Data_PileUp_UL2016_69p2.root")
+            mcfilename   = os.path.join(cmssw+"/src/GGWWAnalyzer/Skimmer/data/","MC_PileUp_UL2016_preVFP.root")
 
         if self.year=="2016post":
-            datafilename = os.path.join(cmssw+"/src/MyNanoAnalyzer/TauG2/data/","Data_PileUp_UL2016_69p2.root")
-            mcfilename   = os.path.join(cmssw+"/src/MyNanoAnalyzer/TauG2/data/","MC_PileUp_UL2016_postVFP.root")
+            datafilename = os.path.join(cmssw+"/src/GGWWAnalyzer/Skimmer/data/","Data_PileUp_UL2016_69p2.root")
+            mcfilename   = os.path.join(cmssw+"/src/GGWWAnalyzer/Skimmer/data/","MC_PileUp_UL2016_postVFP.root")
 
         self.datafile = ROOT.TFile(datafilename, 'READ')
         self.mcfile   = ROOT.TFile(mcfilename, 'READ')
@@ -200,6 +201,21 @@ class Analysis(Module):
 
         self.out.branch("V_genpt",           "F");
         self.out.branch("pu_weight",         "F");
+
+        self.out.branch("is_emu",              "I");
+        self.out.branch("is_etau",              "I");
+        self.out.branch("is_mutau",              "I");
+        self.out.branch("is_tautau",              "I");
+        self.out.branch("fidpt_1",              "F");
+        self.out.branch("fideta_1",              "F");
+        self.out.branch("fidphi_1",              "F");
+        self.out.branch("fidm_1",              "F");
+        self.out.branch("fidpt_2",              "F");
+        self.out.branch("fideta_2",              "F");
+        self.out.branch("fidphi_2",              "F");
+        self.out.branch("fidm_2",              "F");
+        self.out.branch("fidgen_mtt",              "F");
+        self.out.branch("fidntracks",              "I");
         
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
@@ -210,6 +226,28 @@ class Analysis(Module):
         genparticles = Collection(event, "GenPart")
         for genp in genparticles:
             event.selectedGenParticles.append(genp)
+
+    def selectGenDressedLeptons(self, event):
+
+        event.selectedGenDressedLeptons = []
+        gendressed = Collection(event, "GenDressedLepton")
+        for gend in gendressed:
+            event.selectedGenDressedLeptons.append(gend)
+
+    def selectGenVisTaus(self, event):
+
+        event.selectedGenVisTaus = []
+        genvis = Collection(event, "GenVisTau")
+        for gent in genvis:
+            event.selectedGenVisTaus.append(gent)
+
+
+    def selectChargedGens(self, event):
+
+        event.selectedChargedGens = []
+        chargedgen = Collection(event, "ChargedGenCandidates")
+        for genc in chargedgen:
+            event.selectedChargedGens.append(genc)
 
 
     def selectElectrons(self, event, elSel):
@@ -270,9 +308,9 @@ class Analysis(Module):
         event.selectedTracks = []
         chargedPF = Collection(event, "ChargedPFCandidates")
         #lostTracks = Collection(event, "LostTracks")
-        vertex_dz=0.0
-        if self.channel=="ee":
-           vertex_dz=0.5*(event.selectedElectrons[0].dz+event.selectedElectrons[1].dz)
+  	vertex_dz=0.0
+	if self.channel=="ee":
+	   vertex_dz=0.5*(event.selectedElectrons[0].dz+event.selectedElectrons[1].dz)
         elif self.channel=="emu":
            vertex_dz=0.5*(event.selectedElectrons[0].dz+event.selectedMuons[0].dz)
         elif self.channel=="etau":
@@ -285,11 +323,12 @@ class Analysis(Module):
            vertex_dz=0.5*(event.selectedTaus[0].dz+event.selectedTaus[1].dz)
         for j in chargedPF:
             if self.isMC:
-                if abs(j.eta)<2.5 and abs(j.dz-vertex_dz)<2.5: #need wider window in dz in MC because of the BS correction later
+	        if abs(j.eta)<2.5 and abs(j.dz-vertex_dz)<2.5: #need wider window in dz in MC because of the BS correction later
                    event.selectedTracks.append(j)
-            else:
+	    else:
                 if abs(j.eta)<2.5 and abs(j.dz-vertex_dz)<0.5: 
                    event.selectedTracks.append(j)
+
         #for j in lostTracks:
         #    if abs(j.eta)<2.5 and abs(j.dz-vertex_dz)<0.3:
         #        event.selectedTracks.append(j)
@@ -352,35 +391,37 @@ class Analysis(Module):
 
         if self.isMC:
             self.selectGenParticles(event)
+
+        if self.isSignal:
+            self.selectGenDressedLeptons(event)
+            self.selectGenVisTaus(event)
+            self.selectChargedGens(event)
         
         #apply preliminary loose pt cuts based on trigger:
         if self.channel=="mutau":
-            if event.selectedMuons[0].pt<24: return False
-
-        if self.channel=="mutau":
-            if event.selectedTaus[0].pt<28: return False
+            if event.selectedMuons[0].pt<20: return False
 
         if self.channel=="mumu":
             if event.selectedMuons[0].pt<24: return False
 
         if self.channel=="etau" or self.channel=="ee":
-            if event.selectedElectrons[0].pt<25: return False
+            if event.selectedElectrons[0].pt<24: return False
 
-        if self.channel=="etau":
-            if event.selectedElectrons[0].pt<32 and event.selectedTaus[0].pt<34: return False
+        #if self.channel=="etau":
+	#    if event.selectedElectrons[0].pt<32 and event.selectedTaus[0].pt<34: return False
 
         if self.channel=="tautau":
-            if event.selectedTaus[0].pt<38: return False
+            if event.selectedTaus[0].pt<39: return False
 
         if self.channel=="emu":
             if event.selectedElectrons[0].pt<23 and event.selectedMuons[0].pt<23: return False
 
-        #apply channel-dependent tau ID cuts
+	#apply channel-dependent tau ID cuts
         if self.channel=="mutau":
-            tau_vsmu=False
-            for k in range(0,len(event.selectedTaus)):
-                if event.selectedTaus[k].idDeepTau2017v2p1VSmu>=8: tau_vsmu=True #pass tight VSmu
-            if not tau_vsmu: return False
+	    tau_vsmu=False
+	    for k in range(0,len(event.selectedTaus)):
+               if event.selectedTaus[k].idDeepTau2017v2p1VSmu>=8: tau_vsmu=True #pass tight VSmu
+	    if not tau_vsmu: return False
 
         if self.channel=="etau":
             tau_vse=False
@@ -398,21 +439,220 @@ class Analysis(Module):
         event.V_genpt=-1.0;
 
 
+        index=0
         if self.isMC:
             for genp in event.selectedGenParticles:
-                if abs(genp.pdgId)==15 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==23:
+                if abs(genp.pdgId)==15 and (abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==23 or abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==22):
                     event.genCand.append(genp)
-                if (abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==23):
+		if (abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==23):
                     event.genCand.append(genp)
                 if (abs(genp.pdgId)==11 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==23):
                     event.genCand.append(genp)
-                if abs(genp.pdgId)==6:
+                if abs(genp.pdgId)==6: # for ttbar reweighting
                     event.genCand.append(genp)
+                if (abs(genp.pdgId)==24 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==22): # for GGWWW
+                    event.genCand.append(genp)
+
+        if len(event.genCand)==0: # get back the taus that dont have a Z mother
+           if self.isMC:
+              for genp in event.selectedGenParticles:
+                 if abs(genp.pdgId)==15 and genp.genPartIdxMother==0:
+                     event.genCand.append(genp)
+
+        if len(event.genCand)==0: # get the two vector bosons in VVTo2L2Nu
+           if self.isMC:
+              for genp in event.selectedGenParticles:
+                 if (abs(genp.pdgId)==23 or abs(genp.pdgId)==24) and genp.genPartIdxMother==0:
+                     event.genCand.append(genp)
+
+	#if len(event.genCand)==0:
+        #    for genp in event.selectedGenParticles:
+        #		print index,genp.pdgId,event.selectedGenParticles[genp.genPartIdxMother].pdgId,genp.genPartIdxMother
+        #	index=index+1
+	#print "end of event"
 
         if self.isMC:
             for genp in event.selectedGenParticles:
               if (abs(genp.pdgId)==23 or abs(genp.pdgId)==24) and event.V_genpt<0:
                 event.V_genpt=genp.pt
+
+	#print len(event.genCand)
+        #if (len(event.genCand)==2): print event.genCand[0].pt,event.genCand[1].pt
+
+
+        ######################################################
+        ############ FIDUCIAL LEVEL ANALYSIS #################
+        ######################################################
+
+        if self.isSignal:
+           event.gentaup=event.selectedGenParticles[0]
+           event.gentaum=event.selectedGenParticles[0]
+           event.gennup=event.selectedGenParticles[0]
+           event.gennum=event.selectedGenParticles[0]
+           event.el=event.selectedGenParticles[0]
+           event.mu=event.selectedGenParticles[0]
+        is_taup_tauh=1
+        is_taum_tauh=1
+        event.dressedCand=[]
+        event.visCand=[]
+        event.chargedfromtaus=[]
+        ne=0
+        nm=0
+        event.fidgen_mtt=0
+        event.fidntracks=0
+
+        index=0
+        #print "Gen particle collection:"
+        if self.isSignal:
+            for genp in event.selectedGenParticles:
+                #print genp.pdgId,event.selectedGenParticles[genp.genPartIdxMother].pdgId,genp.pt,genp.eta,genp.phi,genp.status
+                if genp.pdgId==15 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: event.gentaup=genp
+                if genp.pdgId==-15 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: event.gentaum=genp
+                if genp.pdgId==16 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: event.gennup=genp
+                if genp.pdgId==-16 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: event.gennum=genp
+                if (genp.pdgId==11 or  genp.pdgId==13) and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: is_taup_tauh=0
+                if (genp.pdgId==-11 or  genp.pdgId==-13) and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: is_taum_tauh=0
+                if genp.pdgId==11 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: ne=ne+1
+                if genp.pdgId==13 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: nm=nm+1
+                if genp.pdgId==-11 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: ne=ne+1
+                if genp.pdgId==-13 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: nm=nm+1
+                if abs(genp.pdgId)==11 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: event.el=genp
+                if abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: event.mu=genp
+                if abs(genp.pdgId)!=12 and abs(genp.pdgId)!=14 and abs(genp.pdgId)!=16 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: event.chargedfromtaus.append(genp)
+                #print genp.pdgId,event.selectedGenParticles[genp.genPartIdxMother].pdgId,genp.pt
+
+            for gend in event.selectedGenDressedLeptons:
+                event.dressedCand.append(gend)
+
+            for gent in event.selectedGenVisTaus:
+                event.visCand.append(gent)
+
+
+        is_emu=0
+        is_etau=0
+        is_mutau=0
+        is_tautau=0
+        if (ne==1 and nm==1): is_emu=1
+        if (ne==1 and nm==0): is_etau=1
+        if (ne==0 and nm==1): is_mutau=1
+        if (ne==0 and nm==0): is_tautau=1
+        fidpt_1=0
+        fideta_1=0
+        fidphi_1=0
+        fidm_1=0
+        fidpt_2=0
+        fideta_2=0
+        fidphi_2=0
+        fidm_2=0
+
+        mytaup=ROOT.TLorentzVector()
+        mytaum=ROOT.TLorentzVector()
+        mynup=ROOT.TLorentzVector()
+        mynum=ROOT.TLorentzVector()
+        if self.isSignal:
+            mytaup.SetPtEtaPhiM(event.gentaup.pt,event.gentaup.eta,event.gentaup.phi,event.gentaup.mass)
+            mytaum.SetPtEtaPhiM(event.gentaum.pt,event.gentaum.eta,event.gentaum.phi,event.gentaum.mass)
+            event.fidgen_mtt=(mytaup+mytaum).M();
+            mynup.SetPtEtaPhiM(event.gennup.pt,event.gennup.eta,event.gennup.phi,event.gennup.mass)
+            vistaup=mytaup-mynup # build gen vis tau from the gen particle collection
+            mynum.SetPtEtaPhiM(event.gennum.pt,event.gennum.eta,event.gennum.phi,event.gennum.mass)
+            vistaum=mytaum-mynum
+
+            if is_etau or is_mutau:
+               if (len(event.dressedCand)==1): # if there is a dressed lepton, use it for the electron or the muon
+                  fidpt_1=event.dressedCand[0].pt
+                  fideta_1=event.dressedCand[0].eta
+                  fidphi_1=event.dressedCand[0].phi
+                  fidm_1=event.dressedCand[0].mass
+               elif is_etau: # otherwise use the electron or muon from the gen particle collection
+                  fidpt_1=event.el.pt
+                  fideta_1=event.el.eta
+                  fidphi_1=event.el.phi
+                  fidm_1=event.el.mass
+               elif is_mutau:
+                  fidpt_1=event.mu.pt
+                  fideta_1=event.mu.eta
+                  fidphi_1=event.mu.phi
+                  fidm_1=event.mu.mass
+
+               if len(event.visCand)==1 and event.visCand[0].pt>0: #if there is a gen vis tau use it
+                  fidpt_2=event.visCand[0].pt
+                  fideta_2=event.visCand[0].eta
+                  fidphi_2=event.visCand[0].phi
+                  fidm_2=event.visCand[0].mass
+               else: # otherwise use the visible tauh built from the gen particle collection
+                  if is_taup_tauh:
+                     fidpt_2=vistaup.Pt()
+                     fideta_2=vistaup.Eta()
+                     fidphi_2=vistaup.Phi()
+                     fidm_2=vistaup.M()
+                  if is_taum_tauh:
+                     fidpt_2=vistaum.Pt()
+                     fideta_2=vistaum.Eta()
+                     fidphi_2=vistaum.Phi()
+                     fidm_2=vistaum.M()
+
+            if is_tautau:
+                if len(event.visCand)>0 and event.visCand[0].pt>0: #take the gen vis taus if they exist
+                    fidpt_1=event.visCand[0].pt
+                    fideta_1=event.visCand[0].eta
+                    fidphi_1=event.visCand[0].phi
+                    fidm_1=event.visCand[0].mass
+                if len(event.visCand)>1 and event.visCand[1].pt>0:
+                    fidpt_2=event.visCand[1].pt
+                    fideta_2=event.visCand[1].eta
+                    fidphi_2=event.visCand[1].phi
+                    fidm_2=event.visCand[1].mass
+                if len(event.visCand)<2: # otherwise take the vis taus built from the gen collection
+                    fidpt_1=vistaup.Pt()
+                    fideta_1=vistaup.Eta()
+                    fidphi_1=vistaup.Phi()
+                    fidm_1=vistaup.M()
+                    fidpt_2=vistaum.Pt()
+                    fideta_2=vistaum.Eta()
+                    fidphi_2=vistaum.Phi()
+                    fidm_2=vistaum.M()
+
+            if is_emu:
+                if len(event.dressedCand)==2 and abs(event.dressedCand[0].pdgId)==11: #2 dressed leptons, the first one is an electron
+                    fidpt_1=event.dressedCand[0].pt
+                    fideta_1=event.dressedCand[0].eta
+                    fidphi_1=event.dressedCand[0].phi
+                    fidm_1=event.dressedCand[0].mass
+                    fidpt_2=event.dressedCand[1].pt
+                    fideta_2=event.dressedCand[1].eta
+                    fidphi_2=event.dressedCand[1].phi
+                    fidm_2=event.dressedCand[1].mass
+                elif len(event.dressedCand)==2: #2 dressed leptons, the first one is a muon
+                     fidpt_1=event.dressedCand[1].pt
+                     fideta_1=event.dressedCand[1].eta
+                     fidphi_1=event.dressedCand[1].phi
+                     fidm_1=event.dressedCand[1].mass
+                     fidpt_2=event.dressedCand[0].pt
+                     fideta_2=event.dressedCand[0].eta
+                     fidphi_2=event.dressedCand[0].phi
+                     fidm_2=event.dressedCand[0].mass
+                else: #not enough dressed leptons, take the generated electron and muon
+                     fidpt_1=event.el.pt
+                     fideta_1=event.el.eta
+                     fidphi_1=event.el.phi
+                     fidm_1=event.el.mass
+                     fidpt_2=event.mu.pt
+                     fideta_2=event.mu.eta
+                     fidphi_2=event.mu.phi
+                     fidm_2=event.mu.mass
+
+        if self.isSignal:
+            event.fidntracks=0
+            for genc in event.selectedChargedGens:
+                mygenc=ROOT.TLorentzVector()
+                mygenc.SetPtEtaPhiM(genc.pt,genc.eta,genc.phi,genc.mass)
+                is_matched=False
+                for track in event.chargedfromtaus:
+                    mytrack=ROOT.TLorentzVector()
+                    mytrack.SetPtEtaPhiM(track.pt,track.eta,track.phi,track.mass)
+                    if mygenc.DeltaR(mytrack)<0.02: is_matched=True
+                if not is_matched: event.fidntracks=event.fidntracks+1
 
         ######################################################
         ##### HIGH LEVEL VARIABLES FOR SELECTED EVENTS   #####
@@ -500,11 +740,11 @@ class Analysis(Module):
                 lep_eleSigmaDown.append(lep.dEsigmaDown)
                 is_matched=0
                 for to in event.selectedTriggerObjects:
-                    top4=ROOT.TLorentzVector()
-                    top4.SetPtEtaPhiM(to.pt,to.eta,to.phi,0)
-                    if self.year=="2017" and self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==11 and lep.p4().DeltaR(top4)<0.5 and ((bool(to.filterBits&1024) and bool(to.filterBits&2)) or bool(to.filterBits&64)): is_matched=1
-                    elif self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==11 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&2) or bool(to.filterBits&64)): is_matched=1
-                    if self.channel=="emu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==11 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&32)): is_matched=1
+                   top4=ROOT.TLorentzVector()
+                   top4.SetPtEtaPhiM(to.pt,to.eta,to.phi,0)
+                   if self.year=="2017" and self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==11 and lep.p4().DeltaR(top4)<0.5 and ((bool(to.filterBits&1024) and bool(to.filterBits&2)) or bool(to.filterBits&64)): is_matched=1
+		   elif self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==11 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&2) or bool(to.filterBits&64)): is_matched=1
+                   if self.channel=="emu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==11 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&32)): is_matched=1
                 lep_trgmatch.append(is_matched)
 
             else:
@@ -525,18 +765,18 @@ class Analysis(Module):
                 lep_muonIso.append(lep.pfRelIso04_all)
                 is_matched=0
                 for to in event.selectedTriggerObjects:
-                    top4=ROOT.TLorentzVector()
-                    top4.SetPtEtaPhiM(to.pt,to.eta,to.phi,0)
-                    if self.channel=="mutau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&64) or bool(to.filterBits&8)): is_matched=1
-                    elif self.channel=="mumu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&8)): is_matched=1
-                    elif self.channel=="emu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&32)): is_matched=1
+                   top4=ROOT.TLorentzVector()
+                   top4.SetPtEtaPhiM(to.pt,to.eta,to.phi,0)
+                   if self.channel=="mutau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&64) or bool(to.filterBits&8)): is_matched=1
+                   elif self.channel=="mumu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&8)): is_matched=1
+                   elif self.channel=="emu" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==13 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&32)): is_matched=1
                 lep_trgmatch.append(is_matched)
             else:
                 lep_muonMediumId.append(-1)
                 lep_muonIso.append(-1)
               
             if lep.id==15:
-                lep_dz2.append(lep.dz2)
+	        lep_dz2.append(lep.dz2)
                 lep_dz3.append(lep.dz3)
                 lep_tk1Pt.append(lep.tk1Pt)
                 lep_tk1Eta.append(lep.tk1Eta)
@@ -553,64 +793,66 @@ class Analysis(Module):
                 lep_vsmu.append(lep.idDeepTau2017v2p1VSmu)
                 is_matched=0
                 for to in event.selectedTriggerObjects:
-                    top4=ROOT.TLorentzVector()
-                    top4.SetPtEtaPhiM(to.pt,to.eta,to.phi,0)
-                    if self.channel=="mutau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&256)): is_matched=1
-                    elif self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&128)): is_matched=1
-                    elif self.channel=="tautau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&64)): is_matched=1
+                   top4=ROOT.TLorentzVector()
+                   top4.SetPtEtaPhiM(to.pt,to.eta,to.phi,0)
+                   if self.channel=="mutau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&256)): is_matched=1
+                   elif self.channel=="etau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&128)): is_matched=1
+                   #elif self.channel=="tautau" and abs(to.pt-lep.pt)/lep.pt<0.20 and to.id==15 and lep.p4().DeltaR(top4)<0.5 and (bool(to.filterBits&64)): is_matched=1
+                   elif self.year=="2017" and self.channel=="tautau" and lep.p4().DeltaR(top4)<0.4 and (to.id == 15 and (bool(to.filterBits&64)) and ((bool(to.filterBits&4) and bool(to.filterBits&8)!=0 ) or (to.pt > 40 and (bool(to.filterBits&2) and bool(to.filterBits&8) ) or bool(to.filterBits&4) ) )): is_matched=1
+                   elif (self.year=="2016" or self.year=="2016pre" or self.year=="2016post") and self.channel=="tautau" and lep.p4().DeltaR(top4)<0.4 and (to.id==15 and (bool(to.filterBits&2)) and bool(to.filterBits&256)): is_matched=1
                 lep_trgmatch.append(is_matched)
                 
                 if self.isMC and lep.genPartFlav==5:
                     if self.channel=="etau":
-                        lep_tauidMsf.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav))
-                        lep_tauidMsf_uncert0_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert0_up'))
-                        lep_tauidMsf_uncert1_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert1_up'))
-                        lep_tauidMsf_syst_alleras_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_alleras_up'))
-                        lep_tauidMsf_syst_era_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_'+postfix_tauid+'_up'))
-                        if lep.decayMode==0: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm0_'+postfix_tauid+'_up'))
-                        elif lep.decayMode==1: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm1_'+postfix_tauid+'_up'))
-                        elif lep.decayMode==10: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm10_'+postfix_tauid+'_up'))
-                        else: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm11_'+postfix_tauid+'_up'))
-                        lep_tauidMsf_uncert0_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert0_down'))
-                        lep_tauidMsf_uncert1_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert1_down'))
-                        lep_tauidMsf_syst_alleras_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_alleras_down'))
-                        lep_tauidMsf_syst_era_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_'+postfix_tauid+'_down'))
-                        if lep.decayMode==0: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm0_'+postfix_tauid+'_down'))
-                        elif lep.decayMode==1: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm1_'+postfix_tauid+'_down'))
-                        elif lep.decayMode==10: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm10_'+postfix_tauid+'_down'))
-                        else: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm11_'+postfix_tauid+'_down'))
+                       lep_tauidMsf.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav))
+                       lep_tauidMsf_uncert0_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert0_up'))
+                       lep_tauidMsf_uncert1_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert1_up'))
+                       lep_tauidMsf_syst_alleras_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_alleras_up'))
+                       lep_tauidMsf_syst_era_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_'+postfix_tauid+'_up'))
+                       if lep.decayMode==0: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm0_'+postfix_tauid+'_up'))
+                       elif lep.decayMode==1: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm1_'+postfix_tauid+'_up'))
+                       elif lep.decayMode==10: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm10_'+postfix_tauid+'_up'))
+                       else: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm11_'+postfix_tauid+'_up'))
+                       lep_tauidMsf_uncert0_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert0_down'))
+                       lep_tauidMsf_uncert1_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert1_down'))
+                       lep_tauidMsf_syst_alleras_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_alleras_down'))
+                       lep_tauidMsf_syst_era_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_'+postfix_tauid+'_down'))
+                       if lep.decayMode==0: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm0_'+postfix_tauid+'_down'))
+                       elif lep.decayMode==1: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm1_'+postfix_tauid+'_down'))
+                       elif lep.decayMode==10: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm10_'+postfix_tauid+'_down'))
+                       else: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseT.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm11_'+postfix_tauid+'_down'))
 
-                    else: #other channels, vsele VVLoose
-                        lep_tauidMsf.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav))
-                        lep_tauidMsf_uncert0_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert0_up'))
-                        lep_tauidMsf_uncert1_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert1_up'))
-                        lep_tauidMsf_syst_alleras_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_alleras_up'))
-                        lep_tauidMsf_syst_era_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_'+postfix_tauid+'_up'))
-                        if lep.decayMode==0: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm0_'+postfix_tauid+'_up'))
-                        elif lep.decayMode==1: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm1_'+postfix_tauid+'_up'))
-                        elif lep.decayMode==10: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm10_'+postfix_tauid+'_up'))
-                        else: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm11_'+postfix_tauid+'_up'))
-                        lep_tauidMsf_uncert0_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert0_down'))
-                        lep_tauidMsf_uncert1_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert1_down'))
-                        lep_tauidMsf_syst_alleras_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_alleras_down'))
-                        lep_tauidMsf_syst_era_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_'+postfix_tauid+'_down'))
-                        if lep.decayMode==0: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm0_'+postfix_tauid+'_down'))
-                        elif lep.decayMode==1: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm1_'+postfix_tauid+'_down'))
-                        elif lep.decayMode==10: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm10_'+postfix_tauid+'_down'))
-                        else: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm11_'+postfix_tauid+'_down'))
+		    else: #other channels, vsele VVLoose
+                       lep_tauidMsf.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav))
+                       lep_tauidMsf_uncert0_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert0_up'))
+                       lep_tauidMsf_uncert1_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert1_up'))
+                       lep_tauidMsf_syst_alleras_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_alleras_up'))
+                       lep_tauidMsf_syst_era_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_'+postfix_tauid+'_up'))
+                       if lep.decayMode==0: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm0_'+postfix_tauid+'_up'))
+                       elif lep.decayMode==1: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm1_'+postfix_tauid+'_up'))
+                       elif lep.decayMode==10: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm10_'+postfix_tauid+'_up'))
+                       else: lep_tauidMsf_syst_dm_era_up.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm11_'+postfix_tauid+'_up'))
+                       lep_tauidMsf_uncert0_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert0_down'))
+                       lep_tauidMsf_uncert1_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'uncert1_down'))
+                       lep_tauidMsf_syst_alleras_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_alleras_down'))
+                       lep_tauidMsf_syst_era_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_'+postfix_tauid+'_down'))
+                       if lep.decayMode==0: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm0_'+postfix_tauid+'_down'))
+                       elif lep.decayMode==1: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm1_'+postfix_tauid+'_down'))
+                       elif lep.decayMode==10: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm10_'+postfix_tauid+'_down'))
+                       else: lep_tauidMsf_syst_dm_era_down.append(self.tauSFsM_vseVVL.getSFvsDMandPT(lep.pt,lep.decayMode,lep.genPartFlav,'syst_dm11_'+postfix_tauid+'_down'))
 
                     lep_taues.append(self.testool.getTES(lep.pt,lep.decayMode,lep.genPartFlav))
                     lep_taues_up.append(self.testool.getTES(lep.pt,lep.decayMode,lep.genPartFlav,unc='Up'))
                     lep_taues_down.append(self.testool.getTES(lep.pt,lep.decayMode,lep.genPartFlav,unc='Down'))
-                    if self.channel=="etau":
+		    if self.channel=="etau":
                        lep_tautriggersf.append(self.etautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=0))
                        lep_tautriggersf_up.append(self.etautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=1))
                        lep_tautriggersf_down.append(self.etautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=-1))
-                    elif self.channel=="mutau":
+		    elif self.channel=="mutau":
                        lep_tautriggersf.append(self.mutautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=0))
                        lep_tautriggersf_up.append(self.mutautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=1))
                        lep_tautriggersf_down.append(self.mutautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=-1))
-                    else:
+		    else:
                        lep_tautriggersf.append(self.ditautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=0))
                        lep_tautriggersf_up.append(self.ditautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=1))
                        lep_tautriggersf_down.append(self.ditautriggerSFTool.getSF(lep.pt,lep.decayMode,unc_scale=-1))
@@ -634,28 +876,28 @@ class Analysis(Module):
                     lep_tautriggersf_down.append(1.0)
                 
                 if self.isMC and (lep.genPartFlav==2 or lep.genPartFlav==4):
-                    if self.channel=="mutau":
-                        lep_antimusf.append(self.antiMuSFTTool.getSFvsEta(lep.eta,lep.genPartFlav))
-                        lep_antimusf_up.append(self.antiMuSFTTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Up'))
-                        lep_antimusf_down.append(self.antiMuSFTTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Down'))
-                    else:
-                        lep_antimusf.append(self.antiMuSFLTool.getSFvsEta(lep.eta,lep.genPartFlav))
-                        lep_antimusf_up.append(self.antiMuSFLTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Up'))
-                        lep_antimusf_down.append(self.antiMuSFLTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Down'))
+		    if self.channel=="mutau":
+	               lep_antimusf.append(self.antiMuSFTTool.getSFvsEta(lep.eta,lep.genPartFlav))
+                       lep_antimusf_up.append(self.antiMuSFTTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Up'))
+                       lep_antimusf_down.append(self.antiMuSFTTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Down'))
+		    else:
+                       lep_antimusf.append(self.antiMuSFLTool.getSFvsEta(lep.eta,lep.genPartFlav))
+                       lep_antimusf_up.append(self.antiMuSFLTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Up'))
+                       lep_antimusf_down.append(self.antiMuSFLTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Down'))
                 else:
                     lep_antimusf.append(1.0)
                     lep_antimusf_up.append(1.0)
                     lep_antimusf_down.append(1.0)
                 
                 if self.isMC and (lep.genPartFlav==1 or lep.genPartFlav==3):
-                    if self.channel=="etau":
-                        lep_antielesf.append(self.antiEleSFTTool.getSFvsEta(lep.eta,lep.genPartFlav))
-                        lep_antielesf_up.append(self.antiEleSFTTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Up'))
-                        lep_antielesf_down.append(self.antiEleSFTTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Down'))
-                    else:
-                        lep_antielesf.append(self.antiEleSFLTool.getSFvsEta(lep.eta,lep.genPartFlav))
-                        lep_antielesf_up.append(self.antiEleSFLTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Up'))
-                        lep_antielesf_down.append(self.antiEleSFLTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Down'))
+		    if self.channel=="etau":
+                       lep_antielesf.append(self.antiEleSFTTool.getSFvsEta(lep.eta,lep.genPartFlav))
+                       lep_antielesf_up.append(self.antiEleSFTTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Up'))
+                       lep_antielesf_down.append(self.antiEleSFTTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Down'))
+		    else:
+                       lep_antielesf.append(self.antiEleSFLTool.getSFvsEta(lep.eta,lep.genPartFlav))
+                       lep_antielesf_up.append(self.antiEleSFLTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Up'))
+                       lep_antielesf_down.append(self.antiEleSFLTool.getSFvsEta(lep.eta,lep.genPartFlav,unc='Down'))
                     lep_fes.append(self.festool.getFES(lep.eta,lep.decayMode,lep.genPartFlav))
                     lep_fes_up.append(self.festool.getFES(lep.eta,lep.decayMode,lep.genPartFlav,unc='Up'))
                     lep_fes_down.append(self.festool.getFES(lep.eta,lep.decayMode,lep.genPartFlav,unc='Down'))
@@ -839,64 +1081,118 @@ class Analysis(Module):
         self.out.fillBranch("Track_isMatchedToHS",     track_isMatchedToHS)
         self.out.fillBranch("Track_charge",            track_charge)
 
-        if self.isMC and len(event.genCand)>0: 
+        #if self.isMC and len(event.genCand)>0: 
+        if self.isMC:
             self.out.fillBranch("nGenCand",           len(event.genCand))
             self.out.fillBranch("GenCand_id" ,        gen_id)
             self.out.fillBranch("GenCand_pt" ,        gen_pt)
             self.out.fillBranch("GenCand_eta" ,       gen_eta)
             self.out.fillBranch("GenCand_phi" ,       gen_phi)
 
+        if self.isSignal:
+            self.out.fillBranch("is_emu" ,      is_emu)
+            self.out.fillBranch("is_etau" ,     is_etau)
+            self.out.fillBranch("is_mutau" ,    is_mutau)
+            self.out.fillBranch("is_tautau" ,   is_tautau)
+
+            self.out.fillBranch("fidpt_1" ,        fidpt_1)
+            self.out.fillBranch("fideta_1" ,       fideta_1)
+            self.out.fillBranch("fidphi_1" ,       fidphi_1)
+            self.out.fillBranch("fidm_1" ,         fidm_1)
+            self.out.fillBranch("fidpt_2" ,        fidpt_2)
+            self.out.fillBranch("fideta_2" ,       fideta_2)
+            self.out.fillBranch("fidphi_2" ,       fidphi_2)
+            self.out.fillBranch("fidm_2" ,         fidm_2)
+            self.out.fillBranch("fidgen_mtt" ,     event.fidgen_mtt)
+            self.out.fillBranch("fidntracks" ,     event.fidntracks)
+
         return True
 
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
-analysis_eemc2018    = lambda : Analysis(channel="ee", isMC=True, year="2018")
-analysis_emumc2018    = lambda : Analysis(channel="emu", isMC=True, year="2018")
-analysis_etaumc2018    = lambda : Analysis(channel="etau", isMC=True, year="2018")
-analysis_mumumc2018    = lambda : Analysis(channel="mumu", isMC=True, year="2018")
-analysis_mutaumc2018    = lambda : Analysis(channel="mutau", isMC=True, year="2018")
-analysis_tautaumc2018    = lambda : Analysis(channel="tautau", isMC=True, year="2018")
+analysis_eemc2018    = lambda : Analysis(channel="ee", isMC=True, isSignal=False, year="2018")
+analysis_emumc2018    = lambda : Analysis(channel="emu", isMC=True, isSignal=False, year="2018")
+analysis_etaumc2018    = lambda : Analysis(channel="etau", isMC=True, isSignal=False, year="2018")
+analysis_mumumc2018    = lambda : Analysis(channel="mumu", isMC=True, isSignal=False, year="2018")
+analysis_mutaumc2018    = lambda : Analysis(channel="mutau", isMC=True, isSignal=False, year="2018")
+analysis_tautaumc2018    = lambda : Analysis(channel="tautau", isMC=True, isSignal=False, year="2018")
 
-analysis_eemc2017    = lambda : Analysis(channel="ee", isMC=True, year="2017")
-analysis_emumc2017    = lambda : Analysis(channel="emu", isMC=True, year="2017")
-analysis_etaumc2017    = lambda : Analysis(channel="etau", isMC=True, year="2017")
-analysis_mumumc2017    = lambda : Analysis(channel="mumu", isMC=True, year="2017")
-analysis_mutaumc2017    = lambda : Analysis(channel="mutau", isMC=True, year="2017")
-analysis_tautaumc2017    = lambda : Analysis(channel="tautau", isMC=True, year="2017")
+analysis_eemc2017    = lambda : Analysis(channel="ee", isMC=True, isSignal=False, year="2017")
+analysis_emumc2017    = lambda : Analysis(channel="emu", isMC=True, isSignal=False, year="2017")
+analysis_etaumc2017    = lambda : Analysis(channel="etau", isMC=True, isSignal=False, year="2017")
+analysis_mumumc2017    = lambda : Analysis(channel="mumu", isMC=True, isSignal=False, year="2017")
+analysis_mutaumc2017    = lambda : Analysis(channel="mutau", isMC=True, isSignal=False, year="2017")
+analysis_tautaumc2017    = lambda : Analysis(channel="tautau", isMC=True, isSignal=False, year="2017")
 
-analysis_eemc2016post    = lambda : Analysis(channel="ee", isMC=True, year="2016post")
-analysis_emumc2016post    = lambda : Analysis(channel="emu", isMC=True, year="2016post")
-analysis_etaumc2016post    = lambda : Analysis(channel="etau", isMC=True, year="2016post")
-analysis_mumumc2016post    = lambda : Analysis(channel="mumu", isMC=True, year="2016post")
-analysis_mutaumc2016post    = lambda : Analysis(channel="mutau", isMC=True, year="2016post")
-analysis_tautaumc2016post    = lambda : Analysis(channel="tautau", isMC=True, year="2016post")
+analysis_eemc2016post    = lambda : Analysis(channel="ee", isMC=True, isSignal=False, year="2016post")
+analysis_emumc2016post    = lambda : Analysis(channel="emu", isMC=True, isSignal=False, year="2016post")
+analysis_etaumc2016post    = lambda : Analysis(channel="etau", isMC=True, isSignal=False, year="2016post")
+analysis_mumumc2016post    = lambda : Analysis(channel="mumu", isMC=True, isSignal=False, year="2016post")
+analysis_mutaumc2016post    = lambda : Analysis(channel="mutau", isMC=True, isSignal=False, year="2016post")
+analysis_tautaumc2016post    = lambda : Analysis(channel="tautau", isMC=True, isSignal=False, year="2016post")
 
-analysis_eemc2016pre    = lambda : Analysis(channel="ee", isMC=True, year="2016pre")
-analysis_emumc2016pre    = lambda : Analysis(channel="emu", isMC=True, year="2016pre")
-analysis_etaumc2016pre    = lambda : Analysis(channel="etau", isMC=True, year="2016pre")
-analysis_mumumc2016pre    = lambda : Analysis(channel="mumu", isMC=True, year="2016pre")
-analysis_mutaumc2016pre    = lambda : Analysis(channel="mutau", isMC=True, year="2016pre")
-analysis_tautaumc2016pre    = lambda : Analysis(channel="tautau", isMC=True, year="2016pre")
+analysis_eemc2016pre    = lambda : Analysis(channel="ee", isMC=True, isSignal=False, year="2016pre")
+analysis_emumc2016pre    = lambda : Analysis(channel="emu", isMC=True, isSignal=False, year="2016pre")
+analysis_etaumc2016pre    = lambda : Analysis(channel="etau", isMC=True, isSignal=False, year="2016pre")
+analysis_mumumc2016pre    = lambda : Analysis(channel="mumu", isMC=True, isSignal=False, year="2016pre")
+analysis_mutaumc2016pre    = lambda : Analysis(channel="mutau", isMC=True, isSignal=False, year="2016pre")
+analysis_tautaumc2016pre    = lambda : Analysis(channel="tautau", isMC=True, isSignal=False, year="2016pre")
 
-analysis_eedata2018  = lambda : Analysis(channel="ee", isMC=False, year="2018")
-analysis_emudata2018  = lambda : Analysis(channel="emu", isMC=False, year="2018")
-analysis_etaudata2018  = lambda : Analysis(channel="etau", isMC=False, year="2018")
-analysis_mumudata2018  = lambda : Analysis(channel="mumu", isMC=False, year="2018")
-analysis_mutaudata2018  = lambda : Analysis(channel="mutau", isMC=False, year="2018")
-analysis_tautaudata2018  = lambda : Analysis(channel="tautau", isMC=False, year="2018")
 
-analysis_eedata2017  = lambda : Analysis(channel="ee", isMC=False, year="2017")
-analysis_emudata2017  = lambda : Analysis(channel="emu", isMC=False, year="2017")
-analysis_etaudata2017  = lambda : Analysis(channel="etau", isMC=False, year="2017")
-analysis_mumudata2017  = lambda : Analysis(channel="mumu", isMC=False, year="2017")
-analysis_mutaudata2017  = lambda : Analysis(channel="mutau", isMC=False, year="2017")
-analysis_tautaudata2017  = lambda : Analysis(channel="tautau", isMC=False, year="2017")
 
-analysis_eedata2016  = lambda : Analysis(channel="ee", isMC=False, year="2016")
-analysis_emudata2016  = lambda : Analysis(channel="emu", isMC=False, year="2016")
-analysis_etaudata2016  = lambda : Analysis(channel="etau", isMC=False, year="2016")
-analysis_mumudata2016  = lambda : Analysis(channel="mumu", isMC=False, year="2016")
-analysis_mutaudata2016  = lambda : Analysis(channel="mutau", isMC=False, year="2016")
-analysis_tautaudata2016  = lambda : Analysis(channel="tautau", isMC=False, year="2016")
+
+
+analysis_eesig2018    = lambda : Analysis(channel="ee", isMC=True, isSignal=True, year="2018")
+analysis_emusig2018    = lambda : Analysis(channel="emu", isMC=True, isSignal=True, year="2018")
+analysis_etausig2018    = lambda : Analysis(channel="etau", isMC=True, isSignal=True, year="2018")
+analysis_mumusig2018    = lambda : Analysis(channel="mumu", isMC=True, isSignal=True, year="2018")
+analysis_mutausig2018    = lambda : Analysis(channel="mutau", isMC=True, isSignal=True, year="2018")
+analysis_tautausig2018    = lambda : Analysis(channel="tautau", isMC=True, isSignal=True, year="2018")
+
+analysis_eesig2017    = lambda : Analysis(channel="ee", isMC=True, isSignal=True, year="2017")
+analysis_emusig2017    = lambda : Analysis(channel="emu", isMC=True, isSignal=True, year="2017")
+analysis_etausig2017    = lambda : Analysis(channel="etau", isMC=True, isSignal=True, year="2017")
+analysis_mumusig2017    = lambda : Analysis(channel="mumu", isMC=True, isSignal=True, year="2017")
+analysis_mutausig2017    = lambda : Analysis(channel="mutau", isMC=True, isSignal=True, year="2017")
+analysis_tautausig2017    = lambda : Analysis(channel="tautau", isMC=True, isSignal=True, year="2017")
+
+analysis_eesig2016post    = lambda : Analysis(channel="ee", isMC=True, isSignal=True, year="2016post")
+analysis_emusig2016post    = lambda : Analysis(channel="emu", isMC=True, isSignal=True, year="2016post")
+analysis_etausig2016post    = lambda : Analysis(channel="etau", isMC=True, isSignal=True, year="2016post")
+analysis_mumusig2016post    = lambda : Analysis(channel="mumu", isMC=True, isSignal=True, year="2016post")
+analysis_mutausig2016post    = lambda : Analysis(channel="mutau", isMC=True, isSignal=True, year="2016post")
+analysis_tautausig2016post    = lambda : Analysis(channel="tautau", isMC=True, isSignal=True, year="2016post")
+
+analysis_eesig2016pre    = lambda : Analysis(channel="ee", isMC=True, isSignal=True, year="2016pre")
+analysis_emusig2016pre    = lambda : Analysis(channel="emu", isMC=True, isSignal=True, year="2016pre")
+analysis_etausig2016pre    = lambda : Analysis(channel="etau", isMC=True, isSignal=True, year="2016pre")
+analysis_mumusig2016pre    = lambda : Analysis(channel="mumu", isMC=True, isSignal=True, year="2016pre")
+analysis_mutausig2016pre    = lambda : Analysis(channel="mutau", isMC=True, isSignal=True, year="2016pre")
+analysis_tautausig2016pre    = lambda : Analysis(channel="tautau", isMC=True, isSignal=True, year="2016pre")
+
+
+
+
+
+analysis_eedata2018  = lambda : Analysis(channel="ee", isMC=False, isSignal=False, year="2018")
+analysis_emudata2018  = lambda : Analysis(channel="emu", isMC=False, isSignal=False, year="2018")
+analysis_etaudata2018  = lambda : Analysis(channel="etau", isMC=False, isSignal=False, year="2018")
+analysis_mumudata2018  = lambda : Analysis(channel="mumu", isMC=False, isSignal=False, year="2018")
+analysis_mutaudata2018  = lambda : Analysis(channel="mutau", isMC=False, isSignal=False, year="2018")
+analysis_tautaudata2018  = lambda : Analysis(channel="tautau", isMC=False, isSignal=False, year="2018")
+
+analysis_eedata2017  = lambda : Analysis(channel="ee", isMC=False, isSignal=False, year="2017")
+analysis_emudata2017  = lambda : Analysis(channel="emu", isMC=False, isSignal=False, year="2017")
+analysis_etaudata2017  = lambda : Analysis(channel="etau", isMC=False, isSignal=False, year="2017")
+analysis_mumudata2017  = lambda : Analysis(channel="mumu", isMC=False, isSignal=False, year="2017")
+analysis_mutaudata2017  = lambda : Analysis(channel="mutau", isMC=False, isSignal=False, year="2017")
+analysis_tautaudata2017  = lambda : Analysis(channel="tautau", isMC=False, isSignal=False, year="2017")
+
+analysis_eedata2016  = lambda : Analysis(channel="ee", isMC=False, isSignal=False, year="2016")
+analysis_emudata2016  = lambda : Analysis(channel="emu", isMC=False, isSignal=False, year="2016")
+analysis_etaudata2016  = lambda : Analysis(channel="etau", isMC=False, isSignal=False, year="2016")
+analysis_mumudata2016  = lambda : Analysis(channel="mumu", isMC=False, isSignal=False, year="2016")
+analysis_mutaudata2016  = lambda : Analysis(channel="mutau", isMC=False, isSignal=False, year="2016")
+analysis_tautaudata2016  = lambda : Analysis(channel="tautau", isMC=False, isSignal=False, year="2016")
 
 
