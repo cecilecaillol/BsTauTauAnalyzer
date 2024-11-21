@@ -9,7 +9,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collect
 
 ### Proton selector be replaced by preprocessing module
 from GGWWAnalyzer.Skimmer.objectSelector import ElectronSelector, MuonSelector, TauSelector
-from GGWWAnalyzer.Skimmer.objectSelector import GenParticleSelector, GenDressedLeptonSelector, GenVisTauSelector, ChargedGenSelector
+from GGWWAnalyzer.Skimmer.objectSelector import GenParticleSelector, GenDressedLeptonSelector, ChargedGenSelector
 
 from TauPOG.TauIDSFs.TauIDSFTool import TauIDSFTool, TauESTool, campaigns
 from TauPOG.TauIDSFs.TauIDSFTool import TauFESTool
@@ -203,9 +203,6 @@ class Analysis(Module):
         self.out.branch("pu_weight",         "F");
 
         self.out.branch("is_emu",              "I");
-        self.out.branch("is_etau",              "I");
-        self.out.branch("is_mutau",              "I");
-        self.out.branch("is_tautau",              "I");
         self.out.branch("fidpt_1",              "F");
         self.out.branch("fideta_1",              "F");
         self.out.branch("fidphi_1",              "F");
@@ -214,7 +211,7 @@ class Analysis(Module):
         self.out.branch("fideta_2",              "F");
         self.out.branch("fidphi_2",              "F");
         self.out.branch("fidm_2",              "F");
-        self.out.branch("fidgen_mtt",              "F");
+        self.out.branch("fidgen_mww",              "F");
         self.out.branch("fidntracks",              "I");
         
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
@@ -233,13 +230,6 @@ class Analysis(Module):
         gendressed = Collection(event, "GenDressedLepton")
         for gend in gendressed:
             event.selectedGenDressedLeptons.append(gend)
-
-    def selectGenVisTaus(self, event):
-
-        event.selectedGenVisTaus = []
-        genvis = Collection(event, "GenVisTau")
-        for gent in genvis:
-            event.selectedGenVisTaus.append(gent)
 
 
     def selectChargedGens(self, event):
@@ -394,7 +384,6 @@ class Analysis(Module):
 
         if self.isSignal:
             self.selectGenDressedLeptons(event)
-            self.selectGenVisTaus(event)
             self.selectChargedGens(event)
         
         #apply preliminary loose pt cuts based on trigger:
@@ -485,57 +474,47 @@ class Analysis(Module):
         ######################################################
 
         if self.isSignal:
-           event.gentaup=event.selectedGenParticles[0]
-           event.gentaum=event.selectedGenParticles[0]
-           event.gennup=event.selectedGenParticles[0]
-           event.gennum=event.selectedGenParticles[0]
            event.el=event.selectedGenParticles[0]
            event.mu=event.selectedGenParticles[0]
-        is_taup_tauh=1
-        is_taum_tauh=1
+           event.genwp=event.selectedGenParticles[0]
+           event.genwm=event.selectedGenParticles[0]
         event.dressedCand=[]
-        event.visCand=[]
-        event.chargedfromtaus=[]
+        event.leptons=[]
         ne=0
         nm=0
-        event.fidgen_mtt=0
+        event.fidgen_mww=0
         event.fidntracks=0
 
         index=0
         #print "Gen particle collection:"
         if self.isSignal:
             for genp in event.selectedGenParticles:
-                #print genp.pdgId,event.selectedGenParticles[genp.genPartIdxMother].pdgId,genp.pt,genp.eta,genp.phi,genp.status
-                if genp.pdgId==15 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: event.gentaup=genp
-                if genp.pdgId==-15 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: event.gentaum=genp
-                if genp.pdgId==16 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: event.gennup=genp
-                if genp.pdgId==-16 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: event.gennum=genp
-                if (genp.pdgId==11 or  genp.pdgId==13) and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: is_taup_tauh=0
-                if (genp.pdgId==-11 or  genp.pdgId==-13) and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: is_taum_tauh=0
-                if genp.pdgId==11 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: ne=ne+1
-                if genp.pdgId==13 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==15: nm=nm+1
-                if genp.pdgId==-11 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: ne=ne+1
-                if genp.pdgId==-13 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-15: nm=nm+1
+                if genp.pdgId==24 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==24 : event.genwp=genp
+                if genp.pdgId==-24 and event.selectedGenParticles[genp.genPartIdxMother].pdgId==-24: event.genwm=genp
+                if abs(genp.pdgId)==11 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==24: event.el=genp
+                if abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==24: event.mu=genp
+                if abs(genp.pdgId)==11 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==24: event.leptons.append(genp)
+                if abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==24: event.leptons.append(genp)
                 if abs(genp.pdgId)==11 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: event.el=genp
                 if abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: event.mu=genp
-                if abs(genp.pdgId)!=12 and abs(genp.pdgId)!=14 and abs(genp.pdgId)!=16 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: event.chargedfromtaus.append(genp)
-                #print genp.pdgId,event.selectedGenParticles[genp.genPartIdxMother].pdgId,genp.pt
+                if abs(genp.pdgId)==11 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: event.leptons.append(genp)
+                if abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: event.leptons.append(genp)
+                if abs(genp.pdgId)==11 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==24: ne = ne+1
+                if abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==24: nm = nm+1
+                if abs(genp.pdgId)==11 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: ne = ne+1
+                if abs(genp.pdgId)==13 and abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==15: nm = nm+1
 
             for gend in event.selectedGenDressedLeptons:
                 event.dressedCand.append(gend)
 
-            for gent in event.selectedGenVisTaus:
-                event.visCand.append(gent)
-
+        mywp=ROOT.TLorentzVector()
+        mywp.SetPtEtaPhiM(event.genwp.pt,event.genwp.eta,event.genwp.phi,event.genwp.mass)
+        mywm=ROOT.TLorentzVector()
+        mywm.SetPtEtaPhiM(event.genwm.pt,event.genwm.eta,event.genwm.phi,event.genwm.mass)
+        event.fidgen_mww=(mywp+mywm).M();
 
         is_emu=0
-        is_etau=0
-        is_mutau=0
-        is_tautau=0
         if (ne==1 and nm==1): is_emu=1
-        if (ne==1 and nm==0): is_etau=1
-        if (ne==0 and nm==1): is_mutau=1
-        if (ne==0 and nm==0): is_tautau=1
         fidpt_1=0
         fideta_1=0
         fidphi_1=0
@@ -545,74 +524,7 @@ class Analysis(Module):
         fidphi_2=0
         fidm_2=0
 
-        mytaup=ROOT.TLorentzVector()
-        mytaum=ROOT.TLorentzVector()
-        mynup=ROOT.TLorentzVector()
-        mynum=ROOT.TLorentzVector()
         if self.isSignal:
-            mytaup.SetPtEtaPhiM(event.gentaup.pt,event.gentaup.eta,event.gentaup.phi,event.gentaup.mass)
-            mytaum.SetPtEtaPhiM(event.gentaum.pt,event.gentaum.eta,event.gentaum.phi,event.gentaum.mass)
-            event.fidgen_mtt=(mytaup+mytaum).M();
-            mynup.SetPtEtaPhiM(event.gennup.pt,event.gennup.eta,event.gennup.phi,event.gennup.mass)
-            vistaup=mytaup-mynup # build gen vis tau from the gen particle collection
-            mynum.SetPtEtaPhiM(event.gennum.pt,event.gennum.eta,event.gennum.phi,event.gennum.mass)
-            vistaum=mytaum-mynum
-
-            if is_etau or is_mutau:
-               if (len(event.dressedCand)==1): # if there is a dressed lepton, use it for the electron or the muon
-                  fidpt_1=event.dressedCand[0].pt
-                  fideta_1=event.dressedCand[0].eta
-                  fidphi_1=event.dressedCand[0].phi
-                  fidm_1=event.dressedCand[0].mass
-               elif is_etau: # otherwise use the electron or muon from the gen particle collection
-                  fidpt_1=event.el.pt
-                  fideta_1=event.el.eta
-                  fidphi_1=event.el.phi
-                  fidm_1=event.el.mass
-               elif is_mutau:
-                  fidpt_1=event.mu.pt
-                  fideta_1=event.mu.eta
-                  fidphi_1=event.mu.phi
-                  fidm_1=event.mu.mass
-
-               if len(event.visCand)==1 and event.visCand[0].pt>0: #if there is a gen vis tau use it
-                  fidpt_2=event.visCand[0].pt
-                  fideta_2=event.visCand[0].eta
-                  fidphi_2=event.visCand[0].phi
-                  fidm_2=event.visCand[0].mass
-               else: # otherwise use the visible tauh built from the gen particle collection
-                  if is_taup_tauh:
-                     fidpt_2=vistaup.Pt()
-                     fideta_2=vistaup.Eta()
-                     fidphi_2=vistaup.Phi()
-                     fidm_2=vistaup.M()
-                  if is_taum_tauh:
-                     fidpt_2=vistaum.Pt()
-                     fideta_2=vistaum.Eta()
-                     fidphi_2=vistaum.Phi()
-                     fidm_2=vistaum.M()
-
-            if is_tautau:
-                if len(event.visCand)>0 and event.visCand[0].pt>0: #take the gen vis taus if they exist
-                    fidpt_1=event.visCand[0].pt
-                    fideta_1=event.visCand[0].eta
-                    fidphi_1=event.visCand[0].phi
-                    fidm_1=event.visCand[0].mass
-                if len(event.visCand)>1 and event.visCand[1].pt>0:
-                    fidpt_2=event.visCand[1].pt
-                    fideta_2=event.visCand[1].eta
-                    fidphi_2=event.visCand[1].phi
-                    fidm_2=event.visCand[1].mass
-                if len(event.visCand)<2: # otherwise take the vis taus built from the gen collection
-                    fidpt_1=vistaup.Pt()
-                    fideta_1=vistaup.Eta()
-                    fidphi_1=vistaup.Phi()
-                    fidm_1=vistaup.M()
-                    fidpt_2=vistaum.Pt()
-                    fideta_2=vistaum.Eta()
-                    fidphi_2=vistaum.Phi()
-                    fidm_2=vistaum.M()
-
             if is_emu:
                 if len(event.dressedCand)==2 and abs(event.dressedCand[0].pdgId)==11: #2 dressed leptons, the first one is an electron
                     fidpt_1=event.dressedCand[0].pt
@@ -648,7 +560,7 @@ class Analysis(Module):
                 mygenc=ROOT.TLorentzVector()
                 mygenc.SetPtEtaPhiM(genc.pt,genc.eta,genc.phi,genc.mass)
                 is_matched=False
-                for track in event.chargedfromtaus:
+                for track in event.leptons:
                     mytrack=ROOT.TLorentzVector()
                     mytrack.SetPtEtaPhiM(track.pt,track.eta,track.phi,track.mass)
                     if mygenc.DeltaR(mytrack)<0.02: is_matched=True
@@ -1091,9 +1003,6 @@ class Analysis(Module):
 
         if self.isSignal:
             self.out.fillBranch("is_emu" ,      is_emu)
-            self.out.fillBranch("is_etau" ,     is_etau)
-            self.out.fillBranch("is_mutau" ,    is_mutau)
-            self.out.fillBranch("is_tautau" ,   is_tautau)
 
             self.out.fillBranch("fidpt_1" ,        fidpt_1)
             self.out.fillBranch("fideta_1" ,       fideta_1)
@@ -1103,7 +1012,7 @@ class Analysis(Module):
             self.out.fillBranch("fideta_2" ,       fideta_2)
             self.out.fillBranch("fidphi_2" ,       fidphi_2)
             self.out.fillBranch("fidm_2" ,         fidm_2)
-            self.out.fillBranch("fidgen_mtt" ,     event.fidgen_mtt)
+            self.out.fillBranch("fidgen_mww" ,     event.fidgen_mww)
             self.out.fillBranch("fidntracks" ,     event.fidntracks)
 
         return True

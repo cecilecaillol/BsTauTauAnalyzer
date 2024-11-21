@@ -54,9 +54,9 @@ ANALYSISCUT={'': {'ee' : '-c "%s"'%ANALYSISCHANNELCUT['ee'], 'emu' : '-c "%s"'%A
 #    print y
 #    ANALYSISCUT[y]={}
 #    for c in ANALYSISTRIGGERDATA[y]:
-#        ANALYSISCUT[y][c]='--cut %s&&%s --json %s'%(ANALYSISTRIGGERDATA[y][c],ANALYSISCHANNELCUT[c],cmssw+'/src/MyNanoAnalyzer/TauG2/data/'+ANALYSISGRL[y]) # for data (json applied)
+#        ANALYSISCUT[y][c]='--cut %s&&%s --json %s'%(ANALYSISTRIGGERDATA[y][c],ANALYSISCHANNELCUT[c],cmssw+'/src/GGWWAnalyzer/Skimmer/data/'+ANALYSISGRL[y]) # for data (json applied)
     
-## Comment the following lines if running on data, uncomment if running on data
+## Comment the following lines if running on data, uncomment if running on MC
 for y in ANALYSISTRIGGERMC:
     ANALYSISCUT[y]={}
     for c in ANALYSISTRIGGERMC[y]:
