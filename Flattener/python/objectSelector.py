@@ -19,7 +19,6 @@ class ElectronSelector(ObjectSelector):
         if isEBEE: return False       
         if el.pt < self.minPt: return False
         if abs(el.eta) > 2.5: return False
-        if not el.mvaFall17V2Iso_WPL: return False
 	if abs(el.eta)<1.4442 and abs(el.dxy) > 0.05: return False
         if abs(el.eta)<1.4442 and abs(el.dz) > 0.10: return False
         if abs(el.eta)>1.5560 and abs(el.dxy) > 0.20: return False

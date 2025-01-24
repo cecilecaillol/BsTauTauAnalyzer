@@ -143,14 +143,14 @@ class Analysis(Module):
         event.selectedAK4Jets = []
         ak4jets = Collection(event, "Jet")
         for j in ak4jets:
-            if j.pt<30 :
-                continue
-            if abs(j.eta) > 4.4:
+            #if j.pt<30 :
+            #    continue
+            if abs(j.eta) > 2.5:
                 continue
 
             ##require tight (2^1) or tightLepVeto (2^2) [https://twiki.cern.ch/twiki/bin/view/CMS/JetID#nanoAOD_Flags]
-            if j.jetId<2:
-                continue
+            #if j.jetId<2:
+            #    continue
             ## https://twiki.cern.ch/twiki/bin/view/CMS/PileupJetID puId==0 means 000: fail all PU ID; puId==4 means 100: pass loose ID, fail medium, fail tight; puId==6 means 110: pass loose and medium ID, fail tight; puId==7 means 111: pass loose, medium, tight ID. 
             #if j.pt<50 and j.puId<1:
             #    continue
@@ -159,6 +159,7 @@ class Analysis(Module):
             deltaR_to_leptons=[ j.p4().DeltaR(lep.p4()) for lep in event.selectedMuons+event.selectedElectrons]
             hasLepOverlap=sum( [dR<0.4 for dR in deltaR_to_leptons] )
             if hasLepOverlap>0: continue
+
             event.selectedAK4Jets.append(j)
 
         event.selectedAK4Jets.sort(key=lambda x: x.pt, reverse=True)
