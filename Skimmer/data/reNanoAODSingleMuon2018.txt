@@ -1,4 +1,0 @@
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleMuon/RunIISummer20UL18_NanoAODv9/221117_084105/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleMuon/SingleMuon_Run2018B-RunIISummer20UL18_NanoAODv9/221118_110639/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleMuon/SingleMuon_Run2018C-RunIISummer20UL18_NanoAODv9/221118_110800/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleMuon/SingleMuon_Run2018D-RunIISummer20UL18_NanoAODv9/221118_110958/0000

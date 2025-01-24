@@ -1,4 +1,0 @@
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToTauTau_Ctb20_RunIISummer20UL17/RunIISummer20UL17_NanoAODv9_nofilter_januarysamples/240109_135217/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToMuMu_RunIISummer20UL17/RunIISummer20UL17_NanoAODv9_nofilter_januarysamples/240109_135255/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToElEl_RunIISummer20UL17/RunIISummer20UL17_NanoAODv9_nofilter_januarysamples/240109_135239/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/GGToWW_RunIISummer20UL17/RunIISummer20UL17_NanoAODv9_nofilter_januarysamples/240109_135306/0000

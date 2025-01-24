@@ -1,4 +1,0 @@
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL18_NanoAODv9/221117_084137/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18_NanoAODv9/221117_084158/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/WWTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18_NanoAODv9/221117_165726/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/RunIISummer20UL18_GGToMuMu/GGToMuMu/230323_171025/0000/

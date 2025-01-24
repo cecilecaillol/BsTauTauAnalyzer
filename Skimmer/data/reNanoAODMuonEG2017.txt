@@ -1,5 +1,0 @@
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/MuonEG/MuonEG_Run2017B-RunIISummer20UL17_NanoAODv9/230413_082427/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/MuonEG/MuonEG_Run2017C-RunIISummer20UL17_NanoAODv9/230413_082439/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/MuonEG/MuonEG_Run2017D-RunIISummer20UL17_NanoAODv9/230413_082451/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/MuonEG/MuonEG_Run2017E-RunIISummer20UL17_NanoAODv9/230413_082502/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/MuonEG/MuonEG_Run2017F-RunIISummer20UL17_NanoAODv9/230413_082512/0000

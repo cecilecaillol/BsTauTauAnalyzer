@@ -1,3 +1,0 @@
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/MuonEG/MuonEG_Run2016postF-RunIISummer20UL16_NanoAODv9/230421_133804/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/MuonEG/MuonEG_Run2016postG-RunIISummer20UL16_NanoAODv9/230421_133836/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/MuonEG/MuonEG_Run2016postH-RunIISummer20UL16_NanoAODv9/230421_133908/0000

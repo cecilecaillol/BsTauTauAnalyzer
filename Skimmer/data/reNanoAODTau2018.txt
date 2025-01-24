@@ -1,4 +1,0 @@
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2018A-RunIISummer20UL18_NanoAODv9/221126_123834/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2018B-RunIISummer20UL18_NanoAODv9/221126_123854/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2018C-RunIISummer20UL18_NanoAODv9/221126_123909/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/Tau/Tau_Run2018D-RunIISummer20UL18_NanoAODv9/221126_123930/0000

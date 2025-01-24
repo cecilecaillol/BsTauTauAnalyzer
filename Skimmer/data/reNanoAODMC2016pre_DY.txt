@@ -1,2 +1,0 @@
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL16APV_NanoAODv9/230420_082615/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/DYJetsToTauTau_TauToMuEle_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL16APV_NanoAODv9/230531_140516/0000

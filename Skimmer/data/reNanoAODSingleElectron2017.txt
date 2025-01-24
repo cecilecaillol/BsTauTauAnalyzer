@@ -1,5 +1,0 @@
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleElectron/SingleElectron_Run2017B-RunIISummer20UL17_NanoAODv9/230413_082325/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleElectron/SingleElectron_Run2017C-RunIISummer20UL17_NanoAODv9/230413_082338/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleElectron/SingleElectron_Run2017D-RunIISummer20UL17_NanoAODv9/230413_082351/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleElectron/SingleElectron_Run2017E-RunIISummer20UL17_NanoAODv9/230413_082402/0000
-/eos/cms/store/group/cmst3/group/taug2/reNanoAOD/SingleElectron/SingleElectron_Run2017F-RunIISummer20UL17_NanoAODv9/230413_082414/0000
