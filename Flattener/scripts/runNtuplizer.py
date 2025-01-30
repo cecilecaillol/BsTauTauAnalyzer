@@ -32,7 +32,7 @@ def buildCondorFile(opt,FarmDirectory):
             OpSysAndVer = "SLCern6"
         else:
             OpSysAndVer = "CentOS7"
-        condor.write('requirements = (OpSysAndVer =?= "{0}")\n\n'.format(OpSysAndVer))
+        #condor.write('requirements = (OpSysAndVer =?= "{0}")\n\n'.format(OpSysAndVer))
         #condor.write('MY.WantOS = "el7"\n')
         condor.write('MY.SingularityImage = "/cvmfs/unpacked.cern.ch/gitlab-registry.cern.ch/cms-cat/cmssw-lxplus/cmssw-el7-lxplus:latest/"\n')
         condor.write('should_transfer_files = YES\n')
@@ -42,49 +42,27 @@ def buildCondorFile(opt,FarmDirectory):
           print('INFO: Processing %s'%(dataset))
           sufix=''
           prefix=''
-          year='2018'
-
-          if 'Run20' in dataset:
-            print ('haha')
+          year=''
+          if 'NanoAODv9' in dataset or 'NanoAODAPVv9' in dataset:
             dataset_name = '_'.join(dataset.split('/')[1:3])
-            dataset_name = dataset.split('/')[10]+"_"+dataset.split('/')[12]
             year=dataset.split('UL')[1][:4]
             if 'UL1' in dataset:
-              year="20"+str(dataset.split('UL')[1][:2])
-              print ('year = ', year)
+                year="20"+str(dataset.split('UL')[1][:2])
             sufix='data'
             cmd='dasgoclient --query=\"file dataset={} status=*\"'.format(dataset)
-            #file_list=os.popen(cmd).read().split()
-            file_list=glob.glob(dataset+'/*.root')
-            print dataset_name
+            file_list=os.popen(cmd).read().split()
             prefix='root://cms-xrd-global.cern.ch/'
           elif 'eos' in dataset.split('/'):
-            sufix='mc' #FIXME
-            #sufix='sig'#FIXME
-            #dataset_name = dataset.split('/')[-1]
-	    dataset_name = dataset.split('/')[9]+"_"+dataset.split('/')[12]
-	    if "RunII" in dataset.split('/')[9] and "GGTo" not in dataset.split('/')[9]:
-              dataset_name = dataset.split('/')[10]+"_"+dataset.split('/')[12]
-	    print "name: ",dataset_name
-            if 'UL1' in dataset:
-              year="20"+str(dataset.split('UL')[1][:2])
-              print ('year = ', year)
-	    if "TauTau" not in dataset.split('/') and ("SingleMuon" in dataset.split('/') or "EGamma" in dataset.split('/') or "MuonEG" in dataset.split('/') or "Tau" in dataset.split('/') or "SingleElectron" in dataset.split('/')): 
-	       dataset_name = dataset.split('/')[9]+"_"+dataset.split('/')[10]+"_"+dataset.split('/')[12]
-            file_list=glob.glob(dataset+'/*.root')
-            print dataset_name
+            sufix='mc'
+            dataset_name = dataset.split('/')[-1]
+            file_list=glob(dataset+'/*root')
           else:
             print('ERROR: found invalid dataset = ',dataset,'stop the code')
             sys.exit(1)
-          if 'Tau' not in dataset and "SingleMuon" not in dataset and "EGamma" not in dataset and "MuonEG" not in dataset and "DoubleMuon" not in dataset and "SingleElectron" not in dataset:
-	          sufix='mc'#FIXME
-	  elif 'TauTau' in dataset:
-                  sufix='mc'#FIXME
-	  else:
-                  sufix='data'
-          channels=['emu'] #EDIT THIS (could be e, mu, emu, ee, mumu)
-          print ('sufix = ', sufix)
+          if 'Tau' not in dataset and "SingleMuon" not in dataset and "EGamma" not in dataset and "Photon" not in dataset and "SingleElectron" not in dataset and "JetHT" not in dataset and "MuonEG" not in dataset:
+             sufix='mc'
 
+          channels=['mu'] #FIXME
           yearmodified=year
           if "preVFP" in dataset and year=="2016" and (sufix=="mc" or sufix=="sig"):
              yearmodified="2016pre"
@@ -139,7 +117,6 @@ def buildCondorFile(opt,FarmDirectory):
         worker.write('echo "$filename ${input}  \\\\"\n')
         worker.write('echo "--bi $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_in.txt   \\\\"\n')
 	worker.write('echo "--bo $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_out.txt  \\\\"\n')
-        else: worker.write('echo "--bo $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_out.txt  \\\\"\n')
         worker.write('echo "${filter} -I BsTauTauAnalyzer.Flattener.Flattener_analysis ${channel} "\n')
         worker.write('python $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\n')
         worker.write('$filename ${input}  \\\n')
@@ -168,8 +145,7 @@ def main():
     usage = 'usage: %prog [options]'
     parser = optparse.OptionParser(usage)
     parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesMC2018.txt', type='string')
-    #parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/user/ccaillol/Flattener/ntuples_mumu_2018', type='string') #EDIT THIS
-    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/group/cmst3/group/ggww/AnalysisCecileGGWW/ntuples_emu_2018', type='string') #EDIT THIS
+    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/cmst3/group/bpark/ccaillol/ntuples_mu_2018', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
     (opt, args) = parser.parse_args()

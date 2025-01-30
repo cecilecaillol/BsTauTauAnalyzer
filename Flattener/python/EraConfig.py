@@ -49,14 +49,14 @@ cmssw=os.environ['CMSSW_BASE']
 ANALYSISCUT={'': {'e' : '-c "%s"'%ANALYSISCHANNELCUT['e'], 'mu' : '-c "%s"'%ANALYSISCHANNELCUT['mu'], 'ee' : '-c "%s"'%ANALYSISCHANNELCUT['ee'], 'emu' : '-c "%s"'%ANALYSISCHANNELCUT['emu'], 'mumu' : '-c "%s"'%ANALYSISCHANNELCUT['mumu']}}
 
 ## Uncomment the following lines if running on data, comment if running on MC
-#for y in ANALYSISTRIGGERDATA:
-#    print y
-#    ANALYSISCUT[y]={}
-#    for c in ANALYSISTRIGGERDATA[y]:
-#        ANALYSISCUT[y][c]='--cut %s&&%s --json %s'%(ANALYSISTRIGGERDATA[y][c],ANALYSISCHANNELCUT[c],cmssw+'/src/GGWWAnalyzer/Skimmer/data/'+ANALYSISGRL[y]) # for data (json applied)
+for y in ANALYSISTRIGGERDATA:
+    print y
+    ANALYSISCUT[y]={}
+    for c in ANALYSISTRIGGERDATA[y]:
+        ANALYSISCUT[y][c]='--cut %s&&%s --json %s'%(ANALYSISTRIGGERDATA[y][c],ANALYSISCHANNELCUT[c],cmssw+'/src/BsTauTauAnalyzer/Flattener/data/'+ANALYSISGRL[y]) # for data (json applied)
     
 ## Comment the following lines if running on data, uncomment if running on MC
-for y in ANALYSISTRIGGERMC:
-    ANALYSISCUT[y]={}
-    for c in ANALYSISTRIGGERMC[y]:
-        ANALYSISCUT[y][c]='--cut %s&&%s'%(ANALYSISTRIGGERMC[y][c],ANALYSISCHANNELCUT[c]) # for MC (no json applied)
+#for y in ANALYSISTRIGGERMC:
+#    ANALYSISCUT[y]={}
+#    for c in ANALYSISTRIGGERMC[y]:
+#        ANALYSISCUT[y][c]='--cut %s&&%s'%(ANALYSISTRIGGERMC[y][c],ANALYSISCHANNELCUT[c]) # for MC (no json applied)
