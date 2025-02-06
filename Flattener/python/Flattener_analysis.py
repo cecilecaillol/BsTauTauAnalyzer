@@ -49,6 +49,8 @@ class Analysis(Module):
            self.out.branch("mu1_dxy",            "F");
            self.out.branch("mu1_dz",           "F");
            self.out.branch("mu1_charge",           "F");
+           self.out.branch("mu1_tightId",           "I");
+           self.out.branch("mu1_iso",           "F");
            #self.out.branch("mu1_ID_sf",           "F");
            #self.out.branch("mu1_iso_sf",           "F");
            #self.out.branch("mu1_HLTIsoMu_sf",           "F");
@@ -60,6 +62,9 @@ class Analysis(Module):
            self.out.branch("mu2_dxy",            "F");
            self.out.branch("mu2_dz",           "F");
            self.out.branch("mu2_charge",           "F");
+           self.out.branch("mu2_tightId",           "I");
+           self.out.branch("mu2_iso",           "F");
+
            #self.out.branch("mu2_ID_sf",           "F");
            #self.out.branch("mu2_iso_sf",           "F");
            #self.out.branch("mu2_HLTIsoMu_sf",           "F");
@@ -234,10 +239,13 @@ class Analysis(Module):
             if event.selectedMuons[0].pt<19: return False
 
 
-	# select jets and filter events with at least 1 jet
+	# select jets and filter events with at least 1 jet with pT > 30 GeV
         self.selectAK4Jets(event)
         if len(event.selectedAK4Jets)<1: return False
-
+        has_jetpt30=False
+        for jet in event.selectedAK4Jets:
+           if jet.pt>30: has_jetpt30=True
+	if not has_jetpt30: return False
 
       	######################################################
       	###############  GEN-LEVEL ANALYSIS ##################
@@ -286,6 +294,8 @@ class Analysis(Module):
            self.out.fillBranch("mu1_dxy",            event.selectedMuons[0].dxy)
            self.out.fillBranch("mu1_dz",             event.selectedMuons[0].dz)
            self.out.fillBranch("mu1_charge",         event.selectedMuons[0].charge)
+           self.out.fillBranch("mu1_tightId",         event.selectedMuons[0].tightId)
+           self.out.fillBranch("mu1_iso",         event.selectedMuons[0].pfRelIso04_all)
            #self.out.fillBranch("mu1_ID_sf",          self.corr_muonID.evaluate(abs(selectedMuons[0].eta),selectedMuons[0].pt,"nominal"))
            #self.out.fillBranch("mu1_iso_sf",         self.corr_muonIso.evaluate(abs(selectedMuons[0].eta),selectedMuons[0].pt,"nominal"))
            #self.out.fillBranch("mu1_HLTIsoMu_sf",    self.corr_muonHLTIsoMu.evaluate(abs(selectedMuons[0].eta),selectedMuons[0].pt,"nominal"))
@@ -297,6 +307,8 @@ class Analysis(Module):
            self.out.fillBranch("mu2_dxy",            event.selectedMuons[1].dxy)
            self.out.fillBranch("mu2_dz",             event.selectedMuons[1].dz)
            self.out.fillBranch("mu2_charge",         event.selectedMuons[1].charge)
+           self.out.fillBranch("mu2_tightId",        event.selectedMuons[1].tightId)
+           self.out.fillBranch("mu2_iso",            event.selectedMuons[1].pfRelIso04_all)
            #self.out.fillBranch("mu2_ID_sf",          self.corr_muonID.evaluate(abs(selectedMuons[1].eta),selectedMuons[1].pt,"nominal"))
            #self.out.fillBranch("mu2_iso_sf",         self.corr_muonIso.evaluate(abs(selectedMuons[1].eta),selectedMuons[1].pt,"nominal"))
            #self.out.fillBranch("mu2_HLTIsoMu_sf",    self.corr_muonHLTIsoMu.evaluate(abs(selectedMuons[1].eta),selectedMuons[1].pt,"nominal"))

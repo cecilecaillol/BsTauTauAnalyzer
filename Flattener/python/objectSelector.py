@@ -11,7 +11,7 @@ class GenParticleSelector(ObjectSelector):
         return True
 
 class ElectronSelector(ObjectSelector):
-    def __init__(self, _minPt = 10):
+    def __init__(self, _minPt = 15):
         self.minPt = _minPt
 
     def evalElectron(self, el):
@@ -21,7 +21,7 @@ class ElectronSelector(ObjectSelector):
         if abs(el.eta) > 2.5: return False
 	if abs(el.eta)<1.4442 and abs(el.dxy) > 0.05: return False
         if abs(el.eta)<1.4442 and abs(el.dz) > 0.10: return False
-        if abs(el.eta)>1.5560 and abs(el.dxy) > 0.20: return False
+        if abs(el.eta)>1.5560 and abs(el.dxy) > 0.10: return False
         if abs(el.eta)>1.5560 and abs(el.dz) > 0.20: return False
 	if el.cutBased<4: return False #cut-based ID Fall17 V2 (0:fail, 1:veto, 2:loose, 3:medium, 4:tight), choose tight in SR
         return True
@@ -43,15 +43,15 @@ class TauSelector(ObjectSelector):
         return True
         
 class MuonSelector(ObjectSelector):
-    def __init__(self, minPt = 10):
+    def __init__(self, minPt = 15):
         self.minPt = minPt
 
     def evalMuon(self, mu):
         if mu.pt < self.minPt: return False
         if abs(mu.eta) > 2.4: return False
-        if mu.pfRelIso04_all>0.15: return False # cut at 0.15 in SR
+        if mu.pfRelIso04_all>0.25: return False # cut at 0.15 in SR
         if abs(mu.dxybs) > 0.05 or abs(mu.dz) > 1.0: return False
-        if not mu.tightId: return False
+        if not mu.looseId: return False
 	      
         return True
 
