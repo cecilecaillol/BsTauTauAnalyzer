@@ -11,7 +11,7 @@ class GenParticleSelector(ObjectSelector):
         return True
 
 class ElectronSelector(ObjectSelector):
-    def __init__(self, _minPt = 15):
+    def __init__(self, _minPt = 10):
         self.minPt = _minPt
 
     def evalElectron(self, el):
@@ -27,7 +27,7 @@ class ElectronSelector(ObjectSelector):
         return True
 
 class TauSelector(ObjectSelector):
-    def __init__(self, _minPt = 24):
+    def __init__(self, _minPt = 30):
         self.minPt = _minPt
 
     def evalTau(self, tau):
@@ -36,22 +36,22 @@ class TauSelector(ObjectSelector):
         if abs(tau.dz) > 0.2: return False
         if tau.decayMode not in [0,1,10,11]: return False
         if abs(tau.charge)!=1: return False
-        if tau.idDeepTau2017v2p1VSe<3: return False # VVLoose
+        if tau.idDeepTau2017v2p1VSe<2: return False # VVLoose
         if tau.idDeepTau2017v2p1VSmu<1: return False # VLoose
-        if tau.idDeepTau2017v2p1VSjet<1: return False # VVVLoose
+        if tau.idDeepTau2017v2p1VSjet<16: return False # VVVLoose
 
         return True
         
 class MuonSelector(ObjectSelector):
-    def __init__(self, minPt = 15):
+    def __init__(self, minPt = 10):
         self.minPt = minPt
 
     def evalMuon(self, mu):
         if mu.pt < self.minPt: return False
         if abs(mu.eta) > 2.4: return False
-        if mu.pfRelIso04_all>0.25: return False # cut at 0.15 in SR
+        if mu.pfRelIso04_all>0.15: return False # cut at 0.15 in SR
         if abs(mu.dxybs) > 0.05 or abs(mu.dz) > 1.0: return False
-        if not mu.looseId: return False
+        if not mu.tightId: return False
 	      
         return True
 

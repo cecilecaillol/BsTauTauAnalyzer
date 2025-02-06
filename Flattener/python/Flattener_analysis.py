@@ -97,6 +97,12 @@ class Analysis(Module):
         self.out.branch("j_deepflavB", "F",  lenVar = "nj");
         self.out.branch("j_hadronFlavour", "I",  lenVar = "nj");
 
+        self.out.branch("ntau",             "I");
+        self.out.branch("tau_pt",        "F",  lenVar = "ntau");
+        self.out.branch("tau_eta",       "F",  lenVar = "ntau");
+        self.out.branch("tau_phi",       "F",  lenVar = "ntau");
+        self.out.branch("tau_charge",        "I",  lenVar = "ntau");
+
         self.out.branch("nGenCand",              "I");
         self.out.branch("GenCand_id",            "I",  lenVar = "nGenCand");
         self.out.branch("GenCand_pt",            "F",  lenVar = "nGenCand");
@@ -141,6 +147,23 @@ class Analysis(Module):
             event.selectedMuons.append(mu)
 
         event.selectedMuons.sort(key=lambda x: x.pt, reverse=True)
+
+    def selectTaus(self, event, tauSel):
+
+        event.selectedTaus = []
+        tauss = Collection(event, "Tau")
+        for tau in taus:
+            if not tauSel.evalTau(tau): continue
+
+            #check overlap with selected leptons 
+            deltaR_to_leptons=[ tau.p4().DeltaR(lep.p4()) for lep in event.selectedMuons+event.selectedElectrons ]
+            hasLepOverlap=sum( [dR<0.4 for dR in deltaR_to_leptons] )
+            if hasLepOverlap>0: continue
+
+            setattr(tau, 'id', 15)
+            event.selectedTaus.append(tau)
+
+        event.selectedTaus.sort(key=lambda x: x.pt, reverse=True)
 
     def selectAK4Jets(self, event):
         ## Selected jets: pT>30, |eta|<4.7, pass tight ID
@@ -194,6 +217,7 @@ class Analysis(Module):
         #initiate object selector tools:
         elSel = ElectronSelector()
         muSel = MuonSelector()
+        tauSel = TauSelector()
 
         # apply object selection and make channels exclusive based on number of leptons
         self.selectMuons(event, muSel)
@@ -202,7 +226,7 @@ class Analysis(Module):
         if self.channel=="mu" or self.channel=="emu":
             if len(event.selectedMuons)!=1: return False
         if self.channel=="mumu":
-            if len(event.selectedMuons)<2: return False
+            if len(event.selectedMuons)!=2: return False
 
         self.selectElectrons(event, elSel)
         if self.channel=="mu" or self.channel=="mumu":
@@ -210,7 +234,9 @@ class Analysis(Module):
         if self.channel=="e" or self.channel=="emu":
             if len(event.selectedElectrons)!=1: return False
         if self.channel=="ee":
-            if len(event.selectedElectrons)<2: return False
+            if len(event.selectedElectrons)!=2: return False
+
+        self.selectTaus(event, tauSel)
 
 	## select trigger objects to do trigger matching
         #self.selectTriggerObjects(event)
@@ -242,10 +268,10 @@ class Analysis(Module):
 	# select jets and filter events with at least 1 jet with pT > 30 GeV
         self.selectAK4Jets(event)
         if len(event.selectedAK4Jets)<1: return False
-        has_jetpt30=False
-        for jet in event.selectedAK4Jets:
-           if jet.pt>30: has_jetpt30=True
-	if not has_jetpt30: return False
+        #has_jetpt30=False
+        #for jet in event.selectedAK4Jets:
+        #   if jet.pt>30: has_jetpt30=True
+	#if not has_jetpt30: return False
 
       	######################################################
       	###############  GEN-LEVEL ANALYSIS ##################
@@ -281,6 +307,11 @@ class Analysis(Module):
                 jet_hadronflavour.append(jet.hadronFlavour)
            else:
                 jet_hadronflavour.append(-1)
+
+        tau_pt     = [tau.pt for tau in event.selectedTaus]
+        tau_eta    = [tau.eta for tau in event.selectedTaus]
+        tau_phi    = [tau.phi for tau in event.selectedTaus]
+        tau_m      = [tau.charge for tau in event.selectedTaus]
 
 	################################################
         ######### store branches #######################
@@ -341,6 +372,13 @@ class Analysis(Module):
         self.out.fillBranch("j_jetid",          jet_jetid);
         self.out.fillBranch("j_deepflavB",      jet_deepflavB);
         self.out.fillBranch("j_hadronFlavour",  jet_hadronflavour);
+
+        # jet branches
+        self.out.fillBranch("ntau" ,             len(event.selectedTaus))
+        self.out.fillBranch("tau_pt",         tau_pt);
+        self.out.fillBranch("tau_eta",        tau_eta);
+        self.out.fillBranch("tau_phi",        tau_phi);
+        self.out.fillBranch("tau_charge",        tau_charge);
 
 
         # GEN branches 
