@@ -62,7 +62,7 @@ def buildCondorFile(opt,FarmDirectory):
           if 'Tau' not in dataset and "SingleMuon" not in dataset and "EGamma" not in dataset and "Photon" not in dataset and "SingleElectron" not in dataset and "JetHT" not in dataset and "MuonEG" not in dataset:
              sufix='mc'
 
-          channels=['mu'] #FIXME
+          channels=['mumu'] #FIXME
           yearmodified=year
           if "preVFP" in dataset and year=="2016" and (sufix=="mc" or sufix=="sig"):
              yearmodified="2016pre"
@@ -145,7 +145,7 @@ def main():
     usage = 'usage: %prog [options]'
     parser = optparse.OptionParser(usage)
     parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesMC2018.txt', type='string')
-    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/cmst3/group/bpark/ccaillol/ntuples_mu_2018', type='string') #EDIT THIS
+    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/cmst3/group/bpark/ccaillol/ntuples_mumu_2018', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
     (opt, args) = parser.parse_args()

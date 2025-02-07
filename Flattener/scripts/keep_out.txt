@@ -40,6 +40,8 @@ keep mu1*
 keep mu2*
 keep j_*
 keep nj
+keep tau_*
+keep ntau
 keep *GenCand*
 
 keep puWeight*

@@ -9,7 +9,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection
 
 ### Proton selector be replaced by preprocessing module
-from BsTauTauAnalyzer.Flattener.objectSelector import ElectronSelector, MuonSelector, GenParticleSelector
+from BsTauTauAnalyzer.Flattener.objectSelector import ElectronSelector, MuonSelector, TauSelector, GenParticleSelector
 
 class Analysis(Module):
     def __init__(self, channel, isMC, year):
@@ -151,7 +151,7 @@ class Analysis(Module):
     def selectTaus(self, event, tauSel):
 
         event.selectedTaus = []
-        tauss = Collection(event, "Tau")
+        taus = Collection(event, "Tau")
         for tau in taus:
             if not tauSel.evalTau(tau): continue
 
@@ -281,7 +281,7 @@ class Analysis(Module):
 
         if self.isMC:
             for genp in event.selectedGenParticles:
-                if (abs(genp.pdgId)==15 or abs(genp.pdgId)==13 or abs(genp.pdgId)==11 or abs(genp.pdgId)==6 or abs(genp.pdgId)==24 or abs(genp.pdgId)==23):
+                if (abs(genp.pdgId)==531 or abs(genp.pdgId)==15 or abs(genp.pdgId)==13 or abs(genp.pdgId)==11 or abs(genp.pdgId)==6 or abs(genp.pdgId)==24 or abs(genp.pdgId)==23):
                     event.genCand.append(genp)
 
 
@@ -311,7 +311,7 @@ class Analysis(Module):
         tau_pt     = [tau.pt for tau in event.selectedTaus]
         tau_eta    = [tau.eta for tau in event.selectedTaus]
         tau_phi    = [tau.phi for tau in event.selectedTaus]
-        tau_m      = [tau.charge for tau in event.selectedTaus]
+        tau_charge = [tau.charge for tau in event.selectedTaus]
 
 	################################################
         ######### store branches #######################
@@ -345,40 +345,40 @@ class Analysis(Module):
            #self.out.fillBranch("mu2_HLTIsoMu_sf",    self.corr_muonHLTIsoMu.evaluate(abs(selectedMuons[1].eta),selectedMuons[1].pt,"nominal"))
 
         if self.channel=="e" or self.channel=="ee" or self.channel=="emu":
-           self.out.fillBranch("e1_pt",             event.selectedElectrons[0].pt)
-           self.out.fillBranch("e1_eta",             event.selectedElectrons[0].eta)
-           self.out.fillBranch("e1_phi",             event.selectedElectrons[0].phi)
-           self.out.fillBranch("e1_dxy",             event.selectedElectrons[0].dxy)
-           self.out.fillBranch("e1_dz",             event.selectedElectrons[0].dz)
-           self.out.fillBranch("e1_charge",             event.selectedElectrons[0].charge)
-           self.out.fillBranch("e1_cutbased",             event.selectedElectrons[0].cutBased)
+           self.out.fillBranch("e1_pt",        event.selectedElectrons[0].pt)
+           self.out.fillBranch("e1_eta",       event.selectedElectrons[0].eta)
+           self.out.fillBranch("e1_phi",       event.selectedElectrons[0].phi)
+           self.out.fillBranch("e1_dxy",       event.selectedElectrons[0].dxy)
+           self.out.fillBranch("e1_dz",        event.selectedElectrons[0].dz)
+           self.out.fillBranch("e1_charge",    event.selectedElectrons[0].charge)
+           self.out.fillBranch("e1_cutbased",  event.selectedElectrons[0].cutBased)
 
         if self.channel=="ee":
-           self.out.fillBranch("e2_pt",             event.selectedElectrons[1].pt)
-           self.out.fillBranch("e2_eta",             event.selectedElectrons[1].eta)
-           self.out.fillBranch("e2_phi",             event.selectedElectrons[1].phi)
-           self.out.fillBranch("e2_dxy",             event.selectedElectrons[0].dxy)
-           self.out.fillBranch("e2_dz",             event.selectedElectrons[1].dz)
-           self.out.fillBranch("e2_charge",             event.selectedElectrons[1].charge)
-           self.out.fillBranch("e2_cutbased",             event.selectedElectrons[1].cutBased)
+           self.out.fillBranch("e2_pt",         event.selectedElectrons[1].pt)
+           self.out.fillBranch("e2_eta",        event.selectedElectrons[1].eta)
+           self.out.fillBranch("e2_phi",        event.selectedElectrons[1].phi)
+           self.out.fillBranch("e2_dxy",        event.selectedElectrons[0].dxy)
+           self.out.fillBranch("e2_dz",         event.selectedElectrons[1].dz)
+           self.out.fillBranch("e2_charge",     event.selectedElectrons[1].charge)
+           self.out.fillBranch("e2_cutbased",   event.selectedElectrons[1].cutBased)
 
 	# jet branches
         self.out.fillBranch("nj" ,             len(event.selectedAK4Jets))
-        self.out.fillBranch("j_pt",         jet_pt);
-        self.out.fillBranch("j_eta",        jet_eta);
-        self.out.fillBranch("j_phi",        jet_phi);
-        self.out.fillBranch("j_m",          jet_m);
-        self.out.fillBranch("j_puid",           jet_puid);
-        self.out.fillBranch("j_jetid",          jet_jetid);
-        self.out.fillBranch("j_deepflavB",      jet_deepflavB);
-        self.out.fillBranch("j_hadronFlavour",  jet_hadronflavour);
+        self.out.fillBranch("j_pt",            jet_pt);
+        self.out.fillBranch("j_eta",           jet_eta);
+        self.out.fillBranch("j_phi",           jet_phi);
+        self.out.fillBranch("j_m",             jet_m);
+        self.out.fillBranch("j_puid",          jet_puid);
+        self.out.fillBranch("j_jetid",         jet_jetid);
+        self.out.fillBranch("j_deepflavB",     jet_deepflavB);
+        self.out.fillBranch("j_hadronFlavour", jet_hadronflavour);
 
         # jet branches
-        self.out.fillBranch("ntau" ,             len(event.selectedTaus))
+        self.out.fillBranch("ntau" ,          len(event.selectedTaus))
         self.out.fillBranch("tau_pt",         tau_pt);
         self.out.fillBranch("tau_eta",        tau_eta);
         self.out.fillBranch("tau_phi",        tau_phi);
-        self.out.fillBranch("tau_charge",        tau_charge);
+        self.out.fillBranch("tau_charge",     tau_charge);
 
 
         # GEN branches 
