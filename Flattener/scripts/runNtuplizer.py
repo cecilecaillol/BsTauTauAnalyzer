@@ -59,7 +59,7 @@ def buildCondorFile(opt,FarmDirectory):
           else:
             print('ERROR: found invalid dataset = ',dataset,'stop the code')
             sys.exit(1)
-          if 'Tau' not in dataset and "SingleMuon" not in dataset and "EGamma" not in dataset and "Photon" not in dataset and "SingleElectron" not in dataset and "JetHT" not in dataset and "MuonEG" not in dataset:
+          if 'Tau' not in dataset and "SingleMuon" not in dataset and "DoubleMuon" not in dataset and "EGamma" not in dataset and "Photon" not in dataset and "SingleElectron" not in dataset and "JetHT" not in dataset and "MuonEG" not in dataset:
              sufix='mc'
 
           channels=['mumu'] #FIXME

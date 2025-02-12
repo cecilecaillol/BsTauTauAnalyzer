@@ -28,6 +28,11 @@ keep HLT_Ele35_WPTight_Gsf
 keep HLT_Ele32_WPTight_Gsf
 keep HLT_Ele32_WPTight_Gsf_L1DoubleEG
 
+keep HLT_DoubleEle25_CaloIdL_MW
+keep HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL
+
+keep HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8
+
 keep *LHEScale*
 keep *LHEPdf*
 keep nPSWeight

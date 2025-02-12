@@ -251,14 +251,14 @@ class Analysis(Module):
 
         if self.channel=="mumu":
             if event.selectedMuons[0].pt<19: return False
-            if event.selectedMuons[1].pt<19: return False
+            if event.selectedMuons[1].pt<14: return False
 
         if self.channel=="e":
             if event.selectedElectrons[0].pt<29: return False
 
         if self.channel=="ee":
             if event.selectedElectrons[0].pt<19: return False
-            if event.selectedElectrons[1].pt<19: return False
+            if event.selectedElectrons[1].pt<14: return False
 
         if self.channel=="emu":
             if event.selectedElectrons[0].pt<19: return False

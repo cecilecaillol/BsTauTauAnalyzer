@@ -19,14 +19,14 @@ def getEraConfiguration(era,isData):
 ANALYSISTRIGGERMC = {
     '2016': {'e':'(HLT_Ele27_WPTight_Gsf)','mu':'(HLT_IsoTkMu24||HLT_IsoMu24)','ee':'(HLT_Ele27_WPTight_Gsf)','emu':'(1)','mumu':'(HLT_IsoTkMu24||HLT_IsoMu24)'},
     '2017': {'e':'(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf)','mu':'(HLT_IsoMu27)','ee':'(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf)','emu':'(1)','mumu':'(HLT_IsoMu27)'},
-    '2018': {'e':'(HLT_Ele32_WPTight_Gsf)','mu':'(HLT_IsoMu24)','ee':'(HLT_Ele32_WPTight_Gsf)','emu':'(1)','mumu':'(HLT_IsoMu24)'}
+    '2018': {'e':'(HLT_Ele32_WPTight_Gsf)','mu':'(HLT_IsoMu24)','ee':'(HLT_Ele32_WPTight_Gsf||HLT_DoubleEle25_CaloIdL_MW||HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL)','emu':'(1)','mumu':'(HLT_IsoMu24||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8)'}
 }
 
 # Some tau triggers are enabled only during part of the data taking in 2018, apply the triggers at analysis level rather than here
 ANALYSISTRIGGERDATA = {
     '2016': {'e':'(HLT_Ele27_WPTight_Gsf)','mu':'(HLT_IsoMu24||HLT_IsoTkMu24)','ee':'(HLT_Ele27_WPTight_Gsf)','emu':'(1)','mumu':'(HLT_IsoMu24||HLT_IsoTkMu24)'},
     '2017': {'e':'(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf)','mu':'(HLT_IsoMu27)','ee':'(HLT_Ele27_WPTight_Gsf||HLT_Ele32_WPTight_Gsf||HLT_Ele32_WPTight_Gsf_L1DoubleEG||HLT_Ele35_WPTight_Gsf)','emu':'(1)','mumu':'(HLT_IsoMu27)'},
-    '2018': {'e':'(HLT_Ele32_WPTight_Gsf)','mu':'(HLT_IsoMu24)','ee':'(HLT_Ele32_WPTight_Gsf)','emu':'(1)','mumu':'(HLT_IsoMu24)'}
+    '2018': {'e':'(HLT_Ele32_WPTight_Gsf)','mu':'(HLT_IsoMu24)','ee':'(HLT_Ele32_WPTight_Gsf||HLT_DoubleEle25_CaloIdL_MW||HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL)','emu':'(1)','mumu':'(HLT_IsoMu24||HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8)'}
 }
 
 
