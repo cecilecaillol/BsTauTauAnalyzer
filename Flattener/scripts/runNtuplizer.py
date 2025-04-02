@@ -53,16 +53,18 @@ def buildCondorFile(opt,FarmDirectory):
             file_list=os.popen(cmd).read().split()
             prefix='root://cms-xrd-global.cern.ch/'
           elif 'eos' in dataset.split('/'):
-            sufix='mc'
-            dataset_name = dataset.split('/')[-1]
-            file_list=glob(dataset+'/*root')
+            sufix='mc' 
+            dataset_name = dataset.split('/')[12]+"_"+dataset.split('/')[-1]
+	    if "SingleMu" in dataset_name or "doublemu" in dataset_name or "muonEG" in dataset_name or "egamma" in dataset_name:
+	       sufix='data'
+	       year="2018"
+            file_list=glob.glob(dataset+'/*.root')
+            print dataset_name,sufix,year
           else:
             print('ERROR: found invalid dataset = ',dataset,'stop the code')
             sys.exit(1)
-          if 'Tau' not in dataset and "SingleMuon" not in dataset and "DoubleMuon" not in dataset and "EGamma" not in dataset and "Photon" not in dataset and "SingleElectron" not in dataset and "JetHT" not in dataset and "MuonEG" not in dataset:
-             sufix='mc'
 
-          channels=['mumu'] #FIXME
+          channels=['emu'] #FIXME
           yearmodified=year
           if "preVFP" in dataset and year=="2016" and (sufix=="mc" or sufix=="sig"):
              yearmodified="2016pre"
@@ -145,7 +147,7 @@ def main():
     usage = 'usage: %prog [options]'
     parser = optparse.OptionParser(usage)
     parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesMC2018.txt', type='string')
-    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/cmst3/group/bpark/ccaillol/ntuples_mumu_2018', type='string') #EDIT THIS
+    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/cmst3/group/bpark/ccaillol/ntuples_emu_2018_ParT', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
     (opt, args) = parser.parse_args()

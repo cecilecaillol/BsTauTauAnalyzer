@@ -94,6 +94,13 @@ class Analysis(Module):
         self.out.branch("j_m",         "F",  lenVar = "nj");
         self.out.branch("j_puid",         "I",  lenVar = "nj");
         self.out.branch("j_jetid",         "I",  lenVar = "nj");
+        self.out.branch("j_ParTRawB",         "F",  lenVar = "nj");
+        self.out.branch("j_ParTRawC",         "F",  lenVar = "nj");
+        self.out.branch("j_ParTRawOther",         "F",  lenVar = "nj");
+        self.out.branch("j_ParTRawSingletau",         "F",  lenVar = "nj");
+        self.out.branch("j_ParTRawTauhtaue",         "F",  lenVar = "nj");
+        self.out.branch("j_ParTRawTauhtauh",         "F",  lenVar = "nj");
+        self.out.branch("j_ParTRawTauhtaumu",         "F",  lenVar = "nj");
         self.out.branch("j_deepflavB", "F",  lenVar = "nj");
         self.out.branch("j_hadronFlavour", "I",  lenVar = "nj");
 
@@ -301,6 +308,13 @@ class Analysis(Module):
         jet_deepflavB = [jet.btagDeepFlavB for jet in event.selectedAK4Jets]
         jet_puid      = [jet.puId for jet in event.selectedAK4Jets]
         jet_jetid      = [jet.jetId for jet in event.selectedAK4Jets]
+	jet_ParTRawB  = [jet.myParTRawB for jet in event.selectedAK4Jets]
+        jet_ParTRawC  = [jet.myParTRawC for jet in event.selectedAK4Jets]
+        jet_ParTRawOther  = [jet.myParTRawOther for jet in event.selectedAK4Jets]
+        jet_ParTRawSingletau  = [jet.myParTRawSingletau for jet in event.selectedAK4Jets]
+        jet_ParTRawTauhtaue  = [jet.myParTRawTauhtaue for jet in event.selectedAK4Jets]
+        jet_ParTRawTauhtauh  = [jet.myParTRawTauhtauh for jet in event.selectedAK4Jets]
+        jet_ParTRawTauhtaumu  = [jet.myParTRawTauhtaumu for jet in event.selectedAK4Jets]
         jet_hadronflavour = []
         for jet in event.selectedAK4Jets:
            if self.isMC:
@@ -372,6 +386,13 @@ class Analysis(Module):
         self.out.fillBranch("j_jetid",         jet_jetid);
         self.out.fillBranch("j_deepflavB",     jet_deepflavB);
         self.out.fillBranch("j_hadronFlavour", jet_hadronflavour);
+        self.out.fillBranch("j_ParTRawB",         jet_ParTRawB);
+        self.out.fillBranch("j_ParTRawC",         jet_ParTRawC);
+        self.out.fillBranch("j_ParTRawOther",         jet_ParTRawOther);
+        self.out.fillBranch("j_ParTRawSingletau",         jet_ParTRawSingletau);
+        self.out.fillBranch("j_ParTRawTauhtaue",         jet_ParTRawTauhtaue);
+        self.out.fillBranch("j_ParTRawTauhtauh",         jet_ParTRawTauhtauh);
+        self.out.fillBranch("j_ParTRawTauhtaumu",         jet_ParTRawTauhtaumu);
 
         # jet branches
         self.out.fillBranch("ntau" ,          len(event.selectedTaus))
