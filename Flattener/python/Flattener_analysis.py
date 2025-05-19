@@ -115,6 +115,7 @@ class Analysis(Module):
         self.out.branch("GenCand_pt",            "F",  lenVar = "nGenCand");
         self.out.branch("GenCand_eta",           "F",  lenVar = "nGenCand");
         self.out.branch("GenCand_phi",           "F",  lenVar = "nGenCand");
+        self.out.branch("GenCand_isBsTauTau",            "I",  lenVar = "nGenCand");
 
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
@@ -285,11 +286,15 @@ class Analysis(Module):
       	######################################################
 
         event.genCand=[]
+        event.genIdx=[]
 
+        idx=0
         if self.isMC:
             for genp in event.selectedGenParticles:
                 if (abs(genp.pdgId)==531 or abs(genp.pdgId)==15 or abs(genp.pdgId)==13 or abs(genp.pdgId)==11 or abs(genp.pdgId)==6 or abs(genp.pdgId)==24 or abs(genp.pdgId)==23):
                     event.genCand.append(genp)
+                    event.genIdx.append(idx)
+                idx=idx+1
 
 
         ######################################################
@@ -300,6 +305,14 @@ class Analysis(Module):
         gen_pt     = [genp.pt for genp in event.genCand]
         gen_eta    = [genp.eta for genp in event.genCand]
         gen_phi    = [genp.phi for genp in event.genCand]
+        gen_isbstt = []
+        for k in range(0,len(gen_pt)):
+           is_bstt=0
+           if abs(gen_id[k])==531:
+              for genp in event.selectedGenParticles:
+                 if (abs(genp.pdgId)==15 and (abs(event.selectedGenParticles[genp.genPartIdxMother].pdgId)==531 or abs(event.selectedGenParticles[event.selectedGenParticles[genp.genPartIdxMother].genPartIdxMother].pdgId)==531) and (genp.genPartIdxMother==event.genIdx[k] or event.selectedGenParticles[genp.genPartIdxMother].genPartIdxMother==event.genIdx[k])):
+		    is_bstt=1
+           gen_isbstt.append(is_bstt)
 
         jet_pt     = [jet.pt for jet in event.selectedAK4Jets]
         jet_eta    = [jet.eta for jet in event.selectedAK4Jets]
@@ -409,6 +422,7 @@ class Analysis(Module):
             self.out.fillBranch("GenCand_pt" ,        gen_pt)
             self.out.fillBranch("GenCand_eta" ,       gen_eta)
             self.out.fillBranch("GenCand_phi" ,       gen_phi)
+            self.out.fillBranch("GenCand_isBsTauTau" ,        gen_isbstt)
 
         return True
 
