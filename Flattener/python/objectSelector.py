@@ -19,11 +19,11 @@ class ElectronSelector(ObjectSelector):
         if isEBEE: return False       
         if el.pt < self.minPt: return False
         if abs(el.eta) > 2.5: return False
-	if abs(el.eta)<1.4442 and abs(el.dxy) > 0.05: return False
+        if abs(el.eta)<1.4442 and abs(el.dxy) > 0.05: return False
         if abs(el.eta)<1.4442 and abs(el.dz) > 0.10: return False
         if abs(el.eta)>1.5560 and abs(el.dxy) > 0.10: return False
         if abs(el.eta)>1.5560 and abs(el.dz) > 0.20: return False
-	if el.cutBased<4: return False #cut-based ID Fall17 V2 (0:fail, 1:veto, 2:loose, 3:medium, 4:tight), choose tight in SR
+        if el.cutBased<4: return False #cut-based ID (0:fail, 1:veto, 2:loose, 3:medium, 4:tight), choose tight in SR
         return True
 
 class TauSelector(ObjectSelector):
@@ -36,9 +36,9 @@ class TauSelector(ObjectSelector):
         if abs(tau.dz) > 0.2: return False
         if tau.decayMode not in [0,1,10,11]: return False
         if abs(tau.charge)!=1: return False
-        if tau.idDeepTau2017v2p1VSe<2: return False # VVLoose
-        if tau.idDeepTau2017v2p1VSmu<1: return False # VLoose
-        if tau.idDeepTau2017v2p1VSjet<16: return False # VVVLoose
+        if tau.idDeepTau2017v2p5VSe<2: return False # VVLoose
+        if tau.idDeepTau2017v2p5VSmu<1: return False # VLoose
+        if tau.idDeepTau2017v2p5VSjet<6: return False # Tight
 
         return True
         

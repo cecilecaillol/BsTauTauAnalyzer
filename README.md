@@ -5,13 +5,12 @@
 ```
 mkdir MyWorkingDirectory
 cd MyWorkingDirectory
-cmssw-el7
-cmsrel CMSSW_10_6_27
-cd CMSSW_10_6_27/src/
+cmsrel CMSSW_15_0_10
+cd CMSSW_15_0_10/src/
 cmsenv
 git cms-init
-git clone https://github.com/cms-nanoAOD/nanoAOD-tools.git PhysicsTools/NanoAODTools
-git clone https://github.com/cecilecaillol/BsTauTauAnalyzer.git
+git cms-addpkg PhysicsTools/NanoAODTools
+git clone https://github.com/cecilecaillol/BsTauTauAnalyzer.git -b Run3
 scram b -j 8
 ```
 
