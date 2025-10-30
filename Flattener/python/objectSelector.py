@@ -36,9 +36,9 @@ class TauSelector(ObjectSelector):
         if abs(tau.dz) > 0.2: return False
         if tau.decayMode not in [0,1,10,11]: return False
         if abs(tau.charge)!=1: return False
-        if tau.idDeepTau2017v2p5VSe<2: return False # VVLoose
-        if tau.idDeepTau2017v2p5VSmu<1: return False # VLoose
-        if tau.idDeepTau2017v2p5VSjet<6: return False # Tight
+        if tau.idDeepTau2018v2p5VSe<2: return False # VVLoose
+        if tau.idDeepTau2018v2p5VSmu<1: return False # VLoose
+        if tau.idDeepTau2018v2p5VSjet<6: return False # Tight
 
         return True
         

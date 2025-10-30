@@ -28,13 +28,6 @@ def buildCondorFile(opt,FarmDirectory):
         condor.write('+JobFlavour = "tomorrow"\n')
         condor.write('+AccountingGroup = "group_u_CMST3.all"\n')
         OpSysAndVer = str(os.system('cat /etc/redhat-release'))
-        if 'SLC' in OpSysAndVer:
-            OpSysAndVer = "SLCern6"
-        else:
-            OpSysAndVer = "CentOS7"
-        #condor.write('requirements = (OpSysAndVer =?= "{0}")\n\n'.format(OpSysAndVer))
-        #condor.write('MY.WantOS = "el7"\n')
-        condor.write('MY.SingularityImage = "/cvmfs/unpacked.cern.ch/gitlab-registry.cern.ch/cms-cat/cmssw-lxplus/cmssw-el7-lxplus:latest/"\n')
         condor.write('should_transfer_files = YES\n')
         condor.write('transfer_input_files = %s\n\n'%os.environ['X509_USER_PROXY'])
         for dataset in datasets:
@@ -43,34 +36,34 @@ def buildCondorFile(opt,FarmDirectory):
           sufix=''
           prefix=''
           year=''
-          if 'NanoAODv9' in dataset or 'NanoAODAPVv9' in dataset:
-            dataset_name = '_'.join(dataset.split('/')[1:3])
-            year=dataset.split('UL')[1][:4]
-            if 'UL1' in dataset:
-                year="20"+str(dataset.split('UL')[1][:2])
-            sufix='data'
-            cmd='dasgoclient --query=\"file dataset={} status=*\"'.format(dataset)
-            file_list=os.popen(cmd).read().split()
-            prefix='root://cms-xrd-global.cern.ch/'
-          elif 'eos' in dataset.split('/'):
-            sufix='mc' 
-            dataset_name = dataset.split('/')[12]+"_"+dataset.split('/')[-1]
-	    if "SingleMu" in dataset_name or "doublemu" in dataset_name or "muonEG" in dataset_name or "egamma" in dataset_name:
-	       sufix='data'
-	       year="2018"
-            file_list=glob.glob(dataset+'/*.root')
-            print dataset_name,sufix,year
-          else:
-            print('ERROR: found invalid dataset = ',dataset,'stop the code')
-            sys.exit(1)
+          if 'NanoAODv15' in dataset: #MC in DAS
+             dataset_name = '_'.join(dataset.split('/')[1:3])
+             year=dataset.split('RunIII')[1][:4]
+             if 'RunIII' in dataset:
+                year=str(dataset.split('RunIII')[1][:4])
+             sufix='mc'
+             cmd='dasgoclient --query=\"file dataset={} status=*\"'.format(dataset)
+             file_list=os.popen(cmd).read().split()
+             prefix='root://cms-xrd-global.cern.ch/'
+          if 'NANOv15' in dataset: #data in DAS
+             dataset_name = '_'.join(dataset.split('/')[1:3])
+             sufix='data'
+             if 'Run' in dataset:
+                year=str(dataset.split('Run')[1][:4])
+             cmd='dasgoclient --query=\"file dataset={} status=*\"'.format(dataset)
+             file_list=os.popen(cmd).read().split()
+             prefix='root://cms-xrd-global.cern.ch/'
+          if 'eos' in dataset.split('/'): #private NanoAOD in eos
+             sufix='mc'
+             dataset_name = dataset.split('/')[12]+"_"+dataset.split('/')[-1]
+             file_list=glob.glob(dataset+'/*.root')
+          print(dataset_name,sufix,year)
+        #else:
+        #    print('ERROR: found invalid dataset = ',dataset,'stop the code')
+        #    sys.exit(1)
 
           channels=['emu'] #FIXME
           yearmodified=year
-          if "preVFP" in dataset and year=="2016" and (sufix=="mc" or sufix=="sig"):
-             yearmodified="2016pre"
-          if "preVFP" not in dataset and year=="2016" and (sufix=="mc" or sufix=="sig"):
-             yearmodified="2016post"
-
             
           #prepare output
           output=opt.output+'/'+dataset_name
@@ -79,8 +72,8 @@ def buildCondorFile(opt,FarmDirectory):
             output_full=output+"_"+channel
             # apply filter to data: trigger and GRL
             filter=ANALYSISCUT[year][channel]
-	    print year
-            print ("filter is ", filter)
+            print(year)
+            print("filter is ", filter)
             os.system('mkdir -p {}'.format(output_full))
             for file in file_list:
 
@@ -97,7 +90,7 @@ def buildCondorFile(opt,FarmDirectory):
         worker.write('startMsg="Job started on "`date`\n')
         worker.write('echo $startMsg\n')
         #worker.write('export HOME=%s\n'%os.environ['HOME']) #otherwise, 'dasgoclient' won't work on condor
-	worker.write('source /cvmfs/cms.cern.ch/cmsset_default.sh\n')
+        worker.write('source /cvmfs/cms.cern.ch/cmsset_default.sh\n')
         worker.write('export X509_USER_PROXY=%s\n'%os.environ['X509_USER_PROXY'])
         worker.write('########### INPUT SETTINGS ###########\n')
         worker.write('input=${1}\n')
@@ -118,12 +111,12 @@ def buildCondorFile(opt,FarmDirectory):
         worker.write('echo "python $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\\"\n')
         worker.write('echo "$filename ${input}  \\\\"\n')
         worker.write('echo "--bi $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_in.txt   \\\\"\n')
-	worker.write('echo "--bo $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_out.txt  \\\\"\n')
+        worker.write('echo "--bo $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_out.txt  \\\\"\n')
         worker.write('echo "${filter} -I BsTauTauAnalyzer.Flattener.Flattener_analysis ${channel} "\n')
         worker.write('python $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\n')
         worker.write('$filename ${input}  \\\n')
         worker.write('--bi $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_in.txt   \\\n')
-	worker.write('--bo $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_out.txt  \\\n')
+        worker.write('--bo $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_out.txt  \\\n')
         worker.write('${filter} -I BsTauTauAnalyzer.Flattener.Flattener_analysis ${channel} \n')
         worker.write('echo cp ${filename}/${filename}_Skim.root ${output}/${filename}_Skim.root\n')
         worker.write('cp ${filename}/${filename}_Skim.root ${output}/\n')
@@ -146,8 +139,8 @@ def main():
     #configuration
     usage = 'usage: %prog [options]'
     parser = optparse.OptionParser(usage)
-    parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesMC2018.txt', type='string')
-    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/cmst3/group/bpark/ccaillol/ntuples_emu_2018_ParT', type='string') #EDIT THIS
+    parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesMC2024.txt', type='string')
+    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/cmst3/group/bpark/ccaillol/ntuples_emu_2024', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
     (opt, args) = parser.parse_args()
