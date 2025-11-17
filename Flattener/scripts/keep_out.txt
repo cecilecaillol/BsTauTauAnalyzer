@@ -31,6 +31,7 @@ keep nPSWeight
 keep PSWeight
 
 #keep custom variables
+keep pass_jvm
 keep e1*
 keep e2*
 keep mu1*

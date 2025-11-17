@@ -41,6 +41,16 @@ class Analysis(Module):
         self.cset_btagging = _core.CorrectionSet.from_file(btaggingSF2024_file)
         self.corr_btagging = self.cset_btagging["UParTAK4_kinfit"]
 
+        ##https://cms-analysis-corrections.docs.cern.ch/corrections_era/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/JME/latest
+        jetid2024_file = os.path.join(cmssw+"/src/BsTauTauAnalyzer/Flattener/data/jetid_2024.json")
+        self.cset_jetid = _core.CorrectionSet.from_file(jetid2024_file)
+        self.corr_jetid = self.cset_jetid["AK4PUPPI_Tight"]
+
+        ##https://cms-analysis-corrections.docs.cern.ch/corrections/JME/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest
+        jvm2024_file = os.path.join(cmssw+"/src/BsTauTauAnalyzer/Flattener/data/jetvetomaps_2024.json")
+        self.cset_jvm = _core.CorrectionSet.from_file(jvm2024_file)
+        self.corr_jvm = self.cset_jvm["Summer24Prompt24_RunBCDEFGHI_V1"]
+
         pass
 
     def beginJob(self):
@@ -66,6 +76,9 @@ class Analysis(Module):
            self.out.branch("mu1_iso",           "F");
            self.out.branch("mu1_ID_sf",           "F");
            self.out.branch("mu1_iso_sf",           "F");
+           self.out.branch("mu1_singletrg",           "I");
+           self.out.branch("mu1_crosstrg",           "I");
+           self.out.branch("mu1_doubletrg",           "I");
            #self.out.branch("mu1_HLTIsoMu_sf",           "F");
 
         if self.channel=="mumu":
@@ -79,6 +92,9 @@ class Analysis(Module):
            self.out.branch("mu2_iso",           "F");
            self.out.branch("mu2_ID_sf",           "F");
            self.out.branch("mu2_iso_sf",           "F");
+           self.out.branch("mu2_singletrg",           "I");
+           self.out.branch("mu2_crosstrg",           "I");
+           self.out.branch("mu2_doubletrg",           "I");
            #self.out.branch("mu2_HLTIsoMu_sf",           "F");
 
         if self.channel=="e" or self.channel=="ee" or self.channel=="emu":
@@ -91,6 +107,9 @@ class Analysis(Module):
            self.out.branch("e1_cutbased",           "I");
            self.out.branch("e1_ID_sf",           "F");
            self.out.branch("e1_reco_sf",           "F");
+           self.out.branch("e1_singletrg",           "I");
+           self.out.branch("e1_crosstrg",           "I");
+           self.out.branch("e1_doubletrg",           "I");
 
         if self.channel=="ee":
            self.out.branch("e2_pt",            "F");
@@ -102,6 +121,11 @@ class Analysis(Module):
            self.out.branch("e2_cutbased",           "I");
            self.out.branch("e2_ID_sf",           "F");
            self.out.branch("e2_reco_sf",           "F");
+           self.out.branch("e2_singletrg",           "I");
+           self.out.branch("e2_crosstrg",           "I");
+           self.out.branch("e2_doubletrg",           "I");
+
+        self.out.branch("pass_jvm",             "I");
 
         self.out.branch("nj",             "I");
         self.out.branch("j_pt",        "F",  lenVar = "nj");
@@ -109,7 +133,6 @@ class Analysis(Module):
         self.out.branch("j_phi",       "F",  lenVar = "nj");
         self.out.branch("j_m",         "F",  lenVar = "nj");
         self.out.branch("j_puid",         "F",  lenVar = "nj");
-        #self.out.branch("j_jetid",         "I",  lenVar = "nj"); #FIXME there is a bug in NANOAODv15 https://twiki.cern.ch/twiki/bin/view/CMS/JetID13p6TeV
         #self.out.branch("j_ParTRawB",         "F",  lenVar = "nj");
         #self.out.branch("j_ParTRawC",         "F",  lenVar = "nj");
         #self.out.branch("j_ParTRawOther",         "F",  lenVar = "nj");
@@ -201,17 +224,12 @@ class Analysis(Module):
         event.selectedAK4Jets = []
         ak4jets = Collection(event, "Jet")
         for j in ak4jets:
-            #if j.pt<30 :
-            #    continue
-            if abs(j.eta) > 2.5:
+            if abs(j.eta) > 5.191: #extended eta range to value supported by JME
                 continue
 
-            ##require tight (2^1) or tightLepVeto (2^2) [https://twiki.cern.ch/twiki/bin/view/CMS/JetID#nanoAOD_Flags]
-            #if j.jetId<2:
-            #    continue
-            ## https://twiki.cern.ch/twiki/bin/view/CMS/PileupJetID puId==0 means 000: fail all PU ID; puId==4 means 100: pass loose ID, fail medium, fail tight; puId==6 means 110: pass loose and medium ID, fail tight; puId==7 means 111: pass loose, medium, tight ID. 
-            #if j.pt<50 and j.puId<1:
-            #    continue
+            # in Run3 PU ID is not recommended
+
+            if not self.corr_jetid.evaluate(j.eta, j.chHEF, j.neHEF, j.chEmEF, j.neEmEF, j.muEF, j.chMultiplicity, j.neMultiplicity, j.chMultiplicity+j.neMultiplicity): continue #pass jetID, need to recalculate on top of NanoAODv15
 
             #check overlap with selected leptons 
             deltaR_to_leptons=[ j.p4().DeltaR(lep.p4()) for lep in event.selectedMuons+event.selectedElectrons]
@@ -233,9 +251,8 @@ class Analysis(Module):
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
 
-
         # Noise filters from JME
-        if self.year=="2024":
+        if self.year=="2024" or self.year=="2025":
             if not (event.Flag_goodVertices and event.Flag_globalSuperTightHalo2016Filter and event.Flag_EcalDeadCellTriggerPrimitiveFilter and event.Flag_BadPFMuonFilter and event.Flag_BadPFMuonDzFilter and event.Flag_hfNoisyHitsFilter and event.Flag_eeBadScFilter and event.Flag_ecalBadCalibFilter):
                 return False
 
@@ -243,7 +260,6 @@ class Analysis(Module):
             if not (event.Flag_goodVertices and event.Flag_globalSuperTightHalo2016Filter and event.Flag_EcalDeadCellTriggerPrimitiveFilter and event.Flag_BadPFMuonFilter and event.Flag_BadPFMuonDzFilter and event.Flag_hfNoisyHitsFilter and event.Flag_eeBadScFilter):
                 return False
 
-        
         #initiate object selector tools:
         elSel = ElectronSelector()
         muSel = MuonSelector()
@@ -266,50 +282,44 @@ class Analysis(Module):
         if self.channel=="ee":
             if len(event.selectedElectrons)!=2: return False
 
-        self.selectTaus(event, tauSel)
-
-	    ## select trigger objects to do trigger matching
-        #self.selectTriggerObjects(event)
-
-	    # select gen particles in simulation
-        if self.isMC:
-            self.selectGenParticles(event)
-
         #apply preliminary loose lepton pt cuts based on trigger:
         if self.channel=="mu":
-            if event.selectedMuons[0].pt<29: return False
+            if event.selectedMuons[0].pt<25: return False
 
         if self.channel=="mumu":
             if event.selectedMuons[0].pt<19: return False
             if event.selectedMuons[1].pt<14: return False
+            if event.selectedMuons[0].pt<24 and event.selectedMuons[1].pt<24: return False # at least one with pT > 25 GeV
 
         if self.channel=="e":
-            if event.selectedElectrons[0].pt<29: return False
+            if event.selectedElectrons[0].pt<30: return False
 
         if self.channel=="ee":
             if event.selectedElectrons[0].pt<19: return False
             if event.selectedElectrons[1].pt<14: return False
+            if event.selectedElectrons[0].pt<24 and event.selectedElectrons[1].pt<24: return False # at least one with pT > 25 GeV
 
         if self.channel=="emu":
             if event.selectedElectrons[0].pt<19: return False
             if event.selectedMuons[0].pt<19: return False
+            if event.selectedElectrons[0].pt<24 and event.selectedMuons[0].pt<24: return False # at least one with pT > 25 GeV
 
-
-	    # select jets and filter events with at least 1 jet with pT > 30 GeV
+	    # select jets and filter events with at least 1 (e/mu channels) or 2 (ee/emu/mumu channels) L btagged jet with pT > 20 GeV
         self.selectAK4Jets(event)
         if len(event.selectedAK4Jets)<1: return False
-        #has_jetpt30=False
-        #for jet in event.selectedAK4Jets:
-        #   if jet.pt>30: has_jetpt30=True
-	    #if not has_jetpt30: return False
+        event.nbjetL=0
+        for j in event.selectedAK4Jets:
+            if abs(j.eta)<2.5 and j.btagUParTAK4B>0.0246: event.nbjetL = event.nbjetL+1
+        if (self.channel=="e" or self.channel=="mu") and event.nbjetL<2: return False
+        if (self.channel=="ee" or self.channel=="emu" or self.channel=="mumu") and event.nbjetL<1: return False
 
-      	######################################################
-      	###############  GEN-LEVEL ANALYSIS ##################
-      	######################################################
+        # select gen particles in simulation
+        if self.isMC:
+            self.selectGenParticles(event)
 
+        # select gen partucles to save based on pdgid
         event.genCand=[]
         event.genIdx=[]
-
         idx=0
         if self.isMC:
             for genp in event.selectedGenParticles:
@@ -319,10 +329,6 @@ class Analysis(Module):
                 idx=idx+1
 
 
-        ######################################################
-        ##### HIGH LEVEL VARIABLES FOR SELECTED EVENTS   #####
-        ######################################################
-        
         gen_id     = [genp.pdgId for genp in event.genCand]
         gen_pt     = [genp.pt for genp in event.genCand]
         gen_eta    = [genp.eta for genp in event.genCand]
@@ -336,20 +342,27 @@ class Analysis(Module):
                     is_bstt=1
            gen_isbstt.append(is_bstt)
 
+        # save jet variables
         jet_pt     = [jet.pt for jet in event.selectedAK4Jets]
         jet_eta    = [jet.eta for jet in event.selectedAK4Jets]
         jet_phi    = [jet.phi for jet in event.selectedAK4Jets]
         jet_m      = [jet.mass for jet in event.selectedAK4Jets]
         jet_deepflavB = [jet.btagDeepFlavB for jet in event.selectedAK4Jets]
         jet_upartB = [jet.btagUParTAK4B for jet in event.selectedAK4Jets]
-        jet_upartB_sfL = [self.corr_btagging.evaluate("central","L",5,abs(jet.eta),jet.pt) for jet in event.selectedAK4Jets] #FIXME replace 5 by hadronflavor when the json is updated
-        jet_upartB_sfM = [self.corr_btagging.evaluate("central","M",5,abs(jet.eta),jet.pt) for jet in event.selectedAK4Jets]
-        jet_upartB_sfT = [self.corr_btagging.evaluate("central","T",5,abs(jet.eta),jet.pt) for jet in event.selectedAK4Jets]
-        jet_upartB_sfXT = [self.corr_btagging.evaluate("central","XT",5,abs(jet.eta),jet.pt) for jet in event.selectedAK4Jets]
-        jet_upartB_sfXXT = [self.corr_btagging.evaluate("central","XXT",5,abs(jet.eta),jet.pt) for jet in event.selectedAK4Jets]
+        if self.isMC:
+           jet_upartB_sfL = [self.corr_btagging.evaluate("central","L",5,min(2.49,abs(jet.eta)),max(20.0,jet.pt)) for jet in event.selectedAK4Jets] #FIXME replace 5 by hadronflavor when the json is updated
+           jet_upartB_sfM = [self.corr_btagging.evaluate("central","M",5,min(2.49,abs(jet.eta)),max(20.0,jet.pt)) for jet in event.selectedAK4Jets]
+           jet_upartB_sfT = [self.corr_btagging.evaluate("central","T",5,min(2.49,abs(jet.eta)),max(20.0,jet.pt)) for jet in event.selectedAK4Jets]
+           jet_upartB_sfXT = [self.corr_btagging.evaluate("central","XT",5,min(2.49,abs(jet.eta)),max(20.0,jet.pt)) for jet in event.selectedAK4Jets]
+           jet_upartB_sfXXT = [self.corr_btagging.evaluate("central","XXT",5,min(2.49,abs(jet.eta)),max(20.0,jet.pt)) for jet in event.selectedAK4Jets]
+        else: #for data we can store 1
+           jet_upartB_sfL = [1.0 for jet in event.selectedAK4Jets] 
+           jet_upartB_sfM = [1.0 for jet in event.selectedAK4Jets]
+           jet_upartB_sfT = [1.0 for jet in event.selectedAK4Jets]
+           jet_upartB_sfXT = [1.0 for jet in event.selectedAK4Jets]
+           jet_upartB_sfXXT = [1.0 for jet in event.selectedAK4Jets]
         if self.year=="2024" or self.year=="2025": jet_puid      = [jet.puIdDisc for jet in event.selectedAK4Jets]
         else: jet_puid      = [1.0 for jet in event.selectedAK4Jets]
-        #jet_jetid      = [jet.jetId for jet in event.selectedAK4Jets]
         #jet_ParTRawB  = [jet.myParTRawB for jet in event.selectedAK4Jets]
         #jet_ParTRawC  = [jet.myParTRawC for jet in event.selectedAK4Jets]
         #jet_ParTRawOther  = [jet.myParTRawOther for jet in event.selectedAK4Jets]
@@ -364,14 +377,27 @@ class Analysis(Module):
            else:
                 jet_hadronflavour.append(-1)
 
+        self.selectTaus(event, tauSel)
         tau_pt     = [tau.pt for tau in event.selectedTaus]
         tau_eta    = [tau.eta for tau in event.selectedTaus]
         tau_phi    = [tau.phi for tau in event.selectedTaus]
         tau_charge = [tau.charge for tau in event.selectedTaus]
 
-	    ################################################
-        ######### store branches #######################
-	    ################################################
+        # trigger matching
+        self.selectTriggerObjects(event)
+        def is_trigger_matched(pdgid,trigger,lep):
+            for to in event.selectedTriggerObjects:
+                top4=ROOT.TLorentzVector()
+                top4.SetPtEtaPhiM(to.pt,to.eta,to.phi,0)
+                if lep.p4().DeltaR(top4)<0.3:
+                    if to.id==pdgid:
+                        if trigger=="single" and pdgid==11 and (bool(to.filterBits&1) or bool(to.filterBits&2)): return True
+                        if trigger=="cross" and pdgid==11 and bool(to.filterBits&6): return True
+                        if trigger=="double" and pdgid==11 and (bool(to.filterBits&4) or bool(to.filterBits&5)): return True
+                        if trigger=="single" and pdgid==13 and bool(to.filterBits&3): return True
+                        if trigger=="cross" and pdgid==13 and bool(to.filterBits&5): return True
+                        if trigger=="double" and pdgid==13 and bool(to.filterBits&4): return True
+            return False
 
 	    # lepton branches
         if self.channel=="mu" or self.channel=="mumu" or self.channel=="emu":
@@ -383,9 +409,16 @@ class Analysis(Module):
                self.out.fillBranch("mu1_charge",         event.selectedMuons[0].charge)
                self.out.fillBranch("mu1_tightId",        event.selectedMuons[0].tightId)
                self.out.fillBranch("mu1_iso",            event.selectedMuons[0].pfRelIso04_all)
-               self.out.fillBranch("mu1_ID_sf",          self.corr_muonID.evaluate(event.selectedMuons[0].eta,event.selectedMuons[0].pt,"nominal"))
-               self.out.fillBranch("mu1_iso_sf",         self.corr_muonIso.evaluate(event.selectedMuons[0].eta,event.selectedMuons[0].pt,"nominal"))
-               #self.out.fillBranch("mu1_HLTIsoMu_sf",    self.corr_muonHLTIsoMu.evaluate(abs(selectedMuons[0].eta),selectedMuons[0].pt,"nominal"))
+               if self.isMC:
+                  self.out.fillBranch("mu1_ID_sf",          self.corr_muonID.evaluate(event.selectedMuons[0].eta,event.selectedMuons[0].pt,"nominal"))
+                  self.out.fillBranch("mu1_iso_sf",         self.corr_muonIso.evaluate(event.selectedMuons[0].eta,event.selectedMuons[0].pt,"nominal"))
+               else:
+                  self.out.fillBranch("mu1_ID_sf",       1.0)
+                  self.out.fillBranch("mu1_iso_sf",      1.0)
+               self.out.fillBranch("mu1_singletrg",      is_trigger_matched(13,"single",event.selectedMuons[0]))
+               self.out.fillBranch("mu1_crosstrg",      is_trigger_matched(13,"cross",event.selectedMuons[0]))
+               self.out.fillBranch("mu1_doubletrg",      is_trigger_matched(13,"double",event.selectedMuons[0]))
+               #self.out.fillBranch("mu1_HLTIsoMu_sf",    self.corr_muonHLTIsoMu.evaluate(abs(selectedMuons[0].eta),selectedMuons[0].pt,"nominal")) #FIXME not available yet
     
         if self.channel=="mumu":
                self.out.fillBranch("mu2_pt",             event.selectedMuons[1].pt)
@@ -396,8 +429,15 @@ class Analysis(Module):
                self.out.fillBranch("mu2_charge",         event.selectedMuons[1].charge)
                self.out.fillBranch("mu2_tightId",        event.selectedMuons[1].tightId)
                self.out.fillBranch("mu2_iso",            event.selectedMuons[1].pfRelIso04_all)
-               self.out.fillBranch("mu2_ID_sf",          self.corr_muonID.evaluate(event.selectedMuons[1].eta,event.selectedMuons[1].pt,"nominal"))
-               self.out.fillBranch("mu2_iso_sf",         self.corr_muonIso.evaluate(event.selectedMuons[1].eta,event.selectedMuons[1].pt,"nominal"))
+               if self.isMC:
+                  self.out.fillBranch("mu2_ID_sf",          self.corr_muonID.evaluate(event.selectedMuons[1].eta,event.selectedMuons[1].pt,"nominal"))
+                  self.out.fillBranch("mu2_iso_sf",         self.corr_muonIso.evaluate(event.selectedMuons[1].eta,event.selectedMuons[1].pt,"nominal"))
+               else:
+                  self.out.fillBranch("mu2_ID_sf",       1.0)
+                  self.out.fillBranch("mu2_iso_sf",      1.0)
+               self.out.fillBranch("mu2_singletrg",      is_trigger_matched(13,"single",event.selectedMuons[1]))
+               self.out.fillBranch("mu2_crosstrg",      is_trigger_matched(13,"cross",event.selectedMuons[1]))
+               self.out.fillBranch("mu2_doubletrg",      is_trigger_matched(13,"double",event.selectedMuons[1]))
                #self.out.fillBranch("mu2_HLTIsoMu_sf",    self.corr_muonHLTIsoMu.evaluate(abs(selectedMuons[1].eta),selectedMuons[1].pt,"nominal"))
     
         if self.channel=="e" or self.channel=="ee" or self.channel=="emu":
@@ -408,14 +448,22 @@ class Analysis(Module):
                self.out.fillBranch("e1_dz",        event.selectedElectrons[0].dz)
                self.out.fillBranch("e1_charge",    event.selectedElectrons[0].charge)
                self.out.fillBranch("e1_cutbased",  event.selectedElectrons[0].cutBased)
-               if event.selectedElectrons[0].pt<75:
-                   if self.year=="2024" or self.year=="2025": self.out.fillBranch("e1_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","Reco20to75",event.selectedElectrons[0].superclusterEta,event.selectedElectrons[0].pt))
-                   else: self.out.fillBranch("e1_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","Reco20to75",event.selectedElectrons[0].eta,event.selectedElectrons[0].pt)) #SC eta not saved in nanoaodv12
-               else: 
-                   if self.year=="2024" or self.year=="2025": self.out.fillBranch("e1_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","RecoAbove75",event.selectedElectrons[0].superclusterEta,event.selectedElectrons[0].pt))
-                   else: self.out.fillBranch("e1_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","RecoAbove75",event.selectedElectrons[0].eta,event.selectedElectrons[0].pt))
-               if self.year=="2024" or self.year=="2025": self.out.fillBranch("e1_ID_sf",     self.corr_electronID.evaluate("2024","sf","Tight",event.selectedElectrons[0].superclusterEta,event.selectedElectrons[0].pt))
-               else: self.out.fillBranch("e1_ID_sf",     self.corr_electronID.evaluate("2024","sf","Tight",event.selectedElectrons[0].eta,event.selectedElectrons[0].pt))
+               self.out.fillBranch("e1_singletrg",      is_trigger_matched(11,"single",event.selectedElectrons[0]))
+               self.out.fillBranch("e1_crosstrg",      is_trigger_matched(11,"cross",event.selectedElectrons[0]))
+               self.out.fillBranch("e1_doubletrg",      is_trigger_matched(11,"double",event.selectedElectrons[0]))
+               if self.isMC:
+                  if event.selectedElectrons[0].pt>20 and event.selectedElectrons[0].pt<75:
+                      if self.year=="2024" or self.year=="2025": self.out.fillBranch("e1_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","Reco20to75",event.selectedElectrons[0].superclusterEta,event.selectedElectrons[0].pt))
+                      else: self.out.fillBranch("e1_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","Reco20to75",event.selectedElectrons[0].eta,event.selectedElectrons[0].pt)) #SC eta not saved in nanoaodv12
+                  elif event.selectedElectrons[0].pt>=75: 
+                      if self.year=="2024" or self.year=="2025": self.out.fillBranch("e1_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","RecoAbove75",event.selectedElectrons[0].superclusterEta,event.selectedElectrons[0].pt))
+                      else: self.out.fillBranch("e1_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","RecoAbove75",event.selectedElectrons[0].eta,event.selectedElectrons[0].pt))
+                  else: self.out.fillBranch("e1_reco_sf", 1.0)
+                  if self.year=="2024" or self.year=="2025": self.out.fillBranch("e1_ID_sf",     self.corr_electronID.evaluate("2024","sf","Tight",event.selectedElectrons[0].superclusterEta,max(20.0,event.selectedElectrons[0].pt)))
+                  else: self.out.fillBranch("e1_ID_sf",     self.corr_electronID.evaluate("2024","sf","Tight",event.selectedElectrons[0].eta,max(20.0,event.selectedElectrons[0].pt)))
+               else:
+                  self.out.fillBranch("e1_reco_sf",1.0)
+                  self.out.fillBranch("e1_ID_sf",1.0)
     
         if self.channel=="ee":
                self.out.fillBranch("e2_pt",         event.selectedElectrons[1].pt)
@@ -425,15 +473,30 @@ class Analysis(Module):
                self.out.fillBranch("e2_dz",         event.selectedElectrons[1].dz)
                self.out.fillBranch("e2_charge",     event.selectedElectrons[1].charge)
                self.out.fillBranch("e2_cutbased",   event.selectedElectrons[1].cutBased)
-               if event.selectedElectrons[1].pt<75:
-                  if self.year=="2024" or self.year=="2025": self.out.fillBranch("e2_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","Reco20to75",event.selectedElectrons[1].superclusterEta,event.selectedElectrons[1].pt))
-                  else: self.out.fillBranch("e2_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","Reco20to75",event.selectedElectrons[1].eta,event.selectedElectrons[1].pt))
-               else: 
-                   if self.year=="2024" or self.year=="2025": self.out.fillBranch("e2_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","RecoAbove75",event.selectedElectrons[1].superclusterEta,event.selectedElectrons[1].pt))
-                   else: self.out.fillBranch("e2_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","RecoAbove75",event.selectedElectrons[1].eta,event.selectedElectrons[1].pt))
-               if self.year=="2024" or self.year=="2025": self.out.fillBranch("e2_ID_sf",     self.corr_electronID.evaluate("2024","sf","Tight",event.selectedElectrons[1].superclusterEta,event.selectedElectrons[1].pt))
-               else: self.out.fillBranch("e2_ID_sf",     self.corr_electronID.evaluate("2024","sf","Tight",event.selectedElectrons[1].eta,event.selectedElectrons[1].pt))
-    
+               self.out.fillBranch("e2_singletrg",      is_trigger_matched(11,"single",event.selectedElectrons[1]))
+               self.out.fillBranch("e2_crosstrg",      is_trigger_matched(11,"cross",event.selectedElectrons[1]))
+               self.out.fillBranch("e2_doubletrg",      is_trigger_matched(11,"double",event.selectedElectrons[1]))
+               if self.isMC:
+                  if event.selectedElectrons[1].pt>20 and event.selectedElectrons[1].pt<75:
+                     if self.year=="2024" or self.year=="2025": self.out.fillBranch("e2_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","Reco20to75",event.selectedElectrons[1].superclusterEta,event.selectedElectrons[1].pt))
+                     else: self.out.fillBranch("e2_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","Reco20to75",event.selectedElectrons[1].eta,event.selectedElectrons[1].pt))
+                  elif event.selectedElectrons[1].pt>=75: 
+                      if self.year=="2024" or self.year=="2025": self.out.fillBranch("e2_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","RecoAbove75",event.selectedElectrons[1].superclusterEta,event.selectedElectrons[1].pt))
+                      else: self.out.fillBranch("e2_reco_sf",   self.corr_electronReco.evaluate("2024Prompt","sf","RecoAbove75",event.selectedElectrons[1].eta,event.selectedElectrons[1].pt))
+                  else: self.out.fillBranch("e2_reco_sf", 1.0)
+                  if self.year=="2024" or self.year=="2025": self.out.fillBranch("e2_ID_sf",     self.corr_electronID.evaluate("2024","sf","Tight",event.selectedElectrons[1].superclusterEta,max(20.0,event.selectedElectrons[1].pt)))
+                  else: self.out.fillBranch("e2_ID_sf",     self.corr_electronID.evaluate("2024","sf","Tight",event.selectedElectrons[1].eta,max(event.selectedElectrons[1].pt,20.0)))
+               else:
+                  self.out.fillBranch("e2_reco_sf", 1.0)
+                  self.out.fillBranch("e2_ID_sf", 1.0)
+
+        # jet veto map (veto the entire event in Run3, veto only the jet in Run2)
+        event.pass_jvm=True
+        for j in event.selectedAK4Jets:
+            if self.corr_jvm.evaluate("jetvetomap",j.eta,j.phi)!=0: event.pass_jvm=False
+
+        self.out.fillBranch("pass_jvm",       event.pass_jvm)
+
     	# jet branches
         self.out.fillBranch("nj" ,                len(event.selectedAK4Jets))
         self.out.fillBranch("j_pt",               jet_pt);
@@ -441,7 +504,6 @@ class Analysis(Module):
         self.out.fillBranch("j_phi",              jet_phi);
         self.out.fillBranch("j_m",                jet_m);
         self.out.fillBranch("j_puid",             jet_puid);
-        #self.out.fillBranch("j_jetid",            jet_jetid);
         self.out.fillBranch("j_deepflavB",        jet_deepflavB);
         self.out.fillBranch("j_upartB",           jet_upartB);
         self.out.fillBranch("j_upartB_sfL",       jet_upartB_sfL);
@@ -458,14 +520,13 @@ class Analysis(Module):
         #self.out.fillBranch("j_ParTRawTauhtauh",         jet_ParTRawTauhtauh);
         #self.out.fillBranch("j_ParTRawTauhtaumu",         jet_ParTRawTauhtaumu);
         
-        # jet branches
+        # tau branches
         self.out.fillBranch("ntau" ,          len(event.selectedTaus))
         self.out.fillBranch("tau_pt",         tau_pt);
         self.out.fillBranch("tau_eta",        tau_eta);
         self.out.fillBranch("tau_phi",        tau_phi);
         self.out.fillBranch("tau_charge",     tau_charge);
-        
-        
+
         # GEN branches 
         if self.isMC:
             self.out.fillBranch("nGenCand",           len(event.genCand))

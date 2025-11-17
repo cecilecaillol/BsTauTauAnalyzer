@@ -45,7 +45,7 @@ def buildCondorFile(opt,FarmDirectory):
              cmd='dasgoclient --query=\"file dataset={} status=*\"'.format(dataset)
              file_list=os.popen(cmd).read().split()
              prefix='root://cms-xrd-global.cern.ch/'
-          if 'NANOv15' in dataset: #data in DAS
+          if 'NANOv15' in dataset or 'PromptReco' in dataset: #data in DAS
              dataset_name = '_'.join(dataset.split('/')[1:3])
              sufix='data'
              if 'Run' in dataset:
@@ -62,7 +62,7 @@ def buildCondorFile(opt,FarmDirectory):
         #    print('ERROR: found invalid dataset = ',dataset,'stop the code')
         #    sys.exit(1)
 
-          channels=['emu'] #FIXME
+          channels=['mumu'] #FIXME
           yearmodified=year
             
           #prepare output
@@ -108,12 +108,12 @@ def buildCondorFile(opt,FarmDirectory):
         worker.write('eval `scram r -sh`\n')
         worker.write('cd ${WORKDIR}\n')
         worker.write('echo "INFO: Run ntuplizer"\n')
-        worker.write('echo "python $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\\"\n')
+        worker.write('echo "python3 $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\\"\n')
         worker.write('echo "$filename ${input}  \\\\"\n')
         worker.write('echo "--bi $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_in.txt   \\\\"\n')
         worker.write('echo "--bo $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_out.txt  \\\\"\n')
         worker.write('echo "${filter} -I BsTauTauAnalyzer.Flattener.Flattener_analysis ${channel} "\n')
-        worker.write('python $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\n')
+        worker.write('python3 $CMSSW_BASE/src/PhysicsTools/NanoAODTools/scripts/nano_postproc.py \\\n')
         worker.write('$filename ${input}  \\\n')
         worker.write('--bi $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_in.txt   \\\n')
         worker.write('--bo $CMSSW_BASE/src/BsTauTauAnalyzer/Flattener/scripts/keep_out.txt  \\\n')
@@ -140,7 +140,7 @@ def main():
     usage = 'usage: %prog [options]'
     parser = optparse.OptionParser(usage)
     parser.add_option('-i', '--in',     dest='input',  help='list of input datasets',    default='listSamplesMC2024.txt', type='string')
-    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/cmst3/group/bpark/ccaillol/ntuples_emu_2024', type='string') #EDIT THIS
+    parser.add_option('-o', '--out',      dest='output',   help='output directory',  default='/eos/cms/store/cmst3/group/bpark/ccaillol/ntuples_mumu_2025', type='string') #EDIT THIS
     parser.add_option('-f', '--force',      dest='force',   help='force resubmission',  action='store_true')
     parser.add_option('-s', '--submit',   dest='submit',   help='submit jobs',       action='store_true')
     (opt, args) = parser.parse_args()

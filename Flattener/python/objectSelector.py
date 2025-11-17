@@ -18,7 +18,7 @@ class ElectronSelector(ObjectSelector):
         isEBEE = True if abs(el.eta)>1.4442 and abs(el.eta)<1.5660 else False
         if isEBEE: return False       
         if el.pt < self.minPt: return False
-        if abs(el.eta) > 2.5: return False
+        if abs(el.eta) >= 2.5 or abs(el.superclusterEta) >= 2.5: return False 
         if abs(el.eta)<1.4442 and abs(el.dxy) > 0.05: return False
         if abs(el.eta)<1.4442 and abs(el.dz) > 0.10: return False
         if abs(el.eta)>1.5560 and abs(el.dxy) > 0.10: return False

@@ -32,18 +32,18 @@ ANALYSISTRIGGERDATA = {
 
 
 ANALYSISCHANNELCUT = {
-    'e':'(nElectron>0)',
-    'mu':'(nMuon>0)',
-    'emu':'(nMuon>0&&nElectron>0)',
-    'ee':'nElectron>1',
-    'mumu':'nMuon>1'
+    'e':'(nElectron>0&&nJet>0)',
+    'mu':'(nMuon>0&&nJet>0)',
+    'emu':'(nMuon>0&&nElectron>0&&nJet>0)',
+    'ee':'(nElectron>1&&nJet>0)',
+    'mumu':'(nMuon>1&&nJet>0)'
 }
 
 ANALYSISGRL = {
     '2022': 'Cert_Collisions2022_355100_362760_Golden.json',
     '2023': 'Cert_Collisions2023_366442_370790_Golden.json',
     '2024': 'Cert_Collisions2024_378981_386951_Golden.json',
-    '2025': 'Cert_Collisions2025_391658_398082_Golden.json',
+    '2025': 'Cert_Collisions2025_391658_398595_Golden.json',
 
 }
 
